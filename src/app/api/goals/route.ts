@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { verifyToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     const weekNumber = searchParams.get("week");
 
     // Get journey for week calculation
-    const journey = await prisma.journey.findFirst({
+    const journey = await db.journey.findFirst({
       where: { userId, isActive: true },
     });
 
@@ -34,22 +34,29 @@ export async function GET(request: Request) {
         )
       : 1;
 
-    // Build query
-    const where: { userId: string; weekNumber?: number } = { userId };
-    if (weekNumber) {
-      where.weekNumber = parseInt(weekNumber);
-    }
+    // Get all goals for the user
+    const goals = await db.goalTask.findMany({
+      where: { userId },
+    });
 
-    const goals = await prisma.goalTask.findMany({
-      where,
-      orderBy: [{ weekNumber: "desc" }, { createdAt: "desc" }],
+    // Filter by week if specified
+    const filteredGoals = weekNumber
+      ? goals.filter((g: any) => g.weekNumber === parseInt(weekNumber))
+      : goals;
+
+    // Sort manually (DynamoDB doesn't support multi-field orderBy)
+    filteredGoals.sort((a: any, b: any) => {
+      if (b.weekNumber !== a.weekNumber) return b.weekNumber - a.weekNumber;
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 
     // Get focus pillars
-    const focusPillars = await prisma.focusPillar.findMany({
+    const focusPillars = await db.focusPillar.findMany({
       where: { userId },
-      orderBy: { priority: "asc" },
     });
+
+    // Sort focus pillars by priority
+    focusPillars.sort((a: any, b: any) => a.priority - b.priority);
 
     // Calculate stats
     const totalGoals = goals.length;
@@ -81,7 +88,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({
-      goals,
+      goals: filteredGoals,
       focusPillars,
       currentWeek,
       stats: {
@@ -116,7 +123,7 @@ export async function POST(request: Request) {
     const data = await request.json();
 
     // Get current week
-    const journey = await prisma.journey.findFirst({
+    const journey = await db.journey.findFirst({
       where: { userId, isActive: true },
     });
 
@@ -127,7 +134,7 @@ export async function POST(request: Request) {
         )
       : 1;
 
-    const goal = await prisma.goalTask.create({
+    const goal = await db.goalTask.create({
       data: {
         userId,
         weekNumber: data.weekNumber || weekNumber,
@@ -168,11 +175,11 @@ export async function PATCH(request: Request) {
     }
 
     // Verify ownership
-    const existingGoal = await prisma.goalTask.findFirst({
-      where: { id: data.goalId, userId },
+    const existingGoal = await db.goalTask.findUnique({
+      where: { id: data.goalId },
     });
 
-    if (!existingGoal) {
+    if (!existingGoal || existingGoal.userId !== userId) {
       return NextResponse.json({ error: "Goal not found" }, { status: 404 });
     }
 
@@ -187,7 +194,7 @@ export async function PATCH(request: Request) {
       updateData.title = data.title;
     }
 
-    const goal = await prisma.goalTask.update({
+    const goal = await db.goalTask.update({
       where: { id: data.goalId },
       data: updateData,
     });
@@ -223,15 +230,15 @@ export async function DELETE(request: Request) {
     }
 
     // Verify ownership
-    const existingGoal = await prisma.goalTask.findFirst({
-      where: { id: goalId, userId },
+    const existingGoal = await db.goalTask.findUnique({
+      where: { id: goalId },
     });
 
-    if (!existingGoal) {
+    if (!existingGoal || existingGoal.userId !== userId) {
       return NextResponse.json({ error: "Goal not found" }, { status: 404 });
     }
 
-    await prisma.goalTask.delete({
+    await db.goalTask.delete({
       where: { id: goalId },
     });
 

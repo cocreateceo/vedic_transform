@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
@@ -16,13 +16,13 @@ export default async function ProgressPage() {
   const userId = user.id;
 
   // Get user's journey
-  const journey = await prisma.journey.findFirst({
+  const journey = await db.journey.findFirst({
     where: { userId, isActive: true },
   });
 
   // Get all check-ins for this journey
   const checkins = journey
-    ? await prisma.dailyCheckin.findMany({
+    ? await db.dailyCheckin.findMany({
         where: { userId, completed: true },
         include: { pillar: { select: { slug: true, name: true } } },
         orderBy: { checkinDate: "asc" },
@@ -31,21 +31,21 @@ export default async function ProgressPage() {
 
   // Get streak
   const streak = journey
-    ? await prisma.streak.findFirst({
+    ? await db.streak.findFirst({
         where: { userId, journeyId: journey.id },
         select: { currentStreak: true, longestStreak: true },
       })
     : null;
 
   // Get total karma
-  const karmaTransactions = await prisma.karmaTransaction.findMany({
+  const karmaTransactions = await db.karmaTransaction.findMany({
     where: { userId },
     select: { points: true },
   });
   const totalKarma = karmaTransactions.reduce((sum, t) => sum + t.points, 0);
 
   // Get badges
-  const userBadges = await prisma.userBadge.findMany({
+  const userBadges = await db.userBadge.findMany({
     where: { userId },
     include: { badge: true },
   });

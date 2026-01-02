@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { StreakCounter } from "@/components/features/dashboard/streak-counter";
 import { KarmaPoints } from "@/components/features/dashboard/karma-points";
@@ -14,7 +14,7 @@ export default async function DashboardPage() {
   const userId = user.id;
 
   // Get user's active journey
-  const journey = await prisma.journey.findFirst({
+  const journey = await db.journey.findFirst({
     where: {
       userId,
       isActive: true,
@@ -22,16 +22,12 @@ export default async function DashboardPage() {
   });
 
   // Get streak data
-  let streak: { currentStreak: number; longestStreak: number } | null = null;
+  let streak: any = null;
   if (journey) {
-    streak = await prisma.streak.findFirst({
+    streak = await db.streak.findFirst({
       where: {
         userId,
         journeyId: journey.id,
-      },
-      select: {
-        currentStreak: true,
-        longestStreak: true,
       },
     });
   }
@@ -39,39 +35,40 @@ export default async function DashboardPage() {
   // Get today's completed pillars
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todayCheckins = await prisma.dailyCheckin.findMany({
+  const todayCheckins = await db.dailyCheckin.findMany({
     where: {
       userId,
       checkinDate: today,
       completed: true,
     },
-    include: {
-      pillar: {
-        select: {
-          slug: true,
-        },
-      },
-    },
   });
+
+  // Get all pillars to join with checkins
+  const allPillars = await db.pillar.findMany();
+  const pillarMap = new Map(allPillars.map((p: any) => [p.id, p]));
+
+  // Manually join pillar data
+  const todayCheckinsWithPillars = todayCheckins.map((c: any) => ({
+    ...c,
+    pillar: pillarMap.get(c.pillarId),
+  }));
 
   // Get total karma
-  const karmaTransactions = await prisma.karmaTransaction.findMany({
+  const karmaTransactions = await db.karmaTransaction.findMany({
     where: { userId },
-    select: { points: true },
   });
-  const totalKarma = karmaTransactions.reduce((sum, t) => sum + t.points, 0);
+  const totalKarma = karmaTransactions.reduce((sum: number, t: any) => sum + t.points, 0);
 
   // Get today's earned karma
-  const todayKarmaTransactions = await prisma.karmaTransaction.findMany({
+  const todayKarmaTransactions = await db.karmaTransaction.findMany({
     where: {
       userId,
       createdAt: {
         gte: today,
       },
     },
-    select: { points: true },
   });
-  const todayEarned = todayKarmaTransactions.reduce((sum, t) => sum + t.points, 0);
+  const todayEarned = todayKarmaTransactions.reduce((sum: number, t: any) => sum + t.points, 0);
 
   // Calculate current day in journey
   const currentDay = journey
@@ -85,7 +82,7 @@ export default async function DashboardPage() {
     : 0;
 
   // Get completed pillar slugs
-  const completedPillars = todayCheckins.map((c) => c.pillar.slug);
+  const completedPillars = todayCheckinsWithPillars.map((c: any) => c.pillar?.slug).filter(Boolean);
 
   // Check if streak is at risk (no completions today and it's past noon)
   const isStreakAtRisk =
@@ -207,21 +204,22 @@ export default async function DashboardPage() {
 async function StartJourneyButton({ userId }: { userId: string }) {
   async function startJourney() {
     "use server";
-    const { prisma } = await import("@/lib/db");
+    const { db } = await import("@/lib/dynamodb");
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     // Create journey
-    const journey = await prisma.journey.create({
+    const journey = await db.journey.create({
       data: {
         userId,
         startDate: today,
+        isActive: true,
       },
     });
 
     // Create streak record
-    await prisma.streak.create({
+    await db.streak.create({
       data: {
         userId,
         journeyId: journey.id,

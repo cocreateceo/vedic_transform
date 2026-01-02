@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
 import { getPillarBySlug, PILLARS } from "@/constants/pillars";
@@ -27,7 +27,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const checkin = await prisma.dailyCheckin.findFirst({
+  const checkin = await db.dailyCheckin.findFirst({
     where: {
       userId: user.id,
       pillarId: pillar.id,
@@ -38,7 +38,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
   const isCompleted = checkin?.completed || false;
 
   // Get user's active journey
-  const journey = await prisma.journey.findFirst({
+  const journey = await db.journey.findFirst({
     where: {
       userId: user.id,
       isActive: true,
@@ -122,7 +122,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
         <form
           action={async () => {
             "use server";
-            const { prisma } = await import("@/lib/db");
+            const { db } = await import("@/lib/db");
             const { requireAuth } = await import("@/lib/auth");
 
             const user = await requireAuth();
@@ -131,7 +131,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
             today.setHours(0, 0, 0, 0);
 
             // Get journey
-            const journey = await prisma.journey.findFirst({
+            const journey = await db.journey.findFirst({
               where: {
                 userId: user.id,
                 isActive: true,
@@ -141,14 +141,14 @@ export default async function PillarPage({ params }: PillarPageProps) {
             if (!journey) return;
 
             // Get pillar from DB
-            const pillarData = await prisma.pillar.findUnique({
+            const pillarData = await db.pillar.findUnique({
               where: { slug: pillarId },
             });
 
             if (!pillarData) return;
 
             // Upsert check-in
-            await prisma.dailyCheckin.upsert({
+            await db.dailyCheckin.upsert({
               where: {
                 userId_pillarId_checkinDate: {
                   userId: user.id,
@@ -168,7 +168,7 @@ export default async function PillarPage({ params }: PillarPageProps) {
             });
 
             // Add karma
-            await prisma.karmaTransaction.create({
+            await db.karmaTransaction.create({
               data: {
                 userId: user.id,
                 points: pillarData.karmaPointsBase,

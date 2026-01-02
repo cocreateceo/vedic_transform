@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -12,7 +13,6 @@ import {
   FileText,
   Bell,
   Settings,
-  Flame,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -38,9 +38,13 @@ export function Sidebar() {
     <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-amber-100">
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 py-5 border-b border-amber-100">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-          <Flame className="w-6 h-6 text-white" />
-        </div>
+        <Image
+          src="/images/logo.jpg"
+          alt="10X Vedic Logo"
+          width={40}
+          height={40}
+          className="rounded-xl"
+        />
         <div>
           <h1 className="font-bold text-lg bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
             10X Vedic

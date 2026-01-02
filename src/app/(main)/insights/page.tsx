@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { InsightsPageClient } from "./insights-client";
 
@@ -7,7 +7,7 @@ export default async function InsightsPage() {
   const userId = user.id;
 
   // Fetch active insights
-  const insights = await prisma.userInsight.findMany({
+  const insights = await db.userInsight.findMany({
     where: {
       userId,
       isDismissed: false,

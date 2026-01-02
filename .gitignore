@@ -39,7 +39,16 @@ yarn-error.log*
 # prisma
 # prisma/dev.db - COMMITTED for demo/seeded data
 prisma/dev.db-journal
+prisma/dev.db.backup
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# SST
+.sst/
+.open-next/
+
+# Old deployment artifacts (no longer used - now using SST)
+lambdas/
+scripts/migrate-data.ts

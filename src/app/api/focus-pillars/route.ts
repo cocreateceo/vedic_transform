@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { verifyToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
@@ -20,25 +20,26 @@ export async function GET() {
 
     const userId = payload.id;
 
-    const focusPillars = await prisma.focusPillar.findMany({
+    const focusPillars = await db.focusPillar.findMany({
       where: { userId },
-      orderBy: { priority: "asc" },
     });
 
+    // Sort by priority (manual sort)
+    focusPillars.sort((a: any, b: any) => a.priority - b.priority);
+
     // Get pillar details with completion rates
-    const pillarIds = focusPillars.map((fp) => fp.pillarId);
+    const pillarIds = focusPillars.map((fp: any) => fp.pillarId);
 
     // Get all pillars
-    const pillars = await prisma.pillar.findMany();
+    const pillars = await db.pillar.findMany();
 
     // Get all completed check-ins for user
-    const checkins = await prisma.dailyCheckin.findMany({
+    const checkins = await db.dailyCheckin.findMany({
       where: { userId, completed: true },
-      select: { pillarId: true },
     });
 
     // Get journey for day calculation
-    const journey = await prisma.journey.findFirst({
+    const journey = await db.journey.findFirst({
       where: { userId, isActive: true },
     });
 
@@ -108,14 +109,14 @@ export async function POST(request: Request) {
     }
 
     // Delete existing focus pillars for user
-    await prisma.focusPillar.deleteMany({
+    await db.focusPillar.deleteMany({
       where: { userId },
     });
 
     // Create new focus pillars
     const focusPillars = await Promise.all(
       data.pillarIds.map((pillarId: string, index: number) =>
-        prisma.focusPillar.create({
+        db.focusPillar.create({
           data: {
             userId,
             pillarId: parseInt(pillarId),

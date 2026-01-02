@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, Flame, LogOut, Settings, User } from "lucide-react";
+import { Menu, X, LogOut, Settings, User } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
@@ -39,9 +40,13 @@ export function Header({ user }: HeaderProps) {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-              <Flame className="w-6 h-6 text-white" />
-            </div>
+            <Image
+              src="/images/logo.jpg"
+              alt="10X Vedic Logo"
+              width={40}
+              height={40}
+              className="rounded-xl"
+            />
             <span className="text-xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
               10X Vedic
             </span>

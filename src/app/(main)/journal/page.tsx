@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,21 +14,21 @@ export default async function JournalPage() {
   today.setHours(0, 0, 0, 0);
 
   // Get recent gratitude entries
-  const gratitudeEntries = await prisma.gratitudeEntry.findMany({
+  const gratitudeEntries = await db.gratitudeEntry.findMany({
     where: { userId },
     orderBy: { entryDate: "desc" },
     take: 7,
   });
 
   // Get recent intentions
-  const intentions = await prisma.intention.findMany({
+  const intentions = await db.intention.findMany({
     where: { userId },
     orderBy: { intentionDate: "desc" },
     take: 7,
   });
 
   // Get manifestations
-  const manifestations = await prisma.manifestation.findMany({
+  const manifestations = await db.manifestation.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
   });
@@ -66,7 +66,7 @@ export default async function JournalPage() {
             <form
               action={async (formData: FormData) => {
                 "use server";
-                const { prisma } = await import("@/lib/db");
+                const { db } = await import("@/lib/db");
                 const { requireAuth } = await import("@/lib/auth");
 
                 const user = await requireAuth();
@@ -74,7 +74,7 @@ export default async function JournalPage() {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
 
-                await prisma.gratitudeEntry.upsert({
+                await db.gratitudeEntry.upsert({
                   where: {
                     userId_entryDate: {
                       userId: user.id,
@@ -134,7 +134,7 @@ export default async function JournalPage() {
             <form
               action={async (formData: FormData) => {
                 "use server";
-                const { prisma } = await import("@/lib/db");
+                const { db } = await import("@/lib/db");
                 const { requireAuth } = await import("@/lib/auth");
 
                 const user = await requireAuth();
@@ -145,7 +145,7 @@ export default async function JournalPage() {
 
                 if (!intentionText?.trim()) return;
 
-                await prisma.intention.upsert({
+                await db.intention.upsert({
                   where: {
                     userId_intentionDate: {
                       userId: user.id,
@@ -192,7 +192,7 @@ export default async function JournalPage() {
             <form
               action={async (formData: FormData) => {
                 "use server";
-                const { prisma } = await import("@/lib/db");
+                const { db } = await import("@/lib/db");
                 const { requireAuth } = await import("@/lib/auth");
 
                 const user = await requireAuth();
@@ -202,7 +202,7 @@ export default async function JournalPage() {
 
                 if (!title?.trim()) return;
 
-                await prisma.manifestation.create({
+                await db.manifestation.create({
                   data: {
                     userId: user.id,
                     title,

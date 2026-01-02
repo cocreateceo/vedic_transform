@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { RemindersPageClient } from "./reminders-client";
 
@@ -7,13 +7,13 @@ export default async function RemindersPage() {
   const userId = user.id;
 
   // Get or create reminder settings
-  let settings = await prisma.reminderSettings.findUnique({
+  let settings = await db.reminderSettings.findUnique({
     where: { userId },
   });
 
   if (!settings) {
     // Create default settings
-    settings = await prisma.reminderSettings.create({
+    settings = await db.reminderSettings.create({
       data: {
         userId,
         morningEnabled: true,

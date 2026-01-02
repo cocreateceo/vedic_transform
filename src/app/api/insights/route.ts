@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { verifyToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { generateUserInsights, saveInsights } from "@/lib/insights/generator";
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
     }
 
     // Fetch active insights
-    const insights = await prisma.userInsight.findMany({
+    const insights = await db.userInsight.findMany({
       where: {
         userId,
         isDismissed: false,
@@ -115,7 +115,7 @@ export async function PATCH(request: Request) {
 
     if (data.markAllRead) {
       // Mark all as read
-      await prisma.userInsight.updateMany({
+      await db.userInsight.updateMany({
         where: { userId, isRead: false },
         data: { isRead: true },
       });
@@ -124,7 +124,7 @@ export async function PATCH(request: Request) {
 
     if (data.insightId) {
       // Verify ownership
-      const insight = await prisma.userInsight.findFirst({
+      const insight = await db.userInsight.findFirst({
         where: { id: data.insightId, userId },
       });
 
@@ -142,7 +142,7 @@ export async function PATCH(request: Request) {
         updateData.isDismissed = true;
       }
 
-      await prisma.userInsight.update({
+      await db.userInsight.update({
         where: { id: data.insightId },
         data: updateData,
       });

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
 import { GoalsPageClient } from "./goals-client";
@@ -8,7 +8,7 @@ export default async function GoalsPage() {
   const userId = user.id;
 
   // Get user's journey
-  const journey = await prisma.journey.findFirst({
+  const journey = await db.journey.findFirst({
     where: { userId, isActive: true },
   });
 
@@ -27,21 +27,27 @@ export default async function GoalsPage() {
   const totalWeeks = Math.ceil(TOTAL_JOURNEY_DAYS / 7);
 
   // Get all goals (individual tasks)
-  const goals = await prisma.goalTask.findMany({
+  const goals = await db.goalTask.findMany({
     where: { userId },
-    orderBy: [{ weekNumber: "desc" }, { createdAt: "desc" }],
+  });
+
+  // Sort goals by weekNumber desc, then createdAt desc (manual sort since DynamoDB doesn't support multi-field orderBy)
+  goals.sort((a: any, b: any) => {
+    if (b.weekNumber !== a.weekNumber) return b.weekNumber - a.weekNumber;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
   // Get focus pillars
-  const focusPillars = await prisma.focusPillar.findMany({
+  const focusPillars = await db.focusPillar.findMany({
     where: { userId },
-    orderBy: { priority: "asc" },
   });
 
+  // Sort focus pillars by priority (manual sort)
+  focusPillars.sort((a: any, b: any) => a.priority - b.priority);
+
   // Get all pillars with completion stats
-  const checkins = await prisma.dailyCheckin.findMany({
+  const checkins = await db.dailyCheckin.findMany({
     where: { userId, completed: true },
-    select: { pillarId: true },
   });
 
   const pillarsWithStats = PILLARS.map((pillar) => {

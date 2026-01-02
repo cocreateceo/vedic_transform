@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { PILLARS, getPillarsByCategory } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,7 +14,7 @@ export default async function PillarsPage() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const todayCheckins = await prisma.dailyCheckin.findMany({
+  const todayCheckins = await db.dailyCheckin.findMany({
     where: {
       userId,
       checkinDate: today,

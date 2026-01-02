@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { prisma } from "./db";
+import { db } from "./dynamodb";
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "vedic-transform-secret-key-change-in-production"
@@ -85,7 +85,7 @@ export async function registerUser(
 ): Promise<{ success: boolean; error?: string; user?: UserPayload }> {
   try {
     // Check if user exists
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await db.user.findUnique({
       where: { email: email.toLowerCase() },
     });
 
@@ -95,7 +95,7 @@ export async function registerUser(
 
     // Create user
     const passwordHash = await hashPassword(password);
-    const user = await prisma.user.create({
+    const user = await db.user.create({
       data: {
         email: email.toLowerCase(),
         passwordHash,
@@ -126,7 +126,7 @@ export async function loginUser(
   password: string
 ): Promise<{ success: boolean; error?: string; user?: UserPayload }> {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await db.user.findUnique({
       where: { email: email.toLowerCase() },
     });
 

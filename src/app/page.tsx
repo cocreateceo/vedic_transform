@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -14,6 +15,7 @@ import {
   Moon,
   Wind,
   Sun,
+  Youtube,
 } from "lucide-react";
 import { YouTubeIntro } from "@/components/features/landing/youtube-intro";
 
@@ -63,15 +65,28 @@ export default function HomePage() {
 
         <nav className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-                <Flame className="w-6 h-6 text-white" />
-              </div>
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src="/images/logo.jpg"
+                alt="10X Vedic Logo"
+                width={40}
+                height={40}
+                className="rounded-xl"
+              />
               <span className="text-xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
                 10X Vedic
               </span>
-            </div>
+            </Link>
             <div className="flex items-center gap-4">
+              <a
+                href="https://www.youtube.com/@vedic-s"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-red-600 hover:text-red-700 font-medium"
+              >
+                <Youtube className="w-5 h-5" />
+                <span className="hidden sm:inline">YouTube</span>
+              </a>
               <Link
                 href="/login"
                 className="text-gray-600 hover:text-gray-900 font-medium"
@@ -85,13 +100,52 @@ export default function HomePage() {
           </div>
         </nav>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+        {/* Hero Banner with Face */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+          <a
+            href="https://www.youtube.com/@vedic-s"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block relative rounded-2xl overflow-hidden shadow-2xl group"
+          >
+            <div className="relative aspect-[21/9] sm:aspect-[21/8] md:aspect-[21/7] lg:aspect-[21/6] w-full max-h-[40vh]">
+              <Image
+                src="/images/banner.jpg"
+                alt="10X Transformation"
+                fill
+                className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                priority
+                sizes="(max-width: 1280px) 100vw, 1280px"
+              />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+
+              {/* Text Content */}
+              <div className="absolute inset-0 flex items-center">
+                <div className="px-6 sm:px-10 md:px-16">
+                  <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+                    10X
+                    <span className="block bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                      Transformation
+                    </span>
+                  </h2>
+                  <p className="mt-2 sm:mt-4 text-amber-200 text-sm sm:text-lg flex items-center gap-2">
+                    <Youtube className="w-4 h-4 sm:w-5 sm:h-5" />
+                    Watch on YouTube
+                  </p>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-700 text-sm font-medium mb-8">
             <Sparkles className="w-4 h-4" />
             48-Day Transformation Program
           </div>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
             Transform Your Life with
             <span className="block bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
               Vedic Wisdom
@@ -311,11 +365,24 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center">
-                <Flame className="w-4 h-4 text-white" />
-              </div>
+              <Image
+                src="/images/logo.jpg"
+                alt="10X Vedic Logo"
+                width={32}
+                height={32}
+                className="rounded-lg"
+              />
               <span className="font-semibold text-white">10X Vedic</span>
             </div>
+            <a
+              href="https://www.youtube.com/@vedic-s"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-red-500 hover:text-red-400 transition-colors"
+            >
+              <Youtube className="w-5 h-5" />
+              <span>Subscribe on YouTube</span>
+            </a>
             <p className="text-sm">
               © {new Date().getFullYear()} 10X Vedic Transformation. All rights
               reserved.

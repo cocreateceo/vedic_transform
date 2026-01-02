@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { verifyToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const data = await request.json();
 
     // Get current journey for day calculation
-    const journey = await prisma.journey.findFirst({
+    const journey = await db.journey.findFirst({
       where: { userId, isActive: true },
     });
 
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       : 1;
 
     // Create assessment
-    const assessment = await prisma.selfAssessment.create({
+    const assessment = await db.selfAssessment.create({
       data: {
         userId,
         assessmentDate: new Date(),
@@ -89,18 +89,18 @@ export async function GET(request: Request) {
       where.assessmentType = type;
     }
 
-    const assessments = await prisma.selfAssessment.findMany({
+    const assessments = await db.selfAssessment.findMany({
       where,
       orderBy: { assessmentDate: "desc" },
     });
 
     // Get baseline and latest for comparison
-    const baseline = await prisma.selfAssessment.findFirst({
+    const baseline = await db.selfAssessment.findFirst({
       where: { userId, assessmentType: "baseline" },
       orderBy: { assessmentDate: "asc" },
     });
 
-    const latest = await prisma.selfAssessment.findFirst({
+    const latest = await db.selfAssessment.findFirst({
       where: { userId },
       orderBy: { assessmentDate: "desc" },
     });

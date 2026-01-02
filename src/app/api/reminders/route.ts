@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { verifyToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
@@ -21,13 +21,13 @@ export async function GET() {
     const userId = payload.id;
 
     // Get or create reminder settings
-    let settings = await prisma.reminderSettings.findUnique({
+    let settings = await db.reminderSettings.findUnique({
       where: { userId },
     });
 
     if (!settings) {
       // Create default settings
-      settings = await prisma.reminderSettings.create({
+      settings = await db.reminderSettings.create({
         data: {
           userId,
           morningEnabled: true,
@@ -79,7 +79,7 @@ export async function PUT(request: Request) {
     const data = await request.json();
 
     // Upsert settings
-    const settings = await prisma.reminderSettings.upsert({
+    const settings = await db.reminderSettings.upsert({
       where: { userId },
       update: {
         morningEnabled: data.morningEnabled,

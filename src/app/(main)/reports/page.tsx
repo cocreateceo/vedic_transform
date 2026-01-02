@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth";
 import { TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
 import { ReportsPageClient } from "./reports-client";
@@ -8,7 +8,7 @@ export default async function ReportsPage() {
   const userId = user.id;
 
   // Get journey
-  const journey = await prisma.journey.findFirst({
+  const journey = await db.journey.findFirst({
     where: { userId, isActive: true },
   });
 
@@ -25,21 +25,21 @@ export default async function ReportsPage() {
   const currentWeek = Math.ceil(currentDay / 7);
 
   // Get basic stats for report cards
-  const checkins = await prisma.dailyCheckin.findMany({
+  const checkins = await db.dailyCheckin.findMany({
     where: { userId, completed: true },
   });
 
-  const karmaTransactions = await prisma.karmaTransaction.findMany({
+  const karmaTransactions = await db.karmaTransaction.findMany({
     where: { userId },
   });
 
   const totalKarma = karmaTransactions.reduce((sum, t) => sum + t.points, 0);
 
-  const streak = await prisma.streak.findFirst({
+  const streak = await db.streak.findFirst({
     where: { userId, journeyId: journey?.id || "" },
   });
 
-  const badges = await prisma.userBadge.findMany({
+  const badges = await db.userBadge.findMany({
     where: { userId },
   });
 
