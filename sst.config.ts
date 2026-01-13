@@ -14,8 +14,18 @@ export default $config({
     };
   },
   async run() {
-    // Deploy the Next.js site to AWS Lambda
-    const site = new sst.aws.Nextjs("VedicTransformSite", {
+    // Deploy the landing page to vedics.net
+    const landingPage = new sst.aws.StaticSite("LandingPage", {
+      path: "landing-page",
+      domain: {
+        name: "vedics.net",
+        redirects: ["www.vedics.net"],
+      },
+    });
+
+    // Deploy the Next.js app to 10x.vedics.net
+    const app = new sst.aws.Nextjs("VedicTransformSite", {
+      domain: "10x.vedics.net",
       permissions: [
         {
           actions: ["dynamodb:*"],
@@ -25,7 +35,8 @@ export default $config({
     });
 
     return {
-      siteUrl: site.url,
+      landingPage: landingPage.url,
+      app: app.url,
     };
   },
 });

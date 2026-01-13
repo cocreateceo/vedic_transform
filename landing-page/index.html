@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedics.net - Transform Your Life</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .app-card.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .app-card.coming-soon {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .app-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .app-card.active .app-number {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .app-card.coming-soon .app-number {
+            color: #ccc;
+        }
+
+        .app-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .app-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .app-status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .app-card.active .app-status {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .app-card.coming-soon .app-status {
+            background: #f0f0f0;
+            color: #999;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 60px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Vedics.net</h1>
+            <p>Transform your life through ancient wisdom and modern technology</p>
+        </div>
+
+        <div class="apps-grid">
+            <!-- 10X App - Active -->
+            <a href="https://10x.vedics.net" class="app-card active">
+                <div class="app-number">10X</div>
+                <div class="app-title">Vedic Transform</div>
+                <div class="app-description">
+                    48-day transformation journey based on ancient Vedic principles. Track your progress across 12 life pillars, build streaks, and achieve holistic growth.
+                </div>
+                <span class="app-status">🚀 Live Now</span>
+            </a>
+
+            <!-- Vedic Astrology - Active -->
+            <a href="https://d10mstgfo5cmvc.cloudfront.net/" class="app-card active">
+                <div class="app-number">✨</div>
+                <div class="app-title">Vedic Astrology</div>
+                <div class="app-description">
+                    Discover your cosmic blueprint through authentic Vedic astrology. Personalized insights, predictions, and guidance based on ancient wisdom.
+                </div>
+                <span class="app-status">🚀 Live Now</span>
+            </a>
+
+            <!-- Career Builder - Active -->
+            <a href="https://d2rglxopjj9hqx.cloudfront.net/" class="app-card active">
+                <div class="app-number">💼</div>
+                <div class="app-title">Career Builder</div>
+                <div class="app-description">
+                    Build your dream career with expert guidance and tools. Resume building, interview prep, and career planning all in one place.
+                </div>
+                <span class="app-status">🚀 Live Now</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 Vedics.net - All Rights Reserved</p>
+        </div>
+    </div>
+</body>
+</html>

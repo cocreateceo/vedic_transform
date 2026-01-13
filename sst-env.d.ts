@@ -5,6 +5,10 @@
 
 declare module "sst" {
   export interface Resource {
+    "LandingPage": {
+      "type": "sst.aws.StaticSite"
+      "url": string
+    }
     "VedicTransformSite": {
       "type": "sst.aws.Nextjs"
       "url": string
