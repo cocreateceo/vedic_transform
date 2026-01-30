@@ -36,10 +36,11 @@ yarn-error.log*
 # vercel
 .vercel
 
-# prisma
-# prisma/dev.db - COMMITTED for demo/seeded data
-prisma/dev.db-journal
-prisma/dev.db.backup
+# prisma (DEPRECATED - now using DynamoDB)
+prisma/
+*.db
+*.db-journal
+*.db.backup
 
 # typescript
 *.tsbuildinfo
@@ -52,3 +53,15 @@ next-env.d.ts
 # Old deployment artifacts (no longer used - now using SST)
 lambdas/
 scripts/migrate-data.ts
+
+# Python / Voice Server
+vedic-ai-assistant/voice-server/venv/
+vedic-ai-assistant/voice-server/__pycache__/
+vedic-ai-assistant/voice-server/*.pyc
+vedic-ai-assistant/voice-server/cache/
+vedic-ai-assistant/voice-server/logs/*.log
+vedic-ai-assistant/voice-server/audio_files/*.wav
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

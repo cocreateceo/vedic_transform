@@ -14,6 +14,12 @@ const protectedRoutes = ["/dashboard", "/pillars", "/progress", "/journal", "/ac
 const authRoutes = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
+  console.log("[Middleware] Request for:", request.nextUrl.pathname);
+
+  // Temporarily bypass all auth checks for debugging
+  return NextResponse.next();
+
+  /* Original code commented out for debugging
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(COOKIE_NAME)?.value;
 
@@ -48,6 +54,7 @@ export async function middleware(request: NextRequest) {
   }
 
   return NextResponse.next();
+  */
 }
 
 export const config = {

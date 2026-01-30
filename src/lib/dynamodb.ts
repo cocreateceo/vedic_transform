@@ -9,12 +9,30 @@ import {
   ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-// Initialize DynamoDB client
-const client = new DynamoDBClient({
-  region: process.env.AWS_REGION || "us-east-1",
-});
+// Lazy initialization to avoid blocking app startup
+let dynamodbClient: DynamoDBDocumentClient | null = null;
 
-export const dynamodb = DynamoDBDocumentClient.from(client);
+function getDynamoDBClient(): DynamoDBDocumentClient {
+  if (!dynamodbClient) {
+    const client = new DynamoDBClient({
+      region: process.env.AWS_REGION || "us-east-1",
+      maxAttempts: 3,
+      requestHandler: {
+        connectionTimeout: 3000,
+        requestTimeout: 5000,
+      } as any,
+    });
+    dynamodbClient = DynamoDBDocumentClient.from(client);
+  }
+  return dynamodbClient;
+}
+
+export const dynamodb = new Proxy({} as DynamoDBDocumentClient, {
+  get(target, prop) {
+    const client = getDynamoDBClient();
+    return (client as any)[prop];
+  }
+});
 
 // Table name prefix
 const TABLE_PREFIX = "VedicTransform-";

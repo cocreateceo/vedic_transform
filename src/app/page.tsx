@@ -18,6 +18,7 @@ import {
   Youtube,
 } from "lucide-react";
 import { YouTubeIntro } from "@/components/features/landing/youtube-intro";
+import { VedicChatButton } from "@/components/features/chat/VedicChatButton";
 
 const pillarsData = {
   body: {
@@ -391,6 +392,9 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+
+      {/* AI Chat Assistant - Yellow Theme - Landing Page Only */}
+      <VedicChatButton backendUrl="http://10.0.0.27:5000" />
     </div>
   );
 }
