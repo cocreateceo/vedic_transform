@@ -394,7 +394,7 @@ export default function HomePage() {
       </footer>
 
       {/* AI Chat Assistant - Yellow Theme - Landing Page Only */}
-      <VedicChatButton backendUrl="http://10.0.0.27:5000" />
+      <VedicChatButton backendUrl={process.env.NEXT_PUBLIC_VOICE_SERVER_URL || "https://dxxecm05qzkiz.cloudfront.net"} />
     </div>
   );
 }

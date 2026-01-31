@@ -21,7 +21,7 @@ class Config:
     HF_TOKEN = os.getenv('HF_TOKEN', '')
 
     # Voice File - YOUR cloned voice for Vedic guru
-    VOICE_FILE = os.getenv('VOICE_FILE', 'voices/vedic_guru_voice.wav')
+    VOICE_FILE = os.getenv('VOICE_FILE', 'voices/reference_voice.wav')
 
     # VoxCPM Specific Settings (only used if TTS_ENGINE = 'voxcpm')
     VOXCPM_MODEL_VERSION = os.getenv('VOXCPM_MODEL_VERSION', '1.5')
@@ -82,8 +82,9 @@ redirect to the transformation journey.
     CACHE_ENABLED = True
     CACHE_MAX_SIZE_MB = 500
 
-    # CORS - Allow local development
+    # CORS - Allow local development and production
     CORS_ORIGINS = [
+        # Local development
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'http://localhost:3001',
@@ -94,6 +95,11 @@ redirect to the transformation journey.
         'http://localhost:5500',
         'http://localhost:8080',
         'null',  # For file:// protocol
+        # Production - Vedic Transform App
+        'https://10x.vedics.net',
+        'https://vedics.net',
+        'https://www.vedics.net',
+        'https://dxxecm05qzkiz.cloudfront.net',
     ]
 
     # Performance

@@ -6,6 +6,7 @@ import time
 import os
 import hashlib
 import logging
+from urllib.parse import quote
 from datetime import datetime
 from config import Config
 from tts_base import AudioCache
@@ -237,7 +238,7 @@ def chat_with_voice():
             cached_file = audio_cache.get(cache_key)
             if cached_file:
                 response = send_file(cached_file, mimetype='audio/wav')
-                response.headers['X-Answer-Text'] = answer
+                response.headers['X-Answer-Text'] = quote(answer, safe='')
                 return response
 
         # Generate audio
@@ -251,9 +252,9 @@ def chat_with_voice():
         if audio_cache:
             audio_cache.set(cache_key, output_path)
 
-        # Return audio with answer in header
+        # Return audio with answer in header (URL-encoded to handle emojis/unicode)
         response = send_file(output_path, mimetype='audio/wav')
-        response.headers['X-Answer-Text'] = answer
+        response.headers['X-Answer-Text'] = quote(answer, safe='')
         return response
 
     except Exception as e:

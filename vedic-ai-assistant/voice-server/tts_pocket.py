@@ -30,6 +30,7 @@ class PocketTTSEngine(TTSEngineBase):
             self.model = None
             self.voice_state = None
             self.sample_rate = 24000
+            self._model_loaded = True  # Nothing to load in fallback mode
             return
 
         # Lazy loading: Store config but don't load model yet
@@ -65,10 +66,24 @@ class PocketTTSEngine(TTSEngineBase):
         self.model = TTSModel.load_model()
         print(f"✅ Model loaded in {time.time()-start:.1f}s")
 
-        print(f"🔄 Loading your cloned voice from: {self.voice_file}")
-        start = time.time()
-        self.voice_state = self.model.get_state_for_audio_prompt(self.voice_file)
-        print(f"✅ Voice loaded in {time.time()-start:.1f}s")
+        # Try voice cloning first, fall back to built-in voice if unauthorized
+        try:
+            print(f"🔄 Loading your cloned voice from: {self.voice_file}")
+            start = time.time()
+            self.voice_state = self.model.get_state_for_audio_prompt(self.voice_file)
+            print(f"✅ Voice cloning loaded in {time.time()-start:.1f}s")
+        except ValueError as e:
+            if "voice cloning" in str(e).lower():
+                # Fall back to built-in voice (jean = wise male voice)
+                # Available: alba, marius, javert, jean, fantine, cosette, eponine, azelma
+                fallback_voice = 'jean'
+                print(f"⚠️ Voice cloning requires HF authentication. Using built-in voice: {fallback_voice}")
+                print(f"   To enable voice cloning: set HF_TOKEN and accept terms at https://huggingface.co/kyutai/pocket-tts")
+                start = time.time()
+                self.voice_state = self.model.get_state_for_audio_prompt(fallback_voice)
+                print(f"✅ Built-in voice '{fallback_voice}' loaded in {time.time()-start:.1f}s")
+            else:
+                raise
 
         self.sample_rate = self.model.sample_rate
         print(f"📊 Sample rate: {self.sample_rate} Hz")
