@@ -16,7 +16,7 @@ export default function AboutPage() {
     .join("");
 
   return (
-    <div className="text-[var(--color-text-primary)]">
+    <div className="text-[#e2e8f0]">
       {/* ═══ Hero ═══ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
