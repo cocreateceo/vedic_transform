@@ -431,20 +431,19 @@ export default $config({
     });
 
     // ── Static Site ─────────────────────────────────────────────────
-    // Static site is deployed separately or via SST StaticSite.
-    // Kept commented until Next.js is converted to static export.
-    // const site = new sst.aws.StaticSite("VedicTransformSite", {
-    //   build: {
-    //     command: "npm run build",
-    //     output: "out",
-    //   },
-    //   environment: {
-    //     NEXT_PUBLIC_API_URL: api.url,
-    //   },
-    // });
+    const site = new sst.aws.StaticSite("VedicTransformSite", {
+      build: {
+        command: "npm run build",
+        output: "out",
+      },
+      environment: {
+        NEXT_PUBLIC_API_URL: api.url,
+      },
+    });
 
     return {
       api: api.url,
+      site: site.url,
     };
   },
 });
