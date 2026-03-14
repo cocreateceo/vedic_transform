@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -29,14 +28,10 @@ export function CookieConsent() {
   };
 
   return (
-    <AnimatePresence>
+    <>
       {visible && (
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6"
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6 transition-all duration-300"
         >
           <div className="mx-auto max-w-4xl rounded-2xl border border-purple-500/20 bg-gray-900/80 p-6 shadow-2xl shadow-purple-900/20 backdrop-blur-xl">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -61,8 +56,8 @@ export function CookieConsent() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }

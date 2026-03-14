@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Bell, Check, CheckCheck, Info, Trophy, Target, Sparkles } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
 
 interface Notification {
@@ -138,14 +137,9 @@ export function NotificationCenter() {
       </button>
 
       {/* Dropdown */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -8, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.96 }}
-            transition={{ duration: 0.15 }}
-            className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-[var(--color-bg-surface)] shadow-xl ring-1 ring-[var(--color-border)] overflow-hidden z-50"
+      {isOpen && (
+          <div
+            className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-[var(--color-bg-surface)] shadow-xl ring-1 ring-[var(--color-border)] overflow-hidden z-50 transition-all duration-150"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-border)]">
@@ -243,9 +237,8 @@ export function NotificationCenter() {
                 })
               )}
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
   );
 }
