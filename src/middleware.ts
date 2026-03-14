@@ -8,7 +8,7 @@ const JWT_SECRET = new TextEncoder().encode(
 const COOKIE_NAME = "vedic-auth-token";
 
 // Routes that require authentication
-const protectedRoutes = ["/dashboard", "/pillars", "/progress", "/journal", "/acharya", "/settings"];
+const protectedRoutes = ["/dashboard", "/pillars", "/progress", "/journal", "/goals", "/insights", "/reports", "/reminders", "/settings", "/acharya", "/library", "/sessions", "/wisdom", "/mood", "/achievements"];
 
 // Routes that should redirect to dashboard if already logged in
 const authRoutes = ["/login", "/register"];

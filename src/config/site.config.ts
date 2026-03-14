@@ -39,6 +39,8 @@ export const siteConfig = {
   // Social Links
   social: {
     youtube: "https://www.youtube.com/@vedic-s",
+    instagram: "",
+    twitter: "",
   },
 };
 
