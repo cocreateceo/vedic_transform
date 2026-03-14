@@ -64,11 +64,10 @@ const dailyRoutine = [
   { time: "9:30 PM", activity: "Sleep", icon: Moon, desc: "Wind down for deep restorative rest" },
 ];
 
-const bodyPillars = getPillarsByCategory("body");
-const mindPillars = getPillarsByCategory("mind");
-const spiritPillars = getPillarsByCategory("spirit");
-
 export default function HowItWorksPage() {
+  const bodyPillars = getPillarsByCategory("body");
+  const mindPillars = getPillarsByCategory("mind");
+  const spiritPillars = getPillarsByCategory("spirit");
   return (
     <div className="text-[var(--color-text-primary)]">
       {/* ═══ Hero ═══ */}
