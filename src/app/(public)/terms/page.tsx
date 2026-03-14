@@ -8,7 +8,7 @@ export default function TermsPage() {
   return (
     <div className="text-[#e2e8f0]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-16">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
@@ -22,7 +22,7 @@ export default function TermsPage() {
       </section>
 
       {/* Content */}
-      <section className="py-16 bg-[#0f0a1e]">
+      <section className="py-16 bg-[#0f0d08]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-10">
             <div className="p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">

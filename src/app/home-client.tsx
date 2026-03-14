@@ -56,12 +56,12 @@ export function HomePageClient() {
   const testimonialPreview = TESTIMONIALS.slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-[#0f0a1e] text-[#e2e8f0]">
+    <div className="min-h-screen bg-[#0f0d08] text-[#e2e8f0]">
       {/* ═══ 1. Navbar ═══ */}
       <PublicNavbar />
 
       {/* ═══ 2. Hero Section ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         {/* Ambient glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
@@ -131,7 +131,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 4. How It Works ═══ */}
-      <section className="py-20 bg-[#0f0a1e]">
+      <section className="py-20 bg-[#0f0d08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             How It <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">Works</span>
@@ -166,7 +166,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 4.5 Transformation Flow ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             The{" "}
@@ -182,7 +182,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 5. 11 Pillars Grid ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             The <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">11 Pillars</span> of Transformation
@@ -229,7 +229,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 6. Benefits Grid ═══ */}
-      <section className="py-20 bg-[#0f0a1e]">
+      <section className="py-20 bg-[#0f0d08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             What You&apos;ll <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Gain</span>
@@ -258,7 +258,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 7. Testimonials ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             Voices of <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Transformation</span>
@@ -301,7 +301,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 8. FAQ Preview ═══ */}
-      <section className="py-20 bg-[#0f0a1e]">
+      <section className="py-20 bg-[#0f0d08]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             Frequently Asked <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">Questions</span>
@@ -351,8 +351,8 @@ export function HomePageClient() {
 
       {/* ═══ 9. CTA Section ═══ */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1145] to-amber-900/40" />
-        <div className="absolute inset-0 bg-[#0f0a1e]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1508] to-amber-900/40" />
+        <div className="absolute inset-0 bg-[#0f0d08]/40" />
         {/* Ambient glow */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-amber-500/15 rounded-full blur-[100px] pointer-events-none" />

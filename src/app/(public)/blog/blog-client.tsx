@@ -96,7 +96,7 @@ export function BlogPageClient() {
   return (
     <div className="text-[#e2e8f0]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-20">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-20">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/15 border border-orange-500/20 text-orange-300 text-sm font-medium mb-6">
@@ -115,7 +115,7 @@ export function BlogPageClient() {
       </section>
 
       {/* Category Filters */}
-      <section className="bg-[#0f0a1e] border-b border-white/[0.06]">
+      <section className="bg-[#0f0d08] border-b border-white/[0.06]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-wrap gap-2 justify-center">
             {categories.map((cat) => (
@@ -136,7 +136,7 @@ export function BlogPageClient() {
       </section>
 
       {/* Content */}
-      <section className="py-16 bg-[#0f0a1e]">
+      <section className="py-16 bg-[#0f0d08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
             <p className="text-center text-[#94a3b8] py-20">

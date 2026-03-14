@@ -18,7 +18,7 @@ export default function TestimonialsPage() {
   return (
     <div className="text-[#e2e8f0]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-20">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-20">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
@@ -34,7 +34,7 @@ export default function TestimonialsPage() {
       </section>
 
       {/* Testimonials Grid */}
-      <section className="py-16 bg-[#0f0a1e]">
+      <section className="py-16 bg-[#0f0d08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t) => (
@@ -89,8 +89,8 @@ export default function TestimonialsPage() {
 
       {/* CTA */}
       <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1145] to-amber-900/40" />
-        <div className="absolute inset-0 bg-[#0f0a1e]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1508] to-amber-900/40" />
+        <div className="absolute inset-0 bg-[#0f0d08]/40" />
         <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -75,11 +75,11 @@ export function ContactFormClient() {
           required
           className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
         >
-          <option value="" className="bg-[#1a1145]">Select a subject</option>
-          <option value="general" className="bg-[#1a1145]">General Inquiry</option>
-          <option value="support" className="bg-[#1a1145]">Support</option>
-          <option value="feedback" className="bg-[#1a1145]">Feedback</option>
-          <option value="partnership" className="bg-[#1a1145]">Partnership</option>
+          <option value="" className="bg-[#1a1508]">Select a subject</option>
+          <option value="general" className="bg-[#1a1508]">General Inquiry</option>
+          <option value="support" className="bg-[#1a1508]">Support</option>
+          <option value="feedback" className="bg-[#1a1508]">Feedback</option>
+          <option value="partnership" className="bg-[#1a1508]">Partnership</option>
         </select>
       </div>
 

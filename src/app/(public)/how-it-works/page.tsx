@@ -71,7 +71,7 @@ export default function HowItWorksPage() {
   return (
     <div className="text-[var(--color-text-primary)]">
       {/* ═══ Hero ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
@@ -88,7 +88,7 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ 5-Step Timeline ═══ */}
-      <section className="py-20 bg-[#0f0a1e]">
+      <section className="py-20 bg-[#0f0d08]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             The{" "}
@@ -134,7 +134,7 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ Daily Routine ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             A Day in Your{" "}
@@ -174,7 +174,7 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ Pillar Categories ═══ */}
-      <section className="py-20 bg-[#0f0a1e]">
+      <section className="py-20 bg-[#0f0d08]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             The{" "}
@@ -250,7 +250,7 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ Requirements ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             What You{" "}
@@ -281,8 +281,8 @@ export default function HowItWorksPage() {
 
       {/* ═══ CTA ═══ */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1145] to-amber-900/40" />
-        <div className="absolute inset-0 bg-[#0f0a1e]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1508] to-amber-900/40" />
+        <div className="absolute inset-0 bg-[#0f0d08]/40" />
         <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

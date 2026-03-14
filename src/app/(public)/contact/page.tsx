@@ -11,7 +11,7 @@ export default function ContactPage() {
   return (
     <div className="text-[#e2e8f0]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-20">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-20">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
@@ -27,7 +27,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-16 bg-[#0f0a1e]">
+      <section className="py-16 bg-[#0f0d08]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
             {/* Left: Contact Form */}

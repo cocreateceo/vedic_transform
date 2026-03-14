@@ -58,7 +58,7 @@ export default async function BlogPostPage({
   return (
     <div className="text-[#e2e8f0]">
       {/* Article Header */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-16">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
@@ -97,7 +97,7 @@ export default async function BlogPostPage({
       </section>
 
       {/* Article Content */}
-      <section className="py-12 bg-[#0f0a1e]">
+      <section className="py-12 bg-[#0f0d08]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <article
             className="prose prose-invert prose-lg max-w-none
@@ -112,7 +112,7 @@ export default async function BlogPostPage({
 
       {/* Related Articles */}
       {related.length > 0 && (
-        <section className="py-16 bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+        <section className="py-16 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 text-center">
               Related{" "}

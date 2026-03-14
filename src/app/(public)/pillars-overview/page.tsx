@@ -8,7 +8,7 @@ export default function PillarsOverviewPage() {
   return (
     <div className="text-[var(--color-text-primary)]">
       {/* ═══ Hero ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
@@ -24,7 +24,7 @@ export default function PillarsOverviewPage() {
       </section>
 
       {/* ═══ Filter + Grid (client component) ═══ */}
-      <section className="py-20 bg-[#0f0a1e]">
+      <section className="py-20 bg-[#0f0d08]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <PillarsGrid />
         </div>
@@ -32,8 +32,8 @@ export default function PillarsOverviewPage() {
 
       {/* ═══ CTA ═══ */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1145] to-amber-900/40" />
-        <div className="absolute inset-0 bg-[#0f0a1e]/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1508] to-amber-900/40" />
+        <div className="absolute inset-0 bg-[#0f0d08]/40" />
         <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
