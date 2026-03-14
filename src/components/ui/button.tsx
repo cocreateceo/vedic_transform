@@ -31,7 +31,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       secondary:
         "bg-orange-600 text-white hover:bg-orange-700 focus:ring-orange-500",
       outline:
-        "border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-card-bg)] focus:ring-orange-500",
+        "border-2 border-[#DAA520] text-[var(--color-primary)] hover:bg-[var(--color-card-bg)] hover:border-[#FFD700] focus:ring-orange-500",
       ghost:
         "text-gray-600 hover:bg-gray-100 focus:ring-gray-500",
       danger:

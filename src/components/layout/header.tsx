@@ -38,7 +38,7 @@ export function Header({ user }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-lg bg-white/80 border-b border-amber-100">
+    <header className="sticky top-0 z-50 backdrop-blur-lg bg-white/80 border-b-2 border-[#DAA520]/40">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -91,7 +91,7 @@ export function Header({ user }: HeaderProps) {
               </button>
 
               {profileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white shadow-lg ring-1 ring-black/5 py-1">
+                <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white shadow-lg border-2 border-[#DAA520]/30 py-1">
                   <Link
                     href="/settings"
                     className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-amber-50"

@@ -63,7 +63,7 @@ export function MobileNav() {
 
       {/* More menu panel */}
       {showMore && (
-        <div className="fixed bottom-16 left-0 right-0 z-50 bg-white border-t border-gray-200 rounded-t-2xl shadow-xl lg:hidden safe-area-bottom">
+        <div className="fixed bottom-16 left-0 right-0 z-50 bg-white border-t-2 border-[#DAA520]/40 rounded-t-2xl shadow-xl lg:hidden safe-area-bottom">
           <div className="p-4">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -104,7 +104,7 @@ export function MobileNav() {
       )}
 
       {/* Bottom nav bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 lg:hidden safe-area-bottom">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-[#DAA520]/40 lg:hidden safe-area-bottom">
         <div className="flex items-center justify-around h-16 px-2">
           {navigation.map((item) => {
             const isActive =

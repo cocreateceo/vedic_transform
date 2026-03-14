@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils/cn";
 import { forwardRef, type HTMLAttributes } from "react";
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "glass" | "elevated";
+  variant?: "default" | "glass" | "elevated" | "golden";
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -13,7 +13,9 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       default: "vedic-card",
       glass: "glass rounded-2xl",
       elevated:
-        "bg-[var(--color-bg-surface)] rounded-2xl shadow-xl shadow-gray-200/50 border border-[var(--color-border)]",
+        "bg-[var(--color-bg-surface)] rounded-2xl shadow-xl border-2 border-[#DAA520] golden-glow",
+      golden:
+        "bg-[var(--color-bg-surface)] rounded-2xl shadow-xl border-2 border-[#DAA520] golden-glow golden-top-accent",
     };
 
     return (

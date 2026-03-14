@@ -556,7 +556,7 @@ export function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-8 px-4 bg-gradient-to-br from-amber-50 via-orange-50/30 to-white">
-      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-2xl border border-amber-200/50 shadow-[0_8px_60px_rgba(255,153,51,0.12)]">
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-2xl border-2 border-[#DAA520] shadow-[0_0_20px_rgba(255,215,0,0.15),0_8px_60px_rgba(255,153,51,0.12)] golden-top-accent">
 
         {/* ── Left Panel - Branding ────────────────────────────────── */}
         <div className="relative hidden lg:flex flex-col justify-between p-10 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100/60 overflow-hidden">

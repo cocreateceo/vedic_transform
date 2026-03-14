@@ -34,7 +34,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             "placeholder:text-gray-400",
             error
               ? "border-red-500 focus:border-red-500 focus:ring-red-500/50"
-              : "border-gray-200 hover:border-gray-300",
+              : "border-[#DAA520]/40 hover:border-[#DAA520]/60",
             className
           )}
           {...props}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, Award, ArrowRight, Sparkles } from "lucide-react";
+import { Clock, Award, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 import { PILLARS, type PillarCategory } from "@/constants/pillars";
 import Link from "next/link";
 
@@ -14,13 +14,12 @@ const filterTabs: { key: Filter; label: string; icon: string }[] = [
   { key: "spirit", label: "Spirit", icon: "✨" },
 ];
 
-const categoryStyles: Record<string, { label: string; bg: string; text: string; border: string; glow: string }> = {
-  body: { label: "Body", bg: "bg-red-500/20", text: "text-red-300", border: "border-red-500/25", glow: "rgba(239,68,68,0.08)" },
-  mind: { label: "Mind", bg: "bg-purple-500/20", text: "text-purple-300", border: "border-purple-500/25", glow: "rgba(168,85,247,0.08)" },
-  spirit: { label: "Spirit", bg: "bg-amber-500/20", text: "text-amber-300", border: "border-amber-500/25", glow: "rgba(245,158,11,0.08)" },
+const categoryStyles: Record<string, { label: string; bg: string; text: string; glow: string }> = {
+  body: { label: "Body", bg: "bg-red-500/20", text: "text-red-300", glow: "rgba(239,68,68,0.08)" },
+  mind: { label: "Mind", bg: "bg-purple-500/20", text: "text-purple-300", glow: "rgba(168,85,247,0.08)" },
+  spirit: { label: "Spirit", bg: "bg-amber-500/20", text: "text-amber-300", glow: "rgba(245,158,11,0.08)" },
 };
 
-// Rich detailed descriptions for each pillar
 const pillarDetails: Record<string, { fullDescription: string; benefits: string[]; practice: string; scienceBehind: string }> = {
   "morning-initiation": {
     fullDescription: "The Brahma Muhurta (approximately 96 minutes before sunrise) is considered the most auspicious time in Vedic tradition. Rising at 5 AM allows you to harness the sattvic (pure) energy that permeates the atmosphere during this period. This practice activates your circadian rhythm, setting the foundation for discipline, mental clarity, and emotional balance throughout the day.",
@@ -92,21 +91,38 @@ const pillarDetails: Record<string, { fullDescription: string; benefits: string[
 
 export function PillarsGrid() {
   const [activeFilter, setActiveFilter] = useState<Filter>("all");
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [activePillarId, setActivePillarId] = useState<number>(1);
 
   const filtered =
     activeFilter === "all"
       ? PILLARS
       : PILLARS.filter((p) => p.category === activeFilter);
 
+  // When filter changes, select first pillar in that filter
+  const handleFilterChange = (key: Filter) => {
+    setActiveFilter(key);
+    const newFiltered = key === "all" ? PILLARS : PILLARS.filter((p) => p.category === key);
+    if (newFiltered.length > 0) setActivePillarId(newFiltered[0].id);
+  };
+
+  const activePillar = PILLARS.find((p) => p.id === activePillarId) || PILLARS[0];
+  const details = pillarDetails[activePillar.slug];
+  const cat = categoryStyles[activePillar.category];
+  const IconComp = activePillar.icon;
+
+  // Navigation
+  const currentIndex = filtered.findIndex((p) => p.id === activePillarId);
+  const prevPillar = currentIndex > 0 ? filtered[currentIndex - 1] : null;
+  const nextPillar = currentIndex < filtered.length - 1 ? filtered[currentIndex + 1] : null;
+
   return (
     <>
-      {/* ═══ Filter Tabs ═══ */}
-      <div className="flex items-center justify-center gap-3 mb-12 flex-wrap">
+      {/* ═══ Category Filter Tabs ═══ */}
+      <div className="flex items-center justify-center gap-3 mb-8 flex-wrap">
         {filterTabs.map((tab) => (
           <button
             key={tab.key}
-            onClick={() => { setActiveFilter(tab.key); setExpandedId(null); }}
+            onClick={() => handleFilterChange(tab.key)}
             className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
               activeFilter === tab.key
                 ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 scale-105"
@@ -122,196 +138,195 @@ export function PillarsGrid() {
         ))}
       </div>
 
-      {/* ═══ Category Summary (when filtered) ═══ */}
-      {activeFilter !== "all" && (
-        <div className="text-center mb-10">
-          <p className="text-[#94a3b8] text-sm max-w-2xl mx-auto">
-            {activeFilter === "body" && "Body pillars focus on physical vitality — optimizing your daily rhythms, nutrition, movement, and rest for peak energy and health."}
-            {activeFilter === "mind" && "Mind pillars develop mental strength — rewiring thought patterns, building focus through meditation, and cultivating emotional resilience."}
-            {activeFilter === "spirit" && "Spirit pillars awaken your deeper connection — aligning with cosmic rhythms, expanding consciousness, and manifesting your highest purpose."}
-          </p>
-        </div>
-      )}
-
-      {/* ═══ Pillar Cards ═══ */}
-      <div className="space-y-6">
+      {/* ═══ Pillar Sub-Tabs ═══ */}
+      <div className="flex items-center justify-center gap-2 mb-10 flex-wrap">
         {filtered.map((pillar) => {
-          const IconComp = pillar.icon;
-          const cat = categoryStyles[pillar.category];
-          const details = pillarDetails[pillar.slug];
-          const isExpanded = expandedId === pillar.id;
-
+          const PIcon = pillar.icon;
+          const isActive = pillar.id === activePillarId;
           return (
-            <div
+            <button
               key={pillar.id}
-              className="rounded-2xl bg-white/[0.02] backdrop-blur-sm border transition-all overflow-hidden"
+              onClick={() => setActivePillarId(pillar.id)}
+              className="cursor-pointer transition-all"
               style={{
-                borderColor: isExpanded ? `${pillar.color}40` : `${pillar.color}15`,
-                boxShadow: isExpanded ? `0 8px 40px ${cat.glow}, 0 0 60px ${cat.glow}` : "none",
+                padding: "8px 16px",
+                borderRadius: "12px",
+                fontSize: "13px",
+                fontWeight: isActive ? 700 : 500,
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                background: isActive ? `${pillar.color}20` : "rgba(255,255,255,0.02)",
+                border: `1px solid ${isActive ? `${pillar.color}50` : "rgba(255,255,255,0.06)"}`,
+                color: isActive ? pillar.color : "#94a3b8",
+                boxShadow: isActive ? `0 0 15px ${pillar.color}15` : "none",
+                transform: isActive ? "scale(1.05)" : "scale(1)",
               }}
             >
-              {/* Card Header */}
-              <button
-                onClick={() => setExpandedId(isExpanded ? null : pillar.id)}
-                className="w-full p-6 sm:p-8 text-left cursor-pointer hover:bg-white/[0.02] transition-colors"
-              >
-                <div className="flex items-center gap-5">
-                  {/* Large icon */}
-                  <div
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center flex-shrink-0 border"
-                    style={{
-                      background: `linear-gradient(135deg, ${pillar.color}15, ${pillar.color}25)`,
-                      borderColor: `${pillar.color}30`,
-                    }}
-                  >
-                    <IconComp className="w-8 h-8 sm:w-10 sm:h-10" style={{ color: pillar.color }} />
-                  </div>
-
-                  {/* Title + meta */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <h3 className="text-xl sm:text-2xl font-bold text-white">{pillar.name}</h3>
-                      <span className={`text-xs px-3 py-1 rounded-full ${cat.bg} ${cat.text} font-semibold`}>
-                        {cat.label}
-                      </span>
-                    </div>
-                    <p className="text-sm font-medium mt-1" style={{ color: pillar.color }}>
-                      {pillar.sanskritName}
-                    </p>
-                    <p className="text-sm text-[#94a3b8] mt-2">{pillar.description}</p>
-
-                    {/* Meta row */}
-                    <div className="flex items-center gap-4 mt-3">
-                      {pillar.defaultDurationMinutes > 0 && (
-                        <span className="inline-flex items-center gap-1.5 text-xs text-[#94a3b8]">
-                          <Clock className="w-3.5 h-3.5" />
-                          {pillar.defaultDurationMinutes} min/session
-                        </span>
-                      )}
-                      <span className="inline-flex items-center gap-1.5 text-xs text-amber-400/80">
-                        <Award className="w-3.5 h-3.5" />
-                        +{pillar.karmaPointsBase} Karma
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Expand indicator */}
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border transition-all"
-                    style={{
-                      borderColor: isExpanded ? `${pillar.color}40` : "rgba(255,255,255,0.1)",
-                      background: isExpanded ? `${pillar.color}15` : "transparent",
-                    }}
-                  >
-                    <ArrowRight
-                      className="w-5 h-5 transition-transform duration-300"
-                      style={{
-                        color: isExpanded ? pillar.color : "#64748b",
-                        transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
-                      }}
-                    />
-                  </div>
-                </div>
-              </button>
-
-              {/* Expanded Detail */}
-              {isExpanded && details && (
-                <div className="px-6 sm:px-8 pb-8 border-t border-white/[0.06]">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-6">
-                    {/* Left: Description + Science */}
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: pillar.color }} />
-                          About This Pillar
-                        </h4>
-                        <p className="text-sm text-[#b0b8c8] leading-relaxed">
-                          {details.fullDescription}
-                        </p>
-                      </div>
-
-                      <div>
-                        <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: pillar.color }} />
-                          The Science
-                        </h4>
-                        <div
-                          className="text-sm text-[#b0b8c8] leading-relaxed p-4 rounded-xl border"
-                          style={{
-                            background: `${pillar.color}05`,
-                            borderColor: `${pillar.color}15`,
-                          }}
-                        >
-                          <Sparkles className="w-4 h-4 inline mr-2" style={{ color: pillar.color }} />
-                          {details.scienceBehind}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: Benefits + Practice */}
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: pillar.color }} />
-                          Key Benefits
-                        </h4>
-                        <ul className="space-y-2.5">
-                          {details.benefits.map((benefit, idx) => (
-                            <li key={idx} className="flex items-start gap-3 text-sm text-[#b0b8c8]">
-                              <span
-                                className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-[10px] font-bold"
-                                style={{ background: `${pillar.color}20`, color: pillar.color }}
-                              >
-                                ✓
-                              </span>
-                              {benefit}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: pillar.color }} />
-                          How to Practice
-                        </h4>
-                        <div
-                          className="text-sm text-[#b0b8c8] leading-relaxed p-4 rounded-xl border-l-2"
-                          style={{
-                            borderLeftColor: pillar.color,
-                            background: "rgba(255,255,255,0.02)",
-                          }}
-                        >
-                          {details.practice}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* CTA */}
-                  <div className="mt-6 pt-6 border-t border-white/[0.06] flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className={`text-xs px-3 py-1 rounded-full ${cat.bg} ${cat.text} font-semibold`}>
-                        {cat.label}
-                      </span>
-                      <span className="text-xs text-[#64748b]">
-                        Pillar {pillar.id} of 11
-                      </span>
-                    </div>
-                    <Link
-                      href="/register"
-                      className="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg shadow-orange-500/20"
-                    >
-                      Start Practicing
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
+              <PIcon style={{ width: 16, height: 16 }} />
+              <span className="hidden sm:inline">{pillar.name}</span>
+              <span className="sm:hidden">{pillar.name.split(" ")[0]}</span>
+            </button>
           );
         })}
       </div>
+
+      {/* ═══ Active Pillar Full Detail ═══ */}
+      {details && (
+        <div
+          className="rounded-3xl border overflow-hidden"
+          style={{
+            borderColor: `${activePillar.color}25`,
+            boxShadow: `0 8px 60px ${cat.glow}, 0 0 80px ${cat.glow}`,
+            background: "rgba(255,255,255,0.02)",
+          }}
+        >
+          {/* Header */}
+          <div
+            className="p-8 sm:p-10 border-b"
+            style={{
+              borderBottomColor: `${activePillar.color}15`,
+              background: `linear-gradient(135deg, ${activePillar.color}08, transparent)`,
+            }}
+          >
+            <div className="flex items-center gap-6">
+              <div
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center flex-shrink-0 border-2"
+                style={{
+                  background: `linear-gradient(135deg, ${activePillar.color}15, ${activePillar.color}30)`,
+                  borderColor: `${activePillar.color}40`,
+                  boxShadow: `0 0 30px ${activePillar.color}15`,
+                }}
+              >
+                <IconComp className="w-10 h-10 sm:w-12 sm:h-12" style={{ color: activePillar.color }} />
+              </div>
+              <div>
+                <div className="flex items-center gap-3 flex-wrap mb-1">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-white">{activePillar.name}</h2>
+                  <span className={`text-xs px-3 py-1 rounded-full ${cat.bg} ${cat.text} font-semibold`}>
+                    {cat.label}
+                  </span>
+                </div>
+                <p className="text-base font-medium" style={{ color: activePillar.color }}>
+                  {activePillar.sanskritName}
+                </p>
+                <p className="text-sm text-[#94a3b8] mt-2">{activePillar.description}</p>
+                <div className="flex items-center gap-5 mt-3">
+                  {activePillar.defaultDurationMinutes > 0 && (
+                    <span className="inline-flex items-center gap-1.5 text-sm text-[#94a3b8]">
+                      <Clock className="w-4 h-4" /> {activePillar.defaultDurationMinutes} min/session
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1.5 text-sm text-amber-400">
+                    <Award className="w-4 h-4" /> +{activePillar.karmaPointsBase} Karma Points
+                  </span>
+                  <span className="text-sm text-[#64748b]">Pillar {activePillar.id} of 11</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Content Grid */}
+          <div className="p-8 sm:p-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {/* Left Column */}
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full" style={{ background: activePillar.color }} />
+                    About This Pillar
+                  </h3>
+                  <p className="text-[15px] text-[#b0b8c8] leading-relaxed">
+                    {details.fullDescription}
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full" style={{ background: activePillar.color }} />
+                    The Science Behind It
+                  </h3>
+                  <div
+                    className="text-[15px] text-[#b0b8c8] leading-relaxed p-5 rounded-xl border"
+                    style={{ background: `${activePillar.color}05`, borderColor: `${activePillar.color}15` }}
+                  >
+                    <Sparkles className="w-4 h-4 inline mr-2 -mt-0.5" style={{ color: activePillar.color }} />
+                    {details.scienceBehind}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full" style={{ background: activePillar.color }} />
+                    Key Benefits
+                  </h3>
+                  <ul className="space-y-3">
+                    {details.benefits.map((benefit, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-[15px] text-[#b0b8c8]">
+                        <span
+                          className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold"
+                          style={{ background: `${activePillar.color}20`, color: activePillar.color }}
+                        >
+                          ✓
+                        </span>
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full" style={{ background: activePillar.color }} />
+                    How to Practice
+                  </h3>
+                  <div
+                    className="text-[15px] text-[#b0b8c8] leading-relaxed p-5 rounded-xl border-l-3"
+                    style={{ borderLeftColor: activePillar.color, borderLeftWidth: "3px", background: "rgba(255,255,255,0.02)" }}
+                  >
+                    {details.practice}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation + CTA */}
+            <div className="mt-10 pt-8 border-t border-white/[0.06] flex items-center justify-between">
+              <div>
+                {prevPillar && (
+                  <button
+                    onClick={() => setActivePillarId(prevPillar.id)}
+                    className="flex items-center gap-2 text-sm text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    {prevPillar.name}
+                  </button>
+                )}
+              </div>
+              <Link
+                href="/register"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg shadow-orange-500/20"
+              >
+                Start Practicing <ArrowRight className="w-4 h-4" />
+              </Link>
+              <div>
+                {nextPillar && (
+                  <button
+                    onClick={() => setActivePillarId(nextPillar.id)}
+                    className="flex items-center gap-2 text-sm text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
+                  >
+                    {nextPillar.name}
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
