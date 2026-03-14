@@ -1,8 +1,9 @@
-import { requireAuth } from "@/lib/auth";
-import { db } from "@/lib/db";
+"use client";
+
+import { useState, useEffect } from "react";
+import { apiFetch } from "@/lib/api";
 import { Award, Star, Trophy, Flame, Target, Sparkles } from "lucide-react";
 
-export const dynamic = "force-dynamic";
 interface BadgeWithEarned {
   id: string;
   slug: string;
@@ -13,7 +14,7 @@ interface BadgeWithEarned {
   requirement: string;
   karmaBonus: number;
   earned: boolean;
-  earnedAt?: Date;
+  earnedAt?: string;
 }
 
 function parseBadgeCategory(requirement: string): string {
@@ -38,28 +39,34 @@ const CATEGORY_META: Record<
   special: { label: "Special Badges", icon: Sparkles, color: "text-purple-400" },
 };
 
-export default async function AchievementsPage() {
-  const user = await requireAuth();
-  const userId = user.id;
+export default function AchievementsPage() {
+  const [badgesWithStatus, setBadgesWithStatus] = useState<BadgeWithEarned[]>([]);
+  const [totalKarma, setTotalKarma] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  const [allBadges, userBadges, karmaTransactions] = await Promise.all([
-    db.badge.findMany({ orderBy: { sortOrder: "asc" } }),
-    db.userBadge.findMany({
-      where: { userId },
-      include: { badge: true },
-    }),
-    db.karmaTransaction.findMany({ where: { userId } }),
-  ]);
+  useEffect(() => {
+    apiFetch("/data/achievements")
+      .then((res) => {
+        setBadgesWithStatus(res?.badges || []);
+        setTotalKarma(res?.totalKarma || 0);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
-  const earnedBadgeIds = new Set(userBadges.map((ub) => ub.badgeId));
-  const earnedMap = new Map(userBadges.map((ub) => [ub.badgeId, ub.earnedAt]));
-  const totalKarma = karmaTransactions.reduce((sum, t) => sum + t.points, 0);
-
-  const badgesWithStatus: BadgeWithEarned[] = allBadges.map((b) => ({
-    ...b,
-    earned: earnedBadgeIds.has(b.id),
-    earnedAt: earnedMap.get(b.id) ?? undefined,
-  }));
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
+        <div className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   // Group by category
   const grouped: Record<string, BadgeWithEarned[]> = {};

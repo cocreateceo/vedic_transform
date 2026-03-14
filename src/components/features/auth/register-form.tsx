@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Flame, Mail, Lock, User, Phone } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export function RegisterForm() {
   const [fullName, setFullName] = useState("");
@@ -17,6 +18,7 @@ export function RegisterForm() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,27 +38,15 @@ export function RegisterForm() {
     }
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-          name: fullName,
-          phone: phone || undefined,
-        }),
-      });
+      const result = await register(email, password, fullName);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || "Registration failed");
+      if (!result.success) {
+        setError(result.error || "Registration failed");
         return;
       }
 
       // Registration successful - redirect to dashboard
       router.push("/dashboard");
-      router.refresh();
     } catch {
       setError("An unexpected error occurred");
     } finally {

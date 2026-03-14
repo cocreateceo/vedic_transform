@@ -1,129 +1,136 @@
-import { db } from "@/lib/db";
-import { requireAuth } from "@/lib/auth";
+"use client";
+
+import { useState, useEffect } from "react";
+import { apiFetch } from "@/lib/api";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
 import { GoalsPageClient } from "./goals-client";
 
-export const dynamic = "force-dynamic";
-export default async function GoalsPage() {
-  const user = await requireAuth();
-  const userId = user.id;
+export default function GoalsPage() {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Get user's journey
-  const journey = await db.journey.findFirst({
-    where: { userId, isActive: true },
-  });
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [journeyData, goalsRes, focusRes, checkinsRes] = await Promise.all([
+          apiFetch("/data/journey"),
+          apiFetch("/data/goals"),
+          apiFetch("/data/focus-pillars"),
+          apiFetch("/data/checkin?all=true"),
+        ]);
 
-  // Calculate current day and week
-  const currentDay = journey
-    ? Math.min(
-        Math.floor(
-          (new Date().getTime() - new Date(journey.startDate).getTime()) /
-            (1000 * 60 * 60 * 24)
-        ) + 1,
-        TOTAL_JOURNEY_DAYS
-      )
-    : 0;
+        const journey = journeyData?.journey;
+        const goals = goalsRes?.goals || [];
+        const focusPillars = focusRes?.focusPillars || [];
+        const checkins = checkinsRes?.checkins || [];
 
-  const currentWeek = Math.max(1, Math.ceil(currentDay / 7));
-  const totalWeeks = Math.ceil(TOTAL_JOURNEY_DAYS / 7);
+        // Calculate current day and week
+        const currentDay = journey
+          ? Math.min(
+              Math.floor(
+                (new Date().getTime() - new Date(journey.startDate).getTime()) /
+                  (1000 * 60 * 60 * 24)
+              ) + 1,
+              TOTAL_JOURNEY_DAYS
+            )
+          : 0;
 
-  // Get all goals (individual tasks)
-  const goals = await db.goalTask.findMany({
-    where: { userId },
-  });
+        const currentWeek = Math.max(1, Math.ceil(currentDay / 7));
+        const totalWeeks = Math.ceil(TOTAL_JOURNEY_DAYS / 7);
 
-  // Sort goals by weekNumber desc, then createdAt desc (manual sort since DynamoDB doesn't support multi-field orderBy)
-  goals.sort((a: any, b: any) => {
-    if (b.weekNumber !== a.weekNumber) return b.weekNumber - a.weekNumber;
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+        // Sort goals
+        goals.sort((a: any, b: any) => {
+          if (b.weekNumber !== a.weekNumber) return b.weekNumber - a.weekNumber;
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
 
-  // Get focus pillars
-  const focusPillars = await db.focusPillar.findMany({
-    where: { userId },
-  });
+        // Pillars with stats
+        const pillarsWithStats = PILLARS.map((pillar) => {
+          const completedDays = checkins.filter((c: any) => c.pillarId === pillar.id).length;
+          const completionRate = currentDay > 0 ? Math.round((completedDays / currentDay) * 100) : 0;
+          return {
+            id: pillar.id,
+            name: pillar.name,
+            description: pillar.description,
+            category: pillar.category,
+            icon: "🎯",
+            completionRate: Math.min(100, completionRate),
+          };
+        });
 
-  // Sort focus pillars by priority (manual sort)
-  focusPillars.sort((a: any, b: any) => a.priority - b.priority);
+        // Stats
+        const totalGoals = goals.length;
+        const completedGoals = goals.filter((g: any) => g.isCompleted).length;
 
-  // Get all pillars with completion stats
-  const checkins = await db.dailyCheckin.findMany({
-    where: { userId, completed: true },
-  });
+        const weeklyStats: Record<number, { total: number; completed: number }> = {};
+        goals.forEach((g: any) => {
+          if (!weeklyStats[g.weekNumber]) weeklyStats[g.weekNumber] = { total: 0, completed: 0 };
+          weeklyStats[g.weekNumber].total++;
+          if (g.isCompleted) weeklyStats[g.weekNumber].completed++;
+        });
 
-  const pillarsWithStats = PILLARS.map((pillar) => {
-    const completedDays = checkins.filter((c) => c.pillarId === pillar.id).length;
-    const completionRate = currentDay > 0 ? Math.round((completedDays / currentDay) * 100) : 0;
+        const weeklyCompletion = Array.from({ length: currentWeek }, (_, i) => {
+          const weekData = weeklyStats[i + 1];
+          return weekData && weekData.total > 0
+            ? Math.round((weekData.completed / weekData.total) * 100)
+            : 0;
+        });
 
-    return {
-      id: pillar.id,
-      name: pillar.name,
-      description: pillar.description,
-      category: pillar.category,
-      icon: "🎯",
-      completionRate: Math.min(100, completionRate),
-    };
-  });
+        let streak = 0;
+        for (let w = currentWeek; w >= 1; w--) {
+          const weekData = weeklyStats[w];
+          if (weekData && weekData.total > 0 && weekData.completed === weekData.total) {
+            streak++;
+          } else {
+            break;
+          }
+        }
 
-  // Calculate stats
-  const totalGoals = goals.length;
-  const completedGoals = goals.filter((g) => g.isCompleted).length;
+        const goalsByWeek: Record<number, any[]> = {};
+        goals.forEach((g: any) => {
+          if (!goalsByWeek[g.weekNumber]) goalsByWeek[g.weekNumber] = [];
+          goalsByWeek[g.weekNumber].push(g);
+        });
 
-  // Weekly completion rates
-  const weeklyStats: Record<number, { total: number; completed: number }> = {};
-  goals.forEach((g) => {
-    if (!weeklyStats[g.weekNumber]) {
-      weeklyStats[g.weekNumber] = { total: 0, completed: 0 };
+        const pillarList = PILLARS.map((p) => ({ id: p.id.toString(), name: p.name }));
+
+        setData({
+          goals,
+          goalsByWeek,
+          focusPillarIds: focusPillars.map((fp: any) => fp.pillarId.toString()),
+          allPillars: pillarsWithStats,
+          pillarList,
+          currentWeek,
+          totalWeeks,
+          stats: { totalGoals, completedGoals, streak, weeklyCompletion },
+        });
+      } catch {
+      } finally {
+        setLoading(false);
+      }
     }
-    weeklyStats[g.weekNumber].total++;
-    if (g.isCompleted) weeklyStats[g.weekNumber].completed++;
-  });
+    fetchData();
+  }, []);
 
-  const weeklyCompletion = Array.from({ length: currentWeek }, (_, i) => {
-    const weekData = weeklyStats[i + 1];
-    return weekData && weekData.total > 0
-      ? Math.round((weekData.completed / weekData.total) * 100)
-      : 0;
-  });
-
-  // Calculate streak
-  let streak = 0;
-  for (let w = currentWeek; w >= 1; w--) {
-    const weekData = weeklyStats[w];
-    if (weekData && weekData.total > 0 && weekData.completed === weekData.total) {
-      streak++;
-    } else {
-      break;
-    }
+  if (loading || !data) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
+        <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+      </div>
+    );
   }
-
-  // Group goals by week
-  const goalsByWeek: Record<number, typeof goals> = {};
-  goals.forEach((g) => {
-    if (!goalsByWeek[g.weekNumber]) {
-      goalsByWeek[g.weekNumber] = [];
-    }
-    goalsByWeek[g.weekNumber].push(g);
-  });
-
-  // Prepare pillar list for goal linking
-  const pillarList = PILLARS.map((p) => ({ id: p.id.toString(), name: p.name }));
 
   return (
     <GoalsPageClient
-      initialGoals={goals}
-      goalsByWeek={goalsByWeek}
-      focusPillarIds={focusPillars.map((fp) => fp.pillarId.toString())}
-      allPillars={pillarsWithStats}
-      pillarList={pillarList}
-      currentWeek={currentWeek}
-      totalWeeks={totalWeeks}
-      stats={{
-        totalGoals,
-        completedGoals,
-        streak,
-        weeklyCompletion,
-      }}
+      initialGoals={data.goals}
+      goalsByWeek={data.goalsByWeek}
+      focusPillarIds={data.focusPillarIds}
+      allPillars={data.allPillars}
+      pillarList={data.pillarList}
+      currentWeek={data.currentWeek}
+      totalWeeks={data.totalWeeks}
+      stats={data.stats}
     />
   );
 }

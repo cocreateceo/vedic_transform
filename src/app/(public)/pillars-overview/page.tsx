@@ -2,7 +2,6 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { PillarsGrid } from "./pillars-grid";
 
-export const dynamic = "force-dynamic";
 export const metadata = { title: "11 Pillars of Transformation" };
 
 export default function PillarsOverviewPage() {

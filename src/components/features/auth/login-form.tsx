@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Flame, Mail, Lock } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ export function LoginForm() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,21 +23,14 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const result = await login(email, password);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || "Login failed");
+      if (!result.success) {
+        setError(result.error || "Login failed");
         return;
       }
 
       router.push("/dashboard");
-      router.refresh();
     } catch {
       setError("An unexpected error occurred");
     } finally {

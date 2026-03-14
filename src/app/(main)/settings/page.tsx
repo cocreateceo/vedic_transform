@@ -1,17 +1,61 @@
-import { requireAuth } from "@/lib/auth";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useAuth } from "@/context/auth-context";
+import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Settings, User, Bell, Shield } from "lucide-react";
-import { redirect } from "next/navigation";
-import { db } from "@/lib/db";
+import { useRouter } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-export default async function SettingsPage() {
-  const user = await requireAuth();
+export default function SettingsPage() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+  const [dbUser, setDbUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  const dbUser = await db.user.findUnique({
-    where: { id: user.id },
-  });
+  useEffect(() => {
+    apiFetch("/data/user")
+      .then((res) => setDbUser(res?.user || null))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleSaveProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSaving(true);
+    const formData = new FormData(e.currentTarget);
+    try {
+      await apiFetch("/data/user", {
+        method: "PUT",
+        body: JSON.stringify({
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+        }),
+      });
+      // Refresh data
+      const res = await apiFetch("/data/user");
+      setDbUser(res?.user || null);
+    } catch {
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSignOut = () => {
+    logout();
+    router.push("/login");
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div className="h-8 bg-gray-200 rounded w-32 animate-pulse" />
+        <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -33,28 +77,7 @@ export default async function SettingsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <form
-            action={async (formData: FormData) => {
-              "use server";
-              const { db } = await import("@/lib/db");
-              const { requireAuth } = await import("@/lib/auth");
-
-              const currentUser = await requireAuth();
-              const name = formData.get("name") as string;
-              const phone = formData.get("phone") as string;
-
-              await db.user.update({
-                where: { id: currentUser.id },
-                data: {
-                  name: name || null,
-                  phone: phone || null,
-                },
-              });
-
-              redirect("/settings");
-            }}
-            className="space-y-4"
-          >
+          <form onSubmit={handleSaveProfile} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Name
@@ -74,7 +97,7 @@ export default async function SettingsPage() {
               </label>
               <input
                 type="email"
-                value={user.email}
+                value={user?.email || ""}
                 disabled
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm bg-gray-50 text-gray-500"
               />
@@ -93,7 +116,7 @@ export default async function SettingsPage() {
               />
             </div>
 
-            <Button type="submit" size="sm" className="w-full">
+            <Button type="submit" size="sm" className="w-full" isLoading={saving}>
               Save Profile
             </Button>
           </form>
@@ -129,23 +152,13 @@ export default async function SettingsPage() {
       {/* Logout */}
       <Card>
         <CardContent className="pt-6">
-          <form
-            action={async () => {
-              "use server";
-              const { logoutUser } = await import("@/lib/auth");
-              await logoutUser();
-              const { redirect } = await import("next/navigation");
-              redirect("/login");
-            }}
+          <Button
+            variant="outline"
+            className="w-full text-red-600 border-red-200 hover:bg-red-50"
+            onClick={handleSignOut}
           >
-            <Button
-              type="submit"
-              variant="outline"
-              className="w-full text-red-600 border-red-200 hover:bg-red-50"
-            >
-              Sign Out
-            </Button>
-          </form>
+            Sign Out
+          </Button>
         </CardContent>
       </Card>
     </div>

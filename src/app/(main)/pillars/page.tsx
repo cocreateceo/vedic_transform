@@ -1,40 +1,42 @@
-import { db } from "@/lib/db";
-import { requireAuth } from "@/lib/auth";
+"use client";
+
+import { useState, useEffect } from "react";
+import { apiFetch } from "@/lib/api";
 import { PILLARS, getPillarsByCategory } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import { Check } from "lucide-react";
 
-export const dynamic = "force-dynamic";
-export default async function PillarsPage() {
-  const user = await requireAuth();
-  const userId = user.id;
+export default function PillarsPage() {
+  const [completedPillars, setCompletedPillars] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Get today's completed pillars
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const todayCheckins = await db.dailyCheckin.findMany({
-    where: {
-      userId,
-      checkinDate: today,
-      completed: true,
-    },
-    include: {
-      pillar: {
-        select: {
-          slug: true,
-        },
-      },
-    },
-  });
-
-  const completedPillars = todayCheckins.map((c) => c.pillar.slug);
+  useEffect(() => {
+    apiFetch("/data/checkin")
+      .then((data) => {
+        setCompletedPillars(data?.completedPillars || []);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   const bodyPillars = getPillarsByCategory("body");
   const mindPillars = getPillarsByCategory("mind");
   const spiritPillars = getPillarsByCategory("spirit");
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="h-8 bg-gray-200 rounded w-64 animate-pulse" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">

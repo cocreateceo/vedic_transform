@@ -1,48 +1,120 @@
-import { db } from "@/lib/db";
-import { requireAuth } from "@/lib/auth";
+"use client";
+
+import { useState, useEffect } from "react";
+import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Heart, Sparkles, Calendar } from "lucide-react";
-import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-export default async function JournalPage() {
-  const user = await requireAuth();
-  const userId = user.id;
+export default function JournalPage() {
+  const [gratitudeEntries, setGratitudeEntries] = useState<any[]>([]);
+  const [todayGratitude, setTodayGratitude] = useState<any>(null);
+  const [todayIntention, setTodayIntention] = useState<any>(null);
+  const [manifestations, setManifestations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [savingGratitude, setSavingGratitude] = useState(false);
+  const [savingIntention, setSavingIntention] = useState(false);
+  const [savingManifestation, setSavingManifestation] = useState(false);
 
-  // Get today's date
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const fetchData = async () => {
+    try {
+      const data = await apiFetch("/data/journal");
+      setGratitudeEntries(data?.gratitudeEntries || []);
+      setTodayGratitude(data?.todayGratitude || null);
+      setTodayIntention(data?.todayIntention || null);
+      setManifestations(data?.manifestations || []);
+    } catch {
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // Get recent gratitude entries
-  const gratitudeEntries = await db.gratitudeEntry.findMany({
-    where: { userId },
-    orderBy: { entryDate: "desc" },
-    take: 7,
-  });
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  // Get recent intentions
-  const intentions = await db.intention.findMany({
-    where: { userId },
-    orderBy: { intentionDate: "desc" },
-    take: 7,
-  });
+  const handleSaveGratitude = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSavingGratitude(true);
+    const formData = new FormData(e.currentTarget);
+    try {
+      await apiFetch("/data/journal", {
+        method: "POST",
+        body: JSON.stringify({
+          action: "gratitude",
+          gratitude1: formData.get("gratitude_1"),
+          gratitude2: formData.get("gratitude_2"),
+          gratitude3: formData.get("gratitude_3"),
+        }),
+      });
+      await fetchData();
+    } catch {
+    } finally {
+      setSavingGratitude(false);
+    }
+  };
 
-  // Get manifestations
-  const manifestations = await db.manifestation.findMany({
-    where: { userId },
-    orderBy: { createdAt: "desc" },
-  });
+  const handleSetIntention = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSavingIntention(true);
+    const formData = new FormData(e.currentTarget);
+    const intentionText = formData.get("intention") as string;
+    if (!intentionText?.trim()) {
+      setSavingIntention(false);
+      return;
+    }
+    try {
+      await apiFetch("/data/journal", {
+        method: "POST",
+        body: JSON.stringify({
+          action: "intention",
+          intentionText,
+        }),
+      });
+      await fetchData();
+    } catch {
+    } finally {
+      setSavingIntention(false);
+    }
+  };
 
-  // Find today's gratitude entry
-  const todayGratitude = gratitudeEntries.find(
-    (e) => e.entryDate.getTime() === today.getTime()
-  );
+  const handleAddManifestation = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSavingManifestation(true);
+    const formData = new FormData(e.currentTarget);
+    const title = formData.get("title") as string;
+    if (!title?.trim()) {
+      setSavingManifestation(false);
+      return;
+    }
+    try {
+      await apiFetch("/data/journal", {
+        method: "POST",
+        body: JSON.stringify({
+          action: "manifestation",
+          title,
+          description: formData.get("description") || "",
+        }),
+      });
+      (e.target as HTMLFormElement).reset();
+      await fetchData();
+    } catch {
+    } finally {
+      setSavingManifestation(false);
+    }
+  };
 
-  // Find today's intention
-  const todayIntention = intentions.find(
-    (i) => i.intentionDate.getTime() === today.getTime()
-  );
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="h-8 bg-gray-200 rounded w-32 animate-pulse" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+          <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -64,42 +136,7 @@ export default async function JournalPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <form
-              action={async (formData: FormData) => {
-                "use server";
-                const { db } = await import("@/lib/db");
-                const { requireAuth } = await import("@/lib/auth");
-
-                const user = await requireAuth();
-
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                await db.gratitudeEntry.upsert({
-                  where: {
-                    userId_entryDate: {
-                      userId: user.id,
-                      entryDate: today,
-                    },
-                  },
-                  update: {
-                    gratitude1: formData.get("gratitude_1") as string,
-                    gratitude2: formData.get("gratitude_2") as string,
-                    gratitude3: formData.get("gratitude_3") as string,
-                  },
-                  create: {
-                    userId: user.id,
-                    entryDate: today,
-                    gratitude1: formData.get("gratitude_1") as string,
-                    gratitude2: formData.get("gratitude_2") as string,
-                    gratitude3: formData.get("gratitude_3") as string,
-                  },
-                });
-
-                redirect("/journal");
-              }}
-              className="space-y-3"
-            >
+            <form onSubmit={handleSaveGratitude} className="space-y-3">
               {[1, 2, 3].map((num) => (
                 <div key={num}>
                   <label className="block text-xs text-gray-500 mb-1">
@@ -116,7 +153,7 @@ export default async function JournalPage() {
                   />
                 </div>
               ))}
-              <Button type="submit" size="sm" className="w-full">
+              <Button type="submit" size="sm" className="w-full" isLoading={savingGratitude}>
                 Save Gratitude
               </Button>
             </form>
@@ -132,41 +169,7 @@ export default async function JournalPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <form
-              action={async (formData: FormData) => {
-                "use server";
-                const { db } = await import("@/lib/db");
-                const { requireAuth } = await import("@/lib/auth");
-
-                const user = await requireAuth();
-
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const intentionText = formData.get("intention") as string;
-
-                if (!intentionText?.trim()) return;
-
-                await db.intention.upsert({
-                  where: {
-                    userId_intentionDate: {
-                      userId: user.id,
-                      intentionDate: today,
-                    },
-                  },
-                  update: {
-                    intentionText,
-                  },
-                  create: {
-                    userId: user.id,
-                    intentionDate: today,
-                    intentionText,
-                  },
-                });
-
-                redirect("/journal");
-              }}
-              className="space-y-3"
-            >
+            <form onSubmit={handleSetIntention} className="space-y-3">
               <textarea
                 name="intention"
                 placeholder="My intention for today is..."
@@ -174,7 +177,7 @@ export default async function JournalPage() {
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 resize-none"
                 defaultValue={todayIntention?.intentionText || ""}
               />
-              <Button type="submit" size="sm" className="w-full">
+              <Button type="submit" size="sm" className="w-full" isLoading={savingIntention}>
                 Set Intention
               </Button>
             </form>
@@ -190,30 +193,7 @@ export default async function JournalPage() {
               <BookOpen className="w-5 h-5 text-violet-500" />
               <CardTitle>Manifestation Board</CardTitle>
             </div>
-            <form
-              action={async (formData: FormData) => {
-                "use server";
-                const { db } = await import("@/lib/db");
-                const { requireAuth } = await import("@/lib/auth");
-
-                const user = await requireAuth();
-
-                const title = formData.get("title") as string;
-                const description = formData.get("description") as string;
-
-                if (!title?.trim()) return;
-
-                await db.manifestation.create({
-                  data: {
-                    userId: user.id,
-                    title,
-                    description: description || null,
-                  },
-                });
-
-                redirect("/journal");
-              }}
-            >
+            <form onSubmit={handleAddManifestation}>
               <div className="flex gap-2">
                 <input
                   name="title"
@@ -221,7 +201,7 @@ export default async function JournalPage() {
                   placeholder="New manifestation..."
                   className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
                 />
-                <Button type="submit" size="sm">
+                <Button type="submit" size="sm" isLoading={savingManifestation}>
                   Add
                 </Button>
               </div>
@@ -231,7 +211,7 @@ export default async function JournalPage() {
         <CardContent>
           {manifestations && manifestations.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {manifestations.map((m) => (
+              {manifestations.map((m: any) => (
                 <div
                   key={m.id}
                   className={`p-4 rounded-xl border-2 ${
@@ -274,13 +254,13 @@ export default async function JournalPage() {
         <CardContent>
           <div className="space-y-4">
             {gratitudeEntries && gratitudeEntries.length > 0 ? (
-              gratitudeEntries.slice(0, 5).map((entry) => (
+              gratitudeEntries.slice(0, 5).map((entry: any) => (
                 <div
                   key={entry.id}
                   className="p-4 rounded-xl bg-gray-50 border border-gray-100"
                 >
                   <p className="text-sm text-gray-500 mb-2">
-                    {entry.entryDate.toLocaleDateString("en-US", {
+                    {new Date(entry.entryDate).toLocaleDateString("en-US", {
                       weekday: "long",
                       month: "short",
                       day: "numeric",
@@ -288,13 +268,13 @@ export default async function JournalPage() {
                   </p>
                   <div className="space-y-1 text-sm">
                     {entry.gratitude1 && (
-                      <p className="text-gray-700">• {entry.gratitude1}</p>
+                      <p className="text-gray-700">- {entry.gratitude1}</p>
                     )}
                     {entry.gratitude2 && (
-                      <p className="text-gray-700">• {entry.gratitude2}</p>
+                      <p className="text-gray-700">- {entry.gratitude2}</p>
                     )}
                     {entry.gratitude3 && (
-                      <p className="text-gray-700">• {entry.gratitude3}</p>
+                      <p className="text-gray-700">- {entry.gratitude3}</p>
                     )}
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { apiFetch } from "@/lib/api";
 import { ReportCard, JourneyCertificate } from "@/components/features/reports";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,11 @@ export function ReportsPageClient({
   const handleDownloadCSV = async () => {
     setIsGenerating(true);
     try {
-      const res = await fetch("/api/reports?format=csv");
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+      const token = localStorage.getItem("vedic-token");
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch(`${API_URL}/data/reports?format=csv`, { headers });
       if (res.ok) {
         const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);

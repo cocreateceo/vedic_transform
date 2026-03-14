@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Calendar, User } from "lucide-react";
 import { BLOG_POSTS } from "@/data/blog-posts";
 
-export const dynamic = "force-dynamic";
+export function generateStaticParams() {
+  return BLOG_POSTS.map((post) => ({ slug: post.slug }));
+}
+
 const categoryColors: Record<string, { bg: string; text: string }> = {
   body: { bg: "bg-red-500/20", text: "text-red-300" },
   mind: { bg: "bg-purple-500/20", text: "text-purple-300" },

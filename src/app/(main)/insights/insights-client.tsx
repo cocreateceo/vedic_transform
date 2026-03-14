@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 import { InsightsFeed } from "@/components/features/insights";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
@@ -32,12 +33,11 @@ export function InsightsPageClient({
     setIsRefreshing(true);
     try {
       // Generate new insights
-      await fetch("/api/insights", { method: "POST" });
+      await apiFetch("/data/insights", { method: "POST" });
 
       // Fetch updated insights
-      const res = await fetch("/api/insights?refresh=false");
-      if (res.ok) {
-        const data = await res.json();
+      const data = await apiFetch("/data/insights?refresh=false");
+      if (data.insights) {
         setInsights(data.insights);
       }
     } catch (error) {
@@ -49,9 +49,8 @@ export function InsightsPageClient({
 
   const handleDismiss = async (id: string) => {
     try {
-      await fetch("/api/insights", {
+      await apiFetch("/data/insights", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ insightId: id, dismiss: true }),
       });
       setInsights((prev) => prev.filter((i) => i.id !== id));
@@ -62,9 +61,8 @@ export function InsightsPageClient({
 
   const handleMarkAllRead = async () => {
     try {
-      await fetch("/api/insights", {
+      await apiFetch("/data/insights", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ markAllRead: true }),
       });
       setInsights((prev) => prev.map((i) => ({ ...i, isNew: false })));

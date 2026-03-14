@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 import { ReminderSettingsForm } from "@/components/features/reminders";
 import { Card, CardContent } from "@/components/ui/card";
 import { Bell, CheckCircle } from "lucide-react";
@@ -34,17 +35,14 @@ export function RemindersPageClient({ initialSettings }: RemindersPageClientProp
 
   const handleSave = async (newSettings: ReminderSettings) => {
     try {
-      const res = await fetch("/api/reminders", {
+      await apiFetch("/data/reminders", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSettings),
       });
 
-      if (res.ok) {
-        setSettings(newSettings);
-        setShowSuccess(true);
-        setTimeout(() => setShowSuccess(false), 3000);
-      }
+      setSettings(newSettings);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
     } catch (error) {
       console.error("Failed to save settings:", error);
     }

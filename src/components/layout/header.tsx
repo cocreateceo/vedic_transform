@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { NotificationCenter } from "@/components/features/notifications/notification-center";
+import { useAuth } from "@/context/auth-context";
 
 interface HeaderProps {
   user?: {
@@ -22,6 +23,7 @@ export function Header({ user }: HeaderProps) {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { logout } = useAuth();
 
   const navigation = [
     { name: "Dashboard", href: "/dashboard" },
@@ -30,10 +32,9 @@ export function Header({ user }: HeaderProps) {
     { name: "Journal", href: "/journal" },
   ];
 
-  const handleSignOut = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+  const handleSignOut = () => {
+    logout();
     router.push("/login");
-    router.refresh();
   };
 
   return (

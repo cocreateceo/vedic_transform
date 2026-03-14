@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { apiFetch } from "@/lib/api";
 import { Bell, Check, CheckCheck, Info, Trophy, Target, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -53,10 +54,11 @@ export function NotificationCenter() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const res = await fetch("/api/notifications");
-      if (res.ok) {
-        const data = await res.json();
+      const data = await apiFetch("/data/notifications");
+      if (Array.isArray(data)) {
         setNotifications(data);
+      } else if (data?.notifications) {
+        setNotifications(data.notifications);
       }
     } catch {
       // silently fail
@@ -87,9 +89,8 @@ export function NotificationCenter() {
       prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
     );
     try {
-      await fetch("/api/notifications", {
+      await apiFetch("/data/notifications", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
     } catch {
@@ -100,9 +101,8 @@ export function NotificationCenter() {
   const markAllRead = async () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     try {
-      await fetch("/api/notifications", {
+      await apiFetch("/data/notifications", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ markAll: true }),
       });
     } catch {

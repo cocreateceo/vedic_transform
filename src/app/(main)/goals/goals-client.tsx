@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 import { WeeklyGoalCard, FocusPillarSelector, GoalSummary } from "@/components/features/goals";
 
 interface Goal {
@@ -63,14 +64,12 @@ export function GoalsPageClient({
 
   const handleAddGoal = async (title: string, pillarId?: string) => {
     try {
-      const res = await fetch("/api/goals", {
+      const data = await apiFetch("/data/goals", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, pillarId, weekNumber: currentWeek }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
+      if (data.goal) {
         setGoals((prev) => [data.goal, ...prev]);
         setStats((prev) => ({ ...prev, totalGoals: prev.totalGoals + 1 }));
       }
@@ -81,21 +80,18 @@ export function GoalsPageClient({
 
   const handleToggleGoal = async (goalId: string, completed: boolean) => {
     try {
-      const res = await fetch("/api/goals", {
+      await apiFetch("/data/goals", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ goalId, isCompleted: completed }),
       });
 
-      if (res.ok) {
-        setGoals((prev) =>
-          prev.map((g) => (g.id === goalId ? { ...g, isCompleted: completed } : g))
-        );
-        setStats((prev) => ({
-          ...prev,
-          completedGoals: completed ? prev.completedGoals + 1 : prev.completedGoals - 1,
-        }));
-      }
+      setGoals((prev) =>
+        prev.map((g) => (g.id === goalId ? { ...g, isCompleted: completed } : g))
+      );
+      setStats((prev) => ({
+        ...prev,
+        completedGoals: completed ? prev.completedGoals + 1 : prev.completedGoals - 1,
+      }));
     } catch (error) {
       console.error("Failed to toggle goal:", error);
     }
@@ -103,21 +99,19 @@ export function GoalsPageClient({
 
   const handleDeleteGoal = async (goalId: string) => {
     try {
-      const res = await fetch(`/api/goals?id=${goalId}`, {
+      await apiFetch(`/data/goals?id=${goalId}`, {
         method: "DELETE",
       });
 
-      if (res.ok) {
-        const deleted = goals.find((g) => g.id === goalId);
-        setGoals((prev) => prev.filter((g) => g.id !== goalId));
-        setStats((prev) => ({
-          ...prev,
-          totalGoals: prev.totalGoals - 1,
-          completedGoals: deleted?.isCompleted
-            ? prev.completedGoals - 1
-            : prev.completedGoals,
-        }));
-      }
+      const deleted = goals.find((g) => g.id === goalId);
+      setGoals((prev) => prev.filter((g) => g.id !== goalId));
+      setStats((prev) => ({
+        ...prev,
+        totalGoals: prev.totalGoals - 1,
+        completedGoals: deleted?.isCompleted
+          ? prev.completedGoals - 1
+          : prev.completedGoals,
+      }));
     } catch (error) {
       console.error("Failed to delete goal:", error);
     }
@@ -125,15 +119,12 @@ export function GoalsPageClient({
 
   const handleSaveFocusPillars = async (pillarIds: string[]) => {
     try {
-      const res = await fetch("/api/focus-pillars", {
+      await apiFetch("/data/focus-pillars", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pillarIds }),
       });
 
-      if (res.ok) {
-        setFocusPillarIds(pillarIds);
-      }
+      setFocusPillarIds(pillarIds);
     } catch (error) {
       console.error("Failed to save focus pillars:", error);
     }

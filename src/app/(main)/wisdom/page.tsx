@@ -1,17 +1,15 @@
-import { requireAuth } from "@/lib/auth";
+"use client";
+
 import { DAILY_WISDOM } from "@/data/daily-wisdom";
 import { BookOpen, Sparkles, Quote } from "lucide-react";
 
-export const dynamic = "force-dynamic";
 function getDayOfYear(): number {
   return Math.floor(
     (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
   );
 }
 
-export default async function WisdomPage() {
-  await requireAuth();
-
+export default function WisdomPage() {
   const dayOfYear = getDayOfYear();
   const todayIndex = dayOfYear % DAILY_WISDOM.length;
 
@@ -51,7 +49,7 @@ export default async function WisdomPage() {
         </p>
       </div>
 
-      {/* Today's Wisdom — Featured Card */}
+      {/* Today's Wisdom -- Featured Card */}
       <div className="relative overflow-hidden rounded-2xl border border-[var(--color-border)] bg-gradient-to-br from-[var(--color-primary)]/10 via-[var(--color-card-bg)] to-[var(--color-secondary)]/10 p-8 md:p-10">
         {/* Decorative elements */}
         <div className="absolute top-4 right-4 opacity-10">

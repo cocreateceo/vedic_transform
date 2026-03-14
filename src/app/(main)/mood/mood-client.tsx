@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { apiFetch } from "@/lib/api";
 import {
   LineChart,
   Line,
@@ -67,9 +68,8 @@ export function MoodPageClient({
     if (moodScore === 0) return;
     setSubmitting(true);
     try {
-      const res = await fetch("/api/mood", {
+      const newLog = await apiFetch("/data/mood", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           moodScore,
           energy: energy || null,
@@ -78,8 +78,7 @@ export function MoodPageClient({
           notes: notes.trim() || null,
         }),
       });
-      if (res.ok) {
-        const newLog = await res.json();
+      if (newLog) {
         setLogs((prev) => {
           const filtered = prev.filter(
             (l) =>

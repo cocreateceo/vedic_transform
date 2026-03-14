@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ClientOnlyProviders } from "@/components/ui/client-only-providers";
+import { AuthProvider } from "@/context/auth-context";
 
 export const metadata: Metadata = {
   title: "10X Vedic Transform - 48 Day Journey",
@@ -23,7 +24,9 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{
           __html: `(function(){try{var t=localStorage.getItem('vedic-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})()`,
         }} />
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
         <ClientOnlyProviders />
       </body>
     </html>

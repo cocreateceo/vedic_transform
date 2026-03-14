@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /pillars
+Disallow: /progress
+Disallow: /journal
+Disallow: /goals
+Disallow: /insights
+Disallow: /reports
+Disallow: /reminders
+Disallow: /settings
+Disallow: /library
+Disallow: /sessions
+Disallow: /wisdom
+Disallow: /mood
+Disallow: /achievements
+
+Sitemap: https://10x.vedics.net/sitemap.xml

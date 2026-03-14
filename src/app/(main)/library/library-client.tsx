@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import { apiFetch } from "@/lib/api";
 import { CONTENT_LIBRARY, type ContentItem } from "@/data/content-library";
 import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
@@ -108,17 +109,15 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
       setLoadingIds((prev) => new Set(prev).add(item.id));
       try {
         const existing = progressMap.get(item.id);
-        const res = await fetch("/api/content-progress", {
+        const updated = await apiFetch("/data/content-progress", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contentId: item.id,
             completed: existing?.completed || false,
             progress: existing?.progress || 0,
           }),
         });
-        if (res.ok) {
-          const updated = await res.json();
+        if (updated) {
           setProgressMap((prev) => {
             const next = new Map(prev);
             next.set(item.id, updated);
@@ -145,17 +144,15 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
 
       setLoadingIds((prev) => new Set(prev).add(item.id));
       try {
-        const res = await fetch("/api/content-progress", {
+        const updated = await apiFetch("/data/content-progress", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contentId: item.id,
             completed: newCompleted,
             progress: newCompleted ? 100 : existing?.progress || 0,
           }),
         });
-        if (res.ok) {
-          const updated = await res.json();
+        if (updated) {
           setProgressMap((prev) => {
             const next = new Map(prev);
             next.set(item.id, updated);
