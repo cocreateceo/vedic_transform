@@ -23,6 +23,7 @@ import { YouTubeIntro } from "@/components/features/landing/youtube-intro";
 import { PILLARS } from "@/constants/pillars";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { FAQ_DATA } from "@/data/faq";
+import { TransformationFlow } from "@/components/features/landing/transformation-flow";
 
 /* ─── Category colors for pillar badges ─── */
 const categoryStyles: Record<string, { label: string; bg: string; text: string }> = {
@@ -161,6 +162,22 @@ export function HomePageClient() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ═══ 4.5 Transformation Flow ═══ */}
+      <section className="py-20 bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
+            The{" "}
+            <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
+              48-Day Path
+            </span>
+          </h2>
+          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+            Your daily transformation journey through 11 pillars
+          </p>
+          <TransformationFlow />
         </div>
       </section>
 
