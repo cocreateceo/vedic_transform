@@ -1,7 +1,15 @@
 "use client";
 
-import { RegisterForm } from "@/components/features/auth/register-form";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
-  return <RegisterForm />;
+  const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to unified login page with signup tab
+    router.replace("/login?tab=signup");
+  }, [router]);
+
+  return null;
 }
