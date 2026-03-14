@@ -7,19 +7,15 @@ export const metadata = { title: "11 Pillars of Transformation" };
 export default function PillarsOverviewPage() {
   return (
     <div className="text-[#e2e8f0]">
-      {/* ═══ Hero ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-            <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
-              11 Pillars of Transformation
-            </span>
-          </h1>
-          <p className="mt-6 text-lg sm:text-xl text-[#94a3b8] max-w-2xl mx-auto leading-relaxed">
-            Body &bull; Mind &bull; Spirit
-          </p>
+      {/* ═══ Hero Banner ═══ */}
+      <section className="relative bg-[#0f0d08]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+          <img
+            src="/images/vedic-banner.png"
+            alt="10X Yourself — Vedic Transformation in 48 Days — Working on Mind, Body, Spirit"
+            className="w-full rounded-2xl shadow-2xl shadow-orange-900/20"
+            style={{ border: "2px solid rgba(255,153,51,0.2)" }}
+          />
         </div>
       </section>
 
