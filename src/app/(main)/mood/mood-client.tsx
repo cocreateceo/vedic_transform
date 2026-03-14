@@ -372,7 +372,7 @@ export function MoodPageClient({
                 <Line
                   type="monotone"
                   dataKey="Mood"
-                  stroke="#7c3aed"
+                  stroke="#FF9933"
                   strokeWidth={2}
                   dot={{ r: 4 }}
                   activeDot={{ r: 6 }}
@@ -394,7 +394,7 @@ export function MoodPageClient({
                 <Line
                   type="monotone"
                   dataKey="Sleep"
-                  stroke="#6366f1"
+                  stroke="#3b82f6"
                   strokeWidth={2}
                   dot={{ r: 3 }}
                 />

@@ -131,7 +131,7 @@ export default function JournalPage() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
-              <Heart className="w-5 h-5 text-pink-500" />
+              <Heart className="w-5 h-5 text-orange-500" />
               <CardTitle className="text-lg">Today&apos;s Gratitude</CardTitle>
             </div>
           </CardHeader>
@@ -190,7 +190,7 @@ export default function JournalPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-violet-500" />
+              <BookOpen className="w-5 h-5 text-amber-500" />
               <CardTitle>Manifestation Board</CardTitle>
             </div>
             <form onSubmit={handleAddManifestation}>
@@ -217,7 +217,7 @@ export default function JournalPage() {
                   className={`p-4 rounded-xl border-2 ${
                     m.isAchieved
                       ? "bg-green-50 border-green-200"
-                      : "bg-violet-50 border-violet-200"
+                      : "bg-amber-50 border-amber-200"
                   }`}
                 >
                   <div className="flex items-start justify-between">

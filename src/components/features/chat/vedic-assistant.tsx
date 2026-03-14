@@ -631,7 +631,7 @@ export function VedicAssistant() {
             color:
               !input.trim() || isLoading
                 ? "var(--color-text-muted, #94a3b8)"
-                : "#1e1b4b",
+                : "#1a1510",
             cursor:
               !input.trim() || isLoading ? "not-allowed" : "pointer",
             display: "flex",

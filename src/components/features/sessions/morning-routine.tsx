@@ -373,7 +373,7 @@ export function MorningRoutine() {
         {/* Step 5: Gratitude */}
         {currentStep === 4 && (
           <div className="text-center space-y-6 w-full max-w-md">
-            <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-xl shadow-pink-500/30">
+            <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-xl shadow-orange-500/30">
               <Heart className="w-12 h-12 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">

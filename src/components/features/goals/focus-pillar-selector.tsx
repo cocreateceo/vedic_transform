@@ -28,7 +28,7 @@ const categoryColors: Record<string, { bg: string; text: string; border: string 
   "Mental Health": { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
   "Physical Health": { bg: "bg-green-50", text: "text-green-700", border: "border-green-200" },
   "Financial Health": { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-  "Relationship Health": { bg: "bg-pink-50", text: "text-pink-700", border: "border-pink-200" },
+  "Relationship Health": { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
   default: { bg: "bg-gray-50", text: "text-gray-700", border: "border-gray-200" },
 };
 

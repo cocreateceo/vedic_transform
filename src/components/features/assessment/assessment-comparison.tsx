@@ -41,10 +41,10 @@ const metrics = [
   { key: "stressLevel", label: "Stress", icon: Brain, color: "#ef4444", invert: true },
   { key: "sleepQuality", label: "Sleep", icon: Moon, color: "#3b82f6" },
   { key: "energyLevel", label: "Energy", icon: Zap, color: "#f59e0b" },
-  { key: "mentalClarity", label: "Clarity", icon: Target, color: "#8b5cf6" },
+  { key: "mentalClarity", label: "Clarity", icon: Target, color: "#FF9933" },
   { key: "physicalFitness", label: "Fitness", icon: Dumbbell, color: "#10b981" },
-  { key: "emotionalStability", label: "Emotional", icon: Heart, color: "#ec4899" },
-  { key: "spiritualConnection", label: "Spiritual", icon: Sparkles, color: "#6366f1" },
+  { key: "emotionalStability", label: "Emotional", icon: Heart, color: "#f59e0b" },
+  { key: "spiritualConnection", label: "Spiritual", icon: Sparkles, color: "#FF9933" },
   { key: "lifeSatisfaction", label: "Satisfaction", icon: Smile, color: "#14b8a6" },
 ];
 

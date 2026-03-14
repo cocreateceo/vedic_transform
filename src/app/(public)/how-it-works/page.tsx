@@ -199,7 +199,7 @@ export default function HowItWorksPage() {
                 title: "Mind",
                 pillars: mindPillars,
                 color: "text-orange-400",
-                border: "border-purple-500/20",
+                border: "border-orange-500/20",
                 iconBg: "bg-orange-500/15",
               },
               {

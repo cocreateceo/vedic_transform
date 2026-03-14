@@ -11,7 +11,7 @@
   --vedic-maroon: #800020;
   --vedic-cream: #FFFDD0;
   --vedic-sage: #9CAF88;
-  --vedic-purple: #673AB7;
+  --vedic-deep-saffron: #FF6600;
 
   /* Sunrise mode */
   --sunrise-light: #FEF3C7;
@@ -104,7 +104,7 @@
   --color-vedic-maroon: var(--vedic-maroon);
   --color-vedic-cream: var(--vedic-cream);
   --color-vedic-sage: var(--vedic-sage);
-  --color-vedic-purple: var(--vedic-purple);
+  --color-vedic-deep-saffron: var(--vedic-deep-saffron);
 
   /* Sunrise */
   --color-sunrise-light: var(--sunrise-light);

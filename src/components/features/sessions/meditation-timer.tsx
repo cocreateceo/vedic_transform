@@ -189,7 +189,7 @@ export function MeditationTimer() {
               x2="100%"
               y2="100%"
             >
-              <stop offset="0%" stopColor="#9333ea" />
+              <stop offset="0%" stopColor="#FF9933" />
               <stop offset="100%" stopColor="#d97706" />
             </linearGradient>
           </defs>

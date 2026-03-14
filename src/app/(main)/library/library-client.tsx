@@ -50,7 +50,7 @@ const TYPE_CONFIG: Record<ContentItem["type"], { icon: typeof Video; label: stri
 const CATEGORY_BORDER_COLORS: Record<string, string> = {
   body: "border-t-orange-500",
   mind: "border-t-cyan-500",
-  spirit: "border-t-violet-500",
+  spirit: "border-t-amber-500",
 };
 
 function getPillarName(item: ContentItem): string {

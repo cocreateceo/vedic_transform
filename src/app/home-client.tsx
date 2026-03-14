@@ -110,7 +110,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 3. Stats Bar ═══ */}
-      <section className="bg-[#1e1b4b]/80 border-y border-orange-500/10">
+      <section className="bg-[#1a1510]/80 border-y border-orange-500/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[

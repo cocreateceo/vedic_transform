@@ -68,7 +68,7 @@ const metrics = [
     key: "mentalClarity",
     label: "Mental Clarity",
     icon: Target,
-    color: "#8b5cf6",
+    color: "#FF9933",
     description: "How clear and focused is your mind?",
   },
   {
@@ -82,14 +82,14 @@ const metrics = [
     key: "emotionalStability",
     label: "Emotional Stability",
     icon: Heart,
-    color: "#ec4899",
+    color: "#f59e0b",
     description: "How balanced are your emotions?",
   },
   {
     key: "spiritualConnection",
     label: "Spiritual Connection",
     icon: Sparkles,
-    color: "#6366f1",
+    color: "#FF9933",
     description: "How connected do you feel to your inner self?",
   },
   {

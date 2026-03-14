@@ -139,7 +139,7 @@ export default function PillarsPage() {
       {/* Mind pillars */}
       <section>
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
             <span className="text-xl">🧠</span>
           </div>
           <div>
@@ -201,7 +201,7 @@ export default function PillarsPage() {
       {/* Spirit pillars */}
       <section>
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
             <span className="text-xl">✨</span>
           </div>
           <div>

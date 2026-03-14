@@ -141,8 +141,8 @@ export function FastingTimer() {
               x2="100%"
               y2="100%"
             >
-              <stop offset="0%" stopColor="#9333ea" />
-              <stop offset="100%" stopColor="#7c3aed" />
+              <stop offset="0%" stopColor="#FF9933" />
+              <stop offset="100%" stopColor="#E8860D" />
             </linearGradient>
             <linearGradient
               id="eatingGradient"
