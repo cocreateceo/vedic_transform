@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+export const dynamic = "force-dynamic";
 import { ArrowLeft, Clock, Calendar, User } from "lucide-react";
 import { BLOG_POSTS } from "@/data/blog-posts";
 

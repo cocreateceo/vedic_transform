@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Mail, Clock, MessageCircle } from "lucide-react";
 
 export const metadata: Metadata = {
+export const dynamic = "force-dynamic";
   title: "Contact Us",
 };
 
