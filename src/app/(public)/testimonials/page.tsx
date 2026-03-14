@@ -4,9 +4,9 @@ import { ArrowRight } from "lucide-react";
 import { TESTIMONIALS } from "@/data/testimonials";
 
 export const metadata: Metadata = {
-export const dynamic = "force-dynamic";
   title: "Transformation Stories",
 };
+export const dynamic = "force-dynamic";
 
 function formatPillarName(slug: string): string {
   return slug
