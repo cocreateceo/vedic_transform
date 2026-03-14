@@ -9,15 +9,12 @@ export default function PillarsOverviewPage() {
     <div className="text-[#e2e8f0]">
       {/* ═══ Hero Banner ═══ */}
       <section className="bg-[#0f0d08]">
-        <div className="w-full">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
           <img
             src="/images/vedic-banner.png"
             alt="10X Yourself — Vedic Transformation in 48 Days — Working on Mind, Body, Spirit"
-            className="w-full object-contain"
-            style={{
-              borderTop: "3px solid rgba(255,153,51,0.4)",
-              borderBottom: "3px solid rgba(255,153,51,0.4)",
-            }}
+            className="w-full rounded-2xl shadow-2xl shadow-orange-900/30"
+            style={{ border: "3px solid rgba(255,153,51,0.35)" }}
           />
         </div>
       </section>

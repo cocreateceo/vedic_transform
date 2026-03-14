@@ -33,13 +33,14 @@ export async function handler(event: any) {
         name: name || null,
         phone: null,
         avatarUrl: null,
+        onboardingCompleted: false,
         createdAt: now,
         updatedAt: now,
       },
     }));
 
     const token = await createToken({ id, email: email.toLowerCase(), name });
-    return ok({ success: true, token, user: { id, email: email.toLowerCase(), name } });
+    return ok({ success: true, token, user: { id, email: email.toLowerCase(), name, onboardingCompleted: false } });
   } catch (e: any) {
     console.error('Registration error:', e);
     return err(500, 'Registration failed');

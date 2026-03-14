@@ -28,7 +28,7 @@ export async function handler(event: any) {
     return ok({
       success: true,
       token,
-      user: { id: user.id, email: user.email, name: user.name },
+      user: { id: user.id, email: user.email, name: user.name, onboardingCompleted: user.onboardingCompleted || false },
     });
   } catch (e: any) {
     console.error('Login error:', e);

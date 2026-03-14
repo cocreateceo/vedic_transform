@@ -219,10 +219,9 @@ export function LoginForm() {
     try {
       const result = await register(email, password, name);
       if (result.success) {
-        // If backend supports email verification, switch to verify view
-        setVerifyEmailAddr(email);
-        setView("verify");
-        setSuccess("Account created! Please check your email for the verification code.");
+        // Redirect new users to onboarding quiz
+        setSuccess("Account created! Setting up your journey...");
+        setTimeout(() => router.push("/onboarding"), 800);
       } else {
         setError(result.error || "Registration failed");
       }

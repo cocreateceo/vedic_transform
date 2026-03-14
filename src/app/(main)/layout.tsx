@@ -5,9 +5,25 @@ import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { useAuth } from "@/context/auth-context";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
+  const router = useRouter();
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    if (user && user.onboardingCompleted === false) {
+      router.push("/onboarding");
+    } else {
+      setChecked(true);
+    }
+  }, [user, router]);
+
+  // Don't render until we've checked onboarding status
+  // But if onboardingCompleted is undefined (existing users), let them through
+  if (!checked && user?.onboardingCompleted === false) return null;
 
   return (
     <AuthGuard>

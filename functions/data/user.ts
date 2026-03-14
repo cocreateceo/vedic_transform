@@ -24,7 +24,7 @@ export async function handler(event: any) {
 
   if (method === 'PATCH') {
     const body = JSON.parse(event.body || '{}');
-    const { name, phone, avatarUrl } = body;
+    const { name, phone, avatarUrl, onboardingCompleted, onboardingData } = body;
 
     const updates: string[] = [];
     const values: Record<string, any> = {};
@@ -33,6 +33,8 @@ export async function handler(event: any) {
     if (name !== undefined) { updates.push('#n = :name'); values[':name'] = name; names['#n'] = 'name'; }
     if (phone !== undefined) { updates.push('phone = :phone'); values[':phone'] = phone; }
     if (avatarUrl !== undefined) { updates.push('avatarUrl = :avatarUrl'); values[':avatarUrl'] = avatarUrl; }
+    if (onboardingCompleted !== undefined) { updates.push('onboardingCompleted = :onboarded'); values[':onboarded'] = onboardingCompleted; updates.push('onboardingCompletedAt = :onboardedAt'); values[':onboardedAt'] = new Date().toISOString(); }
+    if (onboardingData !== undefined) { updates.push('onboardingData = :onboardingData'); values[':onboardingData'] = onboardingData; }
 
     updates.push('updatedAt = :updatedAt');
     values[':updatedAt'] = new Date().toISOString();
