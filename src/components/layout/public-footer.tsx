@@ -97,7 +97,7 @@ export function PublicFooter() {
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-[var(--color-border)]">
           <p className="text-sm text-[var(--color-text-secondary)] text-center">
-            &copy; 2026 10X Vedic. All rights reserved. | Shri Hari Hari
+            &copy; 2026 10X Vedic. All rights reserved. | Vedic Transform
           </p>
         </div>
       </div>
