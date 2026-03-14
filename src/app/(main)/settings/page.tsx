@@ -5,6 +5,7 @@ import { Settings, User, Bell, Shield } from "lucide-react";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
 export default async function SettingsPage() {
   const user = await requireAuth();
 

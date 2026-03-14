@@ -3,6 +3,7 @@ import { requireAuth } from "@/lib/auth";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
 import { GoalsPageClient } from "./goals-client";
 
+export const dynamic = "force-dynamic";
 export default async function GoalsPage() {
   const user = await requireAuth();
   const userId = user.id;

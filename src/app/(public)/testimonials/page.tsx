@@ -3,10 +3,10 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { TESTIMONIALS } from "@/data/testimonials";
 
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Transformation Stories",
 };
-export const dynamic = "force-dynamic";
 
 function formatPillarName(slug: string): string {
   return slug

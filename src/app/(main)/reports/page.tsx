@@ -3,6 +3,7 @@ import { requireAuth } from "@/lib/auth";
 import { TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
 import { ReportsPageClient } from "./reports-client";
 
+export const dynamic = "force-dynamic";
 export default async function ReportsPage() {
   const user = await requireAuth();
   const userId = user.id;

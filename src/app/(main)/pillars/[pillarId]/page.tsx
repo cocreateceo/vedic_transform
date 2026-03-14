@@ -9,6 +9,7 @@ import { Check, ArrowLeft, Clock, Sparkles, Download, FileText } from "lucide-re
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 
+export const dynamic = "force-dynamic";
 interface PillarPageProps {
   params: Promise<{ pillarId: string }>;
 }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import { Check } from "lucide-react";
 
+export const dynamic = "force-dynamic";
 export default async function PillarsPage() {
   const user = await requireAuth();
   const userId = user.id;

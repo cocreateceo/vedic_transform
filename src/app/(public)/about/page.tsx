@@ -3,8 +3,8 @@ import { ArrowRight, Target, Eye, Sparkles } from "lucide-react";
 import { TEAM } from "@/data/team";
 import { PILLARS, getPillarsByCategory } from "@/constants/pillars";
 
-export const metadata = { title: "About Us" };
 export const dynamic = "force-dynamic";
+export const metadata = { title: "About Us" };
 
 export default function AboutPage() {
   const bodyPillars = getPillarsByCategory("body");

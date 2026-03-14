@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Heart, Sparkles, Calendar } from "lucide-react";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
 export default async function JournalPage() {
   const user = await requireAuth();
   const userId = user.id;

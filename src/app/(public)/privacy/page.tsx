@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Privacy Policy",
 };
-export const dynamic = "force-dynamic";
 
 export default function PrivacyPage() {
   return (

@@ -2,10 +2,10 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Mail, Clock, MessageCircle } from "lucide-react";
 
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Contact Us",
 };
-export const dynamic = "force-dynamic";
 
 async function submitContactForm(formData: FormData) {
   "use server";

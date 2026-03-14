@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { RemindersPageClient } from "./reminders-client";
 
+export const dynamic = "force-dynamic";
 export default async function RemindersPage() {
   const user = await requireAuth();
   const userId = user.id;

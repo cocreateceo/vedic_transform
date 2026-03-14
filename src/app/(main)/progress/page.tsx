@@ -11,6 +11,8 @@ import {
   InsightList,
 } from "@/components/features/analytics";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProgressPage() {
   const user = await requireAuth();
   const userId = user.id;

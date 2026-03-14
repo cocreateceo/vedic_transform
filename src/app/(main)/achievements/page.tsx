@@ -2,6 +2,7 @@ import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Award, Star, Trophy, Flame, Target, Sparkles } from "lucide-react";
 
+export const dynamic = "force-dynamic";
 interface BadgeWithEarned {
   id: string;
   slug: string;

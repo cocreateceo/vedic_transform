@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { InsightsPageClient } from "./insights-client";
 
+export const dynamic = "force-dynamic";
 export default async function InsightsPage() {
   const user = await requireAuth();
   const userId = user.id;

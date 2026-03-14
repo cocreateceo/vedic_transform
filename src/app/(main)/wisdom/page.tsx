@@ -2,6 +2,7 @@ import { requireAuth } from "@/lib/auth";
 import { DAILY_WISDOM } from "@/data/daily-wisdom";
 import { BookOpen, Sparkles, Quote } from "lucide-react";
 
+export const dynamic = "force-dynamic";
 function getDayOfYear(): number {
   return Math.floor(
     (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
