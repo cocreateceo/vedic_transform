@@ -7,6 +7,7 @@ import { Menu, X, LogOut, Settings, User } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface HeaderProps {
   user?: {
@@ -72,6 +73,7 @@ export function Header({ user }: HeaderProps) {
 
           {/* Profile Menu */}
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <div className="relative">
               <button
                 onClick={() => setProfileMenuOpen(!profileMenuOpen)}
