@@ -1,4 +1,4 @@
-import { db } from "@/lib/dynamodb";
+import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { StreakCounter } from "@/components/features/dashboard/streak-counter";
 import { KarmaPoints } from "@/components/features/dashboard/karma-points";

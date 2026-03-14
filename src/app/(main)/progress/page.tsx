@@ -1,4 +1,4 @@
-import { db } from "@/lib/dynamodb";
+import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";

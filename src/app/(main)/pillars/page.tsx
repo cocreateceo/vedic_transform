@@ -1,4 +1,4 @@
-import { db } from "@/lib/dynamodb";
+import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { PILLARS, getPillarsByCategory } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";

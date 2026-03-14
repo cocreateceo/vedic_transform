@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PillarsGrid } from "./pillars-grid";
 
 export const metadata = { title: "11 Pillars of Transformation" };
+export const dynamic = "force-dynamic";
 
 export default function PillarsOverviewPage() {
   return (

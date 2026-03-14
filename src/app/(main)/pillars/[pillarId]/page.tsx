@@ -1,4 +1,4 @@
-import { db } from "@/lib/dynamodb";
+import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
 import { getPillarBySlug, PILLARS } from "@/constants/pillars";

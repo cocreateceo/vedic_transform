@@ -1,4 +1,4 @@
-import { db } from "@/lib/dynamodb";
+import { db } from "@/lib/db";
 import { requireAuth } from "@/lib/auth";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
 import { GoalsPageClient } from "./goals-client";
