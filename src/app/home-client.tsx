@@ -191,39 +191,68 @@ export function HomePageClient() {
             A comprehensive system addressing body, mind, and spirit
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {PILLARS.map((pillar) => {
               const cat = categoryStyles[pillar.category];
               const IconComp = pillar.icon;
               return (
-                <div
+                <Link
                   key={pillar.id}
-                  className="p-5 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all hover:-translate-y-1"
+                  href="/pillars-overview"
+                  className="group block"
                 >
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                    style={{ backgroundColor: `${pillar.color}20` }}
+                    className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border transition-all hover:-translate-y-1 hover:shadow-lg h-full"
+                    style={{
+                      borderColor: `${pillar.color}20`,
+                      boxShadow: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.borderColor = `${pillar.color}50`;
+                      (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 30px ${pillar.color}15`;
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.borderColor = `${pillar.color}20`;
+                      (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                    }}
                   >
-                    <IconComp className="w-6 h-6" style={{ color: pillar.color }} />
+                    <div className="flex items-start gap-4">
+                      <div
+                        className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: `${pillar.color}15` }}
+                      >
+                        <IconComp className="w-7 h-7" style={{ color: pillar.color }} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-white font-bold text-base">{pillar.name}</h3>
+                        </div>
+                        <p className="text-xs font-medium mb-2" style={{ color: pillar.color }}>{pillar.sanskritName}</p>
+                        <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">{pillar.description}</p>
+                        <div className="flex items-center gap-3">
+                          <span className={`inline-block text-xs px-2.5 py-0.5 rounded-full ${cat.bg} ${cat.text} font-medium`}>
+                            {cat.label}
+                          </span>
+                          {pillar.defaultDurationMinutes > 0 && (
+                            <span className="text-xs text-[#64748b]">
+                              {pillar.defaultDurationMinutes} min
+                            </span>
+                          )}
+                          <span className="text-xs text-amber-500/70">
+                            +{pillar.karmaPointsBase} karma
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-end">
+                      <span className="text-xs text-orange-400 group-hover:text-orange-300 font-medium flex items-center gap-1 transition-colors">
+                        Learn more <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="text-white font-semibold">{pillar.name}</h3>
-                  <p className="text-xs text-amber-400/80 font-medium mb-2">{pillar.sanskritName}</p>
-                  <span className={`inline-block text-xs px-2.5 py-0.5 rounded-full ${cat.bg} ${cat.text} font-medium`}>
-                    {cat.label}
-                  </span>
-                </div>
+                </Link>
               );
             })}
-          </div>
-
-          <div className="text-center mt-10">
-            <Link
-              href="/pillars-overview"
-              className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 font-medium transition-colors"
-            >
-              View All Pillars
-              <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </section>
