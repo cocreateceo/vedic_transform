@@ -1,0 +1,10 @@
+{
+  "name": "vedic-transform-functions",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.958.0",
+    "@aws-sdk/lib-dynamodb": "^3.958.0",
+    "jose": "^6.1.3",
+    "bcryptjs": "^3.0.3"
+  }
+}
