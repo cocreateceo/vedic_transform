@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ClientOnlyProviders } from "@/components/ui/client-only-providers";
 import { AuthProvider } from "@/context/auth-context";
+import { AudioPlayerProvider } from "@/context/audio-player-context";
 import { VedicAssistant } from "@/components/features/chat/vedic-assistant";
+import { MiniPlayer } from "@/components/features/audio/mini-player";
 
 export const metadata: Metadata = {
   title: "10X Vedic Transform - 48 Day Journey",
@@ -26,8 +28,11 @@ export default function RootLayout({
           __html: `(function(){try{var t=localStorage.getItem('vedic-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})()`,
         }} />
         <AuthProvider>
-          {children}
-          <VedicAssistant />
+          <AudioPlayerProvider>
+            {children}
+            <MiniPlayer />
+            <VedicAssistant />
+          </AudioPlayerProvider>
         </AuthProvider>
         <ClientOnlyProviders />
       </body>

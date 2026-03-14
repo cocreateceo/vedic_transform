@@ -7,6 +7,7 @@ import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAudioPlayer } from "@/context/audio-player-context";
 import {
   Search,
   CheckCircle2,
@@ -16,6 +17,8 @@ import {
   BookOpen,
   ExternalLink,
   Library,
+  Play,
+  Pause,
 } from "lucide-react";
 
 interface ContentProgressRecord {
@@ -32,12 +35,21 @@ interface LibraryPageClientProps {
 }
 
 type CategoryFilter = "all" | "body" | "mind" | "spirit";
+type TypeFilter = "all" | "video" | "audio" | "article" | "guide";
 
 const CATEGORY_TABS: { value: CategoryFilter; label: string; color: string }[] = [
   { value: "all", label: "All", color: "from-orange-500 to-amber-500" },
   { value: "body", label: "Body", color: "from-orange-500 to-red-500" },
   { value: "mind", label: "Mind", color: "from-cyan-500 to-blue-500" },
   { value: "spirit", label: "Spirit", color: "from-amber-500 to-yellow-500" },
+];
+
+const TYPE_TABS: { value: TypeFilter; label: string; icon: string }[] = [
+  { value: "all", label: "All Types", icon: "" },
+  { value: "audio", label: "Audio", icon: "" },
+  { value: "video", label: "Video", icon: "" },
+  { value: "article", label: "Articles", icon: "" },
+  { value: "guide", label: "Guides", icon: "" },
 ];
 
 const TYPE_CONFIG: Record<ContentItem["type"], { icon: typeof Video; label: string; color: string }> = {
@@ -65,6 +77,7 @@ function getPillarName(item: ContentItem): string {
 
 export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all");
+  const [activeType, setActiveType] = useState<TypeFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [progressMap, setProgressMap] = useState<Map<string, ContentProgressRecord>>(() => {
     const map = new Map<string, ContentProgressRecord>();
@@ -75,11 +88,17 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
   });
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
 
+  const { currentTrack, isPlaying, playTrack, togglePlay } = useAudioPlayer();
+
   const filteredContent = useMemo(() => {
     let items = CONTENT_LIBRARY;
 
     if (activeCategory !== "all") {
       items = items.filter((item) => item.category === activeCategory);
+    }
+
+    if (activeType !== "all") {
+      items = items.filter((item) => item.type === activeType);
     }
 
     if (searchQuery.trim()) {
@@ -92,18 +111,34 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
     }
 
     return items;
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, activeType, searchQuery]);
 
   const stats = useMemo(() => {
     const total = CONTENT_LIBRARY.length;
     const completed = Array.from(progressMap.values()).filter((p) => p.completed).length;
-    return { total, completed };
+    const audioCount = CONTENT_LIBRARY.filter((i) => i.audioUrl).length;
+    return { total, completed, audioCount };
   }, [progressMap]);
 
   const handleOpenContent = useCallback(
     async (item: ContentItem) => {
-      // Open in new tab
-      window.open(item.url, "_blank", "noopener,noreferrer");
+      // If it has an audio URL, play in-app
+      if (item.audioUrl) {
+        if (currentTrack?.id === item.id) {
+          togglePlay();
+        } else {
+          playTrack({
+            id: item.id,
+            title: item.title,
+            duration: item.duration,
+            url: item.audioUrl,
+            category: item.category,
+          });
+        }
+      } else {
+        // Open in new tab for video/article/guide
+        window.open(item.url, "_blank", "noopener,noreferrer");
+      }
 
       // Mark as accessed via API
       setLoadingIds((prev) => new Set(prev).add(item.id));
@@ -134,7 +169,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
         });
       }
     },
-    [progressMap]
+    [progressMap, currentTrack, playTrack, togglePlay]
   );
 
   const handleToggleComplete = useCallback(
@@ -188,35 +223,60 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
               Explore guided content for your transformation journey
             </p>
           </div>
-          <div className="hidden sm:flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2">
-            <CheckCircle2 className="w-5 h-5" />
-            <span className="font-medium">
-              {stats.completed}/{stats.total} Completed
-            </span>
+          <div className="hidden sm:flex items-center gap-4">
+            <div className="flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2">
+              <Headphones className="w-4 h-4" />
+              <span className="font-medium text-sm">{stats.audioCount} Audio</span>
+            </div>
+            <div className="flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2">
+              <CheckCircle2 className="w-5 h-5" />
+              <span className="font-medium">
+                {stats.completed}/{stats.total}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-          <Input
-            placeholder="Search content..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+            <Input
+              placeholder="Search content..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <div className="flex gap-2">
+            {CATEGORY_TABS.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setActiveCategory(tab.value)}
+                className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  activeCategory === tab.value
+                    ? `bg-gradient-to-r ${tab.color} text-white shadow-lg`
+                    : "bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-elevated)] border border-[var(--color-border)]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="flex gap-2">
-          {CATEGORY_TABS.map((tab) => (
+
+        {/* Type filter */}
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {TYPE_TABS.map((tab) => (
             <button
               key={tab.value}
-              onClick={() => setActiveCategory(tab.value)}
-              className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-                activeCategory === tab.value
-                  ? `bg-gradient-to-r ${tab.color} text-white shadow-lg`
-                  : "bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-elevated)] border border-[var(--color-border)]"
+              onClick={() => setActiveType(tab.value)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                activeType === tab.value
+                  ? "bg-amber-100 text-amber-800 border border-amber-300"
+                  : "bg-gray-50 text-gray-500 hover:bg-gray-100 border border-transparent"
               }`}
             >
               {tab.label}
@@ -242,12 +302,17 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
             const typeConfig = TYPE_CONFIG[item.type];
             const TypeIcon = typeConfig.icon;
             const borderColor = CATEGORY_BORDER_COLORS[item.category] || "border-t-gray-500";
+            const isCurrentlyPlaying = currentTrack?.id === item.id && isPlaying;
+            const isCurrentTrack = currentTrack?.id === item.id;
+            const hasAudio = !!item.audioUrl;
 
             return (
               <Card
                 key={item.id}
                 variant="elevated"
-                className={`relative overflow-hidden border-t-4 ${borderColor} p-0 flex flex-col`}
+                className={`relative overflow-hidden border-t-4 ${borderColor} p-0 flex flex-col ${
+                  isCurrentTrack ? "ring-2 ring-amber-400/50" : ""
+                }`}
               >
                 <div className="p-5 flex-1 flex flex-col">
                   {/* Type badge and completion indicator */}
@@ -258,9 +323,17 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
                       <TypeIcon className="w-3.5 h-3.5" />
                       {typeConfig.label}
                     </span>
-                    {isCompleted && (
-                      <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    )}
+                    <div className="flex items-center gap-1.5">
+                      {hasAudio && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-700 border border-amber-200">
+                          <Headphones className="w-3 h-3" />
+                          In-App
+                        </span>
+                      )}
+                      {isCompleted && (
+                        <CheckCircle2 className="w-5 h-5 text-green-500" />
+                      )}
+                    </div>
                   </div>
 
                   {/* Title */}
@@ -282,16 +355,43 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 mt-auto">
-                    <Button
-                      size="sm"
-                      variant="primary"
-                      onClick={() => handleOpenContent(item)}
-                      disabled={isLoading}
-                      className="flex-1"
-                    >
-                      <ExternalLink className="w-4 h-4 mr-1.5" />
-                      Open
-                    </Button>
+                    {hasAudio ? (
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        onClick={() => handleOpenContent(item)}
+                        disabled={isLoading}
+                        className={`flex-1 ${isCurrentlyPlaying ? "animate-pulse" : ""}`}
+                      >
+                        {isCurrentlyPlaying ? (
+                          <>
+                            <Pause className="w-4 h-4 mr-1.5" />
+                            Playing...
+                          </>
+                        ) : isCurrentTrack ? (
+                          <>
+                            <Play className="w-4 h-4 mr-1.5" />
+                            Resume
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-4 h-4 mr-1.5" />
+                            Play
+                          </>
+                        )}
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        onClick={() => handleOpenContent(item)}
+                        disabled={isLoading}
+                        className="flex-1"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-1.5" />
+                        Open
+                      </Button>
+                    )}
                     <Button
                       size="sm"
                       variant={isCompleted ? "secondary" : "outline"}

@@ -6,6 +6,7 @@ export interface ContentItem {
   category: "body" | "mind" | "spirit";
   duration: string;
   url: string;
+  audioUrl?: string; // For in-app audio playback
   thumbnail?: string;
   description: string;
 }
@@ -74,6 +75,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "20 min",
     url: "https://www.youtube.com/@10xvedic",
+    audioUrl: "https://cdn.pixabay.com/audio/2024/11/02/audio_db80bde7d0.mp3",
     description:
       "A gentle guided meditation designed to help you release stored emotional tension. Drawing from Yoga Nidra and Vedantic visualization practices, this session guides you through body scanning, emotional acknowledgment, and compassionate letting go.",
   },
@@ -131,5 +133,104 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     url: "https://www.youtube.com/@10xvedic",
     description:
       "Quality sleep is the foundation of transformation. This session covers Ayurvedic sleep hygiene — including optimal sleep timing, evening wind-down rituals, herbal recommendations, and a short Yoga Nidra practice to help you transition into deep, restorative rest.",
+  },
+
+  // ── In-App Audio Meditations ────────────────────────────────────
+
+  {
+    id: "audio-om-chanting",
+    title: "Om Chanting Meditation",
+    type: "audio",
+    pillarSlug: "breathing-meditation",
+    category: "spirit",
+    duration: "10 min",
+    url: "#",
+    audioUrl: "/audio/om-chanting.mp3",
+    description:
+      "Sacred Om chanting meditation to align your energy centers. The primordial sound of Om resonates with the frequency of the universe, calming the nervous system and deepening your connection to universal consciousness.",
+  },
+  {
+    id: "audio-morning-mantra",
+    title: "Morning Mantra & Intention Setting",
+    type: "audio",
+    pillarSlug: "morning-routine",
+    category: "body",
+    duration: "8 min",
+    url: "#",
+    audioUrl: "/audio/morning-mantra.mp3",
+    description:
+      "Start your day with powerful Vedic mantras and guided intention setting. This short audio practice combines the Gayatri Mantra with a visualization exercise to set your daily Sankalpa.",
+  },
+  {
+    id: "audio-pranayama-guided",
+    title: "Guided Pranayama: Nadi Shodhana",
+    type: "audio",
+    pillarSlug: "breathing-meditation",
+    category: "mind",
+    duration: "15 min",
+    url: "#",
+    audioUrl: "/audio/nadi-shodhana.mp3",
+    description:
+      "Follow along with this guided alternate nostril breathing (Nadi Shodhana) session. Perfect for balancing the left and right hemispheres of the brain, reducing anxiety, and preparing for deeper meditation.",
+  },
+  {
+    id: "audio-yoga-nidra",
+    title: "Yoga Nidra: Yogic Sleep for Deep Rest",
+    type: "audio",
+    pillarSlug: "sleep-optimization",
+    category: "body",
+    duration: "25 min",
+    url: "#",
+    audioUrl: "/audio/yoga-nidra.mp3",
+    description:
+      "A complete Yoga Nidra (yogic sleep) session that guides you through progressive relaxation, body scanning, and visualization. One hour of Yoga Nidra is said to equal 4 hours of regular sleep.",
+  },
+  {
+    id: "audio-gratitude-meditation",
+    title: "Gratitude & Heart Opening Meditation",
+    type: "audio",
+    pillarSlug: "gratitude",
+    category: "mind",
+    duration: "12 min",
+    url: "#",
+    audioUrl: "/audio/gratitude-meditation.mp3",
+    description:
+      "A gentle heart-centered meditation that cultivates deep gratitude. Using Vedic visualization of the heart chakra (Anahata), this practice opens you to appreciation, love, and contentment.",
+  },
+  {
+    id: "audio-sandhya-evening",
+    title: "Evening Sandhya: Twilight Meditation",
+    type: "audio",
+    pillarSlug: "sandhya-meditation",
+    category: "spirit",
+    duration: "10 min",
+    url: "#",
+    audioUrl: "/audio/sandhya-evening.mp3",
+    description:
+      "A calming evening meditation performed at the sacred twilight hour. This practice helps you release the day, process experiences, and prepare your consciousness for restful sleep.",
+  },
+  {
+    id: "audio-chakra-healing",
+    title: "7 Chakra Healing Sound Bath",
+    type: "audio",
+    pillarSlug: "healing-meditation",
+    category: "spirit",
+    duration: "20 min",
+    url: "#",
+    audioUrl: "/audio/chakra-healing.mp3",
+    description:
+      "An immersive sound healing experience using frequencies aligned to each of the 7 chakras. Tibetan singing bowls, crystal bowls, and binaural beats guide energy through your subtle body for deep healing.",
+  },
+  {
+    id: "audio-manifestation-visualization",
+    title: "Sankalpa: Guided Manifestation",
+    type: "audio",
+    pillarSlug: "manifestation",
+    category: "spirit",
+    duration: "15 min",
+    url: "#",
+    audioUrl: "/audio/manifestation.mp3",
+    description:
+      "A powerful guided visualization for manifesting your deepest intentions. Using the Vedic practice of Sankalpa combined with modern visualization techniques, this session helps you plant seeds of transformation in your subconscious.",
   },
 ];

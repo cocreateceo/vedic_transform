@@ -138,8 +138,8 @@ export function PillarsGrid() {
         ))}
       </div>
 
-      {/* ═══ Pillar Sub-Tabs ═══ */}
-      <div className="flex items-center justify-center gap-2 mb-10 flex-wrap">
+      {/* ═══ Pillar Sub-Tabs (2 rows) ═══ */}
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mb-10 max-w-4xl mx-auto">
         {filtered.map((pillar) => {
           const PIcon = pillar.icon;
           const isActive = pillar.id === activePillarId;
@@ -149,23 +149,23 @@ export function PillarsGrid() {
               onClick={() => setActivePillarId(pillar.id)}
               className="cursor-pointer transition-all"
               style={{
-                padding: "8px 16px",
-                borderRadius: "12px",
-                fontSize: "13px",
+                padding: "6px 10px",
+                borderRadius: "10px",
+                fontSize: "11px",
                 fontWeight: isActive ? 700 : 500,
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
+                justifyContent: "center",
+                gap: "4px",
                 background: isActive ? `${pillar.color}20` : "rgba(255,255,255,0.02)",
                 border: `1px solid ${isActive ? `${pillar.color}50` : "rgba(255,255,255,0.06)"}`,
                 color: isActive ? pillar.color : "#94a3b8",
-                boxShadow: isActive ? `0 0 15px ${pillar.color}15` : "none",
-                transform: isActive ? "scale(1.05)" : "scale(1)",
+                boxShadow: isActive ? `0 0 12px ${pillar.color}15` : "none",
+                whiteSpace: "nowrap",
               }}
             >
-              <PIcon style={{ width: 16, height: 16 }} />
-              <span className="hidden sm:inline">{pillar.name}</span>
-              <span className="sm:hidden">{pillar.name.split(" ")[0]}</span>
+              <PIcon style={{ width: 14, height: 14, flexShrink: 0 }} />
+              <span className="truncate">{pillar.name}</span>
             </button>
           );
         })}
