@@ -18,6 +18,7 @@ import {
   Quote,
   SmilePlus,
   Trophy,
+  Leaf,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -32,6 +33,7 @@ const navigation = [
 
 const secondaryNav = [
   { name: "Library", href: "/library", icon: BookMarked },
+  { name: "Dosha Quiz", href: "/dosha-assessment", icon: Leaf },
   { name: "Wisdom", href: "/wisdom", icon: Quote },
   { name: "Mood", href: "/mood", icon: SmilePlus },
   { name: "Achievements", href: "/achievements", icon: Trophy },

@@ -24,7 +24,7 @@ export async function handler(event: any) {
 
   if (method === 'PATCH') {
     const body = JSON.parse(event.body || '{}');
-    const { name, phone, avatarUrl, onboardingCompleted, onboardingData } = body;
+    const { name, phone, avatarUrl, onboardingCompleted, onboardingData, doshaType, doshaSecondary, doshaScores, doshaAssessedAt } = body;
 
     const updates: string[] = [];
     const values: Record<string, any> = {};
@@ -35,6 +35,10 @@ export async function handler(event: any) {
     if (avatarUrl !== undefined) { updates.push('avatarUrl = :avatarUrl'); values[':avatarUrl'] = avatarUrl; }
     if (onboardingCompleted !== undefined) { updates.push('onboardingCompleted = :onboarded'); values[':onboarded'] = onboardingCompleted; updates.push('onboardingCompletedAt = :onboardedAt'); values[':onboardedAt'] = new Date().toISOString(); }
     if (onboardingData !== undefined) { updates.push('onboardingData = :onboardingData'); values[':onboardingData'] = onboardingData; }
+    if (doshaType !== undefined) { updates.push('doshaType = :doshaType'); values[':doshaType'] = doshaType; }
+    if (doshaSecondary !== undefined) { updates.push('doshaSecondary = :doshaSecondary'); values[':doshaSecondary'] = doshaSecondary; }
+    if (doshaScores !== undefined) { updates.push('doshaScores = :doshaScores'); values[':doshaScores'] = doshaScores; }
+    if (doshaAssessedAt !== undefined) { updates.push('doshaAssessedAt = :doshaAssessedAt'); values[':doshaAssessedAt'] = doshaAssessedAt; }
 
     updates.push('updatedAt = :updatedAt');
     values[':updatedAt'] = new Date().toISOString();

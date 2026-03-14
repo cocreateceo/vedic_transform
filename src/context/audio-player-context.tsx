@@ -81,34 +81,104 @@ export function AudioPlayerProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const stopGenerated = useCallback(() => {
+    if (generatedStopRef.current) {
+      generatedStopRef.current();
+      generatedStopRef.current = null;
+    }
+    if (generatedTimerRef.current) {
+      clearInterval(generatedTimerRef.current);
+      generatedTimerRef.current = null;
+    }
+    setIsGenerated(false);
+  }, []);
+
+  const playGenerated = useCallback((track: AudioTrack) => {
+    stopGenerated();
+    const config = getPresetConfig(track.id);
+    const { stop: stopFn } = generateMeditationTone(config);
+    generatedStopRef.current = stopFn;
+    setIsGenerated(true);
+    setCurrentTrack(track);
+    setIsPlaying(true);
+    setProgress(0);
+    setCurrentTime(0);
+    setDuration(config.durationSeconds);
+    setIsMinimized(true);
+
+    // Simulate time progress for generated audio
+    const startTime = Date.now();
+    generatedTimerRef.current = setInterval(() => {
+      const elapsed = (Date.now() - startTime) / 1000;
+      setCurrentTime(elapsed);
+      setProgress((elapsed / config.durationSeconds) * 100);
+      if (elapsed >= config.durationSeconds) {
+        stopGenerated();
+        setIsPlaying(false);
+      }
+    }, 1000);
+  }, [stopGenerated]);
+
   const playTrack = useCallback((track: AudioTrack) => {
     const audio = audioRef.current;
-    if (!audio) return;
 
-    if (currentTrack?.id === track.id && audio.src) {
-      // Same track - just toggle
+    // Stop any generated audio first
+    stopGenerated();
+
+    if (currentTrack?.id === track.id && !isGenerated && audio?.src) {
       audio.play();
       setIsPlaying(true);
       return;
     }
 
-    audio.src = track.url;
-    audio.load();
-    audio.play().catch(() => {
-      // Autoplay blocked - user needs to interact
-      setIsPlaying(false);
-    });
+    // Try to play the URL; if it fails or is a placeholder, use generated audio
+    const isPlaceholderUrl = !track.url || track.url === "#" || track.url === "generated" || track.url.startsWith("/audio/");
+
+    if (isPlaceholderUrl) {
+      playGenerated(track);
+      return;
+    }
+
+    if (audio) {
+      audio.src = track.url;
+      audio.load();
+      audio.play().catch(() => {
+        // File failed to load - fallback to generated
+        playGenerated(track);
+      });
+
+      // Also handle load errors
+      const handleError = () => {
+        playGenerated(track);
+        audio.removeEventListener("error", handleError);
+      };
+      audio.addEventListener("error", handleError, { once: true });
+    }
+
     setCurrentTrack(track);
     setIsPlaying(true);
     setProgress(0);
     setCurrentTime(0);
     setIsMinimized(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTrack?.id]);
+  }, [currentTrack?.id, isGenerated, stopGenerated, playGenerated]);
 
   const togglePlay = useCallback(() => {
+    if (!currentTrack) return;
+
+    if (isGenerated) {
+      // For generated audio, stop/restart
+      if (isPlaying) {
+        stopGenerated();
+        setIsPlaying(false);
+      } else {
+        playGenerated(currentTrack);
+      }
+      return;
+    }
+
     const audio = audioRef.current;
-    if (!audio || !currentTrack) return;
+    if (!audio) return;
 
     if (isPlaying) {
       audio.pause();
@@ -117,14 +187,20 @@ export function AudioPlayerProvider({ children }: { children: ReactNode }) {
       audio.play().catch(() => setIsPlaying(false));
       setIsPlaying(true);
     }
-  }, [isPlaying, currentTrack]);
+  }, [isPlaying, currentTrack, isGenerated, stopGenerated, playGenerated]);
 
   const pause = useCallback(() => {
-    audioRef.current?.pause();
+    if (isGenerated) {
+      stopGenerated();
+    } else {
+      audioRef.current?.pause();
+    }
     setIsPlaying(false);
-  }, []);
+  }, [isGenerated, stopGenerated]);
 
   const stop = useCallback(() => {
+    stopGenerated();
+    stopGeneratedAudio();
     const audio = audioRef.current;
     if (audio) {
       audio.pause();
@@ -134,7 +210,7 @@ export function AudioPlayerProvider({ children }: { children: ReactNode }) {
     setCurrentTrack(null);
     setProgress(0);
     setCurrentTime(0);
-  }, []);
+  }, [stopGenerated]);
 
   const seek = useCallback((time: number) => {
     const audio = audioRef.current;

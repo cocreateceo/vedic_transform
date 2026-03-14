@@ -118,7 +118,7 @@ export function PillarsGrid() {
   return (
     <>
       {/* ═══ Category Filter Tabs ═══ */}
-      <div className="flex items-center justify-center gap-3 mb-8 flex-wrap">
+      <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
         {filterTabs.map((tab) => (
           <button
             key={tab.key}
@@ -139,7 +139,7 @@ export function PillarsGrid() {
       </div>
 
       {/* ═══ Pillar Sub-Tabs (2 rows) ═══ */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mb-10 max-w-4xl mx-auto">
+      <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
         {filtered.map((pillar) => {
           const PIcon = pillar.icon;
           const isActive = pillar.id === activePillarId;
@@ -149,23 +149,21 @@ export function PillarsGrid() {
               onClick={() => setActivePillarId(pillar.id)}
               className="cursor-pointer transition-all"
               style={{
-                padding: "6px 10px",
+                padding: "8px 14px",
                 borderRadius: "10px",
-                fontSize: "11px",
+                fontSize: "13px",
                 fontWeight: isActive ? 700 : 500,
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                gap: "4px",
+                gap: "6px",
                 background: isActive ? `${pillar.color}20` : "rgba(255,255,255,0.02)",
-                border: `1px solid ${isActive ? `${pillar.color}50` : "rgba(255,255,255,0.06)"}`,
+                border: `1px solid ${isActive ? `${pillar.color}50` : "rgba(255,255,255,0.08)"}`,
                 color: isActive ? pillar.color : "#94a3b8",
                 boxShadow: isActive ? `0 0 12px ${pillar.color}15` : "none",
-                whiteSpace: "nowrap",
               }}
             >
-              <PIcon style={{ width: 14, height: 14, flexShrink: 0 }} />
-              <span className="truncate">{pillar.name}</span>
+              <PIcon style={{ width: 16, height: 16, flexShrink: 0 }} />
+              {pillar.name}
             </button>
           );
         })}

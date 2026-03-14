@@ -20,6 +20,7 @@ import {
   SmilePlus,
   Trophy,
   Settings,
+  Leaf,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -34,6 +35,7 @@ const moreNavItems = [
   { name: "Goals", href: "/goals", icon: Target },
   { name: "Journal", href: "/journal", icon: BookOpen },
   { name: "Library", href: "/library", icon: BookMarked },
+  { name: "Dosha", href: "/dosha-assessment", icon: Leaf },
   { name: "Wisdom", href: "/wisdom", icon: Quote },
   { name: "Mood", href: "/mood", icon: SmilePlus },
   { name: "Achievements", href: "/achievements", icon: Trophy },

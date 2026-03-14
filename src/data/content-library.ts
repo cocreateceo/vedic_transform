@@ -75,7 +75,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "20 min",
     url: "https://www.youtube.com/@10xvedic",
-    audioUrl: "https://cdn.pixabay.com/audio/2024/11/02/audio_db80bde7d0.mp3",
+    audioUrl: "generated",
     description:
       "A gentle guided meditation designed to help you release stored emotional tension. Drawing from Yoga Nidra and Vedantic visualization practices, this session guides you through body scanning, emotional acknowledgment, and compassionate letting go.",
   },
@@ -145,7 +145,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "10 min",
     url: "#",
-    audioUrl: "/audio/om-chanting.mp3",
+    audioUrl: "generated",
     description:
       "Sacred Om chanting meditation to align your energy centers. The primordial sound of Om resonates with the frequency of the universe, calming the nervous system and deepening your connection to universal consciousness.",
   },
@@ -157,7 +157,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "body",
     duration: "8 min",
     url: "#",
-    audioUrl: "/audio/morning-mantra.mp3",
+    audioUrl: "generated",
     description:
       "Start your day with powerful Vedic mantras and guided intention setting. This short audio practice combines the Gayatri Mantra with a visualization exercise to set your daily Sankalpa.",
   },
@@ -169,7 +169,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "15 min",
     url: "#",
-    audioUrl: "/audio/nadi-shodhana.mp3",
+    audioUrl: "generated",
     description:
       "Follow along with this guided alternate nostril breathing (Nadi Shodhana) session. Perfect for balancing the left and right hemispheres of the brain, reducing anxiety, and preparing for deeper meditation.",
   },
@@ -181,7 +181,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "body",
     duration: "25 min",
     url: "#",
-    audioUrl: "/audio/yoga-nidra.mp3",
+    audioUrl: "generated",
     description:
       "A complete Yoga Nidra (yogic sleep) session that guides you through progressive relaxation, body scanning, and visualization. One hour of Yoga Nidra is said to equal 4 hours of regular sleep.",
   },
@@ -193,7 +193,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "12 min",
     url: "#",
-    audioUrl: "/audio/gratitude-meditation.mp3",
+    audioUrl: "generated",
     description:
       "A gentle heart-centered meditation that cultivates deep gratitude. Using Vedic visualization of the heart chakra (Anahata), this practice opens you to appreciation, love, and contentment.",
   },
@@ -205,7 +205,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "10 min",
     url: "#",
-    audioUrl: "/audio/sandhya-evening.mp3",
+    audioUrl: "generated",
     description:
       "A calming evening meditation performed at the sacred twilight hour. This practice helps you release the day, process experiences, and prepare your consciousness for restful sleep.",
   },
@@ -217,7 +217,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "20 min",
     url: "#",
-    audioUrl: "/audio/chakra-healing.mp3",
+    audioUrl: "generated",
     description:
       "An immersive sound healing experience using frequencies aligned to each of the 7 chakras. Tibetan singing bowls, crystal bowls, and binaural beats guide energy through your subtle body for deep healing.",
   },
@@ -229,7 +229,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "15 min",
     url: "#",
-    audioUrl: "/audio/manifestation.mp3",
+    audioUrl: "generated",
     description:
       "A powerful guided visualization for manifesting your deepest intentions. Using the Vedic practice of Sankalpa combined with modern visualization techniques, this session helps you plant seeds of transformation in your subconscious.",
   },
