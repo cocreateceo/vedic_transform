@@ -11,7 +11,7 @@ export default async function MainLayout({
   const user = await requireAuth();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50/50 via-white to-orange-50/50">
+    <div className="min-h-screen bg-[var(--color-bg-primary)]">
       {/* Desktop Sidebar */}
       <Sidebar />
 

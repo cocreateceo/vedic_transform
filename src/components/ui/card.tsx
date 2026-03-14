@@ -13,7 +13,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       default: "vedic-card",
       glass: "glass rounded-2xl",
       elevated:
-        "bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100",
+        "bg-[var(--color-bg-surface)] rounded-2xl shadow-xl shadow-gray-200/50 border border-[var(--color-border)]",
     };
 
     return (
@@ -44,7 +44,7 @@ const CardTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("text-xl font-semibold text-gray-900", className)}
+    className={cn("text-xl font-semibold text-[var(--color-text-primary)]", className)}
     {...props}
   />
 ));
@@ -55,7 +55,7 @@ const CardDescription = forwardRef<
   HTMLParagraphElement,
   HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <p ref={ref} className={cn("text-sm text-gray-500 mt-1", className)} {...props} />
+  <p ref={ref} className={cn("text-sm text-[var(--color-text-secondary)] mt-1", className)} {...props} />
 ));
 
 CardDescription.displayName = "CardDescription";
@@ -70,7 +70,7 @@ CardContent.displayName = "CardContent";
 
 const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("mt-4 pt-4 border-t border-gray-100", className)} {...props} />
+    <div ref={ref} className={cn("mt-4 pt-4 border-t border-[var(--color-border)]", className)} {...props} />
   )
 );
 
