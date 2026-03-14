@@ -209,14 +209,14 @@ export function VedicAssistant() {
           width: "60px",
           height: "60px",
           borderRadius: "50%",
-          background: "linear-gradient(135deg, #7c3aed, #6d28d9)",
+          background: "linear-gradient(135deg, #FF6B35, #FF9933)",
           border: "none",
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           boxShadow:
-            "0 4px 20px rgba(124, 58, 237, 0.5), 0 0 40px rgba(124, 58, 237, 0.2)",
+            "0 4px 20px rgba(255, 107, 53, 0.5), 0 0 40px rgba(255, 153, 51, 0.2)",
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
         }}
         onMouseEnter={(e) => {
@@ -239,16 +239,16 @@ export function VedicAssistant() {
         bottom: "24px",
         right: "24px",
         zIndex: 9999,
-        width: "min(400px, calc(100vw - 32px))",
-        height: "min(620px, calc(100vh - 48px))",
+        width: "min(420px, calc(100vw - 32px))",
+        height: "min(680px, calc(100vh - 48px))",
         borderRadius: "20px",
         display: "flex",
         flexDirection: "column",
-        overflow: "hidden",
-        background: "var(--color-bg-surface, #ffffff)",
-        border: "1px solid var(--color-border, rgba(124,58,237,0.15))",
+        overflow: "visible",
+        background: "#ffffff",
+        border: "1px solid #e5e7eb",
         boxShadow:
-          "0 8px 40px rgba(0,0,0,0.2), 0 0 60px rgba(124,58,237,0.15)",
+          "0 8px 40px rgba(0,0,0,0.15), 0 0 60px rgba(255,107,53,0.1)",
         animation: "slideUp 0.35s ease-out",
       }}
     >
@@ -264,85 +264,83 @@ export function VedicAssistant() {
         }
       `}</style>
 
-      {/* ── Header ── */}
+      {/* ── Header with large avatar ── */}
       <div
         style={{
-          background: "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)",
-          padding: "16px",
+          background: "linear-gradient(135deg, #FF6B35 0%, #FF9933 100%)",
+          padding: "20px 16px 40px 16px",
           color: "white",
+          flexShrink: 0,
+          borderRadius: "20px 20px 0 0",
+          position: "relative",
+          textAlign: "center",
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={() => {
+            setIsOpen(false);
+            stopSpeaking();
+          }}
+          aria-label="Close chat"
+          style={{
+            position: "absolute",
+            top: "12px",
+            right: "12px",
+            background: "rgba(255,255,255,0.2)",
+            border: "none",
+            borderRadius: "50%",
+            width: "32px",
+            height: "32px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            color: "white",
+          }}
+        >
+          <X size={18} />
+        </button>
+
+        {/* Large centered avatar */}
+        <div
+          style={{
+            width: "100px",
+            height: "100px",
+            borderRadius: "50%",
+            border: "4px solid #FF9933",
+            margin: "0 auto 12px auto",
+            overflow: "hidden",
+            background: "#f0f0f0",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+          }}
+        >
+          <img
+            src="/images/logo.jpg"
+            alt="Vedic AI Assistant"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </div>
+      </div>
+
+      {/* ── Title bar below header ── */}
+      <div
+        style={{
+          padding: "12px 16px",
+          borderBottom: "1px solid #e5e7eb",
+          background: "#ffffff",
           flexShrink: 0,
         }}
       >
-        {/* Top row: avatar + title + close */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "12px",
-            marginBottom: "12px",
-          }}
-        >
-          {/* Avatar */}
-          <div
-            style={{
-              width: "48px",
-              height: "48px",
-              borderRadius: "50%",
-              border: "3px solid #FF9933",
-              background:
-                "linear-gradient(135deg, #FFD700 0%, #FF9933 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "22px",
-              flexShrink: 0,
-            }}
-          >
-            {"\u{1F549}"}
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div
-              style={{
-                fontWeight: 700,
-                fontSize: "16px",
-                letterSpacing: "0.3px",
-              }}
-            >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: "16px", color: "#1a1a1a" }}>
               Vedic AI Assistant
             </div>
-            <div
-              style={{
-                fontSize: "11px",
-                opacity: 0.85,
-                marginTop: "2px",
-                lineHeight: 1.3,
-              }}
-            >
+            <div style={{ fontSize: "12px", color: "#6b7280", marginTop: "2px" }}>
               Ask me anything about your 48-day transformation journey
             </div>
           </div>
-          <button
-            onClick={() => {
-              setIsOpen(false);
-              stopSpeaking();
-            }}
-            aria-label="Close chat"
-            style={{
-              background: "rgba(255,255,255,0.15)",
-              border: "none",
-              borderRadius: "50%",
-              width: "32px",
-              height: "32px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              color: "white",
-              flexShrink: 0,
-            }}
-          >
-            <X size={18} />
-          </button>
         </div>
 
         {/* Speed controls row */}
@@ -351,27 +349,21 @@ export function VedicAssistant() {
             display: "flex",
             alignItems: "center",
             gap: "6px",
+            marginTop: "8px",
             flexWrap: "wrap",
           }}
         >
-          <Volume2 size={14} style={{ opacity: 0.7 }} />
           {speedOptions.map((rate) => (
             <button
               key={rate}
               onClick={() => setSpeechRate(rate)}
               style={{
-                background:
-                  speechRate === rate
-                    ? "rgba(255,255,255,0.3)"
-                    : "rgba(255,255,255,0.1)",
-                border:
-                  speechRate === rate
-                    ? "1px solid rgba(255,255,255,0.5)"
-                    : "1px solid transparent",
-                borderRadius: "12px",
-                padding: "2px 10px",
-                fontSize: "11px",
-                color: "white",
+                background: speechRate === rate ? "#FF6B35" : "#f3f4f6",
+                border: "1px solid " + (speechRate === rate ? "#FF6B35" : "#e5e7eb"),
+                borderRadius: "16px",
+                padding: "3px 12px",
+                fontSize: "12px",
+                color: speechRate === rate ? "white" : "#6b7280",
                 cursor: "pointer",
                 fontWeight: speechRate === rate ? 700 : 400,
                 transition: "all 0.2s ease",
@@ -381,27 +373,29 @@ export function VedicAssistant() {
             </button>
           ))}
           {/* Pause / Play */}
-          {isSpeaking && (
+          {isSpeaking ? (
             <button
               onClick={togglePause}
               aria-label={isPaused ? "Resume speech" : "Pause speech"}
               style={{
-                background: "rgba(255,255,255,0.15)",
+                background: "#FF6B35",
                 border: "none",
-                borderRadius: "50%",
-                width: "28px",
-                height: "28px",
+                borderRadius: "16px",
+                padding: "3px 12px",
+                fontSize: "12px",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                gap: "4px",
                 cursor: "pointer",
                 color: "white",
+                fontWeight: 600,
                 marginLeft: "auto",
               }}
             >
-              {isPaused ? <Play size={14} /> : <Pause size={14} />}
+              {isPaused ? <Play size={12} /> : <Pause size={12} />}
+              {isPaused ? "Play" : "Pause"}
             </button>
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -414,7 +408,7 @@ export function VedicAssistant() {
           display: "flex",
           flexDirection: "column",
           gap: "12px",
-          background: "var(--color-bg-primary, #faf5ff)",
+          background: "#fafafa",
         }}
         className="hide-scrollbar"
       >
@@ -447,7 +441,7 @@ export function VedicAssistant() {
                       height: "28px",
                       borderRadius: "50%",
                       background:
-                        "linear-gradient(135deg, #FFD700, #FF9933)",
+                        "linear-gradient(135deg, #FF6B35, #FF9933)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -466,21 +460,15 @@ export function VedicAssistant() {
                       ? "4px 16px 16px 16px"
                       : "16px 4px 16px 16px",
                     background: isBot
-                      ? "var(--color-card-bg, rgba(124,58,237,0.08))"
-                      : "linear-gradient(135deg, #7c3aed, #6d28d9)",
-                    color: isBot
-                      ? "var(--color-text-primary, #1e1b4b)"
-                      : "white",
+                      ? "#f3f4f6"
+                      : "linear-gradient(135deg, #FF6B35, #FF9933)",
+                    color: isBot ? "#1a1a1a" : "white",
                     fontSize: "13px",
                     lineHeight: 1.5,
                     wordBreak: "break-word",
                     whiteSpace: "pre-wrap",
-                    border: isBot
-                      ? "1px solid var(--color-border, rgba(124,58,237,0.1))"
-                      : "none",
-                    boxShadow: isBot
-                      ? "none"
-                      : "0 2px 8px rgba(124,58,237,0.3)",
+                    border: isBot ? "1px solid #e5e7eb" : "none",
+                    boxShadow: isBot ? "none" : "0 2px 8px rgba(255,107,53,0.3)",
                   }}
                 >
                   {msg.content}
@@ -534,7 +522,7 @@ export function VedicAssistant() {
                 background:
                   "var(--color-card-bg, rgba(124,58,237,0.08))",
                 border:
-                  "1px solid var(--color-border, rgba(124,58,237,0.1))",
+                  "1px solid #e5e7eb",
                 display: "flex",
                 gap: "6px",
               }}
@@ -546,7 +534,7 @@ export function VedicAssistant() {
                     width: "8px",
                     height: "8px",
                     borderRadius: "50%",
-                    background: "#7c3aed",
+                    background: "#FF6B35",
                     animation: `typingDot 1.4s ease-in-out ${dot * 0.2}s infinite`,
                   }}
                 />
@@ -583,21 +571,20 @@ export function VedicAssistant() {
             flex: 1,
             padding: "10px 14px",
             borderRadius: "12px",
-            border: "1px solid var(--color-border, rgba(124,58,237,0.2))",
-            background:
-              "var(--color-bg-elevated, #f5f0ff)",
-            color: "var(--color-text-primary, #1e1b4b)",
+            border: "1px solid #e5e7eb",
+            background: "#f9fafb",
+            color: "#1a1a1a",
             fontSize: "13px",
             outline: "none",
             transition: "border-color 0.2s",
             minWidth: 0,
           }}
           onFocus={(e) => {
-            e.currentTarget.style.borderColor = "#7c3aed";
+            e.currentTarget.style.borderColor = "#FF6B35";
           }}
           onBlur={(e) => {
             e.currentTarget.style.borderColor =
-              "var(--color-border, rgba(124,58,237,0.2))";
+              "#e5e7eb";
           }}
         />
 
