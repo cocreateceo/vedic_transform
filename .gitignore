@@ -52,3 +52,6 @@ next-env.d.ts
 # Old deployment artifacts (no longer used - now using SST)
 lambdas/
 scripts/migrate-data.ts
+
+# superpowers
+.superpowers/
