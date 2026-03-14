@@ -240,6 +240,7 @@ model MoodLog {
   // Relations
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, logDate])
   @@index([userId])
   @@index([logDate])
 }
