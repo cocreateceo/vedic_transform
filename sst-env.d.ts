@@ -2,15 +2,96 @@
 /* tslint:disable */
 /* eslint-disable */
 /* deno-fmt-ignore-file */
+/* biome-ignore-all lint: auto-generated */
 
 declare module "sst" {
   export interface Resource {
-    "LandingPage": {
-      "type": "sst.aws.StaticSite"
+    "Api": {
+      "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
+    "Badges": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "ContentProgress": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "DailyCheckins": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "FocusPillars": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "GoalTasks": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "GratitudeEntries": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Intentions": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Journeys": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "JwtSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "KarmaTransactions": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Manifestations": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "MoodLogs": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Notifications": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Pillars": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "ReminderSettings": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "SelfAssessments": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Streaks": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "UserBadges": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "UserInsights": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Users": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "VedicTransformSite": {
-      "type": "sst.aws.Nextjs"
+      "type": "sst.aws.StaticSite"
       "url": string
     }
   }
