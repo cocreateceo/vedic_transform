@@ -16,6 +16,7 @@ export default $config({
   async run() {
     // ── Secrets ──────────────────────────────────────────────────────
     const jwtSecret = new sst.Secret("JwtSecret");
+    const anthropicApiKey = new sst.Secret("AnthropicApiKey");
 
     // ── DynamoDB Tables ─────────────────────────────────────────────
 
@@ -428,6 +429,12 @@ export default $config({
     api.route("GET /data/achievements", {
       handler: "functions/data/achievements.handler",
       link: achievementsLink,
+    });
+
+    // ── Chat (AI Assistant) ─────────────────────────────────────
+    api.route("POST /chat", {
+      handler: "functions/chat/chat.handler",
+      link: [jwtSecret, anthropicApiKey],
     });
 
     // ── Static Site ─────────────────────────────────────────────────

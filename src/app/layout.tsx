@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ClientOnlyProviders } from "@/components/ui/client-only-providers";
 import { AuthProvider } from "@/context/auth-context";
+import { VedicAssistant } from "@/components/features/chat/vedic-assistant";
 
 export const metadata: Metadata = {
   title: "10X Vedic Transform - 48 Day Journey",
@@ -26,6 +27,7 @@ export default function RootLayout({
         }} />
         <AuthProvider>
           {children}
+          <VedicAssistant />
         </AuthProvider>
         <ClientOnlyProviders />
       </body>
