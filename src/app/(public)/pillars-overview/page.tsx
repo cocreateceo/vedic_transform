@@ -13,9 +13,8 @@ export default function PillarsOverviewPage() {
           <img
             src="/images/vedic-banner.png"
             alt="10X Yourself — Vedic Transformation in 48 Days — Working on Mind, Body, Spirit"
-            className="w-full object-cover"
+            className="w-full object-contain"
             style={{
-              maxHeight: "220px",
               borderTop: "3px solid rgba(255,153,51,0.4)",
               borderBottom: "3px solid rgba(255,153,51,0.4)",
             }}
