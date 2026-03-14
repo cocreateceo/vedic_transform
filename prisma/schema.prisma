@@ -39,6 +39,8 @@ model User {
   insights           UserInsight[]
   reminderSettings   ReminderSettings?
   weeklySummaries    WeeklySummary[]
+  contentProgress    ContentProgress[]
+  notifications      Notification[]
 }
 
 // The 11 transformation pillars
@@ -231,6 +233,7 @@ model MoodLog {
   moodScore Int      // 1-5 scale
   energy    Int?     // 1-5 scale
   stress    Int?     // 1-5 scale
+  sleepQuality Int?
   notes     String?
   createdAt DateTime @default(now())
 
@@ -418,4 +421,28 @@ model WeeklySummary {
 
   @@unique([userId, weekNumber])
   @@index([userId])
+}
+
+model ContentProgress {
+  id             String   @id @default(cuid())
+  userId         String
+  contentId      String
+  completed      Boolean  @default(false)
+  progress       Int      @default(0)
+  lastAccessedAt DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, contentId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  actionUrl String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
