@@ -59,11 +59,11 @@ export default async function BlogPostPage({
     <div className="text-[#e2e8f0]">
       {/* Article Header */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-16">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm font-medium mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 text-sm font-medium mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Blog
@@ -103,7 +103,7 @@ export default async function BlogPostPage({
             className="prose prose-invert prose-lg max-w-none
               prose-p:text-[#c4c9d4] prose-p:leading-relaxed prose-p:mb-6
               prose-headings:text-white prose-headings:font-bold
-              prose-a:text-purple-400 prose-a:no-underline hover:prose-a:text-purple-300
+              prose-a:text-orange-400 prose-a:no-underline hover:prose-a:text-orange-300
               prose-strong:text-white"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
@@ -125,13 +125,13 @@ export default async function BlogPostPage({
                 const rc = categoryColors[rp.category] || categoryColors.mind;
                 return (
                   <Link key={rp.slug} href={`/blog/${rp.slug}`} className="group block">
-                    <div className="p-5 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-purple-500/30 transition-all">
+                    <div className="p-5 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all">
                       <span
                         className={`inline-block text-xs px-2.5 py-0.5 rounded-full ${rc.bg} ${rc.text} font-medium mb-3`}
                       >
                         {rp.category.charAt(0).toUpperCase() + rp.category.slice(1)}
                       </span>
-                      <h3 className="text-white font-semibold mb-2 group-hover:text-purple-300 transition-colors line-clamp-2">
+                      <h3 className="text-white font-semibold mb-2 group-hover:text-orange-300 transition-colors line-clamp-2">
                         {rp.title}
                       </h3>
                       <p className="text-sm text-[#94a3b8] leading-relaxed line-clamp-2 mb-3">

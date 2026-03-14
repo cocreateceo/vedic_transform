@@ -58,13 +58,13 @@ export function InsightsFeed({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-purple-600" />
+            <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-orange-600" />
             </div>
             <div>
               <CardTitle className="text-sm sm:text-base">Personalized Insights</CardTitle>
               {newCount > 0 && (
-                <p className="text-xs text-purple-600">
+                <p className="text-xs text-orange-600">
                   {newCount} new insight{newCount !== 1 ? "s" : ""} for you
                 </p>
               )}
@@ -101,7 +101,7 @@ export function InsightsFeed({
                   className={cn(
                     "px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors",
                     filter === option.value
-                      ? "bg-purple-100 text-purple-700"
+                      ? "bg-orange-100 text-orange-700"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   )}
                 >

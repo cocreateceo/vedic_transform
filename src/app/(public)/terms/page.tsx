@@ -9,7 +9,7 @@ export default function TermsPage() {
     <div className="text-[#e2e8f0]">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-16">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
@@ -165,7 +165,7 @@ export default function TermsPage() {
                   If you have any questions about these Terms of Service, please contact us at:
                 </p>
                 <p className="mt-3 text-white">
-                  <a href="mailto:support@10xvedic.com" className="text-purple-400 hover:text-purple-300 transition-colors">
+                  <a href="mailto:support@10xvedic.com" className="text-orange-400 hover:text-orange-300 transition-colors">
                     support@10xvedic.com
                   </a>
                 </p>

@@ -31,9 +31,9 @@ export function FAQPageClient() {
     <div className="text-[#e2e8f0]">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-20">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/15 border border-purple-500/20 text-purple-300 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/15 border border-orange-500/20 text-orange-300 text-sm font-medium mb-6">
             <HelpCircle className="w-4 h-4" />
             Help Center
           </div>
@@ -55,7 +55,7 @@ export function FAQPageClient() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search questions..."
-              className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white placeholder-[#64748b] focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/30 transition-colors"
+              className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white placeholder-[#64748b] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
             />
           </div>
         </div>
@@ -71,7 +71,7 @@ export function FAQPageClient() {
                 onClick={() => setActiveCategory(tab.key)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
                   activeCategory === tab.key
-                    ? "bg-purple-600 text-white shadow-lg shadow-purple-500/25"
+                    ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
                     : "bg-white/[0.05] text-[#94a3b8] hover:bg-white/[0.1] hover:text-white"
                 }`}
               >
@@ -130,7 +130,7 @@ export function FAQPageClient() {
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-lg shadow-purple-500/25 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/25 transition-all"
             >
               Contact Us
               <ArrowRight className="w-5 h-5" />

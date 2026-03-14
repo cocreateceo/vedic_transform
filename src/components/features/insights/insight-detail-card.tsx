@@ -55,9 +55,9 @@ const typeConfig: Record<InsightType, {
   },
   recommendation: {
     icon: Lightbulb,
-    bgColor: "bg-purple-50",
-    iconColor: "text-purple-600",
-    borderColor: "border-purple-200",
+    bgColor: "bg-orange-50",
+    iconColor: "text-orange-600",
+    borderColor: "border-orange-200",
   },
   milestone: {
     icon: Target,
@@ -104,7 +104,7 @@ export function InsightDetailCard({
               config.bgColor === "bg-blue-50" ? "bg-blue-100" :
               config.bgColor === "bg-green-50" ? "bg-green-100" :
               config.bgColor === "bg-amber-50" ? "bg-amber-100" :
-              config.bgColor === "bg-purple-50" ? "bg-purple-100" :
+              config.bgColor === "bg-orange-50" ? "bg-orange-100" :
               "bg-emerald-100"
             )}
           >

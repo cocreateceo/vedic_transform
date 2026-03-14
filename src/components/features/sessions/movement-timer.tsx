@@ -123,7 +123,7 @@ export function MovementTimer() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => adjustValue(setWorkTime, -5, 10, 120)}
-                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-purple-50 transition-colors"
+                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-orange-50 transition-colors"
               >
                 -
               </button>
@@ -132,7 +132,7 @@ export function MovementTimer() {
               </span>
               <button
                 onClick={() => adjustValue(setWorkTime, 5, 10, 120)}
-                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-purple-50 transition-colors"
+                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-orange-50 transition-colors"
               >
                 +
               </button>
@@ -147,7 +147,7 @@ export function MovementTimer() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => adjustValue(setRestTime, -5, 5, 60)}
-                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-purple-50 transition-colors"
+                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-orange-50 transition-colors"
               >
                 -
               </button>
@@ -156,7 +156,7 @@ export function MovementTimer() {
               </span>
               <button
                 onClick={() => adjustValue(setRestTime, 5, 5, 60)}
-                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-purple-50 transition-colors"
+                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-orange-50 transition-colors"
               >
                 +
               </button>
@@ -171,7 +171,7 @@ export function MovementTimer() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => adjustValue(setTotalRounds, -1, 1, 20)}
-                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-purple-50 transition-colors"
+                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-orange-50 transition-colors"
               >
                 -
               </button>
@@ -180,7 +180,7 @@ export function MovementTimer() {
               </span>
               <button
                 onClick={() => adjustValue(setTotalRounds, 1, 1, 20)}
-                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-purple-50 transition-colors"
+                className="w-8 h-8 rounded-lg bg-[var(--color-card-bg)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:bg-orange-50 transition-colors"
               >
                 +
               </button>
@@ -194,7 +194,7 @@ export function MovementTimer() {
         <div
           className={cn(
             "absolute inset-0 rounded-full blur-2xl transition-all duration-500",
-            phase === "work" ? "bg-purple-500/15" : phase === "rest" ? "bg-green-500/15" : "bg-gray-300/5"
+            phase === "work" ? "bg-orange-500/15" : phase === "rest" ? "bg-green-500/15" : "bg-gray-300/5"
           )}
           style={{ transform: "scale(1.3)" }}
         />
@@ -261,7 +261,7 @@ export function MovementTimer() {
             className={cn(
               "text-sm font-semibold uppercase tracking-wider",
               phase === "work"
-                ? "text-purple-600"
+                ? "text-orange-600"
                 : phase === "rest"
                   ? "text-green-600"
                   : "text-[var(--color-text-secondary)]"
@@ -289,10 +289,10 @@ export function MovementTimer() {
               className={cn(
                 "w-3 h-3 rounded-full transition-all duration-300",
                 i < currentRound - 1
-                  ? "bg-purple-500"
+                  ? "bg-orange-500"
                   : i === currentRound - 1
                     ? phase === "work"
-                      ? "bg-purple-500 animate-pulse"
+                      ? "bg-orange-500 animate-pulse"
                       : "bg-green-500 animate-pulse"
                     : "bg-[var(--color-border)]"
               )}

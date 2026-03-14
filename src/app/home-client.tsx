@@ -62,11 +62,11 @@ export function HomePageClient() {
       {/* ═══ 2. Hero Section ═══ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
         {/* Ambient glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/15 border border-purple-500/20 text-purple-300 text-sm font-medium mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/15 border border-orange-500/20 text-orange-300 text-sm font-medium mb-8">
             <Sparkles className="w-4 h-4" />
             48-Day Vedic Transformation Program
           </div>
@@ -87,7 +87,7 @@ export function HomePageClient() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-semibold bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-lg shadow-purple-500/25 transition-all"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-semibold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/25 transition-all"
             >
               Begin Your Journey
               <ArrowRight className="w-5 h-5" />
@@ -109,7 +109,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 3. Stats Bar ═══ */}
-      <section className="bg-[#1e1b4b]/80 border-y border-purple-500/10">
+      <section className="bg-[#1e1b4b]/80 border-y border-orange-500/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
@@ -133,7 +133,7 @@ export function HomePageClient() {
       <section className="py-20 bg-[#0f0a1e]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            How It <span className="bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">Works</span>
+            How It <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">Works</span>
           </h2>
           <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
             Four simple steps to begin your transformation journey
@@ -143,18 +143,18 @@ export function HomePageClient() {
             {steps.map((step) => (
               <div
                 key={step.num}
-                className="relative p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-purple-500/30 transition-colors group"
+                className="relative p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-colors group"
               >
                 {/* Number circle */}
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-purple-500 flex items-center justify-center text-white font-bold text-sm mb-4 shadow-lg shadow-purple-500/20">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm mb-4 shadow-lg shadow-orange-500/20">
                   {step.num}
                 </div>
-                <step.icon className="w-8 h-8 text-purple-400 mb-3" />
+                <step.icon className="w-8 h-8 text-orange-400 mb-3" />
                 <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
                 <p className="text-sm text-[#94a3b8] leading-relaxed">{step.desc}</p>
                 {/* Connector arrow (not on last) */}
                 {step.num < 4 && (
-                  <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2 text-purple-500/40">
+                  <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2 text-orange-500/40">
                     <ArrowRight className="w-6 h-6" />
                   </div>
                 )}
@@ -181,7 +181,7 @@ export function HomePageClient() {
               return (
                 <div
                   key={pillar.id}
-                  className="p-5 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-purple-500/30 transition-all hover:-translate-y-1"
+                  className="p-5 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all hover:-translate-y-1"
                 >
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
@@ -202,7 +202,7 @@ export function HomePageClient() {
           <div className="text-center mt-10">
             <Link
               href="/pillars-overview"
-              className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium transition-colors"
+              className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 font-medium transition-colors"
             >
               View All Pillars
               <ArrowRight className="w-4 h-4" />
@@ -225,10 +225,10 @@ export function HomePageClient() {
             {benefits.map((b) => (
               <div
                 key={b.title}
-                className="flex gap-4 p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-purple-500/20 transition-colors"
+                className="flex gap-4 p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/20 transition-colors"
               >
-                <div className="w-12 h-12 shrink-0 rounded-xl bg-purple-500/15 flex items-center justify-center">
-                  <b.icon className="w-6 h-6 text-purple-400" />
+                <div className="w-12 h-12 shrink-0 rounded-xl bg-orange-500/15 flex items-center justify-center">
+                  <b.icon className="w-6 h-6 text-orange-400" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-1">{b.title}</h3>
@@ -269,7 +269,7 @@ export function HomePageClient() {
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
                     {t.name.charAt(0)}
                   </div>
                   <div>
@@ -287,7 +287,7 @@ export function HomePageClient() {
       <section className="py-20 bg-[#0f0a1e]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            Frequently Asked <span className="bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">Questions</span>
+            Frequently Asked <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">Questions</span>
           </h2>
           <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
             Everything you need to know before starting
@@ -323,7 +323,7 @@ export function HomePageClient() {
           <div className="text-center mt-8">
             <Link
               href="/faq"
-              className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium transition-colors"
+              className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 font-medium transition-colors"
             >
               View All FAQs
               <ArrowRight className="w-4 h-4" />
@@ -334,10 +334,10 @@ export function HomePageClient() {
 
       {/* ═══ 9. CTA Section ═══ */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-[#1a1145] to-amber-900/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1145] to-amber-900/40" />
         <div className="absolute inset-0 bg-[#0f0a1e]/40" />
         {/* Ambient glow */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-purple-600/20 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-amber-500/15 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -353,7 +353,7 @@ export function HomePageClient() {
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-xl shadow-purple-500/25 transition-all"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-xl shadow-orange-500/25 transition-all"
           >
             Begin Your Journey
             <ArrowRight className="w-5 h-5" />

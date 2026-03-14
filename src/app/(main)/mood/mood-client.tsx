@@ -273,7 +273,7 @@ export function MoodPageClient({
           disabled={moodScore === 0 || submitting}
           className="w-full rounded-xl py-3 px-6 font-semibold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           style={{
-            background: "var(--color-purple-gradient)",
+            background: "var(--color-saffron-gradient)",
           }}
         >
           {submitting

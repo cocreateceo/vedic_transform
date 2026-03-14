@@ -72,7 +72,7 @@ export default function HowItWorksPage() {
     <div className="text-[var(--color-text-primary)]">
       {/* ═══ Hero ═══ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
@@ -92,7 +92,7 @@ export default function HowItWorksPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             The{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">
               5 Steps
             </span>
           </h2>
@@ -102,7 +102,7 @@ export default function HowItWorksPage() {
 
           <div className="relative">
             {/* Vertical connecting line */}
-            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-gradient-to-b from-purple-500/60 via-purple-500/30 to-amber-500/60 hidden sm:block" />
+            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-gradient-to-b from-orange-500/60 via-orange-500/30 to-amber-500/60 hidden sm:block" />
 
             <div className="space-y-8">
               {timelineSteps.map((step) => {
@@ -110,13 +110,13 @@ export default function HowItWorksPage() {
                 return (
                   <div key={step.num} className="relative flex gap-6 items-start">
                     {/* Number circle */}
-                    <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-gradient-to-br from-purple-600 to-purple-500 flex items-center justify-center text-white font-bold shadow-lg shadow-purple-500/20">
+                    <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold shadow-lg shadow-orange-500/20">
                       {step.num}
                     </div>
                     {/* Content */}
                     <div className="flex-1 p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
                       <div className="flex items-center gap-3 mb-3">
-                        <IconComp className="w-5 h-5 text-purple-400" />
+                        <IconComp className="w-5 h-5 text-orange-400" />
                         <h3 className="text-lg font-semibold text-white">
                           {step.title}
                         </h3>
@@ -152,11 +152,11 @@ export default function HowItWorksPage() {
               return (
                 <div
                   key={item.activity}
-                  className="p-5 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-purple-500/30 transition-colors"
+                  className="p-5 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-colors"
                 >
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center">
-                      <IconComp className="w-5 h-5 text-purple-400" />
+                    <div className="w-10 h-10 rounded-xl bg-orange-500/15 flex items-center justify-center">
+                      <IconComp className="w-5 h-5 text-orange-400" />
                     </div>
                     <div>
                       <p className="text-amber-400 text-sm font-medium">
@@ -198,9 +198,9 @@ export default function HowItWorksPage() {
               {
                 title: "Mind",
                 pillars: mindPillars,
-                color: "text-purple-400",
+                color: "text-orange-400",
                 border: "border-purple-500/20",
-                iconBg: "bg-purple-500/15",
+                iconBg: "bg-orange-500/15",
               },
               {
                 title: "Spirit",
@@ -254,7 +254,7 @@ export default function HowItWorksPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             What You{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">
               Need
             </span>
           </h2>
@@ -281,9 +281,9 @@ export default function HowItWorksPage() {
 
       {/* ═══ CTA ═══ */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-[#1a1145] to-amber-900/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1145] to-amber-900/40" />
         <div className="absolute inset-0 bg-[#0f0a1e]/40" />
-        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-purple-600/20 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
@@ -298,7 +298,7 @@ export default function HowItWorksPage() {
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-xl shadow-purple-500/25 transition-all"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-xl shadow-orange-500/25 transition-all"
           >
             Register Now
             <ArrowRight className="w-5 h-5" />

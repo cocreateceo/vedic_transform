@@ -36,7 +36,7 @@ const CATEGORY_META: Record<
   streak: { label: "Streak Badges", icon: Flame, color: "text-orange-400" },
   milestone: { label: "Milestone Badges", icon: Target, color: "text-blue-400" },
   mastery: { label: "Mastery Badges", icon: Star, color: "text-amber-400" },
-  special: { label: "Special Badges", icon: Sparkles, color: "text-purple-400" },
+  special: { label: "Special Badges", icon: Sparkles, color: "text-orange-400" },
 };
 
 export default function AchievementsPage() {
@@ -131,7 +131,7 @@ export default function AchievementsPage() {
               className="h-full rounded-full transition-all"
               style={{
                 width: `${totalCount > 0 ? (earnedCount / totalCount) * 100 : 0}%`,
-                background: "var(--color-purple-gradient)",
+                background: "var(--color-saffron-gradient)",
               }}
             />
           </div>

@@ -34,10 +34,10 @@ interface LibraryPageClientProps {
 type CategoryFilter = "all" | "body" | "mind" | "spirit";
 
 const CATEGORY_TABS: { value: CategoryFilter; label: string; color: string }[] = [
-  { value: "all", label: "All", color: "from-purple-600 to-violet-600" },
+  { value: "all", label: "All", color: "from-orange-500 to-amber-500" },
   { value: "body", label: "Body", color: "from-orange-500 to-red-500" },
   { value: "mind", label: "Mind", color: "from-cyan-500 to-blue-500" },
-  { value: "spirit", label: "Spirit", color: "from-violet-500 to-purple-600" },
+  { value: "spirit", label: "Spirit", color: "from-amber-500 to-yellow-500" },
 ];
 
 const TYPE_CONFIG: Record<ContentItem["type"], { icon: typeof Video; label: string; color: string }> = {
@@ -175,7 +175,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="vedic-card p-6 bg-gradient-to-r from-purple-600 to-violet-600 text-white">
+      <div className="vedic-card p-6 bg-gradient-to-r from-orange-500 to-amber-500 text-white">
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -184,7 +184,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
               </div>
               <h1 className="text-2xl font-bold">Content Library</h1>
             </div>
-            <p className="text-purple-200">
+            <p className="text-orange-100">
               Explore guided content for your transformation journey
             </p>
           </div>

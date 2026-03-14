@@ -182,7 +182,7 @@ export function MorningRoutine() {
                   completedSteps.has(i)
                     ? "bg-green-500 text-white"
                     : i === currentStep
-                      ? "bg-gradient-to-br from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/25"
+                      ? "bg-gradient-to-br from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25"
                       : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] border border-[var(--color-border)]"
                 )}
               >
@@ -211,11 +211,11 @@ export function MorningRoutine() {
             <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">
               Wake Up
             </h3>
-            <div className="bg-gradient-to-r from-purple-50 to-amber-50 rounded-2xl p-6 max-w-md border border-purple-100">
-              <p className="text-lg italic text-purple-800 font-medium">
+            <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl p-6 max-w-md border border-orange-100">
+              <p className="text-lg italic text-orange-800 font-medium">
                 &ldquo;I am awake and present.&rdquo;
               </p>
-              <p className="text-sm text-purple-600 mt-2">
+              <p className="text-sm text-orange-600 mt-2">
                 Take a deep breath. Feel the gift of a new day.
               </p>
             </div>
@@ -343,13 +343,13 @@ export function MorningRoutine() {
         {/* Step 4: Awareness */}
         {currentStep === 3 && (
           <div className="text-center space-y-6">
-            <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow-xl shadow-purple-500/30">
+            <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-xl shadow-orange-500/30">
               <Eye className="w-12 h-12 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">
               Awareness
             </h3>
-            <p className="text-lg italic text-purple-700 font-medium">
+            <p className="text-lg italic text-orange-700 font-medium">
               Be still. Be present.
             </p>
             <p className="text-3xl font-bold tabular-nums text-[var(--color-text-primary)]">
@@ -394,7 +394,7 @@ export function MorningRoutine() {
                     setGratitude(next);
                   }}
                   placeholder={`I am grateful for...`}
-                  className="w-full px-4 py-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-card-bg)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-card-bg)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
               ))}
             </div>

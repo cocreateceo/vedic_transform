@@ -33,7 +33,7 @@ export function CookieConsent() {
         <div
           className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6 transition-all duration-300"
         >
-          <div className="mx-auto max-w-4xl rounded-2xl border border-purple-500/20 bg-gray-900/80 p-6 shadow-2xl shadow-purple-900/20 backdrop-blur-xl">
+          <div className="mx-auto max-w-4xl rounded-2xl border border-orange-500/20 bg-gray-900/80 p-6 shadow-2xl shadow-orange-900/20 backdrop-blur-xl">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-gray-300 sm:text-base">
                 We use cookies to enhance your experience and analyze site
@@ -43,13 +43,13 @@ export function CookieConsent() {
               <div className="flex flex-shrink-0 gap-3">
                 <button
                   onClick={handleNecessaryOnly}
-                  className="rounded-lg border border-purple-500/40 px-5 py-2.5 text-sm font-medium text-purple-300 transition-colors hover:border-purple-400 hover:text-purple-200"
+                  className="rounded-lg border border-orange-500/40 px-5 py-2.5 text-sm font-medium text-orange-300 transition-colors hover:border-orange-400 hover:text-orange-200"
                 >
                   Necessary Only
                 </button>
                 <button
                   onClick={handleAccept}
-                  className="rounded-lg bg-gradient-to-r from-purple-600 to-purple-500 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-purple-500/25 transition-all hover:from-purple-500 hover:to-purple-400 hover:shadow-purple-500/40"
+                  className="rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-orange-500/25 transition-all hover:from-orange-600 hover:to-amber-600 hover:shadow-orange-500/40"
                 >
                   Accept All
                 </button>

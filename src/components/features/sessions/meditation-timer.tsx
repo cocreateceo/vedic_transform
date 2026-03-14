@@ -132,8 +132,8 @@ export function MeditationTimer() {
             className={cn(
               "px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200",
               selectedDuration === mins
-                ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/25"
-                : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] hover:bg-purple-50 border border-[var(--color-border)]",
+                ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25"
+                : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] hover:bg-orange-50 border border-[var(--color-border)]",
               isActive && "opacity-50 cursor-not-allowed"
             )}
           >
@@ -148,7 +148,7 @@ export function MeditationTimer() {
         <div
           className={cn(
             "absolute inset-0 rounded-full blur-2xl transition-all duration-1000",
-            isActive ? "bg-purple-500/15" : "bg-purple-500/5"
+            isActive ? "bg-orange-500/15" : "bg-orange-500/5"
           )}
           style={{ transform: "scale(1.3)" }}
         />

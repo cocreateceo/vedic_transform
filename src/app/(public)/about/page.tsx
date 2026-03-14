@@ -19,7 +19,7 @@ export default function AboutPage() {
     <div className="text-[var(--color-text-primary)]">
       {/* ═══ Hero ═══ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145]">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
             <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
@@ -39,8 +39,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Mission */}
             <div className="p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/15 flex items-center justify-center mb-5">
-                <Target className="w-6 h-6 text-purple-400" />
+              <div className="w-12 h-12 rounded-xl bg-orange-500/15 flex items-center justify-center mb-5">
+                <Target className="w-6 h-6 text-orange-400" />
               </div>
               <h2 className="text-2xl font-bold text-white mb-4">Our Mission</h2>
               <p className="text-[#94a3b8] leading-relaxed">
@@ -73,7 +73,7 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             The{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-purple-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">
               Science
             </span>{" "}
             Behind 48 Days
@@ -172,13 +172,13 @@ export default function AboutPage() {
 
           <div className="p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] flex flex-col sm:flex-row items-center sm:items-start gap-8">
             {/* Avatar */}
-            <div className="w-24 h-24 shrink-0 rounded-full bg-gradient-to-br from-purple-500 to-amber-500 flex items-center justify-center text-white font-bold text-3xl shadow-lg shadow-purple-500/20">
+            <div className="w-24 h-24 shrink-0 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-3xl shadow-lg shadow-orange-500/20">
               {initials}
             </div>
             {/* Info */}
             <div>
               <h3 className="text-xl font-bold text-white">{founder.name}</h3>
-              <p className="text-purple-400 font-medium mb-4">{founder.role}</p>
+              <p className="text-orange-400 font-medium mb-4">{founder.role}</p>
               <p className="text-[#94a3b8] leading-relaxed">{founder.bio}</p>
             </div>
           </div>
@@ -187,9 +187,9 @@ export default function AboutPage() {
 
       {/* ═══ CTA ═══ */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-[#1a1145] to-amber-900/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1145] to-amber-900/40" />
         <div className="absolute inset-0 bg-[#0f0a1e]/40" />
-        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-purple-600/20 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Sparkles className="w-8 h-8 text-amber-400 mx-auto mb-4" />
@@ -205,7 +205,7 @@ export default function AboutPage() {
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-xl shadow-purple-500/25 transition-all"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-xl shadow-orange-500/25 transition-all"
           >
             Start Your Journey
             <ArrowRight className="w-5 h-5" />

@@ -39,9 +39,9 @@ const typeConfig = {
   },
   monthly: {
     icon: Target,
-    bgColor: "bg-purple-50",
-    iconColor: "text-purple-600",
-    borderColor: "border-purple-200",
+    bgColor: "bg-orange-50",
+    iconColor: "text-orange-600",
+    borderColor: "border-orange-200",
   },
   journey: {
     icon: Flame,
@@ -80,7 +80,7 @@ export function ReportCard({
               className={cn(
                 "w-10 h-10 rounded-xl flex items-center justify-center",
                 config.bgColor === "bg-blue-50" ? "bg-blue-100" :
-                config.bgColor === "bg-purple-50" ? "bg-purple-100" :
+                config.bgColor === "bg-orange-50" ? "bg-orange-100" :
                 config.bgColor === "bg-orange-50" ? "bg-orange-100" :
                 "bg-amber-100"
               )}

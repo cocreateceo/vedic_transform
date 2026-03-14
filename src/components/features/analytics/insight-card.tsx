@@ -51,10 +51,10 @@ export function InsightCard({
       case "milestone":
         return {
           icon: Award,
-          bg: "bg-purple-50",
-          iconBg: "bg-purple-100",
-          iconColor: "text-purple-600",
-          border: "border-purple-200",
+          bg: "bg-orange-50",
+          iconBg: "bg-orange-100",
+          iconColor: "text-orange-600",
+          border: "border-orange-200",
         };
       case "recommendation":
         return {

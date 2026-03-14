@@ -161,8 +161,8 @@ export function NotificationCenter() {
             <div className="max-h-80 overflow-y-auto">
               {notifications.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10 px-4">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-3">
-                    <Bell className="w-6 h-6 text-purple-400" />
+                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mb-3">
+                    <Bell className="w-6 h-6 text-orange-400" />
                   </div>
                   <p className="text-sm text-[var(--color-text-muted)]">
                     No notifications yet
@@ -177,7 +177,7 @@ export function NotificationCenter() {
                       onClick={() => handleNotificationClick(notification)}
                       className={cn(
                         "w-full flex items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-[var(--color-card-bg)]",
-                        !notification.isRead && "bg-purple-50/50 dark:bg-purple-950/20"
+                        !notification.isRead && "bg-orange-50/50 dark:bg-orange-950/20"
                       )}
                     >
                       <div
@@ -185,7 +185,7 @@ export function NotificationCenter() {
                           "mt-0.5 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center",
                           notification.isRead
                             ? "bg-gray-100 dark:bg-gray-800"
-                            : "bg-purple-100 dark:bg-purple-900/50"
+                            : "bg-orange-100 dark:bg-orange-900/50"
                         )}
                       >
                         <Icon
@@ -193,7 +193,7 @@ export function NotificationCenter() {
                             "w-4 h-4",
                             notification.isRead
                               ? "text-gray-400"
-                              : "text-purple-600 dark:text-purple-400"
+                              : "text-orange-600 dark:text-orange-400"
                           )}
                         />
                       </div>
@@ -210,7 +210,7 @@ export function NotificationCenter() {
                             {notification.title}
                           </p>
                           {!notification.isRead && (
-                            <span className="flex-shrink-0 w-2 h-2 rounded-full bg-purple-600" />
+                            <span className="flex-shrink-0 w-2 h-2 rounded-full bg-orange-500" />
                           )}
                         </div>
                         <p className="text-xs text-[var(--color-text-muted)] mt-0.5 line-clamp-2">
@@ -226,10 +226,10 @@ export function NotificationCenter() {
                             e.stopPropagation();
                             markAsRead(notification.id);
                           }}
-                          className="flex-shrink-0 mt-1 p-1 rounded-full hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-colors"
+                          className="flex-shrink-0 mt-1 p-1 rounded-full hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors"
                           aria-label="Mark as read"
                         >
-                          <Check className="w-3.5 h-3.5 text-purple-500" />
+                          <Check className="w-3.5 h-3.5 text-orange-500" />
                         </button>
                       )}
                     </button>

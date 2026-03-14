@@ -12,7 +12,7 @@ export default function ContactPage() {
     <div className="text-[#e2e8f0]">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-20">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
@@ -42,13 +42,13 @@ export default function ContactPage() {
             <div className="lg:col-span-2 space-y-6">
               <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-purple-400" />
+                  <div className="w-10 h-10 rounded-xl bg-orange-500/15 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-orange-400" />
                   </div>
                   <h3 className="text-white font-semibold">Email</h3>
                 </div>
                 <p className="text-[#94a3b8] text-sm">
-                  <a href="mailto:support@10xvedic.com" className="text-purple-400 hover:text-purple-300 transition-colors">
+                  <a href="mailto:support@10xvedic.com" className="text-orange-400 hover:text-orange-300 transition-colors">
                     support@10xvedic.com
                   </a>
                 </p>
@@ -68,8 +68,8 @@ export default function ContactPage() {
 
               <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/15 flex items-center justify-center">
-                    <MessageCircle className="w-5 h-5 text-purple-400" />
+                  <div className="w-10 h-10 rounded-xl bg-orange-500/15 flex items-center justify-center">
+                    <MessageCircle className="w-5 h-5 text-orange-400" />
                   </div>
                   <h3 className="text-white font-semibold">Community</h3>
                 </div>

@@ -38,8 +38,8 @@ export function PillarsGrid() {
             onClick={() => setActiveFilter(tab.key)}
             className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
               activeFilter === tab.key
-                ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/20"
-                : "bg-white/[0.03] border border-white/[0.06] text-[#94a3b8] hover:border-purple-500/30 hover:text-white"
+                ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20"
+                : "bg-white/[0.03] border border-white/[0.06] text-[#94a3b8] hover:border-orange-500/30 hover:text-white"
             }`}
           >
             {tab.label}
@@ -108,7 +108,7 @@ export function PillarsGrid() {
                   <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">
                     {pillar.description}
                   </p>
-                  <div className="flex items-center gap-2 text-xs text-purple-400">
+                  <div className="flex items-center gap-2 text-xs text-orange-400">
                     <span className="font-medium">
                       +{pillar.karmaPointsBase} Karma Points per session
                     </span>

@@ -56,7 +56,7 @@ export function Sidebar() {
           className="rounded-xl"
         />
         <div>
-          <h1 className="font-bold text-lg bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
+          <h1 className="font-bold text-lg bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
             10X Vedic
           </h1>
           <p className="text-xs text-gray-500">48-Day Transformation</p>
@@ -77,7 +77,7 @@ export function Sidebar() {
                 className={cn(
                   "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all",
                   isActive
-                    ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/25"
+                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25"
                     : "text-gray-600 hover:bg-[var(--color-card-bg)] hover:text-[var(--color-primary)]"
                 )}
               >
@@ -122,12 +122,12 @@ export function Sidebar() {
 
       {/* Bottom section */}
       <div className="p-4 border-t border-[var(--color-border)]">
-        <div className="vedic-card p-4 bg-gradient-to-br from-purple-50 to-violet-50">
-          <p className="text-xs text-purple-800 font-medium">Daily Wisdom</p>
-          <p className="text-sm text-purple-900 mt-2 italic">
+        <div className="vedic-card p-4 bg-gradient-to-br from-orange-50 to-amber-50">
+          <p className="text-xs text-orange-800 font-medium">Daily Wisdom</p>
+          <p className="text-sm text-orange-900 mt-2 italic">
             &quot;The mind is everything. What you think you become.&quot;
           </p>
-          <p className="text-xs text-purple-600 mt-1">— Buddha</p>
+          <p className="text-xs text-orange-600 mt-1">— Buddha</p>
         </div>
       </div>
     </aside>

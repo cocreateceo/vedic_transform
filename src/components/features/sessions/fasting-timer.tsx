@@ -100,7 +100,7 @@ export function FastingTimer() {
             "absolute inset-0 rounded-full blur-2xl transition-all duration-1000",
             isRunning
               ? isFasting
-                ? "bg-purple-500/15"
+                ? "bg-orange-500/15"
                 : "bg-green-500/15"
               : "bg-gray-300/5"
           )}
@@ -165,7 +165,7 @@ export function FastingTimer() {
                 className={cn(
                   "w-12 h-12 rounded-full flex items-center justify-center mb-2",
                   isFasting
-                    ? "bg-purple-100 text-purple-600"
+                    ? "bg-orange-100 text-orange-600"
                     : "bg-green-100 text-green-600"
                 )}
               >
@@ -178,7 +178,7 @@ export function FastingTimer() {
               <span
                 className={cn(
                   "text-sm font-semibold uppercase tracking-wider",
-                  isFasting ? "text-purple-600" : "text-green-600"
+                  isFasting ? "text-orange-600" : "text-green-600"
                 )}
               >
                 {isFasting ? "Fasting" : "Eating Window"}

@@ -44,8 +44,8 @@ export default function SessionsPage() {
               className={cn(
                 "flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                 activeTab === index
-                  ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/25"
-                  : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] hover:bg-purple-50 border border-[var(--color-border)]"
+                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25"
+                  : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] hover:bg-orange-50 border border-[var(--color-border)]"
               )}
             >
               <Icon className="w-4 h-4" />

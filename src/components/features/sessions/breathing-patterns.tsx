@@ -67,7 +67,7 @@ export function BreathingPatterns() {
     if (!isActive) return "from-gray-200 to-gray-300";
     const phaseName = currentPhase.name;
     if (phaseName === "Breathe In") return "from-cyan-400 to-cyan-600";
-    if (phaseName === "Hold") return "from-purple-500 to-violet-600";
+    if (phaseName === "Hold") return "from-orange-500 to-amber-500";
     return "from-amber-400 to-amber-600";
   };
 
@@ -75,7 +75,7 @@ export function BreathingPatterns() {
     if (!isActive) return "bg-gray-300/10";
     const phaseName = currentPhase.name;
     if (phaseName === "Breathe In") return "bg-cyan-400/20";
-    if (phaseName === "Hold") return "bg-purple-500/20";
+    if (phaseName === "Hold") return "bg-orange-500/20";
     return "bg-amber-400/20";
   };
 
@@ -143,8 +143,8 @@ export function BreathingPatterns() {
             className={cn(
               "px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200",
               selectedPattern === i
-                ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white shadow-lg shadow-purple-500/25"
-                : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] hover:bg-purple-50 border border-[var(--color-border)]",
+                ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25"
+                : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] hover:bg-orange-50 border border-[var(--color-border)]",
               isActive && "opacity-50 cursor-not-allowed"
             )}
           >
@@ -203,7 +203,7 @@ export function BreathingPatterns() {
                 currentPhase.name === "Breathe In"
                   ? "border-cyan-300"
                   : currentPhase.name === "Hold"
-                    ? "border-purple-300"
+                    ? "border-orange-300"
                     : "border-amber-300"
               )}
               style={{

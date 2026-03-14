@@ -44,7 +44,7 @@ function ArticleCard({ post }: { post: BlogPost }) {
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
-      <div className="rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-purple-500/30 transition-all overflow-hidden">
+      <div className="rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all overflow-hidden">
         {/* Thumbnail placeholder */}
         <div className={`h-40 bg-gradient-to-br ${cat.thumbnail} flex items-center justify-center`}>
           {Icon && <Icon className="w-12 h-12 text-white/30" />}
@@ -56,7 +56,7 @@ function ArticleCard({ post }: { post: BlogPost }) {
             {post.category.charAt(0).toUpperCase() + post.category.slice(1)}
           </span>
 
-          <h3 className="text-white font-semibold mb-2 group-hover:text-purple-300 transition-colors line-clamp-2">
+          <h3 className="text-white font-semibold mb-2 group-hover:text-orange-300 transition-colors line-clamp-2">
             {post.title}
           </h3>
 
@@ -97,9 +97,9 @@ export function BlogPageClient() {
     <div className="text-[#e2e8f0]">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-20">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/15 border border-purple-500/20 text-purple-300 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/15 border border-orange-500/20 text-orange-300 text-sm font-medium mb-6">
             <BookOpen className="w-4 h-4" />
             Vedic Wisdom &amp; Insights
           </div>
@@ -124,7 +124,7 @@ export function BlogPageClient() {
                 onClick={() => setActiveCategory(cat.key)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
                   activeCategory === cat.key
-                    ? "bg-purple-600 text-white shadow-lg shadow-purple-500/25"
+                    ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
                     : "bg-white/[0.05] text-[#94a3b8] hover:bg-white/[0.1] hover:text-white"
                 }`}
               >
@@ -147,7 +147,7 @@ export function BlogPageClient() {
               {/* Featured Article */}
               {featured && featuredCat && (
                 <Link href={`/blog/${featured.slug}`} className="group block mb-12">
-                  <div className="rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-purple-500/30 transition-all overflow-hidden md:flex">
+                  <div className="rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all overflow-hidden md:flex">
                     <div
                       className={`md:w-2/5 h-56 md:h-auto bg-gradient-to-br ${featuredCat.thumbnail} flex items-center justify-center`}
                     >
@@ -159,7 +159,7 @@ export function BlogPageClient() {
                       >
                         {featured.category.charAt(0).toUpperCase() + featured.category.slice(1)}
                       </span>
-                      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 group-hover:text-orange-300 transition-colors">
                         {featured.title}
                       </h2>
                       <p className="text-[#94a3b8] leading-relaxed mb-4">

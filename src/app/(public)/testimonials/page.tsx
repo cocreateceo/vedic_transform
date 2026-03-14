@@ -19,7 +19,7 @@ export default function TestimonialsPage() {
     <div className="text-[#e2e8f0]">
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0a1e] to-[#1a1145] py-20">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
@@ -40,7 +40,7 @@ export default function TestimonialsPage() {
             {TESTIMONIALS.map((t) => (
               <div
                 key={t.id}
-                className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-purple-500/20 transition-colors flex flex-col"
+                className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/20 transition-colors flex flex-col"
               >
                 {/* Star Rating */}
                 <div className="flex gap-1 mb-4">
@@ -64,7 +64,7 @@ export default function TestimonialsPage() {
                   {t.topPillars.map((pillar) => (
                     <span
                       key={pillar}
-                      className="text-xs px-2.5 py-1 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/20"
+                      className="text-xs px-2.5 py-1 rounded-full bg-orange-500/15 text-orange-300 border border-orange-500/20"
                     >
                       {formatPillarName(pillar)}
                     </span>
@@ -73,7 +73,7 @@ export default function TestimonialsPage() {
 
                 {/* Author */}
                 <div className="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
                     {t.name.charAt(0)}
                   </div>
                   <div>
@@ -89,9 +89,9 @@ export default function TestimonialsPage() {
 
       {/* CTA */}
       <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-[#1a1145] to-amber-900/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1145] to-amber-900/40" />
         <div className="absolute inset-0 bg-[#0f0a1e]/40" />
-        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-purple-600/20 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
@@ -105,7 +105,7 @@ export default function TestimonialsPage() {
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-semibold bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 shadow-lg shadow-purple-500/25 transition-all"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-semibold bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/25 transition-all"
           >
             Begin Your Journey
             <ArrowRight className="w-5 h-5" />
