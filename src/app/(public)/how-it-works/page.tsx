@@ -16,6 +16,7 @@ import {
 import { getPillarsByCategory } from "@/constants/pillars";
 
 export const metadata = { title: "How It Works" };
+export const dynamic = "force-dynamic";
 
 const timelineSteps = [
   {

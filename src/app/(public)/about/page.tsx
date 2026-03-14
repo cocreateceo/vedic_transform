@@ -4,12 +4,12 @@ import { TEAM } from "@/data/team";
 import { PILLARS, getPillarsByCategory } from "@/constants/pillars";
 
 export const metadata = { title: "About Us" };
-
-const bodyPillars = getPillarsByCategory("body");
-const mindPillars = getPillarsByCategory("mind");
-const spiritPillars = getPillarsByCategory("spirit");
+export const dynamic = "force-dynamic";
 
 export default function AboutPage() {
+  const bodyPillars = getPillarsByCategory("body");
+  const mindPillars = getPillarsByCategory("mind");
+  const spiritPillars = getPillarsByCategory("spirit");
   const founder = TEAM[0];
   const initials = founder.name
     .split(" ")
