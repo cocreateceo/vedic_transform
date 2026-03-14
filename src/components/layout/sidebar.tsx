@@ -13,18 +13,28 @@ import {
   FileText,
   Bell,
   Settings,
+  Timer,
+  BookMarked,
+  Quote,
+  SmilePlus,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Pillars", href: "/pillars", icon: Layers },
+  { name: "Sessions", href: "/sessions", icon: Timer },
   { name: "Goals", href: "/goals", icon: Target },
   { name: "Progress", href: "/progress", icon: TrendingUp },
   { name: "Journal", href: "/journal", icon: BookOpen },
 ];
 
 const secondaryNav = [
+  { name: "Library", href: "/library", icon: BookMarked },
+  { name: "Wisdom", href: "/wisdom", icon: Quote },
+  { name: "Mood", href: "/mood", icon: SmilePlus },
+  { name: "Achievements", href: "/achievements", icon: Trophy },
   { name: "Insights", href: "/insights", icon: Sparkles },
   { name: "Reports", href: "/reports", icon: FileText },
   { name: "Reminders", href: "/reminders", icon: Bell },

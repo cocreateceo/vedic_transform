@@ -14,21 +14,33 @@ import {
   Bell,
   MoreHorizontal,
   X,
+  Timer,
+  BookMarked,
+  Quote,
+  SmilePlus,
+  Trophy,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 const navigation = [
   { name: "Home", href: "/dashboard", icon: LayoutDashboard },
   { name: "Pillars", href: "/pillars", icon: Layers },
-  { name: "Goals", href: "/goals", icon: Target },
+  { name: "Sessions", href: "/sessions", icon: Timer },
   { name: "Progress", href: "/progress", icon: TrendingUp },
 ];
 
 const moreNavItems = [
+  { name: "Goals", href: "/goals", icon: Target },
   { name: "Journal", href: "/journal", icon: BookOpen },
+  { name: "Library", href: "/library", icon: BookMarked },
+  { name: "Wisdom", href: "/wisdom", icon: Quote },
+  { name: "Mood", href: "/mood", icon: SmilePlus },
+  { name: "Achievements", href: "/achievements", icon: Trophy },
   { name: "Insights", href: "/insights", icon: Sparkles },
   { name: "Reports", href: "/reports", icon: FileText },
   { name: "Reminders", href: "/reminders", icon: Bell },
+  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function MobileNav() {

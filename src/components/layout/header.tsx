@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { NotificationCenter } from "@/components/features/notifications/notification-center";
 
 interface HeaderProps {
   user?: {
@@ -73,6 +74,7 @@ export function Header({ user }: HeaderProps) {
 
           {/* Profile Menu */}
           <div className="flex items-center gap-4">
+            <NotificationCenter />
             <ThemeToggle />
             <div className="relative">
               <button
