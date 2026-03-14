@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Analytics } from "@/components/ui/analytics";
-import { CookieConsent } from "@/components/ui/cookie-consent";
+import { ClientOnlyProviders } from "@/components/ui/client-only-providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,8 +34,7 @@ export default function RootLayout({
           __html: `(function(){try{var t=localStorage.getItem('vedic-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})()`,
         }} />
         {children}
-        <Analytics />
-        <CookieConsent />
+        <ClientOnlyProviders />
       </body>
     </html>
   );
