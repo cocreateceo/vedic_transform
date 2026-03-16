@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Target, Sunrise, Leaf, Headphones, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { DailyWisdomPopup } from "@/components/features/dashboard/daily-wisdom-popup";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -125,6 +126,7 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
+      <DailyWisdomPopup />
       {/* Welcome banner */}
       <div className="vedic-card p-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
         <div className="flex items-center justify-between">

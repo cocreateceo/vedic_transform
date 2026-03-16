@@ -2,6 +2,7 @@
 
 import { DAILY_WISDOM } from "@/data/daily-wisdom";
 import { BookOpen, Sparkles, Quote } from "lucide-react";
+import { ShareButton } from "@/components/ui/share-button";
 
 function getDayOfYear(): number {
   return Math.floor(
@@ -79,11 +80,20 @@ export default function WisdomPage() {
             <span className="text-[var(--color-text-secondary)] font-medium">
               — {todayWisdom.source}
             </span>
-            <span
-              className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${categoryColors[todayWisdom.category]}`}
-            >
-              {categoryLabels[todayWisdom.category]}
-            </span>
+            <div className="flex items-center gap-2">
+              <span
+                className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${categoryColors[todayWisdom.category]}`}
+              >
+                {categoryLabels[todayWisdom.category]}
+              </span>
+              <ShareButton
+                title="Daily Vedic Wisdom"
+                text={`"${todayWisdom.text}" — ${todayWisdom.source}`}
+                size="sm"
+                variant="outline"
+                label="Share"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -121,9 +131,18 @@ export default function WisdomPage() {
                 </p>
               )}
 
-              <p className="text-xs text-[var(--color-text-secondary)]">
-                — {entry.source}
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-[var(--color-text-secondary)]">
+                  — {entry.source}
+                </p>
+                <ShareButton
+                  title="Vedic Wisdom"
+                  text={`"${entry.text}" — ${entry.source}`}
+                  size="sm"
+                  variant="outline"
+                  label="Share"
+                />
+              </div>
             </div>
           ))}
         </div>

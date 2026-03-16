@@ -6,6 +6,7 @@ import { ReportCard, JourneyCertificate } from "@/components/features/reports";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, Printer, FileText } from "lucide-react";
+import { ShareButton } from "@/components/ui/share-button";
 
 interface ReportsPageClientProps {
   hasJourney: boolean;
@@ -119,33 +120,51 @@ export function ReportsPageClient({
       {/* Report Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Journey Report */}
-        <ReportCard
-          title="Journey Progress Report"
-          type="journey"
-          date={new Date()}
-          stats={[
-            { label: "Day", value: currentDay },
-            { label: "Karma", value: stats.totalKarma },
-            { label: "Streak", value: stats.currentStreak },
-            { label: "Rate", value: `${stats.completionRate}%` },
-          ]}
-          onDownloadCSV={handleDownloadCSV}
-          onPrint={handlePrint}
-          isGenerating={isGenerating}
-        />
+        <div className="space-y-3">
+          <ReportCard
+            title="Journey Progress Report"
+            type="journey"
+            date={new Date()}
+            stats={[
+              { label: "Day", value: currentDay },
+              { label: "Karma", value: stats.totalKarma },
+              { label: "Streak", value: stats.currentStreak },
+              { label: "Rate", value: `${stats.completionRate}%` },
+            ]}
+            onDownloadCSV={handleDownloadCSV}
+            onPrint={handlePrint}
+            isGenerating={isGenerating}
+          />
+          <ShareButton
+            title="My Vedic Transformation Progress"
+            text={`Day ${currentDay} of my 48-day Vedic transformation! ${stats.totalKarma} karma points, ${stats.currentStreak}-day streak, ${stats.completionRate}% completion rate.`}
+            variant="outline"
+            size="md"
+            label="Share Progress"
+          />
+        </div>
 
         {/* Weekly Summary */}
-        <ReportCard
-          title={`Week ${currentWeek} Summary`}
-          type="weekly"
-          date={new Date()}
-          stats={[
-            { label: "Check-ins", value: stats.totalCheckins },
-            { label: "Badges", value: stats.badgesEarned },
-          ]}
-          onDownloadCSV={handleDownloadCSV}
-          isGenerating={isGenerating}
-        />
+        <div className="space-y-3">
+          <ReportCard
+            title={`Week ${currentWeek} Summary`}
+            type="weekly"
+            date={new Date()}
+            stats={[
+              { label: "Check-ins", value: stats.totalCheckins },
+              { label: "Badges", value: stats.badgesEarned },
+            ]}
+            onDownloadCSV={handleDownloadCSV}
+            isGenerating={isGenerating}
+          />
+          <ShareButton
+            title={`Week ${currentWeek} Vedic Journey`}
+            text={`Completed week ${currentWeek} of my Vedic journey! ${stats.totalCheckins} check-ins and ${stats.badgesEarned} badges earned.`}
+            variant="outline"
+            size="md"
+            label="Share Progress"
+          />
+        </div>
       </div>
 
       {/* Certificate Section */}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { Award, Star, Trophy, Flame, Target, Sparkles } from "lucide-react";
+import { ShareButton } from "@/components/ui/share-button";
 
 interface BadgeWithEarned {
   id: string;
@@ -200,6 +201,18 @@ export default function AchievementsPage() {
                         year: "numeric",
                       })}
                     </p>
+                  )}
+
+                  {badge.earned && (
+                    <div className="mt-1">
+                      <ShareButton
+                        title={`I earned the "${badge.name}" badge!`}
+                        text={`I just earned the "${badge.name}" badge on my Vedic transformation journey! ${badge.description}`}
+                        size="sm"
+                        variant="outline"
+                        label="Share"
+                      />
+                    </div>
                   )}
 
                   {badge.karmaBonus > 0 && badge.earned && (
