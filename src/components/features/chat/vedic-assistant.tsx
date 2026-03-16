@@ -9,6 +9,7 @@ interface Message {
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+const VOICE_SERVER_URL = "http://44.217.150.192:5050";
 
 const GREETING =
   "\u{1F549}\uFE0F Namaste! I'm your Vedic Transform AI guide. I can answer questions about the 48-day transformation journey, the 11 pillars, and your spiritual practices.\n\nFeel free to ask me anything about meditation, karma points, daily practices, or how the program works!";
@@ -27,6 +28,9 @@ export function VedicAssistant() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const audioQueueRef = useRef<Array<{ url: string; isLast: boolean }>>([]);
+  const isPlayingQueueRef = useRef(false);
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,8 +40,52 @@ export function VedicAssistant() {
     if (isOpen) setTimeout(() => inputRef.current?.focus(), 300);
   }, [isOpen]);
 
-  // TTS
-  const speakText = useCallback(
+  // ── Audio queue for cloned voice playback ──
+  const stopAllAudio = useCallback(() => {
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current = null;
+    }
+    audioQueueRef.current = [];
+    isPlayingQueueRef.current = false;
+    window.speechSynthesis?.cancel();
+    setIsSpeaking(false);
+    setIsPaused(false);
+  }, []);
+
+  const playNextInQueue = useCallback(() => {
+    if (audioQueueRef.current.length === 0) {
+      isPlayingQueueRef.current = false;
+      setIsSpeaking(false);
+      return;
+    }
+    isPlayingQueueRef.current = true;
+    const { url, isLast } = audioQueueRef.current.shift()!;
+    const audio = new Audio(url);
+    currentAudioRef.current = audio;
+    audio.playbackRate = speechRate;
+    setIsSpeaking(true);
+    setIsPaused(false);
+
+    audio.play().catch(() => { playNextInQueue(); });
+    audio.onended = () => {
+      if (isLast && audioQueueRef.current.length === 0) {
+        setIsSpeaking(false);
+        isPlayingQueueRef.current = false;
+      } else {
+        playNextInQueue();
+      }
+    };
+    audio.onerror = () => { playNextInQueue(); };
+  }, [speechRate]);
+
+  const addToAudioQueue = useCallback((audioUrl: string, isLast: boolean) => {
+    audioQueueRef.current.push({ url: audioUrl, isLast });
+    if (!isPlayingQueueRef.current) playNextInQueue();
+  }, [playNextInQueue]);
+
+  // Browser TTS fallback
+  const speakTextFallback = useCallback(
     (text: string) => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
       window.speechSynthesis.cancel();
@@ -56,18 +104,23 @@ export function VedicAssistant() {
   );
 
   const togglePause = () => {
+    // Handle real audio
+    if (currentAudioRef.current) {
+      if (isPaused) { currentAudioRef.current.play(); setIsPaused(false); }
+      else { currentAudioRef.current.pause(); setIsPaused(true); }
+      return;
+    }
+    // Fallback to browser TTS
     if (!window.speechSynthesis) return;
     if (isPaused) { window.speechSynthesis.resume(); setIsPaused(false); }
     else { window.speechSynthesis.pause(); setIsPaused(true); }
   };
 
-  const stopSpeaking = () => {
-    window.speechSynthesis?.cancel();
-    setIsSpeaking(false);
-    setIsPaused(false);
-  };
+  const stopSpeaking = useCallback(() => {
+    stopAllAudio();
+  }, [stopAllAudio]);
 
-  // Send message
+  // ── Send message - uses voice server with SSE, falls back to Lambda API ──
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
     stopSpeaking();
@@ -79,26 +132,66 @@ export function VedicAssistant() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/chat`, {
+      // Try voice server first (trained voice + AI)
+      const response = await fetch(`${VOICE_SERVER_URL}/chat-with-voice-realtime`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
-        }),
+        body: JSON.stringify({ question: input.trim() }),
       });
-      const data = await res.json();
-      const botMsg: Message = {
-        role: "assistant",
-        content: data.reply || "I apologize, I couldn't process that. Please try again.",
-        timestamp: new Date(),
-      };
-      setMessages([...newMessages, botMsg]);
-      speakText(botMsg.content);
+
+      if (!response.ok) throw new Error("Voice server error");
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (reader) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (!line.trim() || !line.startsWith("data: ")) continue;
+          try {
+            const data = JSON.parse(line.slice(6));
+            if (data.type === "answer") {
+              const botMsg: Message = { role: "assistant", content: data.answer, timestamp: new Date() };
+              setMessages([...newMessages, botMsg]);
+              setIsLoading(false);
+            } else if (data.type === "chunk") {
+              const audioUrl = `${VOICE_SERVER_URL}${data.audio_url}`;
+              addToAudioQueue(audioUrl, data.is_last);
+            }
+          } catch { /* skip parse errors */ }
+        }
+      }
     } catch {
-      setMessages([
-        ...newMessages,
-        { role: "assistant", content: "I'm having trouble connecting right now. Please try again.", timestamp: new Date() },
-      ]);
+      // Fallback to Lambda API + browser TTS
+      try {
+        const res = await fetch(`${API_URL}/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
+          }),
+        });
+        const data = await res.json();
+        const botMsg: Message = {
+          role: "assistant",
+          content: data.reply || "I apologize, I couldn't process that. Please try again.",
+          timestamp: new Date(),
+        };
+        setMessages([...newMessages, botMsg]);
+        speakTextFallback(botMsg.content);
+      } catch {
+        setMessages([
+          ...newMessages,
+          { role: "assistant", content: "I'm having trouble connecting right now. Please try again.", timestamp: new Date() },
+        ]);
+      }
     }
     setIsLoading(false);
   };

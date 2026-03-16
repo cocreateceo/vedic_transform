@@ -46,7 +46,7 @@ export async function handler(event: any) {
   }
 
   if (method === 'PUT') {
-    const body = JSON.parse(event.body || '{}');
+    const body = parseBody(event);
     const now = new Date().toISOString();
 
     await db.send(new PutCommand({

@@ -39,7 +39,7 @@ export async function handler(event: any) {
     return { statusCode: 200, headers: CORS_HEADERS, body: '' };
 
   try {
-    const body = JSON.parse(event.body || '{}');
+    const body = parseBody(event);
     const { messages } = body;
 
     if (!messages || !Array.isArray(messages))

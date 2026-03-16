@@ -32,7 +32,7 @@ export async function handler(event: any) {
   }
 
   if (method === 'POST') {
-    const body = JSON.parse(event.body || '{}');
+    const body = parseBody(event);
     const {
       assessmentType, dayNumber,
       stressLevel, sleepQuality, energyLevel, mentalClarity,

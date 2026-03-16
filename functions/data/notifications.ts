@@ -34,7 +34,7 @@ export async function handler(event: any) {
   }
 
   if (method === 'PATCH') {
-    const body = JSON.parse(event.body || '{}');
+    const body = parseBody(event);
     const { id, isRead } = body;
 
     if (!id) return err(400, 'id is required');

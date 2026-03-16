@@ -1,13 +1,13 @@
 import { Resource } from 'sst';
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
-import { db, ok, err, CORS_HEADERS, verifyPassword, createToken } from '../lib/utils';
+import { db, ok, err, CORS_HEADERS, verifyPassword, createToken, parseBody } from '../lib/utils';
 
 export async function handler(event: any) {
   if (event.requestContext?.http?.method === 'OPTIONS')
     return { statusCode: 200, headers: CORS_HEADERS, body: '' };
 
   try {
-    const { email, password } = JSON.parse(event.body || '{}');
+    const { email, password } = parseBody(event);
     if (!email || !password) return err(400, 'Email and password required');
 
     const result = await db.send(new QueryCommand({

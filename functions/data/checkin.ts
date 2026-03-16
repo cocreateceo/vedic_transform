@@ -29,7 +29,7 @@ export async function handler(event: any) {
   }
 
   if (method === 'POST') {
-    const body = JSON.parse(event.body || '{}');
+    const body = parseBody(event);
     const { pillarId, durationMinutes, notes, moodBefore, moodAfter } = body;
 
     if (!pillarId) return err(400, 'pillarId is required');

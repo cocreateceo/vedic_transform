@@ -23,7 +23,7 @@ export async function handler(event: any) {
   }
 
   if (method === 'POST') {
-    const body = JSON.parse(event.body || '{}');
+    const body = parseBody(event);
     const { pillars } = body; // Array of { pillarId, priority, reason }
 
     if (!Array.isArray(pillars) || pillars.length === 0 || pillars.length > 3) {

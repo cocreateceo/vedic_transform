@@ -58,6 +58,18 @@ export function generateId(): string {
   return `${Date.now().toString(36)}${Math.random().toString(36).substr(2, 9)}`;
 }
 
+export function parseBody(event: any): any {
+  let body = event.body || '{}';
+  if (event.isBase64Encoded && typeof body === 'string') {
+    body = Buffer.from(body, 'base64').toString('utf-8');
+  }
+  try {
+    return JSON.parse(body);
+  } catch {
+    return {};
+  }
+}
+
 export async function getUserFromEvent(event: any): Promise<any | null> {
   const authHeader = event.headers?.authorization || event.headers?.Authorization;
   if (!authHeader?.startsWith('Bearer ')) return null;

@@ -31,7 +31,7 @@ export async function handler(event: any) {
   }
 
   if (method === 'POST') {
-    const body = JSON.parse(event.body || '{}');
+    const body = parseBody(event);
     const { moodScore, energy, stress, sleepQuality, notes } = body;
 
     if (!moodScore || moodScore < 1 || moodScore > 5) {
