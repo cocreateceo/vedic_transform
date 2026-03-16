@@ -1,6 +1,6 @@
 import { Resource } from 'sst';
 import { QueryCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
-import { db, ok, err, CORS_HEADERS, getUserFromEvent, generateId } from '../lib/utils';
+import { db, ok, err, CORS_HEADERS, getUserFromEvent, generateId ,parseBody } from '../lib/utils';
 
 export async function handler(event: any) {
   if (event.requestContext?.http?.method === 'OPTIONS')

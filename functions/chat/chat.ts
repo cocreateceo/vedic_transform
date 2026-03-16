@@ -1,5 +1,5 @@
 import { Resource } from 'sst';
-import { CORS_HEADERS, ok, err } from '../lib/utils';
+import { CORS_HEADERS, ok, err, parseBody } from '../lib/utils';
 
 const SYSTEM_PROMPT = `You are the Vedic AI Assistant (Virtual Acharya) for the 10X Vedic Transformation platform. Your name is "Vedic Guide".
 
