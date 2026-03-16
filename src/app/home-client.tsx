@@ -286,6 +286,68 @@ export function HomePageClient() {
         </div>
       </section>
 
+      {/* ═══ 6b. Tools & Features ═══ */}
+      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#0f0d08]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
+            Powerful <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Tools</span> Inside
+          </h2>
+          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+            Everything you need for a complete transformation journey
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Dosha Assessment */}
+            <Link href="/login?tab=signup" className="group">
+              <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border-2 border-[#DAA520]/30 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4 shadow-lg shadow-green-500/20 group-hover:scale-105 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 17 3.5s1.5 0 2.8 1.3c1 1 1 2.5 1 2.5s-1.5 1.5-3.5 7.2A7 7 0 0 1 11 20"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                <h3 className="font-semibold text-white text-lg mb-2">Dosha Assessment</h3>
+                <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">
+                  Discover your Ayurvedic constitution — Vata, Pitta, or Kapha. Get personalized diet, exercise, and pillar recommendations based on your body type.
+                </p>
+                <span className="text-xs text-orange-400 font-medium flex items-center gap-1">
+                  Take the quiz <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Audio Meditations */}
+            <Link href="/login?tab=signup" className="group">
+              <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border-2 border-[#DAA520]/30 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                </div>
+                <h3 className="font-semibold text-white text-lg mb-2">Audio Meditations</h3>
+                <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">
+                  9 in-app guided audio sessions — Om chanting, Pranayama, Yoga Nidra, chakra healing, and more. Play directly in your browser with a persistent mini-player.
+                </p>
+                <span className="text-xs text-orange-400 font-medium flex items-center gap-1">
+                  Listen now <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Personalized Onboarding */}
+            <Link href="/login?tab=signup" className="group">
+              <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border-2 border-[#DAA520]/30 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center mb-4 shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l1.9 5.8h6.1l-4.9 3.6 1.9 5.8L12 14.6l-4.9 3.6 1.9-5.8L4 8.8h6.1z"/></svg>
+                </div>
+                <h3 className="font-semibold text-white text-lg mb-2">Personalized Journey</h3>
+                <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">
+                  Take a quick quiz to customize your 48-day plan. We match your goals, experience level, and available time to the perfect pillar combination.
+                </p>
+                <span className="text-xs text-orange-400 font-medium flex items-center gap-1">
+                  Get started <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ═══ 7. Testimonials ═══ */}
       <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

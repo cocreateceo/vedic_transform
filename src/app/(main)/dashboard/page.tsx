@@ -8,7 +8,7 @@ import { KarmaPoints } from "@/components/features/dashboard/karma-points";
 import { PillarGrid } from "@/components/features/dashboard/pillar-grid";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Target, Sunrise } from "lucide-react";
+import { Calendar, Target, Sunrise, Leaf, Headphones, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -206,6 +206,54 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </Link>
+      </div>
+
+      {/* Discover section */}
+      <div>
+        <h2 className="text-lg font-semibold text-gray-800 mb-3">Discover</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Link href="/dosha-assessment">
+            <Card variant="golden" className="hover:shadow-lg transition-all cursor-pointer group">
+              <CardContent className="flex items-center gap-4 p-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-md shadow-green-500/20 group-hover:scale-105 transition-transform">
+                  <Leaf className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900">Dosha Assessment</h4>
+                  <p className="text-sm text-gray-500">Discover your Ayurvedic type</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/library">
+            <Card variant="golden" className="hover:shadow-lg transition-all cursor-pointer group">
+              <CardContent className="flex items-center gap-4 p-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
+                  <Headphones className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900">Audio Meditations</h4>
+                  <p className="text-sm text-gray-500">Play guided sessions in-app</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/insights">
+            <Card variant="golden" className="hover:shadow-lg transition-all cursor-pointer group">
+              <CardContent className="flex items-center gap-4 p-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900">AI Insights</h4>
+                  <p className="text-sm text-gray-500">Personalized recommendations</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
       </div>
     </div>
   );
