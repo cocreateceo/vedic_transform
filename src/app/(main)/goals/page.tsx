@@ -46,7 +46,13 @@ export default function GoalsPage() {
 
         // Pillars with stats
         const pillarsWithStats = PILLARS.map((pillar) => {
-          const completedDays = checkins.filter((c: any) => c.pillarId === pillar.id).length;
+          // Match both the new shape (numeric pillarId + pillarSlug) and the
+          // legacy shape where pillarId held the slug string.
+          const completedDays = checkins.filter((c: any) =>
+            c.pillarId === pillar.id ||
+            c.pillarSlug === pillar.slug ||
+            c.pillarId === pillar.slug
+          ).length;
           const completionRate = currentDay > 0 ? Math.round((completedDays / currentDay) * 100) : 0;
           return {
             id: pillar.id,

@@ -1,6 +1,7 @@
 import { Resource } from 'sst';
 import { QueryCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, getUserFromEvent, generateId ,parseBody } from '../lib/utils';
+import { resolvePillar } from '../lib/pillars';
 
 export async function handler(event: any) {
   if (event.requestContext?.http?.method === 'OPTIONS')
@@ -30,9 +31,10 @@ export async function handler(event: any) {
 
   if (method === 'POST') {
     const body = parseBody(event);
-    const { pillarId, durationMinutes, notes, moodBefore, moodAfter } = body;
+    const { pillarId, pillarSlug, durationMinutes, notes, moodBefore, moodAfter } = body;
 
-    if (!pillarId) return err(400, 'pillarId is required');
+    const pillar = resolvePillar({ pillarId, pillarSlug });
+    if (!pillar) return err(400, 'pillarId or pillarSlug is required and must reference a known pillar');
 
     const now = new Date();
     const checkinDate = now.toISOString().split('T')[0];
@@ -43,7 +45,8 @@ export async function handler(event: any) {
       Item: {
         id,
         userId: user.id,
-        pillarId,
+        pillarId: pillar.id,
+        pillarSlug: pillar.slug,
         checkinDate,
         completed: true,
         durationMinutes: durationMinutes || null,
@@ -91,16 +94,18 @@ export async function handler(event: any) {
       console.error('Streak update error:', e);
     }
 
-    // Add karma transaction
+    // Add karma transaction — points are pillar-specific (karmaPointsBase from
+    // src/constants/pillars.ts, mirrored in functions/lib/pillars.ts).
     try {
       await db.send(new PutCommand({
         TableName: Resource.KarmaTransactions.name,
         Item: {
           id: generateId(),
           userId: user.id,
-          points: 10,
+          points: pillar.karmaPointsBase,
           reason: 'Pillar checkin completed',
-          pillarId,
+          pillarId: pillar.id,
+          pillarSlug: pillar.slug,
           badgeId: null,
           createdAt: now.toISOString(),
         },
@@ -109,7 +114,7 @@ export async function handler(event: any) {
       console.error('Karma transaction error:', e);
     }
 
-    return ok({ success: true, checkinId: id });
+    return ok({ success: true, checkinId: id, karmaAwarded: pillar.karmaPointsBase });
   }
 
   return err(405, 'Method not allowed');
