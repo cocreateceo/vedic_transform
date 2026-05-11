@@ -488,4 +488,63 @@ export const DAILY_WISDOM: WisdomEntry[] = [
     category: "vedic",
     sanskrit: "kriyāyuktasya siddhiḥ syād-akriyasya kathaṁ bhavet",
   },
+
+  // Upanishads — verified verbatim from Swami Nikhilananda's translation
+  // (scriptures/upanishads-nikhilananda.pdf).
+  {
+    id: 73,
+    text: "The good is one thing; the pleasant, another. Both serve different needs and bind a man. It goes well with him who, of the two, takes the good; but he who chooses the pleasant misses the end.",
+    source: "Katha Upanishad 1.2.1 (tr. Swami Nikhilananda)",
+    category: "vedic",
+    sanskrit: "anyac-chreyo'nyad-utaiva preyaḥ",
+  },
+  {
+    id: 74,
+    text: "Know the Atman to be the master of the chariot; the body is the chariot; the intellect, the charioteer; and the mind, the reins. The senses are the horses, the objects of sense, the roads. The wise call the Atman — united with the body, the senses and the mind — the enjoyer.",
+    source: "Katha Upanishad 1.3.3-4 (tr. Swami Nikhilananda)",
+    category: "vedic",
+    sanskrit: "ātmānaṁ rathinaṁ viddhi śarīraṁ rathameva tu",
+  },
+  {
+    id: 75,
+    text: "Arise! Awake! Approach the great and learn. Like the sharp edge of a razor is that path — hard to tread and difficult to cross, so the wise say.",
+    source: "Katha Upanishad 1.3.14 (tr. Swami Nikhilananda)",
+    category: "vedic",
+    sanskrit: "uttiṣṭhata jāgrata prāpya varān nibodhata",
+  },
+  {
+    id: 76,
+    text: "That which cannot be expressed by speech, but by which speech is expressed — That alone know as Brahman, and not that which people here worship.",
+    source: "Kena Upanishad 1.5 (tr. Swami Nikhilananda)",
+    category: "vedic",
+    sanskrit: "yad-vācānabhyuditaṁ yena vāg-abhyudyate",
+  },
+  {
+    id: 77,
+    text: "He by whom Brahman is not known, knows It; he by whom It is known, knows It not. It is not known by those who know It; It is known by those who do not know It.",
+    source: "Kena Upanishad 2.3 (tr. Swami Nikhilananda)",
+    category: "vedic",
+    sanskrit: "yasyāmataṁ tasya mataṁ matam yasya na veda saḥ",
+  },
+  {
+    id: 78,
+    text: "That is whole; this is whole. From the whole, the whole has been projected. When the whole is taken from the whole, the whole alone remains. Om. Peace! Peace! Peace!",
+    source: "Isha Upanishad — Shanti Mantra (tr. Swami Nikhilananda)",
+    category: "vedic",
+    sanskrit: "pūrṇam-adaḥ pūrṇam-idaṁ pūrṇāt pūrṇam-udacyate",
+  },
+  {
+    id: 79,
+    text: "O Fire, lead us by the good path to the enjoyment of the fruit of our action. You know, O god, all our deeds. Destroy our sin of deceit.",
+    source: "Isha Upanishad 18 (tr. Swami Nikhilananda)",
+    category: "vedic",
+    sanskrit: "agne naya supathā rāye asmān",
+  },
+  {
+    id: 80,
+    text: "If the buddhi, related to a mind always restrained, possesses discrimination, then the senses come under control — like the good horses of a charioteer. A man who has discrimination for his charioteer and holds the reins of the mind firmly reaches the end of the road.",
+    source: "Katha Upanishad 1.3.6 & 1.3.9 (tr. Swami Nikhilananda)",
+    category: "vedic",
+    sanskrit: "vijñāna-sārathir yas tu manaḥ-pragrahavān naraḥ",
+  },
 ];
