@@ -56,3 +56,8 @@ scripts/migrate-data.ts
 
 # superpowers
 .superpowers/
+
+# Public-domain scripture PDFs downloaded via curl for citation work.
+# Each file is independently downloadable from archive.org / sanskritweb.net —
+# excluding from the repo to avoid bloating git history.
+/scriptures/

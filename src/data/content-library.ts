@@ -342,7 +342,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     url: "#",
     audioUrl: "generated",
     description:
-      "The opening verses of the beloved Hanuman Chalisa, composed by Tulsidas in Awadhi. Hanuman embodies supreme devotion (bhakti), selfless service (seva), and indomitable courage. Chanting this hymn invokes physical strength, mental fortitude, and unwavering faith. Traditionally recited to overcome fear, obstacles, and negative energies.",
+      "The opening doha of the 40-verse Hanuman Chalisa, composed by Tulsidas in Awadhi: 'Śrī Guru caraṇa saroja raja, nija mana mukuru sudhāri, baranauṁ Raghubara bimala jasu, jo dāyaku phala chāri' — After cleansing the mirror of my mind with the pollen-dust of the Guru's lotus feet, I profess the pure glory of Sri Raghuvar, which bestows the fourfold fruits of life: dharma, artha, kāma, and mokṣa. The chalisa then invokes Hanuman as the ocean of wisdom and the embodiment of supreme devotion (bhakti), selfless service (seva), and indomitable courage. Traditionally chanted to overcome fear, obstacles, and negative energies — and to build physical and mental fortitude.",
   },
   {
     id: "mantra-pavamana",

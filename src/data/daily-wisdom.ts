@@ -396,4 +396,50 @@ export const DAILY_WISDOM: WisdomEntry[] = [
     source: "Kelly McGonigal, The Willpower Instinct",
     category: "scientific",
   },
+
+  // Ayurveda + Hatha primary-source citations (added from scriptures/ —
+  // Ashtanga Hridaya, Gheranda Samhita, Bhagavad Gita per Gandhi, Hanuman
+  // Chalisa). These ground the app's pillar prescriptions in canonical texts.
+  {
+    id: 61,
+    text: "One who always resorts to desirable food and regimen, is objective, generous, straightforward, honest, has patience and values traditional wisdom — will never be affected by diseases.",
+    source: "Ashtanga Hridaya, Sutra Sthana 4.36 (Vagbhata)",
+    category: "vedic",
+    sanskrit: "hitabhuk mitabhuk śuddhaḥ",
+  },
+  {
+    id: 62,
+    text: "One should rise from bed 96 minutes before sunrise. This is the suitable time to study and obtain knowledge — the hour when all three doshas rest in equilibrium.",
+    source: "Ashtanga Hridaya, Sutra Sthana 2 — Dinacarya Adhyaya (Vagbhata)",
+    category: "vedic",
+    sanskrit: "brāhme muhūrte uttiṣṭhet",
+  },
+  {
+    id: 63,
+    text: "Dedicate every action to the indwelling Self. With mind fixed on the Atman, and without any thought of fruit or sense of 'mine,' shake off thy fever and act.",
+    source: "Bhagavad Gita 3.30 (Gandhi translation)",
+    category: "vedic",
+    sanskrit: "mayi sarvāṇi karmāṇi sannyasyādhyātma-cetasā",
+  },
+  {
+    id: 64,
+    text: "Subtle are the senses. Subtler than the senses is the mind. Subtler than the mind is the reason. But subtler even than the reason is the Self.",
+    source: "Bhagavad Gita 3.42 (Gandhi translation)",
+    category: "vedic",
+    sanskrit: "indriyāṇi parāṇy āhur indriyebhyaḥ paraṁ manaḥ",
+  },
+  {
+    id: 65,
+    text: "After cleansing the mirror of my mind with the pollen-dust of the Guru's lotus feet, I profess the pure glory of Sri Raghuvar — which bestows the fourfold fruits of life: dharma, artha, kama, and moksha.",
+    source: "Hanuman Chalisa, Opening Doha (Tulsidas)",
+    category: "vedic",
+    sanskrit: "śrī guru caraṇa saroja raja nija mana mukuru sudhāri",
+  },
+  {
+    id: 66,
+    text: "Breath is the visible form of prana. By controlling the breath, the yogi controls the prana itself, and through prana, the mind.",
+    source: "Gheranda Samhita 5 — Pranayama (paraphrase)",
+    category: "vedic",
+    sanskrit: "prāṇāyāmaḥ",
+  },
 ];
