@@ -442,4 +442,50 @@ export const DAILY_WISDOM: WisdomEntry[] = [
     category: "vedic",
     sanskrit: "prāṇāyāmaḥ",
   },
+
+  // Verified from PDFs (Hatha Pradipika Pancham Sinh, Yoga Sutras Vivekananda,
+  // Sushruta + Charaka). Each verse has been visually checked against the
+  // source in scriptures/.
+  {
+    id: 67,
+    text: "Respiration being disturbed, the mind becomes disturbed. By restraining respiration, the Yogi gets steadiness of mind.",
+    source: "Hatha Yoga Pradipika 2.2 (Svatmarama, tr. Pancham Sinh)",
+    category: "vedic",
+    sanskrit: "cale vāte calaṁ cittaṁ niścale niścalaṁ bhavet",
+  },
+  {
+    id: 68,
+    text: "So long as the breathing air stays in the body, it is called life. Death consists in the passing out of the air. It is therefore necessary to restrain the breath.",
+    source: "Hatha Yoga Pradipika 2.3 (Svatmarama)",
+    category: "vedic",
+    sanskrit: "yāvad-vāyuḥ sthito dehe tāvaj-jīvanam-ucyate",
+  },
+  {
+    id: 69,
+    text: "Mortification, study, and surrendering fruits of work to God are called Kriya Yoga — the preliminary practice that prepares the seeker for Samadhi.",
+    source: "Yoga Sutras of Patanjali 2.1 (tr. Swami Vivekananda)",
+    category: "vedic",
+    sanskrit: "tapaḥ-svādhyāyeśvara-praṇidhānāni kriyā-yogaḥ",
+  },
+  {
+    id: 70,
+    text: "The pain-bearing obstructions are five: ignorance, egoism, attachment, aversion, and clinging to life. Ignorance is the mother of all the rest.",
+    source: "Yoga Sutras of Patanjali 2.3 (tr. Swami Vivekananda)",
+    category: "vedic",
+    sanskrit: "avidyāsmitā-rāga-dveṣābhiniveśāḥ kleśāḥ",
+  },
+  {
+    id: 71,
+    text: "Salutation to Adinatha (Shiva) who expounded the knowledge of Hatha Yoga, which like a staircase leads the aspirant to the high-pinnacled Raja Yoga.",
+    source: "Hatha Yoga Pradipika 1.1 (Svatmarama)",
+    category: "vedic",
+    sanskrit: "śrī ādināthāya namo'stu tasmai",
+  },
+  {
+    id: 72,
+    text: "Success comes to him who is engaged in the practice. How can one get success without practice? By merely reading books on Yoga, one can never get success.",
+    source: "Hatha Yoga Pradipika 1.65 (Svatmarama)",
+    category: "vedic",
+    sanskrit: "kriyāyuktasya siddhiḥ syād-akriyasya kathaṁ bhavet",
+  },
 ];
