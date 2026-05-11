@@ -6,6 +6,8 @@ import { apiFetch } from "@/lib/api";
 import { StreakCounter } from "@/components/features/dashboard/streak-counter";
 import { KarmaPoints } from "@/components/features/dashboard/karma-points";
 import { PillarGrid } from "@/components/features/dashboard/pillar-grid";
+import { TodaysPractice } from "@/components/features/dashboard/todays-practice";
+import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Target, Sunrise, Leaf, Headphones, Sparkles } from "lucide-react";
@@ -19,6 +21,7 @@ export default function DashboardPage() {
   const [journey, setJourney] = useState<any>(null);
   const [streak, setStreak] = useState<any>(null);
   const [completedPillars, setCompletedPillars] = useState<string[]>([]);
+  const [focusPillarSlugs, setFocusPillarSlugs] = useState<string[]>([]);
   const [totalKarma, setTotalKarma] = useState(0);
   const [todayEarned, setTodayEarned] = useState(0);
   const [currentDay, setCurrentDay] = useState(0);
@@ -29,10 +32,11 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [journeyData, checkinData, karmaData] = await Promise.all([
+        const [journeyData, checkinData, karmaData, focusData] = await Promise.all([
           apiFetch("/data/journey"),
           apiFetch("/data/checkin"),
           apiFetch("/data/reports"),
+          apiFetch("/data/focus-pillars"),
         ]);
 
         if (journeyData?.journey) {
@@ -59,6 +63,21 @@ export default function DashboardPage() {
         if (karmaData) {
           setTotalKarma(karmaData.totalKarma || 0);
           setTodayEarned(karmaData.todayEarned || 0);
+        }
+
+        if (focusData?.focusPillars?.length) {
+          // FocusPillars store pillarId as a stringified numeric id (see
+          // src/components/features/goals/focus-pillar-selector.tsx). Map back
+          // to slugs sorted by user-chosen priority.
+          const slugs = focusData.focusPillars
+            .slice()
+            .sort((a: any, b: any) => (a.priority ?? 99) - (b.priority ?? 99))
+            .map((fp: any) => {
+              const idNum = Number(fp.pillarId);
+              return PILLARS.find((p) => p.id === idNum)?.slug;
+            })
+            .filter((s: string | undefined): s is string => Boolean(s));
+          setFocusPillarSlugs(slugs);
         }
       } catch (err) {
         console.error("Failed to fetch dashboard data", err);
@@ -152,6 +171,14 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Today's Practice — one canonical daily action (P0-2). */}
+      <TodaysPractice
+        journeyDay={currentDay}
+        focusPillarSlugs={focusPillarSlugs}
+        completedPillarSlugs={completedPillars}
+        currentStreak={streak?.currentStreak || 0}
+      />
+
       {/* Stats grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StreakCounter
@@ -162,7 +189,7 @@ export default function DashboardPage() {
         <KarmaPoints totalKarma={totalKarma} todayEarned={todayEarned} />
       </div>
 
-      {/* Today's pillars */}
+      {/* All 11 pillars — kept below the hero card for users who want the full grid. */}
       <PillarGrid completedPillars={completedPillars} />
 
       {/* Quick actions */}
