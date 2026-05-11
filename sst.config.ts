@@ -295,6 +295,13 @@ export default $config({
       link: journeyLink,
     });
 
+    // Karma Shield purchase (P0-5)
+    const buyShieldLink = [streaks, karmaTransactions, jwtSecret];
+    api.route("POST /data/streaks/buy-shield", {
+      handler: "functions/data/buy-shield.handler",
+      link: buyShieldLink,
+    });
+
     // Checkin
     const checkinLink = [dailyCheckins, streaks, karmaTransactions, jwtSecret];
     api.route("GET /data/checkin", {

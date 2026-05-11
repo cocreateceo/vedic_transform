@@ -10,6 +10,7 @@ import { Check, ArrowLeft, Clock, Sparkles, Download, FileText } from "lucide-re
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import { useRouter } from "next/navigation";
+import { setStreakEvent, type StreakEventType } from "@/lib/streak-events";
 
 export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const pillar = getPillarBySlug(pillarId);
@@ -48,11 +49,22 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const handleComplete = async () => {
     setCompleting(true);
     try {
-      await apiFetch("/data/checkin", {
+      const res = await apiFetch("/data/checkin", {
         method: "POST",
         body: JSON.stringify({ pillarSlug: pillarId }),
       });
-      router.push("/pillars");
+      // Forward shield-used / shield-granted events so the dashboard can show
+      // a one-shot banner. Silently ignored if response shape is unexpected.
+      if (res?.streakEvent && res?.streak) {
+        setStreakEvent({
+          type: res.streakEvent as StreakEventType,
+          currentStreak: res.streak.currentStreak,
+          shields: res.streak.shields,
+        });
+        router.push("/dashboard");
+      } else {
+        router.push("/pillars");
+      }
     } catch {
       setCompleting(false);
     }

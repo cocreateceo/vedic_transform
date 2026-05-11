@@ -58,37 +58,108 @@ export async function handler(event: any) {
       },
     }));
 
-    // Update streak
+    // Update streak — calendar-day based, with Karma Shield protection (P0-5).
+    // See spec at docs/superpowers/specs/2026-05-09-p0-bundle-design.md §4.
+    let streakEvent: 'shield-used' | 'shield-granted' | null = null;
+    let streakAfter: { currentStreak: number; longestStreak: number; shields: number } | null = null;
+
     try {
       const streaks = await db.send(new QueryCommand({
         TableName: Resource.Streaks.name,
         IndexName: 'userId-index',
         KeyConditionExpression: 'userId = :userId',
         ExpressionAttributeValues: { ':userId': user.id },
-        Limit: 1,
       }));
 
-      const streak = streaks.Items?.[0];
+      // Prefer a streak tied to an active journey; fall back to the most
+      // recently updated one. With no sort key on the GSI, item order is
+      // not guaranteed — picking by `updatedAt` is deterministic.
+      const sorted = (streaks.Items || []).slice().sort((a: any, b: any) =>
+        (b.updatedAt || '').localeCompare(a.updatedAt || '')
+      );
+      const streak = sorted[0];
+
       if (streak) {
-        const lastCheckin = streak.lastCheckin ? new Date(streak.lastCheckin) : null;
-        const today = new Date(checkinDate);
-        const isConsecutive = lastCheckin &&
-          (today.getTime() - lastCheckin.getTime()) <= 86400000 * 1.5;
+        const lastCheckinDate: string | null = streak.lastCheckin || null;
 
-        const newCurrent = isConsecutive ? streak.currentStreak + 1 : 1;
-        const newLongest = Math.max(newCurrent, streak.longestStreak);
+        // Same calendar day → record the check-in but don't double-count.
+        if (lastCheckinDate === checkinDate) {
+          streakAfter = {
+            currentStreak: streak.currentStreak || 0,
+            longestStreak: streak.longestStreak || 0,
+            shields: streak.shields || 0,
+          };
+        } else {
+          // Calendar-day diff (UTC). Replaces the legacy 36-hour window —
+          // unambiguous and shield-compatible.
+          const lastDate = lastCheckinDate ? new Date(lastCheckinDate) : null;
+          const today = new Date(checkinDate);
+          const daysSinceLast = lastDate
+            ? Math.floor((today.getTime() - lastDate.getTime()) / 86400000)
+            : null;
 
-        await db.send(new UpdateCommand({
-          TableName: Resource.Streaks.name,
-          Key: { id: streak.id },
-          UpdateExpression: 'SET currentStreak = :current, longestStreak = :longest, lastCheckin = :lastCheckin, updatedAt = :now',
-          ExpressionAttributeValues: {
-            ':current': newCurrent,
-            ':longest': newLongest,
-            ':lastCheckin': checkinDate,
-            ':now': now.toISOString(),
-          },
-        }));
+          const shields: number = streak.shields || 0;
+          const currentStreak: number = streak.currentStreak || 0;
+          const longestStreak: number = streak.longestStreak || 0;
+          const shieldsEarned: number = streak.shieldsEarned || 0;
+
+          let newCurrent: number;
+          let shieldDelta = 0;
+
+          if (daysSinceLast === null) {
+            // First check-in.
+            newCurrent = 1;
+          } else if (daysSinceLast === 1) {
+            // Consecutive day.
+            newCurrent = currentStreak + 1;
+          } else if (daysSinceLast === 2 && shields >= 1) {
+            // Exactly one missed day, a shield protects the streak.
+            newCurrent = currentStreak + 1;
+            shieldDelta = -1;
+            streakEvent = 'shield-used';
+          } else {
+            // No shields available, or more than one missed day (shield
+            // can't cover it). Streak resets; shield stays in inventory.
+            newCurrent = 1;
+          }
+
+          // Auto-grant the first Karma Shield once the user crosses Day 7.
+          // Streak Society pattern; lifetime once-per-user via shieldsEarned.
+          let earnedDelta = 0;
+          if (newCurrent >= 7 && shieldsEarned === 0) {
+            shieldDelta += 1;
+            earnedDelta = 1;
+            if (streakEvent === null) streakEvent = 'shield-granted';
+          }
+
+          const newLongest = Math.max(newCurrent, longestStreak);
+          const newShields = Math.min(2, Math.max(0, shields + shieldDelta));
+          const newShieldsEarned = shieldsEarned + earnedDelta;
+          const newShieldsUsed = (streak.shieldsUsed || 0) + (streakEvent === 'shield-used' ? 1 : 0);
+
+          await db.send(new UpdateCommand({
+            TableName: Resource.Streaks.name,
+            Key: { id: streak.id },
+            UpdateExpression:
+              'SET currentStreak = :current, longestStreak = :longest, lastCheckin = :lastCheckin, ' +
+              'shields = :shields, shieldsEarned = :earned, shieldsUsed = :used, updatedAt = :now',
+            ExpressionAttributeValues: {
+              ':current': newCurrent,
+              ':longest': newLongest,
+              ':lastCheckin': checkinDate,
+              ':shields': newShields,
+              ':earned': newShieldsEarned,
+              ':used': newShieldsUsed,
+              ':now': now.toISOString(),
+            },
+          }));
+
+          streakAfter = {
+            currentStreak: newCurrent,
+            longestStreak: newLongest,
+            shields: newShields,
+          };
+        }
       }
     } catch (e) {
       console.error('Streak update error:', e);
@@ -114,7 +185,13 @@ export async function handler(event: any) {
       console.error('Karma transaction error:', e);
     }
 
-    return ok({ success: true, checkinId: id, karmaAwarded: pillar.karmaPointsBase });
+    return ok({
+      success: true,
+      checkinId: id,
+      karmaAwarded: pillar.karmaPointsBase,
+      streakEvent,
+      streak: streakAfter,
+    });
   }
 
   return err(405, 'Method not allowed');

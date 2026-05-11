@@ -39,14 +39,19 @@ export async function handler(event: any) {
       }));
       const totalKarma = (karma.Items || []).reduce((sum: number, t: any) => sum + (t.points || 0), 0);
 
-      // Fetch streak
+      // Fetch streak — return the most-recently-updated row when a user has
+      // multiple (e.g. across journeys). Matches checkin.ts / buy-shield.ts.
       const streaks = await db.send(new QueryCommand({
         TableName: Resource.Streaks.name,
         IndexName: 'userId-index',
         KeyConditionExpression: 'userId = :userId',
         ExpressionAttributeValues: { ':userId': user.id },
-        Limit: 1,
       }));
+      const streak =
+        (streaks.Items || [])
+          .slice()
+          .sort((a: any, b: any) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))[0] ||
+        null;
 
       // Fetch user badges
       const badges = await db.send(new QueryCommand({
@@ -76,7 +81,7 @@ export async function handler(event: any) {
         journeyDay,
         totalCheckins: checkins.Items?.length || 0,
         totalKarma,
-        streak: streaks.Items?.[0] || null,
+        streak,
         badgesEarned: badges.Items?.length || 0,
         pillarStats,
       });

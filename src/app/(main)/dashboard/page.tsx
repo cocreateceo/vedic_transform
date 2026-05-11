@@ -7,6 +7,7 @@ import { StreakCounter } from "@/components/features/dashboard/streak-counter";
 import { KarmaPoints } from "@/components/features/dashboard/karma-points";
 import { PillarGrid } from "@/components/features/dashboard/pillar-grid";
 import { TodaysPractice } from "@/components/features/dashboard/todays-practice";
+import { StreakEventBanner } from "@/components/features/dashboard/streak-event-banner";
 import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,7 +42,6 @@ export default function DashboardPage() {
 
         if (journeyData?.journey) {
           setJourney(journeyData.journey);
-          setStreak(journeyData.streak || null);
 
           const day = Math.min(
             Math.floor(
@@ -51,6 +51,12 @@ export default function DashboardPage() {
             48
           );
           setCurrentDay(day);
+        }
+
+        // Streak (incl. shields) comes from /data/reports — /data/journey
+        // doesn't return it.
+        if (karmaData?.streak) {
+          setStreak(karmaData.streak);
         }
 
         if (checkinData?.completedPillars) {
@@ -179,12 +185,22 @@ export default function DashboardPage() {
         currentStreak={streak?.currentStreak || 0}
       />
 
+      {/* One-shot streak event banner (shield used / shield granted) — set
+          from pillar-detail-client on a successful check-in and cleared on view. */}
+      <StreakEventBanner />
+
       {/* Stats grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StreakCounter
           currentStreak={streak?.currentStreak || 0}
           longestStreak={streak?.longestStreak || 0}
           isAtRisk={isStreakAtRisk}
+          shields={streak?.shields || 0}
+          karmaBalance={totalKarma}
+          onShieldsChanged={(shields, karmaBalance) => {
+            setStreak((s: any) => (s ? { ...s, shields } : { shields }));
+            setTotalKarma(karmaBalance);
+          }}
         />
         <KarmaPoints totalKarma={totalKarma} todayEarned={todayEarned} />
       </div>
