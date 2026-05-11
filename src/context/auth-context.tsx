@@ -1,6 +1,49 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { ANON_DOSHA_KEY } from "@/lib/dosha";
+
+async function claimAnonymousDosha(token: string) {
+  if (typeof window === "undefined") return;
+  let id: string | null = null;
+  try {
+    id = localStorage.getItem(ANON_DOSHA_KEY);
+  } catch {
+    return;
+  }
+  if (!id) return;
+
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+    const fetchRes = await fetch(
+      `${apiUrl}/data/dosha-test/anonymous?id=${encodeURIComponent(id)}`,
+    );
+    if (!fetchRes.ok) return;
+    const result = await fetchRes.json();
+    if (!result?.primary || !result?.secondary) return;
+
+    await fetch(`${apiUrl}/data/user`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        doshaType: result.primary,
+        doshaSecondary: result.secondary,
+        doshaScores: result.scores,
+        doshaAssessedAt: new Date().toISOString(),
+      }),
+    });
+    try {
+      localStorage.removeItem(ANON_DOSHA_KEY);
+    } catch {
+      // ignored
+    }
+  } catch {
+    // Silent — claim failures don't block signup.
+  }
+}
 
 interface User {
   id: string;
@@ -71,6 +114,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setToken(data.token);
         localStorage.setItem("vedic-token", data.token);
         localStorage.setItem("vedic-user", JSON.stringify(data.user));
+
+        // If the user took the public dosha test before signing up, claim
+        // that result and attach it to their new profile. Fire-and-forget
+        // so a failure here doesn't break the signup flow. (P0-4)
+        void claimAnonymousDosha(data.token);
+
         return { success: true };
       }
       return { success: false, error: data.error || "Registration failed" };

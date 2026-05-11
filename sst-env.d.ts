@@ -6,6 +6,10 @@
 
 declare module "sst" {
   export interface Resource {
+    "AnonymousDoshaResults": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "AnthropicApiKey": {
       "type": "sst.sst.Secret"
       "value": string

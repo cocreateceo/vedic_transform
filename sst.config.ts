@@ -267,6 +267,16 @@ export default $config({
       },
     });
 
+    // Anonymous dosha-test results (P0-4). 90-day TTL via the `ttl`
+    // attribute (epoch seconds) — DynamoDB reaps rows in the background.
+    const anonymousDoshaResults = new sst.aws.Dynamo("AnonymousDoshaResults", {
+      fields: {
+        id: "string",
+      },
+      primaryIndex: { hashKey: "id" },
+      ttl: "ttl",
+    });
+
     // ── API Gateway ─────────────────────────────────────────────────
     const api = new sst.aws.ApiGatewayV2("Api", {
       cors: {
@@ -460,6 +470,17 @@ export default $config({
     api.route("POST /chat", {
       handler: "functions/chat/chat.handler",
       link: [jwtSecret, anthropicApiKey],
+    });
+
+    // ── Public Dosha Test (P0-4) ────────────────────────────────
+    // No auth — anyone can take the test and share their result link.
+    api.route("POST /data/dosha-test/anonymous", {
+      handler: "functions/data/dosha-test-anonymous.handler",
+      link: [anonymousDoshaResults],
+    });
+    api.route("GET /data/dosha-test/anonymous", {
+      handler: "functions/data/dosha-test-anonymous.handler",
+      link: [anonymousDoshaResults],
     });
 
     // ── Web Push (P0-1) ─────────────────────────────────────────
