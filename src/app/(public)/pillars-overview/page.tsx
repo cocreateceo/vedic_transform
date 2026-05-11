@@ -2,7 +2,11 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { PillarsGrid } from "./pillars-grid";
 
-export const metadata = { title: "11 Pillars of Transformation" };
+export const metadata = {
+  title: "The 11 Pillars of Vedic Transformation",
+  description:
+    "Explore the 11 daily practices grouped by Body, Mind, and Spirit — from Brahma Muhurta and Pranayama to Sandhya Meditation, gratitude, and sleep optimization.",
+};
 
 export default function PillarsOverviewPage() {
   return (

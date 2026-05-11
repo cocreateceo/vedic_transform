@@ -15,7 +15,11 @@ import {
 } from "lucide-react";
 import { getPillarsByCategory } from "@/constants/pillars";
 
-export const metadata = { title: "How It Works" };
+export const metadata = {
+  title: "How It Works — 10X Vedic Transform",
+  description:
+    "See how the 48-day Vedic transformation works: account setup, dosha assessment, daily check-ins across 11 pillars, streak tracking, and your personal Vedic Guide.",
+};
 
 const timelineSteps = [
   {

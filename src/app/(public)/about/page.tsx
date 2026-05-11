@@ -3,7 +3,11 @@ import { ArrowRight, Target, Eye, Sparkles } from "lucide-react";
 import { TEAM } from "@/data/team";
 import { PILLARS, getPillarsByCategory } from "@/constants/pillars";
 
-export const metadata = { title: "About Us" };
+export const metadata = {
+  title: "About Us — 10X Vedic Transform",
+  description:
+    "Our mission, the 11 pillars across body / mind / spirit, and the team behind the 48-day Vedic transformation program.",
+};
 
 export default function AboutPage() {
   const bodyPillars = getPillarsByCategory("body");

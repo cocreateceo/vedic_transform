@@ -503,12 +503,12 @@ export default $config({
       job: { handler: "functions/crons/recovery-push.handler", link: cronLink },
     });
 
-    // ── Static Site ─────────────────────────────────────────────────
-    const site = new sst.aws.StaticSite("VedicTransformSite", {
-      build: {
-        command: "npm run build",
-        output: "out",
-      },
+    // ── Next.js Site (P0-3) ─────────────────────────────────────────
+    // Switched from sst.aws.StaticSite (output: "export") to the Nextjs
+    // construct so the (public) route group is server-rendered and
+    // crawlable. (main) and (auth) routes keep their "use client" layouts
+    // — they still hydrate the same way, just from a real SSR shell now.
+    const site = new sst.aws.Nextjs("VedicTransformSite", {
       environment: {
         NEXT_PUBLIC_API_URL: api.url,
         // Expose only the *public* VAPID key to the client; the private
