@@ -105,6 +105,19 @@ export default async function DoshaResultPage({
             <p className="text-lg text-[#c4c9d4] leading-relaxed">{primary.description}</p>
           </div>
 
+          <div className="mt-6 p-6 rounded-2xl bg-amber-500/[0.04] border border-amber-500/20">
+            <div className="flex items-baseline justify-between gap-3 mb-3 flex-wrap">
+              <h2 className="font-semibold text-white">Classical definition</h2>
+              <span className="text-xs uppercase tracking-wider text-amber-300/80">
+                Primary source
+              </span>
+            </div>
+            <blockquote className="text-[#c4c9d4] italic leading-relaxed border-l-2 border-amber-500/40 pl-4">
+              {primary.classicalDefinition}
+            </blockquote>
+            <p className="text-xs text-[#94a3b8] mt-3">— {primary.classicalCitation}</p>
+          </div>
+
           <div className="mt-6 p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
             <h2 className="font-semibold text-white mb-4">Your dosha breakdown</h2>
             <div className="space-y-3">

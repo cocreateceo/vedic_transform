@@ -61,3 +61,6 @@ scripts/migrate-data.ts
 # Each file is independently downloadable from archive.org / sanskritweb.net —
 # excluding from the repo to avoid bloating git history.
 /scriptures/
+
+# Extracted text from scripture PDFs — regenerable via pdftotext.
+/scriptures/extracted/

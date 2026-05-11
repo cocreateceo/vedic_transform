@@ -142,6 +142,12 @@ export interface DoshaInfo {
   qualities: string[];
   recommendations: string[];
   description: string;
+  /** Verbatim function-of-normal-dosha description from Vagbhata's Ashtanga
+   *  Hridaya, Sutra Sthana Chapter 11 (Dosadi Vijnaniya Adhyaya), verses 1-2.
+   *  Shown on the result page as the primary-source backing for the modern
+   *  description above. */
+  classicalDefinition: string;
+  classicalCitation: string;
 }
 
 export const DOSHA_INFO: Record<DoshaName, DoshaInfo> = {
@@ -153,6 +159,9 @@ export const DOSHA_INFO: Record<DoshaName, DoshaInfo> = {
     description:
       "Vata governs movement, breath, and creativity. You think quickly, learn quickly, and feel deeply.",
     qualities: ["Creative & Imaginative", "Quick Learner", "Energetic in Bursts", "Adaptable & Flexible"],
+    classicalDefinition:
+      "Maintenance of the body with enthusiasm, expiration, inspiration, movement of various parts, maintenance of dhatus, expulsion of natural urges and keenness of sense perceptions are the normal functions of vata.",
+    classicalCitation: "Ashtanga Hridaya, Sutra Sthana 11.1 (Vagbhata)",
     recommendations: [
       "Follow a regular daily routine with consistent meal times",
       "Favor warm, cooked, nourishing foods with healthy fats",
@@ -169,6 +178,9 @@ export const DOSHA_INFO: Record<DoshaName, DoshaInfo> = {
     description:
       "Pitta governs transformation, digestion, and clarity. You are focused, driven, and naturally lead.",
     qualities: ["Sharp Intellect", "Natural Leader", "Strong Digestion", "Determined & Focused"],
+    classicalDefinition:
+      "Pitta in the normal state causes digestion, production of heat, desire, hunger, thirst, color and complexion of the body, vision, intelligence, bravery, and softness of the body parts.",
+    classicalCitation: "Ashtanga Hridaya, Sutra Sthana 11.1-2 (Vagbhata)",
     recommendations: [
       "Avoid excessive heat — favor cooling foods and environments",
       "Practice calming, non-competitive exercise like swimming or yoga",
@@ -185,6 +197,9 @@ export const DOSHA_INFO: Record<DoshaName, DoshaInfo> = {
     description:
       "Kapha governs stability, strength, and devotion. You are steady, grounded, and naturally loving.",
     qualities: ["Calm & Grounded", "Loyal & Loving", "Strong Endurance", "Steady & Patient"],
+    classicalDefinition:
+      "Kapha maintains the body with stability, unctuousness, compactness of joints, virility, tolerance (the ability to hold emotions), intelligence, strength, and attachment.",
+    classicalCitation: "Ashtanga Hridaya, Sutra Sthana 11.2 (Vagbhata)",
     recommendations: [
       "Stay active with vigorous exercise — avoid daytime sleeping",
       "Favor light, warm, spicy foods — reduce heavy and sweet foods",
