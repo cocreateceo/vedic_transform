@@ -70,6 +70,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "PushSubscriptions": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "ReminderSettings": {
       "name": string
       "type": "sst.aws.Dynamo"
@@ -93,6 +97,14 @@ declare module "sst" {
     "Users": {
       "name": string
       "type": "sst.aws.Dynamo"
+    }
+    "VapidPrivateKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "VapidPublicKey": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
     "VedicTransformSite": {
       "type": "sst.aws.StaticSite"

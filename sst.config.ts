@@ -17,6 +17,10 @@ export default $config({
     // ── Secrets ──────────────────────────────────────────────────────
     const jwtSecret = new sst.Secret("JwtSecret");
     const anthropicApiKey = new sst.Secret("AnthropicApiKey");
+    // VAPID keys for Web Push (P0-1). Generate once with
+    // `npx web-push generate-vapid-keys` and set via `sst secret set`.
+    const vapidPublicKey = new sst.Secret("VapidPublicKey");
+    const vapidPrivateKey = new sst.Secret("VapidPrivateKey");
 
     // ── DynamoDB Tables ─────────────────────────────────────────────
 
@@ -249,6 +253,20 @@ export default $config({
       },
     });
 
+    // Web Push subscriptions (P0-1). One row per (user, device).
+    const pushSubscriptions = new sst.aws.Dynamo("PushSubscriptions", {
+      fields: {
+        id: "string",
+        userId: "string",
+      },
+      primaryIndex: { hashKey: "id" },
+      globalIndexes: {
+        "userId-index": {
+          hashKey: "userId",
+        },
+      },
+    });
+
     // ── API Gateway ─────────────────────────────────────────────────
     const api = new sst.aws.ApiGatewayV2("Api", {
       cors: {
@@ -444,6 +462,47 @@ export default $config({
       link: [jwtSecret, anthropicApiKey],
     });
 
+    // ── Web Push (P0-1) ─────────────────────────────────────────
+    const pushLink = [pushSubscriptions, jwtSecret];
+    api.route("POST /data/push/subscribe", {
+      handler: "functions/data/push-subscribe.handler",
+      link: pushLink,
+    });
+    api.route("DELETE /data/push/subscribe", {
+      handler: "functions/data/push-subscribe.handler",
+      link: pushLink,
+    });
+    api.route("POST /data/push/test", {
+      handler: "functions/data/push-test.handler",
+      link: [pushSubscriptions, vapidPublicKey, vapidPrivateKey, jwtSecret],
+    });
+
+    // Cron senders — each runs every 15 min and fans out by user-local time.
+    const cronLink = [
+      pushSubscriptions,
+      reminderSettings,
+      journeys,
+      streaks,
+      dailyCheckins,
+      vapidPublicKey,
+      vapidPrivateKey,
+    ];
+
+    new sst.aws.Cron("MorningPush", {
+      schedule: "rate(15 minutes)",
+      job: { handler: "functions/crons/morning-push.handler", link: cronLink },
+    });
+
+    new sst.aws.Cron("StreakSavePush", {
+      schedule: "rate(15 minutes)",
+      job: { handler: "functions/crons/streak-save-push.handler", link: cronLink },
+    });
+
+    new sst.aws.Cron("RecoveryPush", {
+      schedule: "rate(15 minutes)",
+      job: { handler: "functions/crons/recovery-push.handler", link: cronLink },
+    });
+
     // ── Static Site ─────────────────────────────────────────────────
     const site = new sst.aws.StaticSite("VedicTransformSite", {
       build: {
@@ -452,6 +511,9 @@ export default $config({
       },
       environment: {
         NEXT_PUBLIC_API_URL: api.url,
+        // Expose only the *public* VAPID key to the client; the private
+        // key stays in the SST secret and is loaded by Lambda at runtime.
+        NEXT_PUBLIC_VAPID_PUBLIC_KEY: vapidPublicKey.value,
       },
     });
 

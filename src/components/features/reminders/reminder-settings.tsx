@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
@@ -15,6 +15,14 @@ import {
   Save,
   AlertCircle,
 } from "lucide-react";
+import {
+  isPushSupported,
+  isIosNotInstalled,
+  subscribeToPush,
+  unsubscribeFromPush,
+  sendTestPush,
+  detectTimezone,
+} from "@/lib/push-client";
 
 interface ReminderSettings {
   morningEnabled: boolean;
@@ -64,6 +72,22 @@ export function ReminderSettingsForm({
   const [settings, setSettings] = useState<ReminderSettings>(initialSettings);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [pushBusy, setPushBusy] = useState(false);
+  const [pushNotice, setPushNotice] = useState<string | null>(null);
+  const [testNotice, setTestNotice] = useState<string | null>(null);
+
+  // Prefill the user's actual timezone when the stored value is the UTC
+  // default — saves a click for the common case.
+  useEffect(() => {
+    if (settings.timezone === "UTC") {
+      const detected = detectTimezone();
+      if (detected && detected !== "UTC") {
+        setSettings((prev) => ({ ...prev, timezone: detected }));
+        setHasChanges(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const updateSetting = <K extends keyof ReminderSettings>(
     key: K,
@@ -71,6 +95,52 @@ export function ReminderSettingsForm({
   ) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
     setHasChanges(true);
+  };
+
+  // Push toggle does real work: request permission → subscribe → talk to API.
+  const handlePushToggle = async (enabled: boolean) => {
+    setPushNotice(null);
+    if (enabled) {
+      if (!isPushSupported()) {
+        setPushNotice("Push notifications are not supported in this browser.");
+        return;
+      }
+      if (isIosNotInstalled()) {
+        setPushNotice(
+          "On iPhone, install Vedic Transform to your Home Screen first (Share → Add to Home Screen), then turn this on."
+        );
+        return;
+      }
+      setPushBusy(true);
+      const res = await subscribeToPush();
+      setPushBusy(false);
+      if (res.ok) {
+        updateSetting("pushNotifications", true);
+        setPushNotice("Push notifications enabled. Save your settings to keep them on.");
+      } else if (res.reason === "denied") {
+        setPushNotice(
+          "Notifications were blocked. Allow them in your browser settings, then try again."
+        );
+      } else if (res.reason === "no-vapid-key") {
+        setPushNotice(
+          "Push not configured on this deployment yet. Contact support."
+        );
+      } else {
+        setPushNotice(res.error || "Could not enable push notifications.");
+      }
+    } else {
+      setPushBusy(true);
+      await unsubscribeFromPush();
+      setPushBusy(false);
+      updateSetting("pushNotifications", false);
+      setPushNotice("Push notifications disabled.");
+    }
+  };
+
+  const handleSendTest = async () => {
+    setTestNotice(null);
+    const res = await sendTestPush();
+    setTestNotice(res.ok ? "Test push sent." : res.error || "Test push failed.");
   };
 
   const handleSave = async () => {
@@ -339,11 +409,28 @@ export function ReminderSettingsForm({
           />
           <Toggle
             enabled={settings.pushNotifications}
-            onChange={(v) => updateSetting("pushNotifications", v)}
-            label="Push notifications"
+            onChange={handlePushToggle}
+            label={pushBusy ? "Working…" : "Push notifications"}
             icon={Smartphone}
             color="gray"
           />
+          {pushNotice && (
+            <p className="ml-11 text-xs text-gray-500">{pushNotice}</p>
+          )}
+          {settings.pushNotifications && (
+            <div className="ml-11">
+              <button
+                type="button"
+                onClick={handleSendTest}
+                className="text-xs text-amber-600 hover:text-amber-700 underline"
+              >
+                Send a test push
+              </button>
+              {testNotice && (
+                <span className="ml-2 text-xs text-gray-500">{testNotice}</span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Save Button */}
