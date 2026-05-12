@@ -93,8 +93,8 @@ export async function GET(
             <div style={{ fontSize: 36, color: "#fbbf24", letterSpacing: 1 }}>
               I&apos;m a
             </div>
-            <div style={{ fontSize: 96, fontWeight: 800, lineHeight: 1 }}>
-              {primaryName}
+            <div style={{ display: "flex", fontSize: 96, fontWeight: 800, lineHeight: 1 }}>
+              <span>{primaryName}</span>
               {secondaryName && (
                 <span style={{ color: "#fbbf24" }}>
                   -{secondaryName}
