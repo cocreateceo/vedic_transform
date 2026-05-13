@@ -202,16 +202,11 @@ export function PillarPDFDocument({ pillar, content }: PillarPDFDocumentProps) {
           <Text style={styles.sanskrit}>{pillar.sanskritName}</Text>
           <View style={styles.meta}>
             <Text>
-              Category: {pillar.category.charAt(0).toUpperCase() + pillar.category.slice(1)}
+              {`Category: ${pillar.category.charAt(0).toUpperCase() + pillar.category.slice(1)}`}
+              {pillar.defaultDurationMinutes > 0
+                ? `  ·  ${pillar.defaultDurationMinutes} min/day  ·  ${pillar.karmaPointsBase} karma points`
+                : `  ·  ${pillar.karmaPointsBase} karma points`}
             </Text>
-            <Text>·</Text>
-            {pillar.defaultDurationMinutes > 0 && (
-              <>
-                <Text>{pillar.defaultDurationMinutes} min/day</Text>
-                <Text>·</Text>
-              </>
-            )}
-            <Text>{pillar.karmaPointsBase} karma points</Text>
           </View>
           <Text style={styles.tagline}>{content.tagline}</Text>
         </View>
@@ -277,7 +272,7 @@ export function PillarPDFDocument({ pillar, content }: PillarPDFDocumentProps) {
           <Text style={styles.sectionTitle}>What the tradition says</Text>
           {content.scripture.map((s, i) => (
             <View key={i} style={styles.scriptureBlock}>
-              <Text style={styles.scriptureText}>&ldquo;{s.text}&rdquo;</Text>
+              <Text style={styles.scriptureText}>{`“${s.text}”`}</Text>
               <Text style={styles.scriptureCite}>— {s.verse}</Text>
             </View>
           ))}
