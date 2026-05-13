@@ -127,6 +127,14 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
               +{pillar.karmaPointsBase} karma points
             </div>
           </div>
+
+          <a
+            href={`/api/pillars/${pillar.slug}/pdf`}
+            className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-sm font-medium hover:bg-amber-100 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            Download offline guide (PDF)
+          </a>
         </div>
       </div>
 
