@@ -4,7 +4,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Font,
 } from "@react-pdf/renderer";
 import type { Pillar } from "@/constants/pillars";
 import type { PillarContent } from "@/data/pillar-content";
@@ -197,7 +196,7 @@ export function PillarPDFDocument({ pillar, content }: PillarPDFDocumentProps) {
       <Page size="A4" style={styles.page}>
         <View style={styles.cover}>
           <Text style={styles.brand}>10X VEDIC TRANSFORM · OFFLINE GUIDE</Text>
-          <Text style={styles.pillarNumber}>Pillar {pillar.id} of 11</Text>
+          <Text style={styles.pillarNumber}>{`Pillar ${pillar.id} of 11`}</Text>
           <Text style={styles.pillarName}>{pillar.name}</Text>
           <Text style={styles.sanskrit}>{pillar.sanskritName}</Text>
           <View style={styles.meta}>
@@ -261,7 +260,7 @@ export function PillarPDFDocument({ pillar, content }: PillarPDFDocumentProps) {
           <Text style={styles.sectionTitle}>How to practice this today</Text>
           {content.dailyPractice.map((step, i) => (
             <View key={i} style={styles.step}>
-              <Text style={styles.stepNumber}>{i + 1}.</Text>
+              <Text style={styles.stepNumber}>{`${i + 1}.`}</Text>
               <Text style={styles.stepText}>{step}</Text>
             </View>
           ))}
@@ -273,7 +272,7 @@ export function PillarPDFDocument({ pillar, content }: PillarPDFDocumentProps) {
           {content.scripture.map((s, i) => (
             <View key={i} style={styles.scriptureBlock}>
               <Text style={styles.scriptureText}>{`“${s.text}”`}</Text>
-              <Text style={styles.scriptureCite}>— {s.verse}</Text>
+              <Text style={styles.scriptureCite}>{`— ${s.verse}`}</Text>
             </View>
           ))}
         </View>
