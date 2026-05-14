@@ -60,11 +60,19 @@ export default function ProgressPage() {
           const maxCount = Math.max(1, ...Object.values(counts));
           return PILLARS.map((p) => ({
             name: p.name,
+            shortName: p.name.split(/[\s&]+/)[0],
+            category: p.category,
             color: p.color,
             completion: Math.round(((counts[String(p.id)] || 0) / maxCount) * 100),
           }));
         })()
-      : (rawPillarStats as { name: string; color: string; completion: number }[]) || [];
+      : (rawPillarStats as {
+          name: string;
+          shortName: string;
+          category: string;
+          color: string;
+          completion: number;
+        }[]) || [];
 
   const currentWeek = Math.max(1, Math.ceil(journeyDay / 7));
   const todayCompleted = pillarStats.filter((p) => p.completion > 0).length;
