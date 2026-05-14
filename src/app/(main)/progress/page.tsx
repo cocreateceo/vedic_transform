@@ -38,19 +38,43 @@ export default function ProgressPage() {
   }
 
   const {
-    currentDay = 0,
-    currentWeek = 1,
-    consistencyScore = 0,
-    previousWeekAverage = 0,
+    journeyDay = 0,
     streak = { currentStreak: 0, longestStreak: 0 },
     totalKarma = 0,
-    todayCompleted = 0,
-    pillarStats = [],
+    pillarStats: rawPillarStats,
     weeklyTrendData = [],
     calendarData = [],
     insights = [],
     userBadges = [],
   } = data;
+
+  // The /data/reports API returns pillarStats as Record<pillarId, count>;
+  // the chart components expect [{ name, color, completion: percent }].
+  // Convert in-place using the PILLARS constants, scaling completion as
+  // a percentage of the largest pillar's count (best-effort visualisation
+  // since the API doesn't yet send per-pillar totals).
+  const pillarStats =
+    rawPillarStats && !Array.isArray(rawPillarStats)
+      ? (() => {
+          const counts = rawPillarStats as Record<string, number>;
+          const maxCount = Math.max(1, ...Object.values(counts));
+          return PILLARS.map((p) => ({
+            name: p.name,
+            color: p.color,
+            completion: Math.round(((counts[String(p.id)] || 0) / maxCount) * 100),
+          }));
+        })()
+      : (rawPillarStats as { name: string; color: string; completion: number }[]) || [];
+
+  const currentWeek = Math.max(1, Math.ceil(journeyDay / 7));
+  const todayCompleted = pillarStats.filter((p) => p.completion > 0).length;
+  // No weekly-trend / consistency data from the API yet — fall back to
+  // simple proxies so the page renders instead of crashing.
+  const consistencyScore = Math.round(
+    pillarStats.reduce((sum, p) => sum + p.completion, 0) /
+      Math.max(1, pillarStats.length),
+  );
+  const previousWeekAverage = 0;
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">

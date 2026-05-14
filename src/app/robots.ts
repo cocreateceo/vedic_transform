@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+  // Default to the canonical custom domain — the old CloudFront URL
+  // (d1wkrhl40vhx82) was deleted during the StaticSite→Nextjs migration.
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://d1wkrhl40vhx82.cloudfront.net";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://10x.vedics.net";
 
   return {
     rules: [

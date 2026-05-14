@@ -17,9 +17,11 @@ const PUBLIC_PATHS = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Default to the canonical custom domain — the old CloudFront URL
+  // (d1wkrhl40vhx82) was deleted during the StaticSite→Nextjs migration
+  // and any sitemap pointing at it would link Google to dead URLs.
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://d1wkrhl40vhx82.cloudfront.net";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://10x.vedics.net";
 
   const lastModified = new Date();
 
