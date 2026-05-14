@@ -129,7 +129,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
           </div>
 
           <a
-            href={`/pillars/pillar-${pillar.id}-${pillar.slug}.pdf`}
+            href={`/guides/pillar-${pillar.id}-${pillar.slug}.pdf`}
             download
             className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-sm font-medium hover:bg-amber-100 transition-colors"
           >

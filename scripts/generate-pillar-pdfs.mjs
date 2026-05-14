@@ -180,7 +180,11 @@ function PillarPDF({ pillar, content }) {
 
 async function main() {
   const PILLAR_CONTENT = await loadPillarContent();
-  const outDir = path.join(projectRoot, "public", "pillars");
+  // Output to public/guides/ — NOT public/pillars/. Static files in
+  // public/pillars/ shadowed the dynamic Next.js route /pillars/[slug]/
+  // because CloudFront preferred the S3 bucket for any path under
+  // /pillars/, returning 403 for actual dynamic-route hits.
+  const outDir = path.join(projectRoot, "public", "guides");
   if (!existsSync(outDir)) await mkdir(outDir, { recursive: true });
 
   for (const pillar of PILLARS) {
