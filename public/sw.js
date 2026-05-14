@@ -1,4 +1,7 @@
-const CACHE_NAME = "vedic-transform-v1";
+// Bump CACHE_NAME any time we change the SW or want to force-invalidate
+// existing clients. The activate handler deletes every cache that
+// doesn't match the current name, which forces a clean state.
+const CACHE_NAME = "vedic-transform-v2";
 const OFFLINE_URL = "/";
 
 const PRECACHE_ASSETS = [
@@ -11,7 +14,18 @@ const PRECACHE_ASSETS = [
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_ASSETS);
+      // Don't let a single missing asset abort the whole install. addAll
+      // is atomic; if any fetch fails, none of the others are stored,
+      // so we use individual put()s with catch().
+      return Promise.all(
+        PRECACHE_ASSETS.map((url) =>
+          fetch(url)
+            .then((res) => {
+              if (res && res.ok) return cache.put(url, res);
+            })
+            .catch(() => {})
+        )
+      );
     })
   );
   self.skipWaiting();
@@ -79,11 +93,29 @@ self.addEventListener("notificationclick", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+
+  // Skip non-GET, cross-origin, and non-http(s) schemes (chrome-extension,
+  // data:, etc.). Touching those is what generated the flood of
+  // "Failed to execute 'put' on 'Cache'" errors users were seeing.
+  if (event.request.method !== "GET") return;
+  if (url.origin !== self.location.origin) return;
+  if (!url.protocol.startsWith("http")) return;
+
+  // Skip API + auth routes — those need to hit the network every time
+  // (auth tokens, push subscriptions, dosha results, etc.). Caching
+  // them silently breaks login and check-in flows.
+  if (
+    url.pathname.startsWith("/api/") ||
+    url.pathname.startsWith("/auth/") ||
+    url.pathname.startsWith("/data/")
+  ) return;
+
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match(OFFLINE_URL);
-      })
+      fetch(event.request).catch(() =>
+        caches.match(OFFLINE_URL).then((res) => res || Response.error())
+      )
     );
     return;
   }
@@ -91,25 +123,29 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Return cached version but fetch fresh copy in background
-        fetch(event.request).then((response) => {
-          if (response && response.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, response);
-            });
-          }
-        });
+        // Stale-while-revalidate: serve cached immediately, refresh in bg.
+        fetch(event.request)
+          .then((response) => {
+            if (response && response.status === 200 && response.type === "basic") {
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, response.clone()).catch(() => {});
+              });
+            }
+          })
+          .catch(() => {});
         return cachedResponse;
       }
-      return fetch(event.request).then((response) => {
-        if (response && response.status === 200 && response.type === "basic") {
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseClone);
-          });
-        }
-        return response;
-      });
+      return fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200 && response.type === "basic") {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone).catch(() => {});
+            });
+          }
+          return response;
+        })
+        .catch(() => Response.error());
     })
   );
 });

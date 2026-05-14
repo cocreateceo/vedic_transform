@@ -530,6 +530,14 @@ export default $config({
     // crawlable. (main) and (auth) routes keep their "use client" layouts
     // — they still hydrate the same way, just from a real SSR shell now.
     const site = new sst.aws.Nextjs("VedicTransformSite", {
+      // Custom domain. DNS is at GoDaddy (manual records — see deploy
+      // output for the CNAME + ACM validation record to add). Switching
+      // here from the bare CloudFront URL (which churns when the
+      // distribution is replaced) to a stable origin we control.
+      domain: {
+        name: "10x.vedics.net",
+        dns: false,
+      },
       environment: {
         NEXT_PUBLIC_API_URL: api.url,
         // Expose only the *public* VAPID key to the client; the private
