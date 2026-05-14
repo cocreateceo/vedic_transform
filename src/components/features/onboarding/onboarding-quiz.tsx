@@ -140,8 +140,10 @@ export function OnboardingQuiz() {
     }
   }
 
-  async function handleComplete() {
-    setSaving(true);
+  async function markOnboardingComplete() {
+    // Always flips the user's onboardingCompleted bit so the (main)
+    // layout's guard stops redirecting back here. Returns when done so
+    // callers can navigate after the flag has propagated to localStorage.
     try {
       await apiFetch("/data/user", {
         method: "PATCH",
@@ -150,28 +152,41 @@ export function OnboardingQuiz() {
           onboardingData: answers,
         }),
       });
+    } catch {
+      // Network/API failure — still flip the local flag so the user
+      // doesn't get stuck on /onboarding. Server will reconcile later.
+    }
+    const savedUser = localStorage.getItem("vedic-user");
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        user.onboardingCompleted = true;
+        localStorage.setItem("vedic-user", JSON.stringify(user));
+      } catch {
+        // ignore malformed cached user
+      }
+    }
+  }
 
-      // Save focus pillars if selected
-      if (answers.focusPillars && answers.focusPillars.length > 0) {
+  async function handleComplete() {
+    setSaving(true);
+    await markOnboardingComplete();
+    // Save focus pillars if selected (only on full completion, not skip)
+    if (answers.focusPillars && answers.focusPillars.length > 0) {
+      try {
         await apiFetch("/data/focus-pillars", {
           method: "PUT",
           body: JSON.stringify({ pillars: answers.focusPillars }),
         });
-      }
-
-      // Update local storage user
-      const savedUser = localStorage.getItem("vedic-user");
-      if (savedUser) {
-        const user = JSON.parse(savedUser);
-        user.onboardingCompleted = true;
-        localStorage.setItem("vedic-user", JSON.stringify(user));
-      }
-
-      router.push("/dashboard");
-    } catch {
-      // If API fails, still let user through (graceful degradation)
-      router.push("/dashboard");
+      } catch {}
     }
+    router.push("/dashboard");
+  }
+
+  async function handleSkip() {
+    setSaving(true);
+    await markOnboardingComplete();
+    router.push("/dashboard");
   }
 
   const isStepComplete = () => {
@@ -199,10 +214,11 @@ export function OnboardingQuiz() {
           </span>
         </Link>
         <button
-          onClick={() => router.push("/dashboard")}
-          className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+          onClick={handleSkip}
+          disabled={saving}
+          className="text-sm text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
         >
-          Skip for now
+          {saving ? "Skipping…" : "Skip for now"}
         </button>
       </div>
 
