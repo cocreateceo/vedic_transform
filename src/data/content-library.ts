@@ -268,7 +268,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "10 min",
     url: "#",
-    audioUrl: "generated",
+    audioUrl: "/audio/om-mani-padme-hum.mp3",
     description:
       "The six-syllable mantra of Avalokiteshvara, the bodhisattva of compassion. Each syllable purifies a different realm of suffering and cultivates generosity, ethics, patience, diligence, concentration, and wisdom. Chanting this mantra opens the heart to boundless compassion for all sentient beings.",
   },
@@ -280,7 +280,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "12 min",
     url: "#",
-    audioUrl: "generated",
+    audioUrl: "/audio/mahamrityunjaya.mp3",
     description:
       "From the Rig Veda (7.59.12), the Mahamrityunjaya Mantra is the most potent healing mantra in the Vedic canon. Addressed to Lord Tryambaka (Shiva), it beseeches liberation from death and disease: 'Oṁ Tryambakaṁ Yajāmahe, Sugandhiṁ Puṣṭivardhanam, Urvārukamiva Bandhanān, Mṛtyor Mukṣīya Māmṛtāt.' Used for physical healing, protection, and spiritual liberation.",
   },
@@ -304,7 +304,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "9 min",
     url: "#",
-    audioUrl: "generated",
+    audioUrl: "/audio/guru-mantra.mp3",
     description:
       "The Guru Stotram honors the teacher as the embodied form of the divine trinity: 'Gurur Brahmā Gurur Viṣṇuḥ Gurur Devo Maheśvaraḥ, Gurur Sākṣāt Paraṁ Brahma Tasmai Śrī Gurave Namaḥ.' In the Vedic tradition, the Guru dispels the darkness of ignorance (gu = darkness, ru = remover). Chanting cultivates humility, devotion, and gratitude.",
   },
@@ -316,7 +316,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "10 min",
     url: "#",
-    audioUrl: "generated",
+    audioUrl: "/audio/lakshmi-mantra.mp3",
     description:
       "The bija (seed) mantra of Goddess Lakshmi, the divine embodiment of abundance, prosperity, and grace. 'Śrīṁ' is the seed sound of Lakshmi energy. Regular chanting removes financial obstacles, attracts material and spiritual prosperity, and cultivates the inner richness of contentment. Traditionally chanted on Fridays and during Diwali.",
   },
@@ -328,7 +328,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "10 min",
     url: "#",
-    audioUrl: "generated",
+    audioUrl: "/audio/saraswati-mantra.mp3",
     description:
       "The mantra of Goddess Saraswati, the divine patron of wisdom, knowledge, music, and the arts. 'Aiṁ' is the bija (seed) syllable that activates the faculty of higher learning. Chanting sharpens the intellect, enhances memory and concentration, removes creative blocks, and awakens the flow of inspired knowledge.",
   },
@@ -352,7 +352,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "9 min",
     url: "#",
-    audioUrl: "generated",
+    audioUrl: "/audio/asato-ma.mp3",
     description:
       "From the Bṛhadāraṇyaka Upaniṣad (1.3.28), the Pavamana Mantra is a prayer for ultimate truth: 'Asato mā sadgamaya, tamaso mā jyotirgamaya, mṛtyor mā amṛtaṁ gamaya' — Lead me from the unreal to the real, from darkness to light, from death to immortality. One of the most profound expressions of the spiritual aspiration in all of Vedic literature.",
   },
@@ -364,7 +364,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "10 min",
     url: "#",
-    audioUrl: "generated",
+    audioUrl: "/audio/asato-ma.mp3",
     description:
       "An extended chanting meditation on the three lines of the Asato Ma prayer. Each line is a complete spiritual journey: from unreality to reality (the path of knowledge), from darkness to light (the path of awakening), and from death to immortality (the path of liberation). This session guides you through slow, contemplative repetitions with pauses for inner reflection.",
   },
