@@ -11,7 +11,7 @@ import { StreakEventBanner } from "@/components/features/dashboard/streak-event-
 import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, Target, Sunrise, Leaf, Headphones, Sparkles } from "lucide-react";
+import { Calendar, Sunrise, Leaf, Headphones, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { DailyWisdomPopup } from "@/components/features/dashboard/daily-wisdom-popup";
@@ -156,7 +156,19 @@ export default function DashboardPage() {
       <div className="vedic-card p-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-amber-100 text-sm">Good morning!</p>
+            <p className="text-amber-100 text-sm">
+              {(() => {
+                const hour = new Date().getHours();
+                const greet =
+                  hour < 5 ? "Pre-dawn blessings"
+                  : hour < 12 ? "Good morning"
+                  : hour < 17 ? "Good afternoon"
+                  : hour < 21 ? "Good evening"
+                  : "Good night";
+                const firstName = user?.name?.split(/\s+/)[0];
+                return firstName ? `${greet}, ${firstName}!` : `${greet}!`;
+              })()}
+            </p>
             <h1 className="text-2xl font-bold mt-1">
               Day {currentDay} of Your Journey
             </h1>
@@ -208,49 +220,59 @@ export default function DashboardPage() {
       {/* All 11 pillars — kept below the hero card for users who want the full grid. */}
       <PillarGrid completedPillars={completedPillars} />
 
-      {/* Quick actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Link href="/pillars/morning-initiation">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                <Sunrise className="w-6 h-6 text-amber-600" />
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Morning Routine</h4>
-                <p className="text-sm text-gray-500">Start your day right</p>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/pillars/breathing-meditation">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center">
-                <Target className="w-6 h-6 text-cyan-600" />
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Breathwork</h4>
-                <p className="text-sm text-gray-500">4-6 breathing exercise</p>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
-
-        <Link href="/journal">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-green-600" />
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-900">Journal</h4>
-                <p className="text-sm text-gray-500">Record your gratitude</p>
-              </div>
-            </CardContent>
-          </Card>
-        </Link>
+      {/* Quick actions — driven by the user's chosen focus pillars (set in
+          onboarding / Goals). Falls back to the original three when the user
+          hasn't picked any yet. Always tacks Journal onto the end so the
+          gratitude shortcut is reachable. */}
+      <div>
+        <h2 className="text-lg font-semibold text-gray-800 mb-3">
+          {focusPillarSlugs.length > 0 ? "Your focus pillars" : "Quick actions"}
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {(focusPillarSlugs.length > 0
+            ? focusPillarSlugs.slice(0, 2)
+            : ["morning-initiation", "breathing-meditation"]
+          ).map((slug) => {
+            const pillar = PILLARS.find((p) => p.slug === slug);
+            if (!pillar) return null;
+            const Icon = pillar.icon;
+            const done = completedPillars.includes(slug);
+            return (
+              <Link key={slug} href={`/pillars/${slug}`}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardContent className="flex items-center gap-4 p-4">
+                    <div
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center ${pillar.bgColor}`}
+                    >
+                      <Icon className="w-6 h-6" style={{ color: pillar.color }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-gray-900 truncate">
+                        {pillar.name}
+                      </h4>
+                      <p className="text-sm text-gray-500 truncate">
+                        {done ? "✓ Done today" : pillar.description}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
+          <Link href="/journal">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardContent className="flex items-center gap-4 p-4">
+                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900">Journal</h4>
+                  <p className="text-sm text-gray-500">Record your gratitude</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
       </div>
 
       {/* Discover section */}

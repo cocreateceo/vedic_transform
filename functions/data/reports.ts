@@ -13,53 +13,51 @@ export async function handler(event: any) {
 
   if (method === 'GET') {
     try {
-      // Fetch journey data
-      const journeys = await db.send(new QueryCommand({
-        TableName: Resource.Journeys.name,
-        IndexName: 'userId-index',
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: { ':userId': user.id },
-      }));
+      // Independent reads — fan out in parallel to cut dashboard latency.
+      const [journeys, checkins, karma, streaks, badges] = await Promise.all([
+        db.send(new QueryCommand({
+          TableName: Resource.Journeys.name,
+          IndexName: 'userId-index',
+          KeyConditionExpression: 'userId = :userId',
+          ExpressionAttributeValues: { ':userId': user.id },
+        })),
+        db.send(new QueryCommand({
+          TableName: Resource.DailyCheckins.name,
+          IndexName: 'userId-index',
+          KeyConditionExpression: 'userId = :userId',
+          ExpressionAttributeValues: { ':userId': user.id },
+        })),
+        db.send(new QueryCommand({
+          TableName: Resource.KarmaTransactions.name,
+          IndexName: 'userId-index',
+          KeyConditionExpression: 'userId = :userId',
+          ExpressionAttributeValues: { ':userId': user.id },
+        })),
+        db.send(new QueryCommand({
+          TableName: Resource.Streaks.name,
+          IndexName: 'userId-index',
+          KeyConditionExpression: 'userId = :userId',
+          ExpressionAttributeValues: { ':userId': user.id },
+        })),
+        db.send(new QueryCommand({
+          TableName: Resource.UserBadges.name,
+          IndexName: 'userId-index',
+          KeyConditionExpression: 'userId = :userId',
+          ExpressionAttributeValues: { ':userId': user.id },
+        })),
+      ]);
+
       const activeJourney = journeys.Items?.find((j: any) => j.isActive);
-
-      // Fetch checkins
-      const checkins = await db.send(new QueryCommand({
-        TableName: Resource.DailyCheckins.name,
-        IndexName: 'userId-index',
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: { ':userId': user.id },
-      }));
-
-      // Fetch karma total
-      const karma = await db.send(new QueryCommand({
-        TableName: Resource.KarmaTransactions.name,
-        IndexName: 'userId-index',
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: { ':userId': user.id },
-      }));
       const totalKarma = (karma.Items || []).reduce((sum: number, t: any) => sum + (t.points || 0), 0);
 
-      // Fetch streak — return the most-recently-updated row when a user has
-      // multiple (e.g. across journeys). Matches checkin.ts / buy-shield.ts.
-      const streaks = await db.send(new QueryCommand({
-        TableName: Resource.Streaks.name,
-        IndexName: 'userId-index',
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: { ':userId': user.id },
-      }));
-      const streak =
-        (streaks.Items || [])
-          .slice()
-          .sort((a: any, b: any) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))[0] ||
-        null;
-
-      // Fetch user badges
-      const badges = await db.send(new QueryCommand({
-        TableName: Resource.UserBadges.name,
-        IndexName: 'userId-index',
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: { ':userId': user.id },
-      }));
+      // Karma earned today — separate from lifetime totalKarma. The dashboard's
+      // "+todayEarned" pill on the karma card was permanently stuck at 0
+      // because we never computed this. Uses the same YYYY-MM-DD prefix
+      // convention as checkin.ts.
+      const todayPrefix = new Date().toISOString().split('T')[0];
+      const todayEarned = (karma.Items || [])
+        .filter((t: any) => (t.createdAt || '').startsWith(todayPrefix))
+        .reduce((sum: number, t: any) => sum + (t.points || 0), 0);
 
       // Calculate journey day
       let journeyDay = 0;
@@ -81,7 +79,14 @@ export async function handler(event: any) {
         journeyDay,
         totalCheckins: checkins.Items?.length || 0,
         totalKarma,
-        streak,
+        todayEarned,
+        // Pick the most-recently-updated streak row when a user has multiple
+        // (e.g. across journeys). Matches checkin.ts and buy-shield.ts.
+        streak:
+          (streaks.Items || [])
+            .slice()
+            .sort((a: any, b: any) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))[0] ||
+          null,
         badgesEarned: badges.Items?.length || 0,
         pillarStats,
       });

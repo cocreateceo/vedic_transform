@@ -14,6 +14,8 @@ export async function handler(event: any) {
 
   if (method === 'GET') {
     const date = event.queryStringParameters?.date || new Date().toISOString().split('T')[0];
+    const pillarIdQuery = event.queryStringParameters?.pillarId;
+    const pillarSlugQuery = event.queryStringParameters?.pillarSlug;
 
     const result = await db.send(new QueryCommand({
       TableName: Resource.DailyCheckins.name,
@@ -26,7 +28,35 @@ export async function handler(event: any) {
       },
     }));
 
-    return ok({ checkins: result.Items || [] });
+    const checkins = result.Items || [];
+
+    // Derive everything callers actually use:
+    //  - completedPillars: array of pillar slugs done today (dashboard grid,
+    //    Today's Practice card)
+    //  - isCompleted: true if a specific pillar was passed in via query
+    //    (pillar detail page's "Mark as Complete" button state)
+    const completedPillars = Array.from(
+      new Set(
+        checkins
+          .map((c: any) => c.pillarSlug)
+          .filter((s: any): s is string => Boolean(s)),
+      ),
+    );
+
+    let isCompleted: boolean | undefined = undefined;
+    if (pillarSlugQuery || pillarIdQuery) {
+      const resolved = resolvePillar({
+        pillarId: pillarIdQuery,
+        pillarSlug: pillarSlugQuery,
+      });
+      if (resolved) {
+        isCompleted = checkins.some(
+          (c: any) => c.pillarSlug === resolved.slug || c.pillarId === resolved.id,
+        );
+      }
+    }
+
+    return ok({ checkins, completedPillars, isCompleted });
   }
 
   if (method === 'POST') {
