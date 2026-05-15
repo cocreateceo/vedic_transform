@@ -3,26 +3,22 @@
 import { DAILY_WISDOM } from "@/data/daily-wisdom";
 import { BookOpen, Sparkles, Quote } from "lucide-react";
 import { ShareButton } from "@/components/ui/share-button";
-
-function getDayOfYear(): number {
-  return Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
-  );
-}
+import { getDayOfYear, getTodayIndex } from "@/lib/wisdom";
 
 export default function WisdomPage() {
   const dayOfYear = getDayOfYear();
-  const todayIndex = dayOfYear % DAILY_WISDOM.length;
+  const todayIndex = getTodayIndex();
 
   const todayWisdom = DAILY_WISDOM[todayIndex];
 
-  // Get past 6 entries (before today)
-  const past6: typeof DAILY_WISDOM = [];
-  for (let i = 1; i <= 6; i++) {
+  // Past 7 entries before today (header said "Past 7 Days"; loop used to
+  // only fill 6, leaving a stale title).
+  const past7: typeof DAILY_WISDOM = [];
+  for (let i = 1; i <= 7; i++) {
     const idx =
       ((todayIndex - i) % DAILY_WISDOM.length + DAILY_WISDOM.length) %
       DAILY_WISDOM.length;
-    past6.push(DAILY_WISDOM[idx]);
+    past7.push(DAILY_WISDOM[idx]);
   }
 
   const categoryColors: Record<string, string> = {
@@ -105,7 +101,7 @@ export default function WisdomPage() {
         </h2>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {past6.map((entry, i) => (
+          {past7.map((entry, i) => (
             <div
               key={entry.id}
               className="glass-card p-5 space-y-3 transition-all hover:scale-[1.02]"

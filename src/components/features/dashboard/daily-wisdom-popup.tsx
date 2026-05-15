@@ -1,17 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { DAILY_WISDOM, WisdomEntry } from "@/data/daily-wisdom";
-import { X, Share2 } from "lucide-react";
-
-function getTodaysWisdom(): WisdomEntry {
-  const today = new Date();
-  const startOfYear = new Date(today.getFullYear(), 0, 0);
-  const diff = today.getTime() - startOfYear.getTime();
-  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const index = dayOfYear % DAILY_WISDOM.length;
-  return DAILY_WISDOM[index];
-}
+import { type WisdomEntry } from "@/data/daily-wisdom";
+import { getTodaysWisdom } from "@/lib/wisdom";
+import { ShareButton } from "@/components/ui/share-button";
+import { X } from "lucide-react";
 
 function getTodayKey(): string {
   const today = new Date();
@@ -21,12 +14,19 @@ function getTodayKey(): string {
 export function DailyWisdomPopup() {
   const [visible, setVisible] = useState(false);
   const [wisdom, setWisdom] = useState<WisdomEntry | null>(null);
+  const [shareUrl, setShareUrl] = useState<string>("");
 
   useEffect(() => {
     const key = getTodayKey();
     if (localStorage.getItem(key)) return;
 
     setWisdom(getTodaysWisdom());
+    // The popup fires on /dashboard, but shared links should land on /wisdom
+    // (which carries the same featured entry plus context). Build the URL
+    // here rather than letting ShareButton default to window.location.href.
+    if (typeof window !== "undefined") {
+      setShareUrl(`${window.location.origin}/wisdom`);
+    }
     // Small delay so the dashboard renders first, then the popup fades in
     const timer = setTimeout(() => setVisible(true), 400);
     return () => clearTimeout(timer);
@@ -35,22 +35,6 @@ export function DailyWisdomPopup() {
   const handleClose = () => {
     setVisible(false);
     localStorage.setItem(getTodayKey(), "true");
-  };
-
-  const handleShare = async () => {
-    if (!wisdom) return;
-    const text = `"${wisdom.text}"\n— ${wisdom.source}${wisdom.sanskrit ? `\n\n${wisdom.sanskrit}` : ""}`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: "Daily Wisdom", text });
-      } catch {
-        // user cancelled
-      }
-    } else {
-      await navigator.clipboard.writeText(text);
-      alert("Wisdom copied to clipboard!");
-    }
   };
 
   if (!visible || !wisdom) return null;
@@ -140,13 +124,15 @@ export function DailyWisdomPopup() {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={handleShare}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-[#DAA520]/50 text-amber-800 hover:bg-amber-50 transition-colors text-sm font-medium"
-            >
-              <Share2 className="w-4 h-4" />
-              Share
-            </button>
+            <div className="flex-1 [&>div]:w-full [&>div>button]:w-full">
+              <ShareButton
+                title="Daily Wisdom"
+                text={`"${wisdom.text}"\n— ${wisdom.source}${wisdom.sanskrit ? `\n\n${wisdom.sanskrit}` : ""}`}
+                url={shareUrl || undefined}
+                variant="outline"
+                label="Share"
+              />
+            </div>
             <button
               onClick={handleClose}
               className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 transition-all text-sm font-medium shadow-md shadow-amber-500/25"
