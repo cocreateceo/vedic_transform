@@ -1,8 +1,9 @@
 import { Resource } from 'sst';
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, getUserFromEvent } from '../lib/utils';
-import { resolvePillar, TOTAL_PILLARS } from '../lib/pillars';
+import { TOTAL_PILLARS } from '../lib/pillars';
 import { BADGES } from '../lib/badges';
+import { analyzeInsights } from '../lib/insights';
 
 const TOTAL_JOURNEY_DAYS = 48;
 
@@ -174,87 +175,14 @@ export async function handler(event: any) {
           .sort((a: any, b: any) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))[0] ||
         null;
 
-      // Insights — rule-based, derived from what we already computed so we
-      // don't add another DB round-trip. Keep them few; the InsightList shows
-      // only the top 3 by default.
-      const insights: Array<{
-        id: string;
-        type: 'strength' | 'weakness' | 'milestone' | 'pattern' | 'recommendation';
-        title: string;
-        description: string;
-      }> = [];
-
-      const pillarCounts = new Map<string, number>();
-      for (const c of checkins.Items || []) {
-        const slug = c.pillarSlug || String(c.pillarId || '');
-        if (!slug) continue;
-        pillarCounts.set(slug, (pillarCounts.get(slug) || 0) + 1);
-      }
-      const sortedPillars = Array.from(pillarCounts.entries()).sort((a, b) => b[1] - a[1]);
-
-      if (sortedPillars.length > 0) {
-        const [topSlug, topCount] = sortedPillars[0];
-        if (topCount >= 3) {
-          const meta = resolvePillar({ pillarSlug: topSlug });
-          insights.push({
-            id: `strength-${topSlug}`,
-            type: 'strength',
-            title: `${meta?.name || topSlug} is your strongest practice`,
-            description: `You've completed it ${topCount} time${topCount === 1 ? '' : 's'}. Keep building on this momentum.`,
-          });
-        }
-        if (sortedPillars.length >= 3) {
-          const [bottomSlug, bottomCount] = sortedPillars[sortedPillars.length - 1];
-          if (bottomCount * 2 < topCount) {
-            const meta = resolvePillar({ pillarSlug: bottomSlug });
-            insights.push({
-              id: `weakness-${bottomSlug}`,
-              type: 'weakness',
-              title: `${meta?.name || bottomSlug} could use more attention`,
-              description: `Only ${bottomCount} completion${bottomCount === 1 ? '' : 's'} so far. Consider making it a focus pillar.`,
-            });
-          }
-        }
-      }
-
-      const currentStreakValue = streakItem?.currentStreak || 0;
-      if (currentStreakValue >= 30) {
-        insights.push({
-          id: 'milestone-30',
-          type: 'milestone',
-          title: '30-day streak!',
-          description: 'Incredible consistency. The habit is yours now.',
-        });
-      } else if (currentStreakValue >= 14) {
-        insights.push({
-          id: 'milestone-14',
-          type: 'milestone',
-          title: '2 weeks strong',
-          description: "You're past the habit-forming threshold.",
-        });
-      } else if (currentStreakValue >= 7) {
-        insights.push({
-          id: 'milestone-7',
-          type: 'milestone',
-          title: 'First week complete!',
-          description: 'You earned your first Karma Shield. Keep going.',
-        });
-      }
-
-      // Today's drop-off — if today's percentage trails the weekly average by
-      // a lot, nudge the user to do one more pillar before the day ends.
-      const todayPct = weeklyTrendData[6]?.percentage ?? 0;
-      const weekAvg = Math.round(
-        weeklyTrendData.reduce((s, d) => s + d.percentage, 0) / 7,
-      );
-      if (weekAvg > 30 && todayPct + 20 < weekAvg) {
-        insights.push({
-          id: 'pattern-today-low',
-          type: 'recommendation',
-          title: 'Today is below your weekly pace',
-          description: `Your week average is ${weekAvg}% but today is only ${todayPct}%. One more pillar puts you back on track.`,
-        });
-      }
+      // Insights — shared analyzer with /data/insights so both pages show
+      // the same rules. Lives in functions/lib/insights.ts.
+      const insights = analyzeInsights({
+        checkins: checkins.Items || [],
+        streakCurrent: streakItem?.currentStreak || 0,
+        journeyDay,
+        totalKarma,
+      });
 
       return ok({
         journey: activeJourney || null,

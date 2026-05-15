@@ -1,6 +1,9 @@
 import { Resource } from 'sst';
-import { QueryCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { db, ok, err, CORS_HEADERS, getUserFromEvent, generateId ,parseBody } from '../lib/utils';
+import { QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { db, ok, err, CORS_HEADERS, getUserFromEvent } from '../lib/utils';
+import { analyzeInsights } from '../lib/insights';
+
+const TOTAL_JOURNEY_DAYS = 48;
 
 export async function handler(event: any) {
   if (event.requestContext?.http?.method === 'OPTIONS')
@@ -11,81 +14,93 @@ export async function handler(event: any) {
 
   const method = event.requestContext?.http?.method;
 
+  // Insights are now computed live on every GET from the user's current
+  // state. The legacy UserInsights table is no longer read or written —
+  // dismiss/seen state lives client-side in localStorage. POST and PATCH
+  // remain as no-op success responses so older in-flight clients (which
+  // still fire them on Refresh / Dismiss) don't see an error.
   if (method === 'GET') {
-    const unreadOnly = event.queryStringParameters?.unreadOnly === 'true';
+    const [checkinsRes, streaksRes, journeysRes, karmaRes] = await Promise.all([
+      db.send(new QueryCommand({
+        TableName: Resource.DailyCheckins.name,
+        IndexName: 'userId-index',
+        KeyConditionExpression: 'userId = :u',
+        ExpressionAttributeValues: { ':u': user.id },
+      })),
+      db.send(new QueryCommand({
+        TableName: Resource.Streaks.name,
+        IndexName: 'userId-index',
+        KeyConditionExpression: 'userId = :u',
+        ExpressionAttributeValues: { ':u': user.id },
+      })),
+      db.send(new QueryCommand({
+        TableName: Resource.Journeys.name,
+        IndexName: 'userId-index',
+        KeyConditionExpression: 'userId = :u',
+        ExpressionAttributeValues: { ':u': user.id },
+      })),
+      db.send(new QueryCommand({
+        TableName: Resource.KarmaTransactions.name,
+        IndexName: 'userId-index',
+        KeyConditionExpression: 'userId = :u',
+        ExpressionAttributeValues: { ':u': user.id },
+      })),
+    ]);
 
-    const params: any = {
-      TableName: Resource.UserInsights.name,
-      IndexName: 'userId-index',
-      KeyConditionExpression: 'userId = :userId',
-      ExpressionAttributeValues: { ':userId': user.id },
-      ScanIndexForward: false,
-    };
+    const streakItem =
+      (streaksRes.Items || [])
+        .slice()
+        .sort((a: any, b: any) =>
+          (b.updatedAt || '').localeCompare(a.updatedAt || ''),
+        )[0] || null;
+    const streakCurrent = streakItem?.currentStreak || 0;
 
-    if (unreadOnly) {
-      params.FilterExpression = 'isRead = :false AND isDismissed = :false';
-      params.ExpressionAttributeValues[':false'] = false;
+    const activeJourney = (journeysRes.Items || []).find((j: any) => j.isActive);
+    let journeyDay = 0;
+    if (activeJourney?.startDate) {
+      journeyDay = Math.min(
+        Math.floor(
+          (Date.now() - new Date(activeJourney.startDate).getTime()) / 86400000,
+        ) + 1,
+        TOTAL_JOURNEY_DAYS,
+      );
     }
 
-    const result = await db.send(new QueryCommand(params));
-    return ok({ insights: result.Items || [] });
-  }
+    const totalKarma = (karmaRes.Items || []).reduce(
+      (sum: number, t: any) => sum + (t.points || 0),
+      0,
+    );
 
-  if (method === 'POST') {
-    const body = parseBody(event);
-    const { insightType, category, title, description, data, priority, expiresAt } = body;
+    const insights = analyzeInsights({
+      checkins: checkinsRes.Items || [],
+      streakCurrent,
+      journeyDay,
+      totalKarma,
+    });
 
-    if (!insightType || !title || !description) {
-      return err(400, 'insightType, title, and description are required');
-    }
-
-    const now = new Date().toISOString();
-    const id = generateId();
-
-    await db.send(new PutCommand({
-      TableName: Resource.UserInsights.name,
-      Item: {
-        id,
-        userId: user.id,
-        insightType,
-        category: category || null,
-        title,
-        description,
-        data: data || null,
-        priority: priority || 0,
+    // Match the legacy UserInsights row shape the page expects: insightType,
+    // category, isRead, isDismissed, createdAt. isRead and isDismissed are
+    // always false from the server — client filters by its own state.
+    return ok({
+      insights: insights.map((i) => ({
+        id: i.id,
+        insightType: i.type,
+        category: i.category || null,
+        title: i.title,
+        description: i.description,
+        data: i.data ? JSON.stringify(i.data) : null,
         isRead: false,
         isDismissed: false,
-        expiresAt: expiresAt || null,
-        createdAt: now,
-      },
-    }));
-
-    return ok({ success: true, id });
+        createdAt: i.createdAt,
+      })),
+    });
   }
 
-  if (method === 'PATCH') {
-    const body = parseBody(event);
-    const { id, isRead, isDismissed } = body;
-
-    if (!id) return err(400, 'id is required');
-
-    const updates: string[] = [];
-    const values: Record<string, any> = { ':userId': user.id };
-
-    if (isRead !== undefined) { updates.push('isRead = :isRead'); values[':isRead'] = isRead; }
-    if (isDismissed !== undefined) { updates.push('isDismissed = :isDismissed'); values[':isDismissed'] = isDismissed; }
-
-    if (updates.length === 0) return err(400, 'No fields to update');
-
-    await db.send(new UpdateCommand({
-      TableName: Resource.UserInsights.name,
-      Key: { id },
-      UpdateExpression: `SET ${updates.join(', ')}`,
-      ConditionExpression: 'userId = :userId',
-      ExpressionAttributeValues: values,
-    }));
-
-    return ok({ success: true });
+  // POST and PATCH used to write/update UserInsights rows. They're no-ops
+  // now — keeping them as 200s so older client builds in flight don't
+  // start failing with 405s after this deploys.
+  if (method === 'POST' || method === 'PATCH') {
+    return ok({ success: true, deprecated: true });
   }
 
   return err(405, 'Method not allowed');

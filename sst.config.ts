@@ -430,7 +430,17 @@ export default $config({
     });
 
     // Insights
-    const insightsLink = [userInsights, jwtSecret];
+    // Insights are computed live from check-ins / streaks / karma / journey
+    // state. UserInsights is no longer read or written; kept linked so the
+    // no-op POST/PATCH paths don't break if anything still references it.
+    const insightsLink = [
+      userInsights,
+      dailyCheckins,
+      streaks,
+      journeys,
+      karmaTransactions,
+      jwtSecret,
+    ];
     api.route("GET /data/insights", {
       handler: "functions/data/insights.handler",
       link: insightsLink,
