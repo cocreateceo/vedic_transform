@@ -243,7 +243,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "breathing-meditation",
     category: "spirit",
     duration: "11 min",
-    url: "https://archive.org/details/Gayatri_Mantra",
+    url: "#",
     audioUrl: "/audio/gayatri-mantra.mp3",
     description:
       "The most sacred mantra in the Vedic tradition, the Gayatri Mantra is a universal prayer for illumination from the Rig Veda (3.62.10). Chanting 'Oṁ Bhūr Bhuvaḥ Svaḥ, Tat Savitur Vareṇyaṁ, Bhargo Devasya Dhīmahi, Dhiyo Yo Naḥ Pracodayāt' invokes the divine light of the Sun to awaken and guide the intellect. Traditionally chanted 108 times at sunrise.",
@@ -255,7 +255,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "sandhya-meditation",
     category: "spirit",
     duration: "10 min",
-    url: "https://archive.org/details/HinduSlokasAndMantras",
+    url: "#",
     audioUrl: "/audio/om-namah-shivaya.mp3",
     description:
       "One of the most powerful mantras in Shaivism, Om Namah Shivaya ('I bow to Shiva') honors the transformative aspect of the divine. Each syllable — Na, Ma, Shi, Va, Ya — corresponds to one of the five elements: earth, water, fire, air, and ether. This chant dissolves the ego and reveals the inner Self.",
@@ -291,7 +291,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "thought-reset",
     category: "mind",
     duration: "8 min",
-    url: "https://archive.org/details/VedicShantiMantra",
+    url: "#",
     audioUrl: "/audio/shanti-mantra.mp3",
     description:
       "The peace invocation chanted at the beginning and end of Vedic teachings. The three repetitions of Shāntiḥ address the three sources of suffering: Ādhibhautika (physical), Ādhidaivika (divine/natural), and Ādhyātmika (spiritual/internal). This mantra calms the mind, stills the emotions, and brings deep peace to the entire being.",
@@ -339,7 +339,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "movement",
     category: "body",
     duration: "11 min",
-    url: "https://archive.org/details/HinduSlokasAndMantras",
+    url: "#",
     audioUrl: "/audio/hanuman-chalisa.mp3",
     description:
       "The opening doha of the 40-verse Hanuman Chalisa, composed by Tulsidas in Awadhi: 'Śrī Guru caraṇa saroja raja, nija mana mukuru sudhāri, baranauṁ Raghubara bimala jasu, jo dāyaku phala chāri' — After cleansing the mirror of my mind with the pollen-dust of the Guru's lotus feet, I profess the pure glory of Sri Raghuvar, which bestows the fourfold fruits of life: dharma, artha, kāma, and mokṣa. The chalisa then invokes Hanuman as the ocean of wisdom and the embodiment of supreme devotion (bhakti), selfless service (seva), and indomitable courage. Traditionally chanted to overcome fear, obstacles, and negative energies — and to build physical and mental fortitude.",
