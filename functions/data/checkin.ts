@@ -2,6 +2,145 @@ import { Resource } from 'sst';
 import { QueryCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, getUserFromEvent, generateId ,parseBody } from '../lib/utils';
 import { resolvePillar } from '../lib/pillars';
+import { BADGES, parseRequirement, type BadgeDef } from '../lib/badges';
+
+const TOTAL_JOURNEY_DAYS = 48;
+
+/**
+ * Evaluate the badge catalog against the user's current state and award any
+ * newly-earned ones. Idempotent — only inserts UserBadges rows for badges the
+ * user doesn't already have. Returns the badges awarded this call so the
+ * client can show a "Badge Unlocked!" toast.
+ *
+ * Runs after the check-in PUT, streak update, and karma transaction so all
+ * those state changes are visible (modulo GSI eventual consistency, which
+ * tends to converge within ms and is self-healing on the next check-in).
+ */
+async function evaluateAndAwardBadges(args: {
+  userId: string;
+  currentStreak: number;
+}): Promise<BadgeDef[]> {
+  const { userId, currentStreak } = args;
+
+  const [userBadgesRes, karmaRes, checkinsRes, journeysRes] = await Promise.all([
+    db.send(new QueryCommand({
+      TableName: Resource.UserBadges.name,
+      IndexName: 'userId-index',
+      KeyConditionExpression: 'userId = :u',
+      ExpressionAttributeValues: { ':u': userId },
+    })),
+    db.send(new QueryCommand({
+      TableName: Resource.KarmaTransactions.name,
+      IndexName: 'userId-index',
+      KeyConditionExpression: 'userId = :u',
+      ExpressionAttributeValues: { ':u': userId },
+    })),
+    db.send(new QueryCommand({
+      TableName: Resource.DailyCheckins.name,
+      IndexName: 'userId-index',
+      KeyConditionExpression: 'userId = :u',
+      ExpressionAttributeValues: { ':u': userId },
+    })),
+    db.send(new QueryCommand({
+      TableName: Resource.Journeys.name,
+      IndexName: 'userId-index',
+      KeyConditionExpression: 'userId = :u',
+      ExpressionAttributeValues: { ':u': userId },
+    })),
+  ]);
+
+  const alreadyEarned = new Set(
+    (userBadgesRes.Items || []).map((b: any) => String(b.badgeId)),
+  );
+
+  let totalKarma = (karmaRes.Items || []).reduce(
+    (sum: number, t: any) => sum + (t.points || 0),
+    0,
+  );
+
+  const totalCheckins = (checkinsRes.Items || []).length;
+
+  const pillarCounts = new Map<string, number>();
+  for (const c of checkinsRes.Items || []) {
+    const slug = c.pillarSlug || String(c.pillarId || '');
+    if (!slug) continue;
+    pillarCounts.set(slug, (pillarCounts.get(slug) || 0) + 1);
+  }
+  const maxPillarCount = Math.max(0, ...pillarCounts.values());
+  const pillarsAt10Plus = Array.from(pillarCounts.values()).filter((c) => c >= 10).length;
+
+  const activeJourney = (journeysRes.Items || []).find((j: any) => j.isActive);
+  let journeyDay = 0;
+  if (activeJourney?.startDate) {
+    journeyDay = Math.min(
+      Math.floor(
+        (Date.now() - new Date(activeJourney.startDate).getTime()) / 86400000,
+      ) + 1,
+      TOTAL_JOURNEY_DAYS,
+    );
+  }
+
+  const newlyEarned: BadgeDef[] = [];
+  const nowIso = new Date().toISOString();
+
+  for (const badge of BADGES) {
+    if (alreadyEarned.has(badge.id)) continue;
+    const r = parseRequirement(badge.requirement);
+    if (!r) continue;
+
+    let earned = false;
+    switch (r.type) {
+      case 'first-checkin': earned = totalCheckins >= r.value; break;
+      case 'streak': earned = currentStreak >= r.value; break;
+      case 'journey': earned = journeyDay >= r.value; break;
+      case 'pillar-mastery': earned = maxPillarCount >= r.value; break;
+      case 'pillar-polymath': earned = pillarsAt10Plus >= r.value; break;
+      case 'karma': earned = totalKarma >= r.value; break;
+    }
+    if (!earned) continue;
+
+    // Best-effort writes — if either Put fails we still report the badge as
+    // earned in-memory so the next check-in's eval can heal.
+    try {
+      await db.send(new PutCommand({
+        TableName: Resource.UserBadges.name,
+        Item: {
+          id: generateId(),
+          userId,
+          badgeId: badge.id,
+          earnedAt: nowIso,
+        },
+      }));
+
+      if (badge.karmaBonus > 0) {
+        await db.send(new PutCommand({
+          TableName: Resource.KarmaTransactions.name,
+          Item: {
+            id: generateId(),
+            userId,
+            points: badge.karmaBonus,
+            reason: `Badge earned: ${badge.name}`,
+            pillarId: null,
+            pillarSlug: null,
+            badgeId: badge.id,
+            createdAt: nowIso,
+          },
+        }));
+        // Bump the running total so a streak/journey badge bonus that crosses
+        // a karma threshold can award the karma badge in the same pass.
+        totalKarma += badge.karmaBonus;
+      }
+    } catch (e) {
+      console.error('Badge award error:', badge.id, e);
+      continue;
+    }
+
+    alreadyEarned.add(badge.id);
+    newlyEarned.push(badge);
+  }
+
+  return newlyEarned;
+}
 
 export async function handler(event: any) {
   if (event.requestContext?.http?.method === 'OPTIONS')
@@ -256,12 +395,31 @@ export async function handler(event: any) {
       console.error('Karma transaction error:', e);
     }
 
+    // Badge evaluation — surface any newly-earned badges so the client can
+    // show a one-shot "Badge Unlocked" toast. Best-effort: a badge eval
+    // failure must not break the underlying check-in response.
+    let newBadges: BadgeDef[] = [];
+    try {
+      newBadges = await evaluateAndAwardBadges({
+        userId: user.id,
+        currentStreak: streakAfter?.currentStreak || 0,
+      });
+    } catch (e) {
+      console.error('Badge evaluation error:', e);
+    }
+
     return ok({
       success: true,
       checkinId: id,
       karmaAwarded: pillar.karmaPointsBase,
       streakEvent,
       streak: streakAfter,
+      newBadges: newBadges.map((b) => ({
+        id: b.id,
+        name: b.name,
+        description: b.description,
+        karmaBonus: b.karmaBonus,
+      })),
     });
   }
 

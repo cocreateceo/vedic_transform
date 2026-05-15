@@ -1,7 +1,8 @@
 import { Resource } from 'sst';
-import { QueryCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
+import { QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, getUserFromEvent } from '../lib/utils';
 import { resolvePillar, TOTAL_PILLARS } from '../lib/pillars';
+import { BADGES } from '../lib/badges';
 
 const TOTAL_JOURNEY_DAYS = 48;
 
@@ -155,25 +156,17 @@ export async function handler(event: any) {
       }
 
       // Badges joined to definitions — shape matches the Progress page's
-      // `userBadges.map(ub => ub.badge?.name)` expectation.
-      let userBadges: Array<{ id: any; badgeId: any; earnedAt: any; badge: any }> = [];
-      if ((badges.Items || []).length > 0) {
-        try {
-          const allBadges = await db.send(new ScanCommand({
-            TableName: Resource.Badges.name,
-          }));
-          const byId = new Map<string, any>();
-          for (const b of allBadges.Items || []) byId.set(String(b.id), b);
-          userBadges = (badges.Items || []).map((ub: any) => ({
-            id: ub.id,
-            badgeId: ub.badgeId,
-            earnedAt: ub.earnedAt,
-            badge: byId.get(String(ub.badgeId)) || { name: 'Unknown', description: '' },
-          }));
-        } catch (e) {
-          console.error('Badge join failed:', e);
-        }
-      }
+      // `userBadges.map(ub => ub.badge?.name)` expectation. Definitions live
+      // in functions/lib/badges.ts now (the DynamoDB Badges table was never
+      // seeded), so the join is just a Map lookup.
+      const badgeById = new Map<string, (typeof BADGES)[number]>();
+      for (const b of BADGES) badgeById.set(b.id, b);
+      const userBadges = (badges.Items || []).map((ub: any) => ({
+        id: ub.id,
+        badgeId: ub.badgeId,
+        earnedAt: ub.earnedAt,
+        badge: badgeById.get(String(ub.badgeId)) || { name: 'Unknown', description: '' },
+      }));
 
       const streakItem =
         (streaks.Items || [])

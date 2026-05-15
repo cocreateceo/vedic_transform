@@ -21,6 +21,10 @@ export default $config({
     // `npx web-push generate-vapid-keys` and set via `sst secret set`.
     const vapidPublicKey = new sst.Secret("VapidPublicKey");
     const vapidPrivateKey = new sst.Secret("VapidPrivateKey");
+    // Google OAuth Client ID. Web-only; no client secret needed for the
+    // Google Identity Services (GIS) flow. Set via:
+    //   sst secret set GoogleClientId <client-id>.apps.googleusercontent.com --stage production
+    const googleClientId = new sst.Secret("GoogleClientId");
 
     // ── DynamoDB Tables ─────────────────────────────────────────────
 
@@ -278,11 +282,21 @@ export default $config({
     });
 
     // ── API Gateway ─────────────────────────────────────────────────
+    // Explicit CORS allowlist. Add any new deployed origin (custom domain,
+    // preview deploy, etc.) here — wildcards leak the API to any site.
+    const allowedOrigins = [
+      "http://localhost:3000",
+      "https://d3l6jfw1mfhlf1.cloudfront.net",
+      "https://10x.vedics.net",
+    ];
+
     const api = new sst.aws.ApiGatewayV2("Api", {
       cors: {
-        allowOrigins: ["*"],
+        allowOrigins: allowedOrigins,
         allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowHeaders: ["Content-Type", "Authorization"],
+        allowCredentials: false,
+        maxAge: "1 day",
       },
     });
 
@@ -297,6 +311,17 @@ export default $config({
     api.route("POST /auth/login", {
       handler: "functions/auth/login.handler",
       link: authLink,
+    });
+
+    api.route("GET /auth/me", {
+      handler: "functions/auth/me.handler",
+      link: authLink,
+    });
+
+    // Google sign-in (GIS credential verification + create/find user)
+    api.route("POST /auth/google", {
+      handler: "functions/auth/google.handler",
+      link: [users, jwtSecret, googleClientId],
     });
 
     // ── Data Routes ─────────────────────────────────────────────────
@@ -323,15 +348,8 @@ export default $config({
       link: journeyLink,
     });
 
-    // Karma Shield purchase (P0-5)
-    const buyShieldLink = [streaks, karmaTransactions, jwtSecret];
-    api.route("POST /data/streaks/buy-shield", {
-      handler: "functions/data/buy-shield.handler",
-      link: buyShieldLink,
-    });
-
     // Checkin
-    const checkinLink = [dailyCheckins, streaks, karmaTransactions, jwtSecret];
+    const checkinLink = [dailyCheckins, streaks, karmaTransactions, userBadges, journeys, jwtSecret];
     api.route("GET /data/checkin", {
       handler: "functions/data/checkin.handler",
       link: checkinLink,
@@ -339,6 +357,13 @@ export default $config({
     api.route("POST /data/checkin", {
       handler: "functions/data/checkin.handler",
       link: checkinLink,
+    });
+
+    // Karma Shield purchase (P0-5)
+    const buyShieldLink = [streaks, karmaTransactions, jwtSecret];
+    api.route("POST /data/streaks/buy-shield", {
+      handler: "functions/data/buy-shield.handler",
+      link: buyShieldLink,
     });
 
     // Goals
@@ -460,7 +485,7 @@ export default $config({
     });
 
     // Achievements
-    const achievementsLink = [badges, userBadges, jwtSecret];
+    const achievementsLink = [userBadges, karmaTransactions, jwtSecret];
     api.route("GET /data/achievements", {
       handler: "functions/data/achievements.handler",
       link: achievementsLink,
@@ -530,19 +555,23 @@ export default $config({
     // crawlable. (main) and (auth) routes keep their "use client" layouts
     // — they still hydrate the same way, just from a real SSR shell now.
     const site = new sst.aws.Nextjs("VedicTransformSite", {
-      // Custom domain. DNS is at GoDaddy (manual records — see deploy
-      // output for the CNAME + ACM validation record to add). Switching
-      // here from the bare CloudFront URL (which churns when the
-      // distribution is replaced) to a stable origin we control.
-      domain: {
-        name: "10x.vedics.net",
-        dns: false,
-      },
+      // NOTE: domain config temporarily disabled — re-enable AFTER
+      // GoDaddy CNAME for 10x.vedics.net is updated to point to the
+      // new distribution. Leaving it on with stale DNS causes the
+      // CloudFront Function to reject all traffic to the bare URL.
+      // domain: {
+      //   name: "10x.vedics.net",
+      //   dns: false,
+      //   cert: "arn:aws:acm:us-east-1:248825820556:certificate/8c0c846b-733a-4b5a-a9a0-e70101fdbb34",
+      // },
       environment: {
         NEXT_PUBLIC_API_URL: api.url,
         // Expose only the *public* VAPID key to the client; the private
         // key stays in the SST secret and is loaded by Lambda at runtime.
         NEXT_PUBLIC_VAPID_PUBLIC_KEY: vapidPublicKey.value,
+        // OAuth client ID is public (it's in the GIS button render) —
+        // safe to embed at build time as a NEXT_PUBLIC_* env var.
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: googleClientId.value,
       },
     });
 
