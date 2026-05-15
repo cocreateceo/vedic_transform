@@ -4,10 +4,15 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
 import { GoalsPageClient } from "./goals-client";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Compass } from "lucide-react";
 
 export default function GoalsPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [hasJourney, setHasJourney] = useState(false);
+  const [startingJourney, setStartingJourney] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -20,6 +25,7 @@ export default function GoalsPage() {
         ]);
 
         const journey = journeyData?.journey;
+        setHasJourney(!!journey);
         const goals = goalsRes?.goals || [];
         const focusPillars = focusRes?.focusPillars || [];
         const checkins = checkinsRes?.checkins || [];
@@ -123,6 +129,58 @@ export default function GoalsPage() {
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
         <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+      </div>
+    );
+  }
+
+  if (!hasJourney) {
+    const handleStartJourney = async () => {
+      setStartingJourney(true);
+      try {
+        await apiFetch("/data/journey", {
+          method: "POST",
+          body: JSON.stringify({ action: "start" }),
+        });
+        // Reload so the full goals data pipeline (incl. currentDay/currentWeek)
+        // rebuilds against the new journey row.
+        window.location.reload();
+      } catch {
+        setStartingJourney(false);
+      }
+    };
+    return (
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Goals</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">
+            Set and track your weekly transformation goals
+          </p>
+        </div>
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="py-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
+                <Compass className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900">
+                  Start your 48-day journey first
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Weekly goals, focus pillars, and progress tracking activate once
+                  your journey has begun.
+                </p>
+                <Button
+                  className="mt-4"
+                  onClick={handleStartJourney}
+                  isLoading={startingJourney}
+                >
+                  Begin my 48-day journey
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

@@ -13,9 +13,24 @@ export async function handler(event: any) {
   const method = event.requestContext?.http?.method;
 
   if (method === 'GET') {
+    const all = event.queryStringParameters?.all === 'true';
     const date = event.queryStringParameters?.date || new Date().toISOString().split('T')[0];
     const pillarIdQuery = event.queryStringParameters?.pillarId;
     const pillarSlugQuery = event.queryStringParameters?.pillarSlug;
+
+    // `?all=true` skips the date filter and returns every check-in for the
+    // user. Goals page uses this to compute per-pillar completion rates
+    // across the whole 48-day journey. Without it, only today's check-ins
+    // came back and rates were always ~0%.
+    if (all) {
+      const result = await db.send(new QueryCommand({
+        TableName: Resource.DailyCheckins.name,
+        IndexName: 'userId-index',
+        KeyConditionExpression: 'userId = :userId',
+        ExpressionAttributeValues: { ':userId': user.id },
+      }));
+      return ok({ checkins: result.Items || [] });
+    }
 
     const result = await db.send(new QueryCommand({
       TableName: Resource.DailyCheckins.name,

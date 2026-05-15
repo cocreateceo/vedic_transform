@@ -24,12 +24,20 @@ interface FocusPillarSelectorProps {
   className?: string;
 }
 
+// Pillar categories are body / mind / spirit (see src/constants/pillars.ts).
+// The previous map keyed on "Mental Health" / "Physical Health" etc., which
+// never matched, so every pillar rendered with the gray default style.
 const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
-  "Mental Health": { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
-  "Physical Health": { bg: "bg-green-50", text: "text-green-700", border: "border-green-200" },
-  "Financial Health": { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-  "Relationship Health": { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
+  body: { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
+  mind: { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
+  spirit: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
   default: { bg: "bg-gray-50", text: "text-gray-700", border: "border-gray-200" },
+};
+
+const categoryLabels: Record<string, string> = {
+  body: "Body",
+  mind: "Mind",
+  spirit: "Spirit",
 };
 
 export function FocusPillarSelector({
@@ -115,10 +123,11 @@ export function FocusPillarSelector({
             <div className="space-y-4">
               {Object.entries(groupedPillars).map(([category, catPillars]) => {
                 const colors = categoryColors[category] || categoryColors.default;
+                const label = categoryLabels[category] || category;
 
                 return (
                   <div key={category}>
-                    <h4 className="text-xs font-medium text-gray-500 mb-2">{category}</h4>
+                    <h4 className="text-xs font-medium text-gray-500 mb-2">{label}</h4>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                       {catPillars.map((pillar) => {
                         const isSelected = selected.includes(pillar.id.toString());
@@ -205,7 +214,9 @@ export function FocusPillarSelector({
                         <p className={cn("text-sm font-medium", colors.text)}>
                           #{index + 1} {pillar.name}
                         </p>
-                        <p className="text-xs text-gray-500 truncate">{pillar.category}</p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {categoryLabels[pillar.category] || pillar.category}
+                        </p>
                       </div>
                       {pillar.completionRate !== undefined && (
                         <div className="text-right">

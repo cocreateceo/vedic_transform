@@ -24,9 +24,25 @@ export async function handler(event: any) {
 
   if (method === 'POST') {
     const body = parseBody(event);
-    const { pillars } = body; // Array of { pillarId, priority, reason }
+    // Two request shapes are accepted:
+    //   simple: { pillarIds: ["1","3","7"] }   — Goals UI uses this
+    //   full:   { pillars: [{ pillarId, priority, reason }, ...] }
+    // The simple form synthesizes priority from array order so the
+    // selector doesn't need to know about it.
+    let pillars: Array<{ pillarId: any; priority: number; reason?: string | null }>;
+    if (Array.isArray(body.pillarIds)) {
+      pillars = body.pillarIds.map((pid: any, i: number) => ({
+        pillarId: pid,
+        priority: i + 1,
+        reason: null,
+      }));
+    } else if (Array.isArray(body.pillars)) {
+      pillars = body.pillars;
+    } else {
+      return err(400, 'Provide pillarIds or pillars');
+    }
 
-    if (!Array.isArray(pillars) || pillars.length === 0 || pillars.length > 3) {
+    if (pillars.length === 0 || pillars.length > 3) {
       return err(400, 'Provide 1-3 focus pillars');
     }
 
@@ -49,7 +65,7 @@ export async function handler(event: any) {
 
     // Create new focus pillars
     const now = new Date().toISOString();
-    const created = [];
+    const created: any[] = [];
 
     for (const p of pillars) {
       const id = generateId();

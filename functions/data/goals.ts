@@ -39,30 +39,38 @@ export async function handler(event: any) {
     const now = new Date().toISOString();
     const id = generateId();
 
+    // Build the item once so we can both persist it and return it. The
+    // Goals page does an optimistic insert from this response — returning
+    // just `{ goalId }` made the new row invisible until a hard reload.
+    const item = {
+      id,
+      userId: user.id,
+      weekNumber,
+      title,
+      description: description || null,
+      pillarId: pillarId || null,
+      isCompleted: false,
+      completedAt: null,
+      createdAt: now,
+      updatedAt: now,
+    };
+
     await db.send(new PutCommand({
       TableName: Resource.GoalTasks.name,
-      Item: {
-        id,
-        userId: user.id,
-        weekNumber,
-        title,
-        description: description || null,
-        pillarId: pillarId || null,
-        isCompleted: false,
-        completedAt: null,
-        createdAt: now,
-        updatedAt: now,
-      },
+      Item: item,
     }));
 
-    return ok({ success: true, goalId: id });
+    return ok({ success: true, goalId: id, goal: item });
   }
 
   if (method === 'PATCH') {
     const body = parseBody(event);
-    const { id, isCompleted, title, description } = body;
+    const { isCompleted, title, description } = body;
+    // The Goals UI sends `goalId`; the original API only accepted `id`.
+    // Accept both so callers don't silently 400 when they drift.
+    const goalId = body.id || body.goalId;
 
-    if (!id) return err(400, 'id is required');
+    if (!goalId) return err(400, 'id or goalId is required');
 
     const updates: string[] = [];
     const values: Record<string, any> = {};
@@ -81,7 +89,7 @@ export async function handler(event: any) {
 
     await db.send(new UpdateCommand({
       TableName: Resource.GoalTasks.name,
-      Key: { id },
+      Key: { id: goalId },
       UpdateExpression: `SET ${updates.join(', ')}`,
       ConditionExpression: 'userId = :userId',
       ExpressionAttributeValues: { ...values, ':userId': user.id },
