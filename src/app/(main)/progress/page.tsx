@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
-import { Award } from "lucide-react";
+import { Award, Compass } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   PillarRadarChart,
   WeeklyTrendChart,
@@ -16,6 +17,7 @@ import {
 export default function ProgressPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [startingJourney, setStartingJourney] = useState(false);
 
   useEffect(() => {
     apiFetch("/data/reports")
@@ -23,6 +25,19 @@ export default function ProgressPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  const handleStartJourney = async () => {
+    setStartingJourney(true);
+    try {
+      await apiFetch("/data/journey", {
+        method: "POST",
+        body: JSON.stringify({ action: "start" }),
+      });
+      window.location.reload();
+    } catch {
+      setStartingJourney(false);
+    }
+  };
 
   if (loading || !data) {
     return (
@@ -38,6 +53,7 @@ export default function ProgressPage() {
   }
 
   const {
+    journey = null,
     journeyDay = 0,
     streak = { currentStreak: 0, longestStreak: 0 },
     totalKarma = 0,
@@ -46,24 +62,64 @@ export default function ProgressPage() {
     calendarData = [],
     insights = [],
     userBadges = [],
+    previousWeekAverage = 0,
   } = data;
 
-  // The /data/reports API returns pillarStats as Record<pillarId, count>;
-  // the chart components expect [{ name, color, completion: percent }].
-  // Convert in-place using the PILLARS constants, scaling completion as
-  // a percentage of the largest pillar's count (best-effort visualisation
-  // since the API doesn't yet send per-pillar totals).
+  if (!journey) {
+    return (
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Your Progress</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">
+            Track your transformation journey
+          </p>
+        </div>
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="py-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
+                <Compass className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900">
+                  Start your 48-day journey first
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Charts, heatmaps, and insights activate once your transformation
+                  journey has begun.
+                </p>
+                <Button
+                  className="mt-4"
+                  onClick={handleStartJourney}
+                  isLoading={startingJourney}
+                >
+                  Begin my 48-day journey
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Pillar completion = days the pillar was checked in ÷ days of journey
+  // elapsed. The old math divided by the most-done pillar's count, so the
+  // top pillar always hit 100% even when the user had only checked it in once.
+  const denom = Math.max(1, journeyDay);
   const pillarStats =
     rawPillarStats && !Array.isArray(rawPillarStats)
       ? (() => {
           const counts = rawPillarStats as Record<string, number>;
-          const maxCount = Math.max(1, ...Object.values(counts));
           return PILLARS.map((p) => ({
             name: p.name,
             shortName: p.name.split(/[\s&]+/)[0],
             category: p.category,
             color: p.color,
-            completion: Math.round(((counts[String(p.id)] || 0) / maxCount) * 100),
+            completion: Math.min(
+              100,
+              Math.round(((counts[String(p.id)] || 0) / denom) * 100),
+            ),
           }));
         })()
       : (rawPillarStats as {
@@ -75,14 +131,23 @@ export default function ProgressPage() {
         }[]) || [];
 
   const currentWeek = Math.max(1, Math.ceil(journeyDay / 7));
-  const todayCompleted = pillarStats.filter((p) => p.completion > 0).length;
-  // No weekly-trend / consistency data from the API yet — fall back to
-  // simple proxies so the page renders instead of crashing.
-  const consistencyScore = Math.round(
-    pillarStats.reduce((sum, p) => sum + p.completion, 0) /
-      Math.max(1, pillarStats.length),
-  );
-  const previousWeekAverage = 0;
+  // Today's row is always the last entry in weeklyTrendData (API builds it
+  // ending today). Falls back to derived state if the field is missing on
+  // an older API response.
+  const todayRow = weeklyTrendData[weeklyTrendData.length - 1];
+  const todayCompleted: number =
+    todayRow?.pillarsCompleted ?? pillarStats.filter((p) => p.completion > 0).length;
+  // Consistency score = avg daily completion % over the current week.
+  // The old derivation averaged the broken pillarStats — garbage in.
+  const consistencyScore =
+    weeklyTrendData.length > 0
+      ? Math.round(
+          weeklyTrendData.reduce(
+            (sum: number, d: { percentage: number }) => sum + d.percentage,
+            0,
+          ) / weeklyTrendData.length,
+        )
+      : 0;
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
