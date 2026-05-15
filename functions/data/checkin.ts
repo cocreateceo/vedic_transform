@@ -68,6 +68,32 @@ export async function handler(event: any) {
 
     const now = new Date();
     const checkinDate = now.toISOString().split('T')[0];
+
+    // Idempotency — silently dedupe same-pillar, same-day check-ins so a
+    // double-click / retry can't farm karma. Karma POST is non-atomic with
+    // the checkin PUT, so the check has to live here, not just on the client.
+    const existing = await db.send(new QueryCommand({
+      TableName: Resource.DailyCheckins.name,
+      IndexName: 'userId-index',
+      KeyConditionExpression: 'userId = :userId',
+      FilterExpression: 'checkinDate = :date AND pillarSlug = :slug',
+      ExpressionAttributeValues: {
+        ':userId': user.id,
+        ':date': checkinDate,
+        ':slug': pillar.slug,
+      },
+    }));
+    if ((existing.Items || []).length > 0) {
+      return ok({
+        success: true,
+        checkinId: existing.Items![0].id,
+        karmaAwarded: 0,
+        alreadyCheckedIn: true,
+        streakEvent: null,
+        streak: null,
+      });
+    }
+
     const id = generateId();
 
     await db.send(new PutCommand({

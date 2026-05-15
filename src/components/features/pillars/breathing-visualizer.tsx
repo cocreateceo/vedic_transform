@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, RotateCcw } from "lucide-react";
+import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 interface BreathingVisualizerProps {
@@ -25,6 +25,44 @@ export function BreathingVisualizer({
   const [cycleCount, setCycleCount] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [phaseProgress, setPhaseProgress] = useState(0);
+  const [muted, setMuted] = useState(false);
+
+  // Lazy-init audio so we don't burn an AudioContext on every page render
+  // and to satisfy iOS Safari's "first audio after user gesture" rule —
+  // first tone fires from Start, which is a click.
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const playTone = useCallback((kind: "in" | "out") => {
+    if (muted) return;
+    try {
+      if (!audioCtxRef.current) {
+        const Ctx = window.AudioContext ||
+          (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        if (!Ctx) return;
+        audioCtxRef.current = new Ctx();
+      }
+      const ctx = audioCtxRef.current;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      // Singing-bowl-ish: A4 rising note for inhale, lower E4 falling note for exhale.
+      osc.frequency.value = kind === "in" ? 440 : 330;
+      osc.type = "sine";
+      const t = ctx.currentTime;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.12, t + 0.05);
+      gain.gain.linearRampToValueAtTime(0, t + 0.6);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.7);
+    } catch {}
+  }, [muted]);
+
+  // Fire a tone whenever the breath phase transitions. setPhase to the same
+  // value is a React no-op, so this effect runs once per inhale↔exhale flip.
+  useEffect(() => {
+    if (phase === "inhale") playTone("in");
+    else if (phase === "exhale") playTone("out");
+  }, [phase, playTone]);
 
   const cycleDuration = inhaleDuration + exhaleDuration;
   const totalSeconds = totalDuration * 60;
@@ -215,6 +253,7 @@ export function BreathingVisualizer({
           size="lg"
           onClick={resetSession}
           disabled={elapsedTime === 0}
+          aria-label="Reset session"
         >
           <RotateCcw className="w-5 h-5" />
         </Button>
@@ -242,6 +281,15 @@ export function BreathingVisualizer({
               {elapsedTime > 0 ? "Resume" : "Start"}
             </>
           )}
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => setMuted((m) => !m)}
+          aria-label={muted ? "Unmute breath tones" : "Mute breath tones"}
+          title={muted ? "Unmute breath tones" : "Mute breath tones"}
+        >
+          {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
         </Button>
       </div>
 
