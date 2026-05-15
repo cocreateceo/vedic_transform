@@ -549,6 +549,16 @@ export default $config({
       job: { handler: "functions/crons/morning-push.handler", link: cronLink },
     });
 
+    new sst.aws.Cron("EveningPush", {
+      schedule: "rate(15 minutes)",
+      job: { handler: "functions/crons/evening-push.handler", link: cronLink },
+    });
+
+    new sst.aws.Cron("SandhyaPush", {
+      schedule: "rate(15 minutes)",
+      job: { handler: "functions/crons/sandhya-push.handler", link: cronLink },
+    });
+
     new sst.aws.Cron("StreakSavePush", {
       schedule: "rate(15 minutes)",
       job: { handler: "functions/crons/streak-save-push.handler", link: cronLink },

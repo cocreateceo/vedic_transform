@@ -153,52 +153,71 @@ export function ReminderSettingsForm({
     }
   };
 
+  // Static class map so Tailwind JIT can extract the literal class names
+  // at build time. Dynamic interpolation like `bg-${color}-100` is purged,
+  // which is why every Toggle badge previously rendered as gray.
+  const colorClasses: Record<string, { bg: string; text: string }> = {
+    amber: { bg: "bg-amber-100", text: "text-amber-600" },
+    indigo: { bg: "bg-indigo-100", text: "text-indigo-600" },
+    orange: { bg: "bg-orange-100", text: "text-orange-600" },
+    red: { bg: "bg-red-100", text: "text-red-600" },
+    blue: { bg: "bg-blue-100", text: "text-blue-600" },
+    gray: { bg: "bg-gray-100", text: "text-gray-600" },
+  };
+
   const Toggle = ({
     enabled,
     onChange,
     label,
     icon: Icon,
     color,
+    disabled = false,
   }: {
     enabled: boolean;
     onChange: (value: boolean) => void;
     label: string;
     icon: typeof Bell;
     color: string;
-  }) => (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div
+    disabled?: boolean;
+  }) => {
+    const palette = colorClasses[color] || colorClasses.gray;
+    return (
+      <div className={cn("flex items-center justify-between", disabled && "opacity-60")}>
+        <div className="flex items-center gap-3">
+          <div
+            className={cn(
+              "w-8 h-8 rounded-lg flex items-center justify-center",
+              enabled && !disabled ? palette.bg : "bg-gray-100"
+            )}
+          >
+            <Icon
+              className={cn(
+                "w-4 h-4",
+                enabled && !disabled ? palette.text : "text-gray-400"
+              )}
+            />
+          </div>
+          <span className="text-sm font-medium text-gray-900">{label}</span>
+        </div>
+        <button
+          onClick={() => !disabled && onChange(!enabled)}
+          disabled={disabled}
           className={cn(
-            "w-8 h-8 rounded-lg flex items-center justify-center",
-            enabled ? `bg-${color}-100` : "bg-gray-100"
+            "relative w-11 h-6 rounded-full transition-colors",
+            enabled && !disabled ? "bg-amber-500" : "bg-gray-200",
+            disabled && "cursor-not-allowed"
           )}
         >
-          <Icon
+          <span
             className={cn(
-              "w-4 h-4",
-              enabled ? `text-${color}-600` : "text-gray-400"
+              "absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform shadow-sm",
+              enabled && "translate-x-5"
             )}
           />
-        </div>
-        <span className="text-sm font-medium text-gray-900">{label}</span>
+        </button>
       </div>
-      <button
-        onClick={() => onChange(!enabled)}
-        className={cn(
-          "relative w-11 h-6 rounded-full transition-colors",
-          enabled ? "bg-amber-500" : "bg-gray-200"
-        )}
-      >
-        <span
-          className={cn(
-            "absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform shadow-sm",
-            enabled && "translate-x-5"
-          )}
-        />
-      </button>
-    </div>
-  );
+    );
+  };
 
   return (
     <Card className={className}>
@@ -361,51 +380,45 @@ export function ReminderSettingsForm({
           )}
         </div>
 
-        {/* Email Digests */}
+        {/* Email Digests — gated behind "Coming soon" until the email
+            dispatcher exists. Toggles are visible as a roadmap signal but
+            disabled so we stop persisting settings that go nowhere. */}
         <div className="space-y-3 pt-4 border-t">
           <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
             <Mail className="w-4 h-4 text-blue-500" />
             Email Digests
+            <span className="ml-1 px-1.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-medium text-gray-500 uppercase tracking-wider">
+              Coming soon
+            </span>
           </h3>
           <Toggle
-            enabled={settings.dailyDigestEnabled}
-            onChange={(v) => updateSetting("dailyDigestEnabled", v)}
+            enabled={false}
+            onChange={() => {}}
             label="Daily progress digest"
             icon={Mail}
             color="blue"
+            disabled
           />
           <Toggle
-            enabled={settings.weeklyDigestEnabled}
-            onChange={(v) => updateSetting("weeklyDigestEnabled", v)}
+            enabled={false}
+            onChange={() => {}}
             label="Weekly summary email"
             icon={Mail}
             color="blue"
+            disabled
           />
-          {settings.weeklyDigestEnabled && (
-            <div className="ml-11">
-              <label className="text-xs text-gray-500">Send on</label>
-              <select
-                value={settings.weeklyDigestDay}
-                onChange={(e) => updateSetting("weeklyDigestDay", e.target.value)}
-                className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
-              >
-                {dayOptions.map((d) => (
-                  <option key={d.value} value={d.value}>{d.label}</option>
-                ))}
-              </select>
-            </div>
-          )}
         </div>
 
         {/* Notification Channels */}
         <div className="space-y-3 pt-4 border-t">
           <h3 className="text-sm font-semibold text-gray-700">Notification Channels</h3>
           <Toggle
-            enabled={settings.emailNotifications}
-            onChange={(v) => updateSetting("emailNotifications", v)}
-            label="Email notifications"
+            enabled={false}
+            onChange={() => {}}
+            label="Email notifications (coming soon)"
             icon={Mail}
             color="gray"
+            disabled
           />
           <Toggle
             enabled={settings.pushNotifications}
