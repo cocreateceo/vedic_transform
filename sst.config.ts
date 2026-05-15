@@ -406,6 +406,14 @@ export default $config({
       handler: "functions/data/journal.handler",
       link: journalLink,
     });
+    api.route("PATCH /data/journal", {
+      handler: "functions/data/journal.handler",
+      link: journalLink,
+    });
+    api.route("DELETE /data/journal", {
+      handler: "functions/data/journal.handler",
+      link: journalLink,
+    });
 
     // Mood
     const moodLink = [moodLogs, jwtSecret];
