@@ -1,0 +1,14 @@
+# Anything matched here is excluded from the project archive uploaded
+# to EAS Build. node_modules in particular adds ~200MB and is fully
+# reinstalled in the build worker, so there's no reason to ship it.
+
+node_modules/
+.expo/
+dist/
+android/
+ios/
+*.log
+.env*
+
+# Test artifacts
+scripts/walkthrough-out/

@@ -23,7 +23,9 @@
         "backgroundColor": "#FF9933"
       },
       "package": "com.vedictransform.app",
-      "permissions": []
+      "permissions": [
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -45,7 +47,11 @@
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "5105fa20-0390-45c6-b2fd-a2ccb554f450"
       }
-    }
+    },
+    "owner": "vinothkumarcocreate"
   }
 }
