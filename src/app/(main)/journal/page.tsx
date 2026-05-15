@@ -4,7 +4,18 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Heart, Sparkles, Calendar } from "lucide-react";
+import { BookOpen, Heart, Sparkles, Calendar, Check, Trash2, RotateCcw } from "lucide-react";
+
+// Best-effort pillar check-in after a journal save. Same-day server dedupe
+// makes this safe to call repeatedly.
+async function creditPillar(slug: string) {
+  try {
+    await apiFetch("/data/checkin", {
+      method: "POST",
+      body: JSON.stringify({ pillarSlug: slug }),
+    });
+  } catch {}
+}
 
 export default function JournalPage() {
   const [gratitudeEntries, setGratitudeEntries] = useState<any[]>([]);
@@ -37,16 +48,22 @@ export default function JournalPage() {
     e.preventDefault();
     setSavingGratitude(true);
     const formData = new FormData(e.currentTarget);
+    const g1 = (formData.get("gratitude_1") || "").toString().trim();
+    const g2 = (formData.get("gratitude_2") || "").toString().trim();
+    const g3 = (formData.get("gratitude_3") || "").toString().trim();
     try {
       await apiFetch("/data/journal", {
         method: "POST",
         body: JSON.stringify({
-          action: "gratitude",
-          gratitude1: formData.get("gratitude_1"),
-          gratitude2: formData.get("gratitude_2"),
-          gratitude3: formData.get("gratitude_3"),
+          type: "gratitude",
+          gratitude1: g1 || null,
+          gratitude2: g2 || null,
+          gratitude3: g3 || null,
         }),
       });
+      // Credit the pillar — Gratitude Practice ("kritajnata") — when at least
+      // one entry is actually filled in.
+      if (g1 || g2 || g3) await creditPillar("gratitude");
       await fetchData();
     } catch {
     } finally {
@@ -58,8 +75,8 @@ export default function JournalPage() {
     e.preventDefault();
     setSavingIntention(true);
     const formData = new FormData(e.currentTarget);
-    const intentionText = formData.get("intention") as string;
-    if (!intentionText?.trim()) {
+    const intentionText = ((formData.get("intention") as string) || "").trim();
+    if (!intentionText) {
       setSavingIntention(false);
       return;
     }
@@ -67,10 +84,12 @@ export default function JournalPage() {
       await apiFetch("/data/journal", {
         method: "POST",
         body: JSON.stringify({
-          action: "intention",
+          type: "intention",
           intentionText,
         }),
       });
+      // Credit the "Thoughts & Intention Reset" pillar.
+      await creditPillar("thoughts-intention");
       await fetchData();
     } catch {
     } finally {
@@ -91,7 +110,7 @@ export default function JournalPage() {
       await apiFetch("/data/journal", {
         method: "POST",
         body: JSON.stringify({
-          action: "manifestation",
+          type: "manifestation",
           title,
           description: formData.get("description") || "",
         }),
@@ -101,6 +120,40 @@ export default function JournalPage() {
     } catch {
     } finally {
       setSavingManifestation(false);
+    }
+  };
+
+  const handleToggleAchieved = async (id: string, currentlyAchieved: boolean) => {
+    // Optimistic flip so the badge updates immediately.
+    setManifestations((prev) =>
+      prev.map((m: any) => (m.id === id ? { ...m, isAchieved: !currentlyAchieved } : m)),
+    );
+    try {
+      await apiFetch("/data/journal", {
+        method: "PATCH",
+        body: JSON.stringify({
+          type: "manifestation",
+          id,
+          isAchieved: !currentlyAchieved,
+        }),
+      });
+    } catch {
+      // Revert on failure so the UI doesn't drift from the server.
+      setManifestations((prev) =>
+        prev.map((m: any) => (m.id === id ? { ...m, isAchieved: currentlyAchieved } : m)),
+      );
+    }
+  };
+
+  const handleDeleteManifestation = async (id: string) => {
+    const snapshot = manifestations;
+    setManifestations((prev) => prev.filter((m: any) => m.id !== id));
+    try {
+      await apiFetch(`/data/journal?id=${encodeURIComponent(id)}&type=manifestation`, {
+        method: "DELETE",
+      });
+    } catch {
+      setManifestations(snapshot);
     }
   };
 
@@ -136,7 +189,11 @@ export default function JournalPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSaveGratitude} className="space-y-3">
+            <form
+              key={todayGratitude?.id ?? "gratitude-empty"}
+              onSubmit={handleSaveGratitude}
+              className="space-y-3"
+            >
               {[1, 2, 3].map((num) => (
                 <div key={num}>
                   <label className="block text-xs text-gray-500 mb-1">
@@ -169,7 +226,11 @@ export default function JournalPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSetIntention} className="space-y-3">
+            <form
+              key={todayIntention?.id ?? "intention-empty"}
+              onSubmit={handleSetIntention}
+              className="space-y-3"
+            >
               <textarea
                 name="intention"
                 placeholder="My intention for today is..."
@@ -220,10 +281,12 @@ export default function JournalPage() {
                       : "bg-amber-50 border-amber-200"
                   }`}
                 >
-                  <div className="flex items-start justify-between">
-                    <h4 className="font-medium text-gray-900">{m.title}</h4>
+                  <div className="flex items-start justify-between gap-2">
+                    <h4 className="font-medium text-gray-900 flex-1 min-w-0 break-words">
+                      {m.title}
+                    </h4>
                     {m.isAchieved && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-green-500 text-white">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-green-500 text-white flex-shrink-0">
                         Achieved!
                       </span>
                     )}
@@ -231,6 +294,38 @@ export default function JournalPage() {
                   {m.description && (
                     <p className="text-sm text-gray-600 mt-1">{m.description}</p>
                   )}
+                  <div className="mt-3 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleAchieved(m.id, !!m.isAchieved)}
+                      className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${
+                        m.isAchieved
+                          ? "bg-white text-green-700 hover:bg-green-100 border border-green-200"
+                          : "bg-green-500 text-white hover:bg-green-600"
+                      }`}
+                    >
+                      {m.isAchieved ? (
+                        <>
+                          <RotateCcw className="w-3 h-3" />
+                          Undo
+                        </>
+                      ) : (
+                        <>
+                          <Check className="w-3 h-3" />
+                          Mark achieved
+                        </>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteManifestation(m.id)}
+                      aria-label="Delete manifestation"
+                      title="Delete"
+                      className="p-1.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
