@@ -9,7 +9,9 @@ import { colors } from "@/theme";
 
 export default function RootLayout() {
   const auth = useAuthProvider();
-  const segments = useSegments();
+  // Cast through string[] — useSegments() under typed routes returns a
+  // narrow tuple union we don't need to discriminate against.
+  const segments = useSegments() as unknown as string[];
   const router = useRouter();
 
   // Auth gate. Mirrors the web's (main) layout: redirect to /(auth)/login
