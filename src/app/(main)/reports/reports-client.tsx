@@ -65,29 +65,19 @@ export function ReportsPageClient({
   };
 
   const handlePrintCertificate = () => {
-    if (certificateRef.current) {
-      const printContent = certificateRef.current.innerHTML;
-      const printWindow = window.open("", "_blank");
-      if (printWindow) {
-        printWindow.document.write(`
-          <html>
-            <head>
-              <title>10X Vedic - Journey Certificate</title>
-              <style>
-                body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; }
-                @media print { body { padding: 0; } }
-              </style>
-              <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet">
-            </head>
-            <body>
-              ${printContent}
-            </body>
-          </html>
-        `);
-        printWindow.document.close();
-        printWindow.print();
-      }
-    }
+    // Use a print-scoped stylesheet on the *current* document rather than
+    // re-rendering the certificate in a new window with an outdated Tailwind
+    // CDN. The class on <body> + the @media print rules below hide everything
+    // except the .cert-print-area wrapper, so all the certificate's existing
+    // Tailwind classes keep rendering correctly.
+    if (typeof window === "undefined") return;
+    document.body.classList.add("printing-cert");
+    const cleanup = () => {
+      document.body.classList.remove("printing-cert");
+      window.removeEventListener("afterprint", cleanup);
+    };
+    window.addEventListener("afterprint", cleanup);
+    window.print();
   };
 
   if (!hasJourney) {
@@ -109,6 +99,22 @@ export function ReportsPageClient({
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      {/* Print-only stylesheet: when body has the printing-cert class, hide
+          everything except elements inside .cert-print-area. Classic print
+          pattern so the certificate's existing Tailwind classes render. */}
+      <style>{`
+        @media print {
+          body.printing-cert * { visibility: hidden; }
+          body.printing-cert .cert-print-area,
+          body.printing-cert .cert-print-area * { visibility: visible; }
+          body.printing-cert .cert-print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+          }
+        }
+      `}</style>
       {/* Page Header */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Reports</h1>
@@ -186,7 +192,7 @@ export function ReportsPageClient({
               </Button>
             </div>
 
-            <div ref={certificateRef}>
+            <div ref={certificateRef} className="cert-print-area">
               <JourneyCertificate
                 userName={userName}
                 startDate={journeyStartDate}

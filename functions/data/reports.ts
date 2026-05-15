@@ -184,9 +184,80 @@ export async function handler(event: any) {
         totalKarma,
       });
 
+      // Reports page exposes a different shape than the Progress page —
+      // currentDay/currentWeek/completionRate/journeyStartDate. Compute
+      // them here rather than making the client re-derive.
+      const currentDay = Math.min(Math.max(0, journeyDay), TOTAL_JOURNEY_DAYS);
+      const currentWeek = Math.max(1, Math.ceil(Math.max(1, currentDay) / 7));
+      // Use the weekly trend average as the headline completion rate —
+      // matches the Progress page's "Consistency Score" and is intuitive.
+      const completionRate =
+        weeklyTrendData.length > 0
+          ? Math.round(
+              weeklyTrendData.reduce((s, d) => s + d.percentage, 0) /
+                weeklyTrendData.length,
+            )
+          : 0;
+      const journeyStartDate = activeJourney?.startDate || null;
+
+      // ── CSV export branch ──────────────────────────────────────────
+      // Reports page's "Download CSV" hits /data/reports?format=csv.
+      // Build a flat row-per-checkin CSV with a small summary header so
+      // a user (or spreadsheet app) can immediately make sense of it.
+      const format = event.queryStringParameters?.format;
+      if (format === 'csv') {
+        const lines: string[] = [];
+        const esc = (s: string | number | null | undefined) => {
+          const v = s == null ? '' : String(s);
+          return /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+        };
+
+        lines.push('# 10X Vedic Transform — Journey Report');
+        lines.push(`# Generated: ${now.toISOString()}`);
+        lines.push(`# Current Day: ${currentDay} of ${TOTAL_JOURNEY_DAYS}`);
+        lines.push(`# Current Week: ${currentWeek}`);
+        lines.push(`# Total Karma: ${totalKarma}`);
+        lines.push(`# Current Streak: ${streakItem?.currentStreak || 0}`);
+        lines.push(`# Longest Streak: ${streakItem?.longestStreak || 0}`);
+        lines.push(`# Total Check-ins: ${checkins.Items?.length || 0}`);
+        lines.push(`# Completion Rate: ${completionRate}%`);
+        lines.push('');
+        lines.push('date,pillar_slug,pillar_id,duration_minutes,mood_before,mood_after,notes');
+
+        const sortedCheckins = [...(checkins.Items || [])].sort((a: any, b: any) =>
+          (a.checkinDate || '').localeCompare(b.checkinDate || ''),
+        );
+        for (const c of sortedCheckins) {
+          lines.push(
+            [
+              esc(c.checkinDate),
+              esc(c.pillarSlug),
+              esc(c.pillarId),
+              esc(c.durationMinutes),
+              esc(c.moodBefore),
+              esc(c.moodAfter),
+              esc(c.notes),
+            ].join(','),
+          );
+        }
+
+        return {
+          statusCode: 200,
+          headers: {
+            'Content-Type': 'text/csv; charset=utf-8',
+            'Content-Disposition': `attachment; filename="vedic-journey-${todayStr}.csv"`,
+          },
+          body: lines.join('\n'),
+        };
+      }
+
       return ok({
         journey: activeJourney || null,
         journeyDay,
+        currentDay,
+        currentWeek,
+        completionRate,
+        journeyStartDate,
         totalCheckins: checkins.Items?.length || 0,
         totalKarma,
         todayEarned,
