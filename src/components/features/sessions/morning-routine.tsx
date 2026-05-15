@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
@@ -12,8 +12,11 @@ import {
   Eye,
   Heart,
   Target,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { apiFetch } from "@/lib/api";
 
 const STEPS = [
   { name: "Wake Up", icon: Sparkles },
@@ -24,10 +27,14 @@ const STEPS = [
   { name: "Manifestation", icon: Target },
 ];
 
+const SESSION_PILLAR = "morning-initiation";
+
 export function MorningRoutine() {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [isComplete, setIsComplete] = useState(false);
+  const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
   // Breathwork state
   const [breathworkActive, setBreathworkActive] = useState(false);
@@ -43,13 +50,45 @@ export function MorningRoutine() {
   // Manifestation timer state
   const [manifestActive, setManifestActive] = useState(false);
   const [manifestElapsed, setManifestElapsed] = useState(0);
+  const [manifestationText, setManifestationText] = useState("");
   const manifestDuration = 2 * 60; // 2 minutes
 
   // Gratitude inputs
   const [gratitude, setGratitude] = useState(["", "", ""]);
+  const [gratitudeSaving, setGratitudeSaving] = useState(false);
 
   // Hydrate check
   const [hydrated, setHydrated] = useState(false);
+
+  // Audio for breathwork — same procedural tones as the standalone
+  // Breathing tab so the in-routine experience matches.
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const checkinFiredRef = useRef(false);
+
+  const playBreathTone = useCallback(
+    (kind: "inhale" | "exhale") => {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtxRef.current) audioCtxRef.current = new AudioContext();
+        const ctx = audioCtxRef.current;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = "sine";
+        const t = ctx.currentTime;
+        const start = kind === "inhale" ? 220 : 440;
+        const end = kind === "inhale" ? 440 : 220;
+        osc.frequency.setValueAtTime(start, t);
+        osc.frequency.exponentialRampToValueAtTime(end, t + 0.6);
+        gain.gain.setValueAtTime(0.18, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+        osc.start(t);
+        osc.stop(t + 0.7);
+      } catch {}
+    },
+    [soundEnabled],
+  );
 
   const markComplete = useCallback(
     (step: number) => {
@@ -61,20 +100,29 @@ export function MorningRoutine() {
   // Breathwork timer
   useEffect(() => {
     if (!breathworkActive) return;
+    // Play the first inhale tone immediately so the user doesn't wait 4s
+    // wondering if it's broken.
+    playBreathTone("inhale");
+
     const interval = setInterval(() => {
       setBreathworkElapsed((prev) => {
-        if (prev + 0.1 >= breathworkDuration) {
+        const next = prev + 0.1;
+        if (next >= breathworkDuration) {
           setBreathworkActive(false);
           markComplete(2);
           return breathworkDuration;
         }
-        const cyclePos = (prev + 0.1) % 10;
-        setBreathPhase(cyclePos < 4 ? "inhale" : "exhale");
-        return prev + 0.1;
+        const cyclePos = next % 10;
+        const nextPhase: "inhale" | "exhale" = cyclePos < 4 ? "inhale" : "exhale";
+        setBreathPhase((prevPhase) => {
+          if (prevPhase !== nextPhase) playBreathTone(nextPhase);
+          return nextPhase;
+        });
+        return next;
       });
     }, 100);
     return () => clearInterval(interval);
-  }, [breathworkActive, breathworkDuration, markComplete]);
+  }, [breathworkActive, breathworkDuration, markComplete, playBreathTone]);
 
   // Awareness timer
   useEffect(() => {
@@ -108,6 +156,54 @@ export function MorningRoutine() {
     return () => clearInterval(interval);
   }, [manifestActive, manifestDuration, markComplete]);
 
+  // Persist + credit when the user finishes the entire routine. Fires once;
+  // re-running today is deduped server-side.
+  useEffect(() => {
+    if (!isComplete || checkinFiredRef.current) return;
+    checkinFiredRef.current = true;
+
+    // 1) Persist gratitude (if anything was typed) and manifestation
+    //    intention (if anything was typed). Best-effort — failures here
+    //    must not block the karma check-in.
+    const tasks: Promise<unknown>[] = [];
+    if (gratitude.some((g) => g.trim())) {
+      tasks.push(
+        apiFetch("/data/journal", {
+          method: "POST",
+          body: JSON.stringify({
+            type: "gratitude",
+            gratitude1: gratitude[0] || null,
+            gratitude2: gratitude[1] || null,
+            gratitude3: gratitude[2] || null,
+          }),
+        }).catch(() => {}),
+      );
+    }
+    if (manifestationText.trim()) {
+      tasks.push(
+        apiFetch("/data/journal", {
+          method: "POST",
+          body: JSON.stringify({
+            type: "intention",
+            intentionText: manifestationText.trim(),
+          }),
+        }).catch(() => {}),
+      );
+    }
+
+    // 2) Record the check-in itself.
+    tasks.push(
+      apiFetch("/data/checkin", {
+        method: "POST",
+        body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
+      })
+        .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
+        .catch(() => {}),
+    );
+
+    void Promise.allSettled(tasks);
+  }, [isComplete, gratitude, manifestationText]);
+
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
@@ -131,6 +227,28 @@ export function MorningRoutine() {
     setIsComplete(true);
   };
 
+  const saveGratitude = async () => {
+    setGratitudeSaving(true);
+    try {
+      await apiFetch("/data/journal", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "gratitude",
+          gratitude1: gratitude[0] || null,
+          gratitude2: gratitude[1] || null,
+          gratitude3: gratitude[2] || null,
+        }),
+      });
+      markComplete(4);
+    } catch {
+      // Even on network failure mark the step done so the user can move on.
+      // The final routine-complete effect will re-attempt the save.
+      markComplete(4);
+    } finally {
+      setGratitudeSaving(false);
+    }
+  };
+
   if (isComplete) {
     return (
       <div className="flex flex-col items-center gap-6 py-12">
@@ -144,6 +262,17 @@ export function MorningRoutine() {
           You have set a powerful intention for your day. Carry this energy with
           you in everything you do.
         </p>
+        {karmaAwarded !== null && karmaAwarded > 0 && (
+          <p className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+            <Sparkles className="w-4 h-4" />
+            +{karmaAwarded} karma earned
+          </p>
+        )}
+        {karmaAwarded === 0 && (
+          <p className="text-xs text-gray-500">
+            Already checked in today — your morning routine is recorded.
+          </p>
+        )}
         <Button
           size="lg"
           onClick={() => {
@@ -154,7 +283,10 @@ export function MorningRoutine() {
             setAwarenessElapsed(0);
             setManifestElapsed(0);
             setGratitude(["", "", ""]);
+            setManifestationText("");
             setHydrated(false);
+            setKarmaAwarded(null);
+            checkinFiredRef.current = false;
           }}
         >
           Start Again
@@ -330,12 +462,22 @@ export function MorningRoutine() {
                 <Check className="w-5 h-5" /> Breathwork Complete
               </p>
             ) : (
-              <Button
-                onClick={() => setBreathworkActive(!breathworkActive)}
-                className={cn(breathworkActive && "bg-red-500 hover:bg-red-600")}
-              >
-                {breathworkActive ? "Stop" : "Start Breathing"}
-              </Button>
+              <div className="flex items-center justify-center gap-3">
+                <Button
+                  onClick={() => setBreathworkActive(!breathworkActive)}
+                  className={cn(breathworkActive && "bg-red-500 hover:bg-red-600")}
+                >
+                  {breathworkActive ? "Stop" : "Start Breathing"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setSoundEnabled((s) => !s)}
+                  aria-label={soundEnabled ? "Mute breath tones" : "Unmute breath tones"}
+                  title={soundEnabled ? "Audio on" : "Audio off"}
+                >
+                  {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                </Button>
+              </div>
             )}
           </div>
         )}
@@ -380,7 +522,8 @@ export function MorningRoutine() {
               Gratitude
             </h3>
             <p className="text-[var(--color-text-secondary)]">
-              Write three things you are grateful for today.
+              Write three things you are grateful for today. Saved to your
+              journal when you finish the routine.
             </p>
             <div className="space-y-3">
               {gratitude.map((val, i) => (
@@ -398,18 +541,23 @@ export function MorningRoutine() {
                 />
               ))}
             </div>
-            {gratitude.some((g) => g.trim()) && (
-              <Button onClick={() => markComplete(4)}>
+            {gratitude.some((g) => g.trim()) && !completedSteps.has(4) && (
+              <Button onClick={saveGratitude} isLoading={gratitudeSaving}>
                 <Heart className="w-4 h-4 mr-2" />
                 Save Gratitude
               </Button>
+            )}
+            {completedSteps.has(4) && (
+              <p className="text-green-600 font-medium flex items-center justify-center gap-2">
+                <Check className="w-5 h-5" /> Gratitude Saved
+              </p>
             )}
           </div>
         )}
 
         {/* Step 6: Manifestation */}
         {currentStep === 5 && (
-          <div className="text-center space-y-6">
+          <div className="text-center space-y-6 w-full max-w-md">
             <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-xl shadow-amber-500/30">
               <Target className="w-12 h-12 text-white" />
             </div>
@@ -419,6 +567,13 @@ export function MorningRoutine() {
             <p className="text-lg italic text-amber-700 font-medium">
               Visualize your goal. Feel it as already real.
             </p>
+            <textarea
+              value={manifestationText}
+              onChange={(e) => setManifestationText(e.target.value)}
+              placeholder="Today I intend to..."
+              rows={3}
+              className="w-full px-4 py-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-card-bg)] text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+            />
             <p className="text-3xl font-bold tabular-nums text-[var(--color-text-primary)]">
               {formatTime(manifestDuration - manifestElapsed)}
             </p>

@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, RotateCcw, Dumbbell, Trophy } from "lucide-react";
+import { Play, Pause, RotateCcw, Trophy, Volume2, VolumeX, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { apiFetch } from "@/lib/api";
+
+const SESSION_PILLAR = "movement";
 
 export function MovementTimer() {
   const [workTime, setWorkTime] = useState(30);
@@ -15,6 +18,45 @@ export function MovementTimer() {
   );
   const [timeRemaining, setTimeRemaining] = useState(30);
   const [isActive, setIsActive] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
+
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const checkinFiredRef = useRef(false);
+
+  const playCue = useCallback(
+    (kind: "work" | "rest" | "finale") => {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtxRef.current) audioCtxRef.current = new AudioContext();
+        const ctx = audioCtxRef.current;
+        // work: rising tone (motivating push), rest: falling tone (recover),
+        // finale: ascending three-note arpeggio.
+        const freqs =
+          kind === "work" ? [330, 660] :
+          kind === "rest" ? [660, 330] :
+          [528, 660, 880];
+        freqs.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = "sine";
+          const t = ctx.currentTime + i * (kind === "finale" ? 0.2 : 0.12);
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(0.3, t + 0.04);
+          gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            t + (kind === "finale" ? 1.2 : 0.18),
+          );
+          osc.start(t);
+          osc.stop(t + (kind === "finale" ? 1.3 : 0.25));
+        });
+      } catch {}
+    },
+    [soundEnabled],
+  );
 
   const phaseDuration = phase === "work" ? workTime : restTime;
 
@@ -32,7 +74,22 @@ export function MovementTimer() {
     setPhase("idle");
     setCurrentRound(1);
     setTimeRemaining(workTime);
+    setKarmaAwarded(null);
+    checkinFiredRef.current = false;
   }, [workTime]);
+
+  // Credit check-in once when workout actually finishes (not on idle resets).
+  useEffect(() => {
+    if (phase !== "complete" || checkinFiredRef.current) return;
+    checkinFiredRef.current = true;
+    playCue("finale");
+    apiFetch("/data/checkin", {
+      method: "POST",
+      body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
+    })
+      .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
+      .catch(() => {});
+  }, [phase, playCue]);
 
   useEffect(() => {
     if (!isActive || phase === "idle" || phase === "complete") return;
@@ -47,11 +104,13 @@ export function MovementTimer() {
               return 0;
             }
             setPhase("rest");
+            playCue("rest");
             return restTime;
           } else {
             // rest -> next work round
             setCurrentRound((r) => r + 1);
             setPhase("work");
+            playCue("work");
             return workTime;
           }
         }
@@ -60,13 +119,14 @@ export function MovementTimer() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isActive, phase, currentRound, totalRounds, workTime, restTime]);
+  }, [isActive, phase, currentRound, totalRounds, workTime, restTime, playCue]);
 
   const startTimer = () => {
     if (phase === "idle" || phase === "complete") {
       setPhase("work");
       setCurrentRound(1);
       setTimeRemaining(workTime);
+      playCue("work");
     }
     setIsActive(true);
   };
@@ -101,6 +161,17 @@ export function MovementTimer() {
           <p className="text-[var(--color-text-secondary)] mt-2">
             You crushed {totalRounds} rounds. Stay consistent, stay strong.
           </p>
+          {karmaAwarded !== null && karmaAwarded > 0 && (
+            <p className="inline-flex items-center gap-1 mt-3 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+              <Sparkles className="w-4 h-4" />
+              +{karmaAwarded} karma earned
+            </p>
+          )}
+          {karmaAwarded === 0 && (
+            <p className="text-xs text-gray-500 mt-3">
+              Already checked in today — your workout is recorded.
+            </p>
+          )}
         </div>
         <Button size="lg" onClick={reset}>
           <RotateCcw className="w-5 h-5 mr-2" />
@@ -327,6 +398,15 @@ export function MovementTimer() {
               {phase === "idle" ? "Start" : "Resume"}
             </>
           )}
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => setSoundEnabled((s) => !s)}
+          aria-label={soundEnabled ? "Mute cues" : "Unmute cues"}
+          title={soundEnabled ? "Audio cues on" : "Audio cues off"}
+        >
+          {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
         </Button>
       </div>
 

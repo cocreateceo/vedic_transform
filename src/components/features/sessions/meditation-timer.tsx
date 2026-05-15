@@ -4,6 +4,9 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { apiFetch } from "@/lib/api";
+
+const SESSION_PILLAR = "healing-meditation";
 
 const DURATION_OPTIONS = [5, 10, 15, 20, 30];
 // Tambura-like ambient drone: A2 + A3 + perfect fifth E3, slightly detuned
@@ -21,9 +24,11 @@ export function MeditationTimer() {
   const [isActive, setIsActive] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const droneOscillatorsRef = useRef<OscillatorNode[]>([]);
   const droneGainRef = useRef<GainNode | null>(null);
+  const checkinFiredRef = useRef(false);
 
   const totalSeconds = selectedDuration * 60;
   const elapsed = totalSeconds - timeRemaining;
@@ -111,7 +116,22 @@ export function MeditationTimer() {
     setIsActive(false);
     setIsComplete(false);
     setTimeRemaining(selectedDuration * 60);
+    setKarmaAwarded(null);
+    checkinFiredRef.current = false;
   }, [selectedDuration]);
+
+  // Credit the user's pillar check-in when the timer naturally completes.
+  // Server-side same-day dedupe means re-running the timer is safe.
+  useEffect(() => {
+    if (!isComplete || checkinFiredRef.current) return;
+    checkinFiredRef.current = true;
+    apiFetch("/data/checkin", {
+      method: "POST",
+      body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
+    })
+      .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
+      .catch(() => {});
+  }, [isComplete]);
 
   const selectDuration = useCallback(
     (mins: number) => {
@@ -198,6 +218,17 @@ export function MeditationTimer() {
             You meditated for {selectedDuration} minutes. Your mind is clearer
             and more focused.
           </p>
+          {karmaAwarded !== null && karmaAwarded > 0 && (
+            <p className="inline-flex items-center gap-1 mt-3 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+              <Sparkles className="w-4 h-4" />
+              +{karmaAwarded} karma earned
+            </p>
+          )}
+          {karmaAwarded === 0 && (
+            <p className="text-xs text-gray-500 mt-3">
+              Already checked in today — your meditation is recorded.
+            </p>
+          )}
         </div>
         <Button size="lg" onClick={reset}>
           <RotateCcw className="w-5 h-5 mr-2" />

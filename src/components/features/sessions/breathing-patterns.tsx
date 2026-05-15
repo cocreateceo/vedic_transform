@@ -2,8 +2,14 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Square, Volume2, VolumeX } from "lucide-react";
+import { Play, Square, Volume2, VolumeX, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { apiFetch } from "@/lib/api";
+
+const SESSION_PILLAR = "breathing-meditation";
+// A "real session" threshold so accidentally hitting Start then Stop doesn't
+// farm karma. Five complete cycles is roughly a minute of practice.
+const MIN_CYCLES_FOR_CREDIT = 5;
 
 // Phase-change cues: a rising glide for inhale, falling for exhale, and
 // a short tick for hold. Played procedurally so no audio files needed.
@@ -56,7 +62,9 @@ export function BreathingPatterns() {
   const [phaseElapsed, setPhaseElapsed] = useState(0);
   const [cycleCount, setCycleCount] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const checkinFiredRef = useRef(false);
 
   const playPhaseTone = useCallback((phaseName: string) => {
     const tone = PHASE_TONES[phaseName];
@@ -119,7 +127,26 @@ export function BreathingPatterns() {
     setCurrentPhaseIndex(0);
     setPhaseElapsed(0);
     setCycleCount(0);
+    setKarmaAwarded(null);
+    checkinFiredRef.current = false;
   }, []);
+
+  // Credit a check-in when the user has practiced enough cycles. Fires once
+  // per session — repeat sessions today are deduped by the server.
+  const maybeCreditCheckin = useCallback(
+    (cycles: number) => {
+      if (checkinFiredRef.current) return;
+      if (cycles < MIN_CYCLES_FOR_CREDIT) return;
+      checkinFiredRef.current = true;
+      apiFetch("/data/checkin", {
+        method: "POST",
+        body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
+      })
+        .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
+        .catch(() => {});
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!isActive) return;
@@ -137,7 +164,11 @@ export function BreathingPatterns() {
           if (soundEnabled && nextPhase) playPhaseTone(nextPhase.name);
           if (wrapsCycle) {
             setCurrentPhaseIndex(0);
-            setCycleCount((c) => c + 1);
+            setCycleCount((c) => {
+              const next = c + 1;
+              maybeCreditCheckin(next);
+              return next;
+            });
           } else {
             setCurrentPhaseIndex(nextIndex);
           }
@@ -155,6 +186,7 @@ export function BreathingPatterns() {
     pattern.phases,
     playPhaseTone,
     soundEnabled,
+    maybeCreditCheckin,
   ]);
 
   const toggleSession = () => {
@@ -312,6 +344,19 @@ export function BreathingPatterns() {
           {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
         </Button>
       </div>
+
+      {/* Karma feedback once a real session has been credited. */}
+      {karmaAwarded !== null && karmaAwarded > 0 && (
+        <p className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+          <Sparkles className="w-4 h-4" />
+          +{karmaAwarded} karma earned
+        </p>
+      )}
+      {karmaAwarded === 0 && (
+        <p className="text-xs text-gray-500">
+          Already checked in today — this session is recorded.
+        </p>
+      )}
 
       {/* Pattern description */}
       <p className="text-center text-sm text-[var(--color-text-secondary)] max-w-md">
