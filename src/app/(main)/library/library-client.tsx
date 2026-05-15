@@ -66,12 +66,10 @@ const CATEGORY_BORDER_COLORS: Record<string, string> = {
 };
 
 function getPillarName(item: ContentItem): string {
-  const pillar = PILLARS.find(
-    (p) =>
-      p.slug === item.pillarSlug ||
-      item.pillarSlug.includes(p.slug) ||
-      p.slug.includes(item.pillarSlug)
-  );
+  // Exact slug match only — the fuzzy `includes()` fallback was papering
+  // over mismatches like `morning-routine` vs `morning-initiation`. The
+  // content library now uses canonical pillar slugs from src/constants/pillars.ts.
+  const pillar = PILLARS.find((p) => p.slug === item.pillarSlug);
   return pillar?.name || item.pillarSlug;
 }
 

@@ -131,8 +131,11 @@ export function AudioPlayerProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Try to play the URL; if it fails or is a placeholder, use generated audio
-    const isPlaceholderUrl = !track.url || track.url === "#" || track.url === "generated" || track.url.startsWith("/audio/");
+    // Try to play the URL; if it fails or is a placeholder, use generated audio.
+    // The previous version treated `/audio/...` as a placeholder, which made every
+    // real public-domain MP3 (Gayatri, Om Namah Shivaya, etc.) silently fall
+    // through to the procedural drone instead of playing the actual file.
+    const isPlaceholderUrl = !track.url || track.url === "#" || track.url === "generated";
 
     if (isPlaceholderUrl) {
       playGenerated(track);

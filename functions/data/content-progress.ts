@@ -53,19 +53,25 @@ export async function handler(event: any) {
 
     const id = existing.Items?.[0]?.id || generateId();
 
+    // Build the saved item once so we can return it. The Library page does
+    // an optimistic `setProgressMap(prev => prev.set(item.id, updated))` from
+    // this response — without the full record, the map gets polluted with
+    // `{ success, id }` and the completion checkmark flickers until reload.
+    const item = {
+      id,
+      userId: user.id,
+      contentId,
+      completed: completed ?? false,
+      progress: progress ?? 0,
+      lastAccessedAt: now,
+    };
+
     await db.send(new PutCommand({
       TableName: Resource.ContentProgress.name,
-      Item: {
-        id,
-        userId: user.id,
-        contentId,
-        completed: completed ?? false,
-        progress: progress ?? 0,
-        lastAccessedAt: now,
-      },
+      Item: item,
     }));
 
-    return ok({ success: true, id });
+    return ok(item);
   }
 
   return err(405, 'Method not allowed');
