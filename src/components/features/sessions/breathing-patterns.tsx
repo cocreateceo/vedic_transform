@@ -1,9 +1,17 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Square } from "lucide-react";
+import { Play, Square, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+
+// Phase-change cues: a rising glide for inhale, falling for exhale, and
+// a short tick for hold. Played procedurally so no audio files needed.
+const PHASE_TONES: Record<string, { startFreq: number; endFreq: number; duration: number }> = {
+  "Breathe In": { startFreq: 220, endFreq: 440, duration: 0.6 },
+  "Breathe Out": { startFreq: 440, endFreq: 220, duration: 0.6 },
+  Hold: { startFreq: 330, endFreq: 330, duration: 0.15 },
+};
 
 interface BreathingPattern {
   name: string;
@@ -47,6 +55,33 @@ export function BreathingPatterns() {
   const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
   const [phaseElapsed, setPhaseElapsed] = useState(0);
   const [cycleCount, setCycleCount] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const playPhaseTone = useCallback((phaseName: string) => {
+    const tone = PHASE_TONES[phaseName];
+    if (!tone) return;
+    try {
+      if (!audioCtxRef.current) audioCtxRef.current = new AudioContext();
+      const ctx = audioCtxRef.current;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(tone.startFreq, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(
+        tone.endFreq,
+        ctx.currentTime + tone.duration,
+      );
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + tone.duration);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + tone.duration);
+    } catch {
+      // Web Audio unavailable — fall through silently
+    }
+  }, []);
 
   const pattern = PATTERNS[selectedPattern];
   const currentPhase = pattern.phases[currentPhaseIndex];
@@ -93,10 +128,14 @@ export function BreathingPatterns() {
       setPhaseElapsed((prev) => {
         const newElapsed = prev + 0.1;
         if (newElapsed >= currentPhase.duration) {
-          // Move to next phase
+          // Move to next phase + play its phase-start tone.
           const nextIndex = currentPhaseIndex + 1;
-          if (nextIndex >= pattern.phases.length) {
-            // Cycle complete
+          const wrapsCycle = nextIndex >= pattern.phases.length;
+          const nextPhase = wrapsCycle
+            ? pattern.phases[0]
+            : pattern.phases[nextIndex];
+          if (soundEnabled && nextPhase) playPhaseTone(nextPhase.name);
+          if (wrapsCycle) {
             setCurrentPhaseIndex(0);
             setCycleCount((c) => c + 1);
           } else {
@@ -109,7 +148,14 @@ export function BreathingPatterns() {
     }, 100);
 
     return () => clearInterval(interval);
-  }, [isActive, currentPhase, currentPhaseIndex, pattern.phases.length]);
+  }, [
+    isActive,
+    currentPhase,
+    currentPhaseIndex,
+    pattern.phases,
+    playPhaseTone,
+    soundEnabled,
+  ]);
 
   const toggleSession = () => {
     if (isActive) {
@@ -118,6 +164,9 @@ export function BreathingPatterns() {
       setIsActive(true);
       setCurrentPhaseIndex(0);
       setPhaseElapsed(0);
+      // Play the first phase tone immediately so the user hears the cue
+      // for the inhale without waiting for the phase transition.
+      if (soundEnabled) playPhaseTone(pattern.phases[0].name);
     }
   };
 
@@ -235,23 +284,34 @@ export function BreathingPatterns() {
       </div>
 
       {/* Controls */}
-      <Button
-        size="lg"
-        onClick={toggleSession}
-        className={cn("min-w-[160px]", isActive && "bg-red-500 hover:bg-red-600")}
-      >
-        {isActive ? (
-          <>
-            <Square className="w-5 h-5 mr-2" />
-            Stop
-          </>
-        ) : (
-          <>
-            <Play className="w-5 h-5 mr-2" />
-            Start
-          </>
-        )}
-      </Button>
+      <div className="flex items-center gap-3">
+        <Button
+          size="lg"
+          onClick={toggleSession}
+          className={cn("min-w-[160px]", isActive && "bg-red-500 hover:bg-red-600")}
+        >
+          {isActive ? (
+            <>
+              <Square className="w-5 h-5 mr-2" />
+              Stop
+            </>
+          ) : (
+            <>
+              <Play className="w-5 h-5 mr-2" />
+              Start
+            </>
+          )}
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => setSoundEnabled((s) => !s)}
+          aria-label={soundEnabled ? "Mute audio" : "Unmute audio"}
+          title={soundEnabled ? "Audio cues on" : "Audio cues off"}
+        >
+          {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+        </Button>
+      </div>
 
       {/* Pattern description */}
       <p className="text-center text-sm text-[var(--color-text-secondary)] max-w-md">

@@ -2,17 +2,28 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, RotateCcw, Sparkles } from "lucide-react";
+import { Play, Pause, RotateCcw, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 const DURATION_OPTIONS = [5, 10, 15, 20, 30];
+// Tambura-like ambient drone: A2 + A3 + perfect fifth E3, slightly detuned
+// for natural beating. Gain held very low so it sits behind everything.
+const DRONE_FREQS = [110, 165, 220];
+const DRONE_GAIN = 0.06;
+// Bell rung at each interval to mark the passage of time without
+// requiring the user to keep looking at the screen.
+const INTERVAL_BELL_SECONDS = 60;
+const BELL_FREQ = 528;
 
 export function MeditationTimer() {
   const [selectedDuration, setSelectedDuration] = useState(10);
   const [timeRemaining, setTimeRemaining] = useState(10 * 60);
   const [isActive, setIsActive] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const droneOscillatorsRef = useRef<OscillatorNode[]>([]);
+  const droneGainRef = useRef<GainNode | null>(null);
 
   const totalSeconds = selectedDuration * 60;
   const elapsed = totalSeconds - timeRemaining;
@@ -23,24 +34,78 @@ export function MeditationTimer() {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference * (1 - progress);
 
-  const playChime = useCallback(() => {
-    try {
-      const ctx = new AudioContext();
-      audioCtxRef.current = ctx;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(528, ctx.currentTime);
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 2);
-    } catch {
-      // Web Audio not supported
+  const ensureAudioCtx = useCallback(() => {
+    if (!audioCtxRef.current) {
+      try {
+        audioCtxRef.current = new AudioContext();
+      } catch {
+        return null;
+      }
     }
+    return audioCtxRef.current;
   }, []);
+
+  const playBell = useCallback(
+    (freq = BELL_FREQ, durationSec = 2, gain = 0.3) => {
+      const ctx = ensureAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      g.gain.setValueAtTime(gain, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + durationSec);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + durationSec);
+    },
+    [ensureAudioCtx],
+  );
+
+  // Start the sustained ambient drone for the duration of the session.
+  // Fades in over 3s so it doesn't startle, fades out over 2s on stop.
+  const startDrone = useCallback(() => {
+    const ctx = ensureAudioCtx();
+    if (!ctx || droneOscillatorsRef.current.length > 0) return;
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0, ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(DRONE_GAIN, ctx.currentTime + 3);
+    masterGain.connect(ctx.destination);
+    droneGainRef.current = masterGain;
+
+    const oscs = DRONE_FREQS.map((freq, i) => {
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      // Slight detune in cents — gives a richer, more organic drone.
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      osc.detune.setValueAtTime(i === 0 ? 0 : i === 1 ? -3 : 4, ctx.currentTime);
+      osc.connect(masterGain);
+      osc.start(ctx.currentTime);
+      return osc;
+    });
+    droneOscillatorsRef.current = oscs;
+  }, [ensureAudioCtx]);
+
+  const stopDrone = useCallback(() => {
+    const ctx = audioCtxRef.current;
+    const gain = droneGainRef.current;
+    if (!ctx || !gain) return;
+    const now = ctx.currentTime;
+    gain.gain.cancelScheduledValues(now);
+    gain.gain.setValueAtTime(gain.gain.value, now);
+    gain.gain.linearRampToValueAtTime(0, now + 1.5);
+    droneOscillatorsRef.current.forEach((osc) => {
+      try {
+        osc.stop(now + 1.6);
+      } catch {}
+    });
+    droneOscillatorsRef.current = [];
+    droneGainRef.current = null;
+  }, []);
+
+  const playChime = useCallback(() => playBell(BELL_FREQ, 2.5, 0.35), [playBell]);
 
   const reset = useCallback(() => {
     setIsActive(false);
@@ -66,15 +131,37 @@ export function MeditationTimer() {
         if (prev <= 1) {
           setIsActive(false);
           setIsComplete(true);
-          playChime();
+          if (soundEnabled) playChime();
           return 0;
         }
-        return prev - 1;
+        const next = prev - 1;
+        // Ring an interval bell every INTERVAL_BELL_SECONDS, but never
+        // at the very end (the completion chime handles that).
+        const elapsedSec = selectedDuration * 60 - next;
+        if (
+          soundEnabled &&
+          elapsedSec > 0 &&
+          elapsedSec % INTERVAL_BELL_SECONDS === 0 &&
+          next > 1
+        ) {
+          playBell(BELL_FREQ, 1.5, 0.18);
+        }
+        return next;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isActive, isComplete, playChime]);
+  }, [isActive, isComplete, playChime, playBell, soundEnabled, selectedDuration]);
+
+  // Start / stop the drone whenever the active state flips.
+  useEffect(() => {
+    if (isActive && soundEnabled) {
+      startDrone();
+    } else {
+      stopDrone();
+    }
+    return () => stopDrone();
+  }, [isActive, soundEnabled, startDrone, stopDrone]);
 
   const toggleTimer = () => {
     if (isComplete) {
@@ -232,6 +319,15 @@ export function MeditationTimer() {
               {elapsed > 0 ? "Resume" : "Start"}
             </>
           )}
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => setSoundEnabled((s) => !s)}
+          aria-label={soundEnabled ? "Mute audio" : "Unmute audio"}
+          title={soundEnabled ? "Audio on" : "Audio off"}
+        >
+          {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
         </Button>
       </div>
 
