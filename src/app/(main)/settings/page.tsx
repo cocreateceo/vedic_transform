@@ -5,7 +5,7 @@ import { useAuth } from "@/context/auth-context";
 import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Settings, User, Bell, Shield } from "lucide-react";
+import { Settings, User, Bell, CheckCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
@@ -14,10 +14,13 @@ export default function SettingsPage() {
   const [dbUser, setDbUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savedAt, setSavedAt] = useState<number | null>(null);
 
   useEffect(() => {
     apiFetch("/data/user")
-      .then((res) => setDbUser(res?.user || null))
+      // /data/user GET returns the user row directly (no { user: ... }
+      // wrapper). Previously read .user → always null → blank form.
+      .then((res) => setDbUser(res || null))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -28,15 +31,19 @@ export default function SettingsPage() {
     const formData = new FormData(e.currentTarget);
     try {
       await apiFetch("/data/user", {
-        method: "PUT",
+        // API exposes PATCH /data/user; PUT was never registered, so the
+        // previous code silently 404'd on every save.
+        method: "PATCH",
         body: JSON.stringify({
           name: formData.get("name"),
           phone: formData.get("phone"),
         }),
       });
-      // Refresh data
+      // Re-read with the corrected response shape.
       const res = await apiFetch("/data/user");
-      setDbUser(res?.user || null);
+      setDbUser(res || null);
+      setSavedAt(Date.now());
+      setTimeout(() => setSavedAt(null), 3000);
     } catch {
     } finally {
       setSaving(false);
@@ -67,6 +74,17 @@ export default function SettingsPage() {
           Manage your account and preferences
         </p>
       </div>
+
+      {/* Save success banner — auto-dismisses after 3s, same pattern as the
+          Reminders page so the visual language is consistent. */}
+      {savedAt && (
+        <Card className="bg-green-50 border-green-200">
+          <CardContent className="py-3 px-4 flex items-center gap-2">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            <p className="text-sm text-green-700">Profile saved successfully!</p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Profile */}
       <Card>
