@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { apiFetch, ApiError } from "@/lib/api";
 import { ANON_DOSHA_KEY } from "@/lib/dosha";
 
 async function claimAnonymousDosha(token: string) {
@@ -58,6 +59,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (email: string, password: string, name?: string) => Promise<{ success: boolean; error?: string }>;
+  loginWithGoogle: (credential: string) => Promise<{ success: boolean; error?: string; isNew?: boolean }>;
   logout: () => void;
 }
 
@@ -73,11 +75,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedToken = localStorage.getItem("vedic-token");
     const savedUser = localStorage.getItem("vedic-user");
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+    if (!savedToken || !savedUser) {
+      setIsLoading(false);
+      return;
     }
-    setIsLoading(false);
+
+    // Hydrate the UI optimistically from cached values, then verify the token
+    // against the server. If it's been revoked or has expired, the API returns
+    // 401 and apiFetch clears localStorage — we then drop the in-memory state
+    // so route guards stop rendering authenticated views.
+    setToken(savedToken);
+    try { setUser(JSON.parse(savedUser)); } catch { /* ignore */ }
+
+    apiFetch("/auth/me", { token: savedToken })
+      .then((data) => {
+        if (data?.user) {
+          setUser(data.user);
+          localStorage.setItem("vedic-user", JSON.stringify(data.user));
+          // If the user took the public dosha test in another tab/session
+          // and only now opened the app while already signed in, attach
+          // that result to their profile. Claim function no-ops if the
+          // localStorage key is empty, so this is cheap to call every restore.
+          void claimAnonymousDosha(savedToken);
+        }
+      })
+      .catch((e) => {
+        if (e instanceof ApiError && e.status === 401) {
+          setUser(null);
+          setToken(null);
+        }
+        // Network errors leave the optimistic state alone — better UX offline.
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -93,6 +122,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setToken(data.token);
         localStorage.setItem("vedic-token", data.token);
         localStorage.setItem("vedic-user", JSON.stringify(data.user));
+        // Match register / Google flows: a returning user who took the
+        // public dosha test before signing in shouldn't lose that result.
+        void claimAnonymousDosha(data.token);
         return { success: true };
       }
       return { success: false, error: data.error || "Login failed" };
@@ -128,6 +160,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const loginWithGoogle = async (credential: string) => {
+    try {
+      const res = await fetch(`${API_URL}/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUser(data.user);
+        setToken(data.token);
+        localStorage.setItem("vedic-token", data.token);
+        localStorage.setItem("vedic-user", JSON.stringify(data.user));
+
+        // If this Google account was created just now and the user had
+        // taken the public dosha test, attach that result — same as the
+        // password-register flow does.
+        if (!data.user.onboardingCompleted) {
+          void claimAnonymousDosha(data.token);
+        }
+
+        return { success: true, isNew: !data.user.onboardingCompleted };
+      }
+      return { success: false, error: data.error || "Google sign-in failed" };
+    } catch {
+      return { success: false, error: "Network error" };
+    }
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -136,7 +197,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, isLoading, login, register, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );
