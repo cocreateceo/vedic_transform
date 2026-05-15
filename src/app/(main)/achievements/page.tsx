@@ -18,10 +18,28 @@ interface BadgeWithEarned {
   earnedAt?: string;
 }
 
+// The Achievements page groups badges into 4 UI buckets (streak / milestone
+// / mastery / special). Map the analyzer's requirement.type values to those
+// buckets so every badge in functions/lib/badges.ts shows up under exactly
+// one section. Without this map, anything outside `type=streak` (which
+// happens to share its name with the UI bucket) was silently filtered out.
+const REQ_TYPE_TO_CATEGORY: Record<string, string> = {
+  "first-checkin": "streak",
+  streak: "streak",
+  journey: "milestone",
+  karma: "milestone",
+  "pillar-mastery": "mastery",
+  "pillar-polymath": "mastery",
+};
+
 function parseBadgeCategory(requirement: string): string {
   try {
     const parsed = JSON.parse(requirement);
-    return parsed.type || "special";
+    const type = parsed?.type;
+    if (typeof type === "string" && REQ_TYPE_TO_CATEGORY[type]) {
+      return REQ_TYPE_TO_CATEGORY[type];
+    }
+    return typeof type === "string" ? type : "special";
   } catch {
     if (requirement.toLowerCase().includes("streak")) return "streak";
     if (requirement.toLowerCase().includes("milestone")) return "milestone";
