@@ -64,3 +64,8 @@ scripts/migrate-data.ts
 
 # Extracted text from scripture PDFs — regenerable via pdftotext.
 /scriptures/extracted/
+
+# Source posters — raw JPEGs from WhatsApp drop. The curated subset lives
+# in public/posters/*.webp; originals stay local-only.
+/Posters/
+/Posters.zip
