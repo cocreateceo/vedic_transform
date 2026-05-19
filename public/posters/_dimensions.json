@@ -37,16 +37,16 @@
     "slug": "path-of-manifestation",
     "sizes": {
       "default": {
-        "width": 759,
-        "height": 1600
+        "width": 768,
+        "height": 1152
       },
       "@2x": {
-        "width": 759,
-        "height": 1600
+        "width": 1024,
+        "height": 1536
       },
       ".thumb": {
         "width": 400,
-        "height": 843
+        "height": 600
       }
     }
   },
