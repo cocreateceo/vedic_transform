@@ -66,6 +66,7 @@ export function MorningRoutine() {
   // Breathing tab so the in-routine experience matches.
   const audioCtxRef = useRef<AudioContext | null>(null);
   const voiceRef = useRef<HTMLAudioElement | null>(null);
+  const omRef = useRef<HTMLAudioElement | null>(null);
   const checkinFiredRef = useRef(false);
 
   const stopVoice = useCallback(() => {
@@ -74,12 +75,31 @@ export function MorningRoutine() {
       try { a.pause(); a.currentTime = 0; } catch {}
       voiceRef.current = null;
     }
+    const om = omRef.current;
+    if (om) {
+      try { om.pause(); om.currentTime = 0; } catch {}
+      omRef.current = null;
+    }
   }, []);
 
   const playVoice = useCallback((src: string) => {
     stopVoice();
+    // Soft Om backdrop while the step cue plays.
+    const om = new Audio("/audio/om-ambient-loop.mp3");
+    om.loop = true;
+    om.volume = 0.22;
+    om.play().catch(() => {});
+    omRef.current = om;
+
     const a = new Audio(src);
-    a.volume = 0.9;
+    a.volume = 0.95;
+    a.playbackRate = 1.56;
+    type WithPitch = HTMLAudioElement & { preservesPitch?: boolean };
+    (a as WithPitch).preservesPitch = true;
+    a.onended = () => {
+      const stillOm = omRef.current;
+      if (stillOm) { try { stillOm.pause(); stillOm.currentTime = 0; } catch {} omRef.current = null; }
+    };
     a.play().catch(() => {});
     voiceRef.current = a;
   }, [stopVoice]);

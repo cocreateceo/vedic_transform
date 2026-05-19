@@ -1,57 +1,23 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { Play, Square, Volume2 } from "lucide-react";
+import { useVoiceCue } from "@/lib/hooks/use-voice-cue";
 
 /**
  * Compact play/stop button in the dashboard welcome banner that plays a
- * short CEO-voice greeting cue. White-on-translucent so it sits well on
- * the saffron banner.
+ * short CEO-voice greeting cue with the Om ambient backdrop. White-on-
+ * translucent styling so it sits well on the saffron banner.
+ *
+ * Greeting autoplays once per browser session (gated by sessionStorage)
+ * so users don't get re-greeted on every tab switch / remount.
  */
 export function GreetingPlayButton() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // Autoplay the greeting on dashboard load. We gate to once-per-session
-  // via sessionStorage so the user doesn't get re-greeted on every tab
-  // switch / re-mount.
-  useEffect(() => {
-    const PLAYED_KEY = "vt:dashboard:greeting:played";
-    if (typeof window !== "undefined" && window.sessionStorage.getItem(PLAYED_KEY)) {
-      return; // already greeted this session
-    }
-    const audio = new Audio("/audio/dashboard/greeting.mp3");
-    audio.volume = 0.95;
-    audio.onended = () => setIsPlaying(false);
-    audio.onerror = () => setIsPlaying(false);
-    audioRef.current = audio;
-    audio.play()
-      .then(() => {
-        setIsPlaying(true);
-        try { window.sessionStorage.setItem(PLAYED_KEY, "1"); } catch {}
-      })
-      .catch(() => setIsPlaying(false));
-    return () => {
-      try { audio.pause(); audio.currentTime = 0; } catch {}
-      if (audioRef.current === audio) audioRef.current = null;
-    };
-  }, []);
-
-  const toggle = () => {
-    const a = audioRef.current;
-    if (isPlaying && a) {
-      try { a.pause(); a.currentTime = 0; } catch {}
-      audioRef.current = null;
-      setIsPlaying(false);
-      return;
-    }
-    const audio = new Audio("/audio/dashboard/greeting.mp3");
-    audio.volume = 0.95;
-    audio.onended = () => setIsPlaying(false);
-    audio.onerror = () => setIsPlaying(false);
-    audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-    audioRef.current = audio;
-  };
+  const { isPlaying, toggle } = useVoiceCue({
+    src: "/audio/dashboard/greeting.mp3",
+    autoplay: true,
+    ambient: true,
+    autoplayOnceKey: "vt:dashboard:greeting:played",
+  });
 
   return (
     <button

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Square, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { useVoiceCue } from "@/lib/hooks/use-voice-cue";
 
 // ─── Per-dosha animated SVG glyphs ──────────────────────────────────────────
 
@@ -81,39 +81,12 @@ interface DoshaListenButtonProps {
 }
 
 export function DoshaListenButton({ dosha }: DoshaListenButtonProps) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // Autoplay the result reading when the user lands on this page — this is
-  // a high-impact moment and the spoken reveal of "your dosha is X" makes
-  // it feel personal.
-  useEffect(() => {
-    const a = new Audio(`/audio/dosha/result-${dosha}.mp3`);
-    a.volume = 0.95;
-    a.onended = () => setIsPlaying(false);
-    a.onerror = () => setIsPlaying(false);
-    audioRef.current = a;
-    a.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-    return () => {
-      try { a.pause(); a.currentTime = 0; } catch {}
-      if (audioRef.current === a) audioRef.current = null;
-    };
-  }, [dosha]);
-
-  const toggle = () => {
-    if (isPlaying && audioRef.current) {
-      try { audioRef.current.pause(); audioRef.current.currentTime = 0; } catch {}
-      audioRef.current = null;
-      setIsPlaying(false);
-      return;
-    }
-    const a = new Audio(`/audio/dosha/result-${dosha}.mp3`);
-    a.volume = 0.95;
-    a.onended = () => setIsPlaying(false);
-    a.onerror = () => setIsPlaying(false);
-    a.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-    audioRef.current = a;
-  };
+  // Autoplays unconditionally — the spoken reveal IS the result-page moment.
+  const { isPlaying, toggle } = useVoiceCue({
+    src: `/audio/dosha/result-${dosha}.mp3`,
+    autoplay: true,
+    ambient: true,
+  });
 
   return (
     <Button onClick={toggle} variant="outline" className="inline-flex items-center gap-2">
@@ -127,45 +100,12 @@ export function DoshaListenButton({ dosha }: DoshaListenButtonProps) {
 // ─── Landing-page intro listen button ───────────────────────────────────────
 
 export function DoshaIntroListenButton() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // Autoplay the intro on first visit to /dosha-test each session.
-  useEffect(() => {
-    const PLAYED_KEY = "vt:dosha:intro:played";
-    if (typeof window === "undefined") return;
-    if (window.sessionStorage.getItem(PLAYED_KEY)) return;
-    const a = new Audio("/audio/dosha/intro.mp3");
-    a.volume = 0.95;
-    a.onended = () => setIsPlaying(false);
-    a.onerror = () => setIsPlaying(false);
-    audioRef.current = a;
-    a.play()
-      .then(() => {
-        setIsPlaying(true);
-        try { window.sessionStorage.setItem(PLAYED_KEY, "1"); } catch {}
-      })
-      .catch(() => setIsPlaying(false));
-    return () => {
-      try { a.pause(); a.currentTime = 0; } catch {}
-      if (audioRef.current === a) audioRef.current = null;
-    };
-  }, []);
-
-  const toggle = () => {
-    if (isPlaying && audioRef.current) {
-      try { audioRef.current.pause(); audioRef.current.currentTime = 0; } catch {}
-      audioRef.current = null;
-      setIsPlaying(false);
-      return;
-    }
-    const a = new Audio("/audio/dosha/intro.mp3");
-    a.volume = 0.95;
-    a.onended = () => setIsPlaying(false);
-    a.onerror = () => setIsPlaying(false);
-    a.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-    audioRef.current = a;
-  };
+  const { isPlaying, toggle } = useVoiceCue({
+    src: "/audio/dosha/intro.mp3",
+    autoplay: true,
+    ambient: true,
+    autoplayOnceKey: "vt:dosha:intro:played",
+  });
 
   return (
     <button

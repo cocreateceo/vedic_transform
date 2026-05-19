@@ -10,112 +10,116 @@ interface WisdomReadAloudProps {
   source?: string;
 }
 
+// Mirror the constants from useVoiceCue so wisdom plays at the same pace
+// (XTTS-rendered intro speeds up, browser TTS reads the actual quote).
+const PLAYBACK_RATE = 1.56;
+const VOICE_VOLUME = 0.95;
+const AMBIENT_SRC = "/audio/om-ambient-loop.mp3";
+const AMBIENT_VOLUME = 0.22;
+
 /**
- * "Listen" button for the daily wisdom card. Plays a short CEO-voice intro
- * cue, then uses the browser's SpeechSynthesis to read the actual wisdom
- * text — wisdom rotates daily so we can't pre-render 365 unique MP3s.
+ * "Listen" for the daily wisdom card. Two-phase playback because wisdom
+ * rotates daily and we can't pre-render 365 unique CEO-voice MP3s:
+ *
+ *   Phase 1: Pre-rendered CEO intro cue ("Here is today's wisdom...")
+ *   Phase 2: Browser SpeechSynthesis reads the actual quote text
+ *
+ * A soft Om loop plays under both phases so the card feels like a real
+ * guided wisdom moment instead of a dry TTS button.
  */
 export function WisdomReadAloud({ text, sanskrit, source }: WisdomReadAloudProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const introRef = useRef<HTMLAudioElement | null>(null);
+  const omRef = useRef<HTMLAudioElement | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
+  const stopOm = useCallback(() => {
+    const a = omRef.current;
+    if (a) { try { a.pause(); a.currentTime = 0; } catch {} omRef.current = null; }
+  }, []);
+
   const stop = useCallback(() => {
-    const a = audioRef.current;
-    if (a) { try { a.pause(); a.currentTime = 0; } catch {} audioRef.current = null; }
+    const a = introRef.current;
+    if (a) { try { a.pause(); a.currentTime = 0; } catch {} introRef.current = null; }
     if (typeof window !== "undefined" && window.speechSynthesis) {
       try { window.speechSynthesis.cancel(); } catch {}
     }
     utteranceRef.current = null;
+    stopOm();
     setIsPlaying(false);
-  }, []);
+  }, [stopOm]);
 
   useEffect(() => () => stop(), [stop]);
 
-  // Autoplay the wisdom on first visit to /wisdom each session. Once-per-
-  // session gate prevents re-firing on every revisit.
+  const speakText = useCallback(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) {
+      stopOm();
+      setIsPlaying(false);
+      return;
+    }
+    const parts = [text];
+    if (sanskrit) parts.push(sanskrit);
+    if (source) parts.push(`— ${source}`);
+    const utter = new SpeechSynthesisUtterance(parts.join(". "));
+    utter.rate = 0.9 * PLAYBACK_RATE;
+    utter.pitch = 1.0;
+    utter.volume = VOICE_VOLUME;
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find((v) => /Neural|Natural/i.test(v.name) && /en-IN|en-US|en-GB/.test(v.lang))
+      ?? voices.find((v) => /female/i.test(v.name))
+      ?? voices.find((v) => /^en/.test(v.lang));
+    if (preferred) utter.voice = preferred;
+    utter.onend = () => { stopOm(); setIsPlaying(false); };
+    utter.onerror = () => { stopOm(); setIsPlaying(false); };
+    utteranceRef.current = utter;
+    window.speechSynthesis.speak(utter);
+  }, [text, sanskrit, source, stopOm]);
+
+  const startCue = useCallback(() => {
+    stop();
+    // Start Om backdrop first.
+    const om = new Audio(AMBIENT_SRC);
+    om.loop = true;
+    om.volume = AMBIENT_VOLUME;
+    omRef.current = om;
+    om.play().catch(() => {});
+
+    // Then play the CEO intro; when it ends, hand off to SpeechSynthesis.
+    const intro = new Audio("/audio/wisdom/intro.mp3");
+    intro.volume = VOICE_VOLUME;
+    intro.playbackRate = PLAYBACK_RATE;
+    type WithPitch = HTMLAudioElement & { preservesPitch?: boolean };
+    (intro as WithPitch).preservesPitch = true;
+    intro.onended = speakText;
+    intro.onerror = speakText;
+    intro.play()
+      .then(() => setIsPlaying(true))
+      .catch(() => {
+        // Autoplay blocked or intro missing — go straight to SpeechSynthesis.
+        speakText();
+        setIsPlaying(true);
+      });
+    introRef.current = intro;
+  }, [stop, speakText]);
+
+  // Autoplay once per session on the wisdom page.
   useEffect(() => {
     const PLAYED_KEY = "vt:wisdom:played";
     if (typeof window === "undefined") return;
     if (window.sessionStorage.getItem(PLAYED_KEY)) return;
-    if (!window.speechSynthesis) return;
-
-    let started = false;
-    const speakText = () => {
-      if (!window.speechSynthesis) return;
-      const parts = [text];
-      if (sanskrit) parts.push(sanskrit);
-      if (source) parts.push(`— ${source}`);
-      const utter = new SpeechSynthesisUtterance(parts.join(". "));
-      utter.rate = 0.9;
-      utter.pitch = 1.0;
-      utter.volume = 0.95;
-      const voices = window.speechSynthesis.getVoices();
-      const preferred = voices.find((v) => /Neural|Natural/i.test(v.name) && /en-IN|en-US|en-GB/.test(v.lang))
-        ?? voices.find((v) => /female/i.test(v.name))
-        ?? voices.find((v) => /^en/.test(v.lang));
-      if (preferred) utter.voice = preferred;
-      utter.onend = () => setIsPlaying(false);
-      utter.onerror = () => setIsPlaying(false);
-      utteranceRef.current = utter;
-      window.speechSynthesis.speak(utter);
-    };
-
-    const intro = new Audio("/audio/wisdom/intro.mp3");
-    intro.volume = 0.9;
-    intro.onended = speakText;
-    intro.onerror = speakText;
-    intro.play()
-      .then(() => {
-        started = true;
-        setIsPlaying(true);
-        try { window.sessionStorage.setItem(PLAYED_KEY, "1"); } catch {}
-      })
-      .catch(() => { /* autoplay blocked — Listen button still works */ });
-    audioRef.current = intro;
-    return () => {
-      if (!started) return;
-      try { intro.pause(); intro.currentTime = 0; } catch {}
-    };
-  }, [text, sanskrit, source]);
-
-  const play = useCallback(() => {
-    if (isPlaying) { stop(); return; }
-    if (typeof window === "undefined") return;
-
-    const speakText = () => {
-      if (!window.speechSynthesis) { setIsPlaying(false); return; }
-      const parts = [text];
-      if (sanskrit) parts.push(sanskrit);
-      if (source) parts.push(`— ${source}`);
-      const utter = new SpeechSynthesisUtterance(parts.join(". "));
-      utter.rate = 0.9;
-      utter.pitch = 1.0;
-      utter.volume = 0.95;
-      // Prefer a calmer Indian-English voice if available.
-      const voices = window.speechSynthesis.getVoices();
-      const preferred = voices.find((v) => /Neural|Natural/i.test(v.name) && /en-IN|en-US|en-GB/.test(v.lang))
-        ?? voices.find((v) => /female/i.test(v.name))
-        ?? voices.find((v) => /^en/.test(v.lang));
-      if (preferred) utter.voice = preferred;
-      utter.onend = () => setIsPlaying(false);
-      utter.onerror = () => setIsPlaying(false);
-      utteranceRef.current = utter;
-      window.speechSynthesis.speak(utter);
-    };
-
-    // CEO intro first, then browser-TTS reads the actual quote.
-    const intro = new Audio("/audio/wisdom/intro.mp3");
-    intro.volume = 0.9;
-    intro.onended = speakText;
-    intro.onerror = speakText; // fall through if the intro file is missing
-    intro.play().catch(speakText);
-    audioRef.current = intro;
-    setIsPlaying(true);
-  }, [isPlaying, stop, text, sanskrit, source]);
+    startCue();
+    try { window.sessionStorage.setItem(PLAYED_KEY, "1"); } catch {}
+    // Cleanup is handled by the unmount effect above.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <Button onClick={play} size="sm" variant="outline" className="inline-flex items-center gap-2">
+    <Button
+      onClick={isPlaying ? stop : startCue}
+      size="sm"
+      variant="outline"
+      className="inline-flex items-center gap-2"
+    >
       {isPlaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
       {isPlaying ? "Stop" : "Listen"}
       <Volume2 className="w-4 h-4 opacity-60" />

@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Square, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { PexelsImage } from "@/components/ui/pexels-image";
 import { PexelsVideo } from "@/components/ui/pexels-video";
+import { useVoiceCue } from "@/lib/hooks/use-voice-cue";
 
 // Pillar slugs that have a curated ambient video backdrop. Anything not in
 // this map falls back to the still photo backdrop already wired below.
@@ -34,44 +34,14 @@ interface PillarHeroProps {
 }
 
 export function PillarHero({ slug, title, sanskritName, className }: PillarHeroProps) {
-  const audioSrc = `/audio/pillars/${slug}.mp3`;
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // Autoplay the intro cue when the user lands on the pillar. Browsers
-  // generally allow autoplay when there's a fresh user-gesture (the nav
-  // click that brought them here counts). If the gesture has expired the
-  // promise rejects and the Listen button remains as fallback.
-  useEffect(() => {
-    const audio = new Audio(audioSrc);
-    audio.volume = 0.95;
-    audio.onended = () => setIsPlaying(false);
-    audio.onerror = () => setIsPlaying(false);
-    audioRef.current = audio;
-    audio.play()
-      .then(() => setIsPlaying(true))
-      .catch(() => setIsPlaying(false));
-    return () => {
-      try { audio.pause(); audio.currentTime = 0; } catch {}
-      if (audioRef.current === audio) audioRef.current = null;
-    };
-  }, [audioSrc]);
-
-  const toggle = () => {
-    const a = audioRef.current;
-    if (isPlaying && a) {
-      try { a.pause(); a.currentTime = 0; } catch {}
-      setIsPlaying(false);
-      return;
-    }
-    // Restart from the beginning.
-    const audio = new Audio(audioSrc);
-    audio.volume = 0.95;
-    audio.onended = () => setIsPlaying(false);
-    audio.onerror = () => setIsPlaying(false);
-    audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-    audioRef.current = audio;
-  };
+  // Autoplay the intro cue with the soft Om backdrop. The shared hook
+  // also takes care of speed (1.56× to match YouTube pace) and clean
+  // teardown on unmount.
+  const { isPlaying, toggle } = useVoiceCue({
+    src: `/audio/pillars/${slug}.mp3`,
+    autoplay: true,
+    ambient: true,
+  });
 
   return (
     <div className={cn(
