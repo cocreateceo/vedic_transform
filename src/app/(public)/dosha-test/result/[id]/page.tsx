@@ -3,6 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { DOSHA_INFO, type DoshaName, type DoshaScores } from "@/lib/dosha";
+import {
+  DoshaListenButton,
+  VataGlyph,
+  PittaGlyph,
+  KaphaGlyph,
+} from "@/components/features/dosha/dosha-visuals";
 
 interface AnonymousDoshaResult {
   id: string;
@@ -83,13 +89,14 @@ export default async function DoshaResultPage({
             <span className="inline-block text-xs uppercase tracking-wider text-orange-300 mb-3">
               Your Vedic Dosha
             </span>
-            <div
-              className="w-24 h-24 mx-auto rounded-full flex items-center justify-center mb-4 text-white text-4xl font-bold"
-              style={{
-                background: `linear-gradient(135deg, ${primary.color}, ${primary.color}cc)`,
-              }}
-            >
-              {primary.sanskrit}
+            <div className="w-32 h-32 mx-auto mb-4">
+              {(() => {
+                const Glyph =
+                  result.primary === "vata" ? VataGlyph
+                  : result.primary === "pitta" ? PittaGlyph
+                  : KaphaGlyph;
+                return <Glyph />;
+              })()}
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-white">
               {primary.name}
@@ -99,6 +106,9 @@ export default async function DoshaResultPage({
             <p className="text-[#94a3b8] mt-2">
               Primary: {primary.element} · Secondary: {secondary.element}
             </p>
+            <div className="mt-5 flex justify-center">
+              <DoshaListenButton dosha={result.primary as "vata" | "pitta" | "kapha"} />
+            </div>
           </div>
 
           <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06]">

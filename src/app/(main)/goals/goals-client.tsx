@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { WeeklyGoalCard, FocusPillarSelector, GoalSummary } from "@/components/features/goals";
+import { TargetGlyph } from "@/components/features/daily/page-glyphs";
 
 interface Goal {
   id: string;
@@ -139,11 +140,14 @@ export function GoalsPageClient({
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Page Header */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Goals</h1>
-        <p className="text-sm sm:text-base text-gray-600 mt-1">
-          Set and track your weekly transformation goals
-        </p>
+      <div className="flex items-center gap-4">
+        <TargetGlyph />
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Goals</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">
+            Set and track your weekly transformation goals
+          </p>
+        </div>
       </div>
 
       {/* Goal Summary */}

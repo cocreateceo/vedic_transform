@@ -5,11 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Play, Square, UtensilsCrossed, Moon, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
+import { PexelsVideo } from "@/components/ui/pexels-video";
 
 const FASTING_HOURS = 16;
 const EATING_HOURS = 8;
 const STORAGE_KEY = "fasting-session-v1";
 const SESSION_PILLAR = "nutrition-fasting";
+
+// CEO voice cues for fasting milestones. Empty src silently skipped.
+const VOICE = {
+  fastStart:    "/audio/fasting/start.mp3",
+  fastMidway:   "/audio/fasting/midway.mp3",
+  fastComplete: "/audio/fasting/complete.mp3",
+  eatStart:     "/audio/fasting/eat-start.mp3",
+};
 
 type StoredSession = {
   startTime: number;
@@ -27,8 +36,20 @@ export function FastingTimer() {
   const [hydrated, setHydrated] = useState(false);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const voiceRef = useRef<HTMLAudioElement | null>(null);
   const targetHitFiredRef = useRef(false);
+  const midwayFiredRef = useRef(false);
   const checkinFiredRef = useRef(false);
+
+  const playVoice = useCallback((src: string) => {
+    if (!soundEnabled) return;
+    const prev = voiceRef.current;
+    if (prev) { try { prev.pause(); prev.currentTime = 0; } catch {} }
+    const a = new Audio(src);
+    a.volume = 0.9;
+    a.play().catch(() => {});
+    voiceRef.current = a;
+  }, [soundEnabled]);
 
   const targetSeconds = isFasting
     ? FASTING_HOURS * 3600
@@ -86,11 +107,22 @@ export function FastingTimer() {
     if (!isRunning || !startTime) return;
 
     const interval = setInterval(() => {
-      setElapsedSeconds(Math.floor((Date.now() - startTime) / 1000));
+      const next = Math.floor((Date.now() - startTime) / 1000);
+      setElapsedSeconds(next);
+      // Fire the halfway cue exactly once when we cross 50% of the target.
+      if (
+        isFasting &&
+        !midwayFiredRef.current &&
+        next >= targetSeconds / 2 &&
+        next < targetSeconds
+      ) {
+        midwayFiredRef.current = true;
+        playVoice(VOICE.fastMidway);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isRunning, startTime]);
+  }, [isRunning, startTime, isFasting, targetSeconds, playVoice]);
 
   // Fire the completion chime + record the check-in exactly once when the
   // user crosses the target threshold. Re-renders after that don't refire.
@@ -101,6 +133,7 @@ export function FastingTimer() {
     targetHitFiredRef.current = true;
     setTargetHit(true);
     playChime();
+    playVoice(isFasting ? VOICE.fastComplete : VOICE.eatStart);
 
     // Best-effort browser notification — silently skipped if denied/unsupported.
     try {
@@ -125,7 +158,7 @@ export function FastingTimer() {
         .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
         .catch(() => {});
     }
-  }, [elapsedSeconds, targetSeconds, isRunning, isFasting, playChime]);
+  }, [elapsedSeconds, targetSeconds, isRunning, isFasting, playChime, playVoice]);
 
   const startSession = useCallback(
     (fasting: boolean) => {
@@ -137,7 +170,9 @@ export function FastingTimer() {
       setTargetHit(false);
       setKarmaAwarded(null);
       targetHitFiredRef.current = false;
+      midwayFiredRef.current = false;
       checkinFiredRef.current = false;
+      playVoice(fasting ? VOICE.fastStart : VOICE.eatStart);
 
       // Persist immediately so a page reload right after start still works.
       try {
@@ -155,7 +190,7 @@ export function FastingTimer() {
         }
       } catch {}
     },
-    []
+    [playVoice]
   );
 
   const stopSession = useCallback(() => {
@@ -165,7 +200,10 @@ export function FastingTimer() {
     setTargetHit(false);
     setKarmaAwarded(null);
     targetHitFiredRef.current = false;
+    midwayFiredRef.current = false;
     checkinFiredRef.current = false;
+    const a = voiceRef.current;
+    if (a) { try { a.pause(); a.currentTime = 0; } catch {} voiceRef.current = null; }
     try {
       window.localStorage.removeItem(STORAGE_KEY);
     } catch {}
@@ -199,7 +237,24 @@ export function FastingTimer() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 py-8">
+    <div className="relative flex flex-col items-center gap-8 py-8 rounded-3xl overflow-hidden">
+      {/* Candle-flame backdrop while the fast is active — the digestive fire metaphor. */}
+      <div
+        className={cn(
+          "absolute inset-0 pointer-events-none transition-opacity duration-1000",
+          isRunning && isFasting ? "opacity-30" : "opacity-10",
+        )}
+      >
+        <PexelsVideo
+          slug={isFasting || !isRunning ? "candle-flame" : "nature-flow"}
+          showAttribution={false}
+          className="w-full h-full"
+        />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/35 to-white/75 pointer-events-none" />
+
+      <div className="relative z-10 flex flex-col items-center gap-8 w-full">
+
       {/* Mode toggle (only when not running) */}
       {!isRunning && (
         <div className="flex gap-3">
@@ -428,6 +483,8 @@ export function FastingTimer() {
           Fast for 16 hours, eat within an 8-hour window. This pattern supports
           cellular repair, mental clarity, and metabolic health.
         </p>
+      </div>
+
       </div>
     </div>
   );

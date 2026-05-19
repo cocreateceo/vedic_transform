@@ -21,6 +21,7 @@ import {
   TrendingUp,
   BarChart3,
 } from "lucide-react";
+import { MoodGlyph } from "@/components/features/daily/page-glyphs";
 
 interface MoodLog {
   id: string;
@@ -145,14 +146,16 @@ export function MoodPageClient({
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
-          <Heart className="h-8 w-8 text-[var(--color-primary)]" />
-          Mood Tracker
-        </h1>
-        <p className="text-[var(--color-text-secondary)] mt-1">
-          Track your emotional well-being on your transformation journey
-        </p>
+      <div className="flex items-center gap-4">
+        <MoodGlyph />
+        <div>
+          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
+            Mood Tracker
+          </h1>
+          <p className="text-[var(--color-text-secondary)] mt-1">
+            Track your emotional well-being on your transformation journey
+          </p>
+        </div>
       </div>
 
       {/* Daily Check-in Card */}

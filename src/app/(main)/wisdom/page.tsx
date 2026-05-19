@@ -3,6 +3,7 @@
 import { DAILY_WISDOM } from "@/data/daily-wisdom";
 import { BookOpen, Sparkles, Quote } from "lucide-react";
 import { ShareButton } from "@/components/ui/share-button";
+import { WisdomReadAloud } from "@/components/features/wisdom/wisdom-read-aloud";
 import { getDayOfYear, getTodayIndex } from "@/lib/wisdom";
 
 export default function WisdomPage() {
@@ -82,6 +83,11 @@ export default function WisdomPage() {
               >
                 {categoryLabels[todayWisdom.category]}
               </span>
+              <WisdomReadAloud
+                text={todayWisdom.text}
+                sanskrit={todayWisdom.sanskrit}
+                source={todayWisdom.source}
+              />
               <ShareButton
                 title="Daily Vedic Wisdom"
                 text={`"${todayWisdom.text}" — ${todayWisdom.source}`}

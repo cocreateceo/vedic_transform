@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
+import { MandalaBackdrop } from "./mandala-backdrop";
 
 // ── Step Data ────────────────────────────────────────────────────────
 
@@ -103,6 +104,22 @@ const STEPS = [
 export function OnboardingQuiz() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
+  const welcomeAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Play the CEO welcome cue once when the user lands on the first step.
+  // Best-effort — autoplay may be blocked until the user clicks, which is fine
+  // because the page itself is meaningful without audio.
+  useEffect(() => {
+    if (currentStep !== 0) return;
+    const audio = new Audio("/audio/onboarding/welcome.mp3");
+    audio.volume = 0.9;
+    audio.play().catch(() => {});
+    welcomeAudioRef.current = audio;
+    return () => {
+      try { audio.pause(); audio.currentTime = 0; } catch {}
+      welcomeAudioRef.current = null;
+    };
+  }, [currentStep]);
   const [answers, setAnswers] = useState<Partial<QuizAnswer>>({});
   const [saving, setSaving] = useState(false);
 
@@ -199,7 +216,9 @@ export function OnboardingQuiz() {
   const isLastStep = currentStep === totalSteps - 1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50/30 to-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50/30 to-white flex flex-col relative overflow-hidden">
+      <MandalaBackdrop />
+
       {/* Header */}
       <div className="px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">

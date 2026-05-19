@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { Award, Star, Trophy, Flame, Target, Sparkles } from "lucide-react";
 import { ShareButton } from "@/components/ui/share-button";
+import { TrophyGlyph } from "@/components/features/daily/page-glyphs";
 
 interface BadgeWithEarned {
   id: string;
@@ -101,14 +102,16 @@ export default function AchievementsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
-          <Trophy className="h-8 w-8 text-[var(--color-secondary)]" />
-          Achievements
-        </h1>
-        <p className="text-[var(--color-text-secondary)] mt-1">
-          Your badges and karma on the transformation path
-        </p>
+      <div className="flex items-center gap-4">
+        <TrophyGlyph />
+        <div>
+          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
+            Achievements
+          </h1>
+          <p className="text-[var(--color-text-secondary)] mt-1">
+            Your badges and karma on the transformation path
+          </p>
+        </div>
       </div>
 
       {/* Summary Bar */}

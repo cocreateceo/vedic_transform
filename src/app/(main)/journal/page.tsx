@@ -5,6 +5,7 @@ import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Heart, Sparkles, Calendar, Check, Trash2, RotateCcw } from "lucide-react";
+import { QuillGlyph } from "@/components/features/daily/page-glyphs";
 
 // Best-effort pillar check-in after a journal save. Same-day server dedupe
 // makes this safe to call repeatedly.
@@ -171,11 +172,14 @@ export default function JournalPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Journal</h1>
-        <p className="text-gray-600 mt-2">
-          Record your gratitude, intentions, and manifestations
-        </p>
+      <div className="flex items-center gap-4">
+        <QuillGlyph />
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Journal</h1>
+          <p className="text-gray-600 mt-2">
+            Record your gratitude, intentions, and manifestations
+          </p>
+        </div>
       </div>
 
       {/* Today's entries */}

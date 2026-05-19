@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Clock, Calendar, BookOpen, Brain, Sparkles, Dumbbell, FlaskConical, Leaf } from "lucide-react";
 import { BLOG_POSTS, type BlogPost } from "@/data/blog-posts";
+import { PexelsImage } from "@/components/ui/pexels-image";
 
 const categories = [
   { key: "all", label: "All" },
@@ -41,13 +42,17 @@ function formatDate(dateStr: string): string {
 function ArticleCard({ post }: { post: BlogPost }) {
   const cat = categoryColors[post.category];
   const Icon = categoryIcons[post.category];
+  const pexelsSlug = `blog-${post.category}`;
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
       <div className="rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all overflow-hidden">
-        {/* Thumbnail placeholder */}
-        <div className={`h-40 bg-gradient-to-br ${cat.thumbnail} flex items-center justify-center`}>
-          {Icon && <Icon className="w-12 h-12 text-white/30" />}
+        {/* Thumbnail — Pexels image, falls back to gradient placeholder */}
+        <div className={`relative h-40 bg-gradient-to-br ${cat.thumbnail} flex items-center justify-center overflow-hidden`}>
+          <PexelsImage slug={pexelsSlug} fallbackSlug="blog-default" className="absolute inset-0 [&_figcaption]:hidden" />
+          {Icon && (
+            <Icon className="w-12 h-12 text-white/70 relative z-10 drop-shadow-lg" />
+          )}
         </div>
 
         <div className="p-5">

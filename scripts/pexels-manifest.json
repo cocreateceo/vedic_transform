@@ -1,0 +1,26 @@
+{
+  "_comment": "Map slug -> Pexels search query. Edit to add new images. Run scripts/pexels-fetch.mjs with PEXELS_API_KEY to populate public/images/pexels/.",
+  "entries": [
+    { "slug": "pillar-morning-initiation",   "query": "sunrise meditation silhouette",      "orientation": "landscape" },
+    { "slug": "pillar-nutrition-fasting",    "query": "ayurveda food bowl spices",          "orientation": "landscape" },
+    { "slug": "pillar-thoughts-intention",   "query": "calm thinking mountain top",         "orientation": "landscape" },
+    { "slug": "pillar-breathing-meditation", "query": "pranayama breathing yoga",           "orientation": "landscape" },
+    { "slug": "pillar-movement",             "query": "yoga sun salutation",                "orientation": "landscape" },
+    { "slug": "pillar-healing-meditation",   "query": "meditation peace lotus",             "orientation": "landscape" },
+    { "slug": "pillar-gratitude",            "query": "gratitude hands open lotus",         "orientation": "landscape" },
+    { "slug": "pillar-sandhya-meditation",   "query": "sunset temple silhouette",           "orientation": "landscape" },
+    { "slug": "pillar-brahman-connection",   "query": "starry sky cosmic infinity",         "orientation": "landscape" },
+    { "slug": "pillar-divine-manifestation", "query": "golden sparkle visualization light", "orientation": "landscape" },
+    { "slug": "pillar-sleep-optimization",   "query": "peaceful sleep night candle",        "orientation": "landscape" },
+
+    { "slug": "blog-default",                "query": "vedic spiritual wisdom abstract",    "orientation": "landscape" },
+    { "slug": "blog-body",                   "query": "yoga healthy lifestyle",             "orientation": "landscape" },
+    { "slug": "blog-mind",                   "query": "calm meditation thoughts",           "orientation": "landscape" },
+    { "slug": "blog-spirit",                 "query": "spiritual lotus temple",             "orientation": "landscape" },
+    { "slug": "blog-science",                "query": "neuroscience brain meditation",      "orientation": "landscape" },
+    { "slug": "blog-lifestyle",              "query": "balanced lifestyle calm home",       "orientation": "landscape" },
+
+    { "slug": "home-hero",                   "query": "meditation sunset mountains spiritual", "orientation": "landscape" },
+    { "slug": "about-mission",               "query": "community circle meditation",        "orientation": "landscape" }
+  ]
+}

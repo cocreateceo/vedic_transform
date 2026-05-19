@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
+import { MeditationPosture } from "./meditation-posture";
+import { PexelsVideo } from "@/components/ui/pexels-video";
 
 const SESSION_PILLAR = "healing-meditation";
 
@@ -13,10 +15,18 @@ const DURATION_OPTIONS = [5, 10, 15, 20, 30];
 // for natural beating. Gain held very low so it sits behind everything.
 const DRONE_FREQS = [110, 165, 220];
 const DRONE_GAIN = 0.06;
-// Bell rung at each interval to mark the passage of time without
-// requiring the user to keep looking at the screen.
-const INTERVAL_BELL_SECONDS = 60;
 const BELL_FREQ = 528;
+
+// Spoken-voice teacher cues rendered with the CEO XTTS voice.
+// Each cue fires exactly once per run; firing is keyed by id and reset on
+// timer reset. Times are absolute elapsed seconds OR offsets-from-end.
+type VoiceCue = { id: string; src: string; atElapsedSec?: number; atRemainingSec?: number; atRatio?: number };
+const VOICE_CUES: VoiceCue[] = [
+  { id: "start",      src: "/audio/meditation/start.mp3",       atElapsedSec: 2 },
+  { id: "midway",     src: "/audio/meditation/midway.mp3",      atRatio: 0.5 },
+  { id: "one-minute", src: "/audio/meditation/one-minute.mp3",  atRemainingSec: 60 },
+  { id: "closing",    src: "/audio/meditation/closing.mp3",     atRemainingSec: 10 },
+];
 
 export function MeditationTimer() {
   const [selectedDuration, setSelectedDuration] = useState(10);
@@ -29,6 +39,8 @@ export function MeditationTimer() {
   const droneOscillatorsRef = useRef<OscillatorNode[]>([]);
   const droneGainRef = useRef<GainNode | null>(null);
   const checkinFiredRef = useRef(false);
+  const voiceAudioRef = useRef<HTMLAudioElement | null>(null);
+  const firedCuesRef = useRef<Set<string>>(new Set());
 
   const totalSeconds = selectedDuration * 60;
   const elapsed = totalSeconds - timeRemaining;
@@ -112,13 +124,31 @@ export function MeditationTimer() {
 
   const playChime = useCallback(() => playBell(BELL_FREQ, 2.5, 0.35), [playBell]);
 
+  const stopVoice = useCallback(() => {
+    const a = voiceAudioRef.current;
+    if (a) {
+      try { a.pause(); a.currentTime = 0; } catch {}
+      voiceAudioRef.current = null;
+    }
+  }, []);
+
+  const playVoice = useCallback((src: string) => {
+    stopVoice();
+    const a = new Audio(src);
+    a.volume = 0.9;
+    a.play().catch(() => {});
+    voiceAudioRef.current = a;
+  }, [stopVoice]);
+
   const reset = useCallback(() => {
     setIsActive(false);
     setIsComplete(false);
     setTimeRemaining(selectedDuration * 60);
     setKarmaAwarded(null);
     checkinFiredRef.current = false;
-  }, [selectedDuration]);
+    firedCuesRef.current.clear();
+    stopVoice();
+  }, [selectedDuration, stopVoice]);
 
   // Credit the user's pillar check-in when the timer naturally completes.
   // Server-side same-day dedupe means re-running the timer is safe.
@@ -145,6 +175,7 @@ export function MeditationTimer() {
 
   useEffect(() => {
     if (!isActive || isComplete) return;
+    const totalSec = selectedDuration * 60;
 
     const interval = setInterval(() => {
       setTimeRemaining((prev) => {
@@ -155,23 +186,28 @@ export function MeditationTimer() {
           return 0;
         }
         const next = prev - 1;
-        // Ring an interval bell every INTERVAL_BELL_SECONDS, but never
-        // at the very end (the completion chime handles that).
-        const elapsedSec = selectedDuration * 60 - next;
-        if (
-          soundEnabled &&
-          elapsedSec > 0 &&
-          elapsedSec % INTERVAL_BELL_SECONDS === 0 &&
-          next > 1
-        ) {
-          playBell(BELL_FREQ, 1.5, 0.18);
+        const elapsedSec = totalSec - next;
+
+        // Fire any voice cue whose moment we just crossed.
+        if (soundEnabled) {
+          for (const cue of VOICE_CUES) {
+            if (firedCuesRef.current.has(cue.id)) continue;
+            let fire = false;
+            if (cue.atElapsedSec !== undefined && elapsedSec >= cue.atElapsedSec) fire = true;
+            else if (cue.atRemainingSec !== undefined && next <= cue.atRemainingSec) fire = true;
+            else if (cue.atRatio !== undefined && elapsedSec >= Math.floor(totalSec * cue.atRatio)) fire = true;
+            if (fire) {
+              firedCuesRef.current.add(cue.id);
+              playVoice(cue.src);
+            }
+          }
         }
         return next;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isActive, isComplete, playChime, playBell, soundEnabled, selectedDuration]);
+  }, [isActive, isComplete, playChime, soundEnabled, selectedDuration, playVoice]);
 
   // Start / stop the drone whenever the active state flips.
   useEffect(() => {
@@ -179,9 +215,14 @@ export function MeditationTimer() {
       startDrone();
     } else {
       stopDrone();
+      // Pause/mute also cuts off any in-flight teacher cue.
+      stopVoice();
     }
-    return () => stopDrone();
-  }, [isActive, soundEnabled, startDrone, stopDrone]);
+    return () => {
+      stopDrone();
+      stopVoice();
+    };
+  }, [isActive, soundEnabled, startDrone, stopDrone, stopVoice]);
 
   const toggleTimer = () => {
     if (isComplete) {
@@ -239,7 +280,20 @@ export function MeditationTimer() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 py-8">
+    <div className="relative flex flex-col items-center gap-6 py-8 rounded-3xl overflow-hidden">
+      {/* Ambient lotus-pond video backdrop, only visible while practicing. */}
+      <div
+        className={cn(
+          "absolute inset-0 pointer-events-none transition-opacity duration-1000",
+          isActive ? "opacity-25" : "opacity-10",
+        )}
+      >
+        <PexelsVideo slug="meditation-ambient" showAttribution={false} className="w-full h-full" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/40 to-white/80 pointer-events-none" />
+
+      <div className="relative z-10 flex flex-col items-center gap-6 w-full">
+
       {/* Duration selector */}
       <div className="flex flex-wrap items-center justify-center gap-2">
         {DURATION_OPTIONS.map((mins) => (
@@ -259,6 +313,9 @@ export function MeditationTimer() {
           </button>
         ))}
       </div>
+
+      {/* Posture guidance — breathes when active to demonstrate pranayama pace */}
+      <MeditationPosture breathing={isActive} className="h-[180px] w-[220px]" />
 
       {/* Circular progress ring */}
       <div className="relative">
@@ -367,6 +424,8 @@ export function MeditationTimer() {
         Find a comfortable position. Close your eyes and focus on your breath.
         Let thoughts pass without judgment.
       </p>
+
+      </div>
     </div>
   );
 }

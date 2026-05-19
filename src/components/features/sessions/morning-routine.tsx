@@ -17,16 +17,18 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
+import { SunriseIllustration } from "./sunrise-illustration";
 
 const STEPS = [
-  { name: "Wake Up", icon: Sparkles },
-  { name: "Hydrate", icon: Droplets },
-  { name: "Breathwork", icon: Wind },
-  { name: "Awareness", icon: Eye },
-  { name: "Gratitude", icon: Heart },
-  { name: "Manifestation", icon: Target },
+  { name: "Wake Up",      icon: Sparkles, voice: "/audio/morning/wake.mp3" },
+  { name: "Hydrate",      icon: Droplets, voice: "/audio/morning/hydrate.mp3" },
+  { name: "Breathwork",   icon: Wind,     voice: "/audio/morning/breathwork.mp3" },
+  { name: "Awareness",    icon: Eye,      voice: "/audio/morning/awareness.mp3" },
+  { name: "Gratitude",    icon: Heart,    voice: "/audio/morning/gratitude.mp3" },
+  { name: "Manifestation", icon: Target,  voice: "/audio/morning/manifestation.mp3" },
 ];
 
+const COMPLETE_VOICE = "/audio/morning/complete.mp3";
 const SESSION_PILLAR = "morning-initiation";
 
 export function MorningRoutine() {
@@ -63,7 +65,41 @@ export function MorningRoutine() {
   // Audio for breathwork — same procedural tones as the standalone
   // Breathing tab so the in-routine experience matches.
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const voiceRef = useRef<HTMLAudioElement | null>(null);
   const checkinFiredRef = useRef(false);
+
+  const stopVoice = useCallback(() => {
+    const a = voiceRef.current;
+    if (a) {
+      try { a.pause(); a.currentTime = 0; } catch {}
+      voiceRef.current = null;
+    }
+  }, []);
+
+  const playVoice = useCallback((src: string) => {
+    stopVoice();
+    const a = new Audio(src);
+    a.volume = 0.9;
+    a.play().catch(() => {});
+    voiceRef.current = a;
+  }, [stopVoice]);
+
+  // Play the step's voice cue whenever the user lands on a new step.
+  useEffect(() => {
+    if (!soundEnabled || isComplete) return;
+    const v = STEPS[currentStep]?.voice;
+    if (v) playVoice(v);
+  }, [currentStep, soundEnabled, isComplete, playVoice]);
+
+  // Play the completion cue and stop on unmount/mute.
+  useEffect(() => {
+    if (isComplete && soundEnabled) playVoice(COMPLETE_VOICE);
+  }, [isComplete, soundEnabled, playVoice]);
+
+  useEffect(() => {
+    if (!soundEnabled) stopVoice();
+    return () => stopVoice();
+  }, [soundEnabled, stopVoice]);
 
   const playBreathTone = useCallback(
     (kind: "inhale" | "exhale") => {
@@ -337,9 +373,7 @@ export function MorningRoutine() {
         {/* Step 1: Wake Up */}
         {currentStep === 0 && (
           <div className="text-center space-y-6">
-            <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-amber-300 via-orange-400 to-amber-500 flex items-center justify-center shadow-2xl shadow-amber-500/30 animate-pulse">
-              <Sparkles className="w-12 h-12 text-white" />
-            </div>
+            <SunriseIllustration className="w-full max-w-[260px] mx-auto h-[160px]" />
             <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">
               Wake Up
             </h3>

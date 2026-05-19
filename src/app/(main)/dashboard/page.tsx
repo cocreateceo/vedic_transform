@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/auth-context";
 import { apiFetch } from "@/lib/api";
+import { GreetingPlayButton } from "@/components/features/dashboard/greeting-play-button";
 import { StreakCounter } from "@/components/features/dashboard/streak-counter";
 import { KarmaPoints } from "@/components/features/dashboard/karma-points";
 import { PillarGrid } from "@/components/features/dashboard/pillar-grid";
@@ -176,15 +177,18 @@ export default function DashboardPage() {
               {48 - currentDay} days remaining in your transformation
             </p>
           </div>
-          <div className="hidden sm:flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2">
-            <Calendar className="w-5 h-5" />
-            <span className="font-medium">
-              {new Date().toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "short",
-                day: "numeric",
-              })}
-            </span>
+          <div className="flex items-center gap-2">
+            <GreetingPlayButton />
+            <div className="hidden sm:flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2">
+              <Calendar className="w-5 h-5" />
+              <span className="font-medium">
+                {new Date().toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
           </div>
         </div>
       </div>

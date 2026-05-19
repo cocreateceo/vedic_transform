@@ -1,0 +1,98 @@
+{
+  "home-hero": {
+    "query": "ocean sunset waves slow",
+    "duration": 9,
+    "width": 3840,
+    "height": 2160,
+    "file_width": 640,
+    "file_height": 360,
+    "photographer": "Aswin R S",
+    "photographer_url": "https://www.pexels.com/@aswin",
+    "pexels_url": "https://www.pexels.com/video/beach-sunset-waves-26608389/",
+    "poster": "https://images.pexels.com/videos/26608389/4k-atlantic-ocean-beach-background-beach-sunset-26608389.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  },
+  "meditation-ambient": {
+    "query": "lotus pond aerial slow",
+    "duration": 15,
+    "width": 3840,
+    "height": 2160,
+    "file_width": 640,
+    "file_height": 360,
+    "photographer": "++ LiN",
+    "photographer_url": "https://www.pexels.com/@lin-2156561570",
+    "pexels_url": "https://www.pexels.com/video/tranquil-lotus-pond-with-blooming-flowers-34317797/",
+    "poster": "https://images.pexels.com/videos/34317797/lotus-leaf-water-lily-34317797.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  },
+  "breathing-ambient": {
+    "query": "clouds time-lapse soft",
+    "duration": 11,
+    "width": 3840,
+    "height": 2160,
+    "file_width": 426,
+    "file_height": 240,
+    "photographer": "Ilya Klimenko",
+    "photographer_url": "https://www.pexels.com/@tact-tm",
+    "pexels_url": "https://www.pexels.com/video/a-time-lapse-video-of-the-sky-6723890/",
+    "poster": "https://images.pexels.com/videos/6723890/pexels-photo-6723890.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  },
+  "morning-ambient": {
+    "query": "sunrise time-lapse calm",
+    "duration": 9,
+    "width": 1920,
+    "height": 1080,
+    "file_width": 426,
+    "file_height": 240,
+    "photographer": "Waqas Ahmad Wicky",
+    "photographer_url": "https://www.pexels.com/@wiki",
+    "pexels_url": "https://www.pexels.com/video/time-lapse-of-the-sunrise-4722513/",
+    "poster": "https://images.pexels.com/videos/4722513/pexels-photo-4722513.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  },
+  "movement-ambient": {
+    "query": "yoga silhouette slow",
+    "duration": 9,
+    "width": 1920,
+    "height": 1080,
+    "file_width": 426,
+    "file_height": 240,
+    "photographer": "olia danilevich",
+    "photographer_url": "https://www.pexels.com/@olia-danilevich",
+    "pexels_url": "https://www.pexels.com/video/a-woman-doing-yoga-4352404/",
+    "poster": "https://images.pexels.com/videos/4352404/asana-body-meditation-yoga-4352404.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  },
+  "nature-flow": {
+    "query": "river flowing forest slow",
+    "duration": 9,
+    "width": 2868,
+    "height": 1512,
+    "file_width": 426,
+    "file_height": 224,
+    "photographer": "binary Ego",
+    "photographer_url": "https://www.pexels.com/@binaryego",
+    "pexels_url": "https://www.pexels.com/video/drone-video-of-a-flowing-forest-river-14214034/",
+    "poster": "https://images.pexels.com/videos/14214034/aerial-videography-autumn-autumn-weather-background-14214034.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  },
+  "candle-flame": {
+    "query": "candle flame close-up",
+    "duration": 14,
+    "width": 1920,
+    "height": 1080,
+    "file_width": 426,
+    "file_height": 240,
+    "photographer": "Cleverson  Amaro",
+    "photographer_url": "https://www.pexels.com/@cleverson-amaro-3806095",
+    "pexels_url": "https://www.pexels.com/video/the-burning-flame-of-a-candle-5641527/",
+    "poster": "https://images.pexels.com/videos/5641527/pexels-photo-5641527.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  },
+  "starry-night": {
+    "query": "night sky milky way time lapse",
+    "duration": 8,
+    "width": 5760,
+    "height": 3240,
+    "file_width": 640,
+    "file_height": 360,
+    "photographer": "Luz Calor Som",
+    "photographer_url": "https://www.pexels.com/@luz-calor-som-99374650",
+    "pexels_url": "https://www.pexels.com/video/milky-way-starry-night-and-a-palm-tree-27426486/",
+    "poster": "https://images.pexels.com/videos/27426486/4k-resolution-astrology-astronomy-astrophotography-27426486.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  }
+}

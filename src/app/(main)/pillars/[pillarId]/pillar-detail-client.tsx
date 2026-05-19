@@ -6,6 +6,7 @@ import { getPillarBySlug, PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BreathingVisualizer } from "@/components/features/pillars/breathing-visualizer";
+import { PillarHero, PillarHeroStyles } from "@/components/features/pillars/pillar-hero";
 import { Check, ArrowLeft, Clock, Sparkles, Download, FileText, Compass } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
@@ -159,6 +160,14 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
         <ArrowLeft className="w-4 h-4" />
         Back to Pillars
       </Link>
+
+      <PillarHeroStyles />
+      <PillarHero
+        slug={pillar.slug}
+        title={pillar.name}
+        sanskritName={pillar.sanskritName}
+        className="mb-8"
+      />
 
       {/* Header */}
       <div className="flex items-start gap-6 mb-8">

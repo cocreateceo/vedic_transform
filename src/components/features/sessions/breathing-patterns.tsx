@@ -5,19 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Play, Square, Volume2, VolumeX, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
+import { BreathingLotus } from "./breathing-lotus";
+import { PexelsVideo } from "@/components/ui/pexels-video";
 
 const SESSION_PILLAR = "breathing-meditation";
 // A "real session" threshold so accidentally hitting Start then Stop doesn't
 // farm karma. Five complete cycles is roughly a minute of practice.
 const MIN_CYCLES_FOR_CREDIT = 5;
 
-// Phase-change cues: a rising glide for inhale, falling for exhale, and
-// a short tick for hold. Played procedurally so no audio files needed.
-const PHASE_TONES: Record<string, { startFreq: number; endFreq: number; duration: number }> = {
-  "Breathe In": { startFreq: 220, endFreq: 440, duration: 0.6 },
-  "Breathe Out": { startFreq: 440, endFreq: 220, duration: 0.6 },
-  Hold: { startFreq: 330, endFreq: 330, duration: 0.15 },
+// Phase voice cues — short CEO clips, one per phase. Centralized so the
+// component can pre-warm them and so we have a single place to swap voices.
+const PHASE_VOICE: Record<string, string> = {
+  "Breathe In":  "/audio/breathing/inhale.mp3",
+  "Breathe Out": "/audio/breathing/exhale.mp3",
+  Hold:          "/audio/breathing/hold.mp3",
 };
+const INTRO_VOICE = "/audio/breathing/intro.mp3";
 
 interface BreathingPattern {
   name: string;
@@ -63,33 +66,25 @@ export function BreathingPatterns() {
   const [cycleCount, setCycleCount] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  const voiceRef = useRef<HTMLAudioElement | null>(null);
   const checkinFiredRef = useRef(false);
 
-  const playPhaseTone = useCallback((phaseName: string) => {
-    const tone = PHASE_TONES[phaseName];
-    if (!tone) return;
-    try {
-      if (!audioCtxRef.current) audioCtxRef.current = new AudioContext();
-      const ctx = audioCtxRef.current;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(tone.startFreq, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(
-        tone.endFreq,
-        ctx.currentTime + tone.duration,
-      );
-      gain.gain.setValueAtTime(0.18, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + tone.duration);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + tone.duration);
-    } catch {
-      // Web Audio unavailable — fall through silently
+  // Stop any in-flight phrase before queueing the next one so we never overlap.
+  const playVoice = useCallback((src: string) => {
+    const prev = voiceRef.current;
+    if (prev) {
+      try { prev.pause(); prev.currentTime = 0; } catch {}
     }
+    const a = new Audio(src);
+    a.volume = 0.9;
+    a.play().catch(() => {});
+    voiceRef.current = a;
   }, []);
+
+  const playPhaseVoice = useCallback((phaseName: string) => {
+    const src = PHASE_VOICE[phaseName];
+    if (src) playVoice(src);
+  }, [playVoice]);
 
   const pattern = PATTERNS[selectedPattern];
   const currentPhase = pattern.phases[currentPhaseIndex];
@@ -97,30 +92,33 @@ export function BreathingPatterns() {
     ? phaseElapsed / currentPhase.duration
     : 0;
 
-  // Circle scale: expand on inhale, contract on exhale, hold steady on hold
-  const getScale = () => {
-    if (!isActive) return 1;
-    const phaseName = currentPhase.name;
-    if (phaseName === "Breathe In") return 1 + phaseProgress * 0.4;
-    if (phaseName === "Breathe Out") return 1.4 - phaseProgress * 0.4;
-    return phaseName === "Hold" && currentPhaseIndex === 1 ? 1.4 : 1;
+  // Lotus openness: 0 = closed bud (fully exhaled), 1 = fully bloomed (fully inhaled).
+  // Drives the SVG petals so they breathe in sync with the timer.
+  const getOpenness = (): number => {
+    if (!isActive || !currentPhase) return 0;
+    const name = currentPhase.name;
+    if (name === "Breathe In")  return phaseProgress;
+    if (name === "Breathe Out") return 1 - phaseProgress;
+    // "Hold" — stay at whatever level the previous phase ended at. Hold-after-
+    // inhale (index 1 in 4:7:8 and box) holds bloomed; hold-after-exhale (box,
+    // index 3) holds closed.
+    return currentPhaseIndex === 1 ? 1 : 0;
   };
 
-  const getPhaseColor = () => {
-    if (!isActive) return "from-gray-200 to-gray-300";
-    const phaseName = currentPhase.name;
-    if (phaseName === "Breathe In") return "from-cyan-400 to-cyan-600";
-    if (phaseName === "Hold") return "from-orange-500 to-amber-500";
-    return "from-amber-400 to-amber-600";
-  };
+  const lotusPhase: "in" | "hold" | "out" | "idle" = (() => {
+    if (!isActive || !currentPhase) return "idle";
+    if (currentPhase.name === "Breathe In") return "in";
+    if (currentPhase.name === "Hold") return "hold";
+    return "out";
+  })();
 
-  const getGlowColor = () => {
-    if (!isActive) return "bg-gray-300/10";
-    const phaseName = currentPhase.name;
-    if (phaseName === "Breathe In") return "bg-cyan-400/20";
-    if (phaseName === "Hold") return "bg-orange-500/20";
-    return "bg-amber-400/20";
-  };
+  const stopVoice = useCallback(() => {
+    const a = voiceRef.current;
+    if (a) {
+      try { a.pause(); a.currentTime = 0; } catch {}
+      voiceRef.current = null;
+    }
+  }, []);
 
   const reset = useCallback(() => {
     setIsActive(false);
@@ -129,7 +127,14 @@ export function BreathingPatterns() {
     setCycleCount(0);
     setKarmaAwarded(null);
     checkinFiredRef.current = false;
-  }, []);
+    stopVoice();
+  }, [stopVoice]);
+
+  // Make sure voice doesn't leak across unmount or mute.
+  useEffect(() => {
+    if (!soundEnabled) stopVoice();
+    return () => stopVoice();
+  }, [soundEnabled, stopVoice]);
 
   // Credit a check-in when the user has practiced enough cycles. Fires once
   // per session — repeat sessions today are deduped by the server.
@@ -161,7 +166,7 @@ export function BreathingPatterns() {
           const nextPhase = wrapsCycle
             ? pattern.phases[0]
             : pattern.phases[nextIndex];
-          if (soundEnabled && nextPhase) playPhaseTone(nextPhase.name);
+          if (soundEnabled && nextPhase) playPhaseVoice(nextPhase.name);
           if (wrapsCycle) {
             setCurrentPhaseIndex(0);
             setCycleCount((c) => {
@@ -184,7 +189,7 @@ export function BreathingPatterns() {
     currentPhase,
     currentPhaseIndex,
     pattern.phases,
-    playPhaseTone,
+    playPhaseVoice,
     soundEnabled,
     maybeCreditCheckin,
   ]);
@@ -196,9 +201,15 @@ export function BreathingPatterns() {
       setIsActive(true);
       setCurrentPhaseIndex(0);
       setPhaseElapsed(0);
-      // Play the first phase tone immediately so the user hears the cue
-      // for the inhale without waiting for the phase transition.
-      if (soundEnabled) playPhaseTone(pattern.phases[0].name);
+      if (soundEnabled) {
+        // Opening teacher cue, then the first phase cue follows in the
+        // phase-tick effect on the next iteration.
+        playVoice(INTRO_VOICE);
+        // Queue the first-phase cue ~2.5s after the intro so they don't overlap.
+        setTimeout(() => {
+          if (PHASE_VOICE[pattern.phases[0].name]) playPhaseVoice(pattern.phases[0].name);
+        }, 2500);
+      }
     }
   };
 
@@ -213,7 +224,20 @@ export function BreathingPatterns() {
     : 0;
 
   return (
-    <div className="flex flex-col items-center gap-8 py-8">
+    <div className="relative flex flex-col items-center gap-8 py-8 rounded-3xl overflow-hidden">
+      {/* Ambient cloud-time-lapse backdrop. Stronger when actively breathing. */}
+      <div
+        className={cn(
+          "absolute inset-0 pointer-events-none transition-opacity duration-1000",
+          isActive ? "opacity-30" : "opacity-12",
+        )}
+      >
+        <PexelsVideo slug="breathing-ambient" showAttribution={false} className="w-full h-full" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/35 to-white/75 pointer-events-none" />
+
+      <div className="relative z-10 flex flex-col items-center gap-8 w-full">
+
       {/* Pattern selector */}
       <div className="flex flex-wrap items-center justify-center gap-2">
         {PATTERNS.map((p, i) => (
@@ -234,68 +258,31 @@ export function BreathingPatterns() {
         ))}
       </div>
 
-      {/* Breathing circle */}
-      <div className="relative flex items-center justify-center" style={{ width: 300, height: 300 }}>
-        {/* Outer glow */}
-        <div
-          className={cn(
-            "absolute rounded-full blur-2xl transition-all",
-            getGlowColor()
-          )}
-          style={{
-            width: 260,
-            height: 260,
-            transform: `scale(${getScale() * 1.2})`,
-            transitionDuration: "0.3s",
-          }}
+      {/* Breathing lotus — petals open on inhale, hold at bloom, close on exhale */}
+      <div className="relative flex items-center justify-center" style={{ width: 320, height: 320 }}>
+        <BreathingLotus
+          openness={getOpenness()}
+          phase={lotusPhase}
+          className="w-full h-full"
         />
 
-        {/* Main circle */}
-        <div
-          className={cn(
-            "relative w-56 h-56 rounded-full flex items-center justify-center bg-gradient-to-br transition-all shadow-2xl",
-            getPhaseColor()
-          )}
-          style={{
-            transform: `scale(${getScale()})`,
-            transitionDuration: "0.3s",
-          }}
-        >
-          <div className="text-center text-white">
-            {isActive ? (
+        {/* Phase label + countdown overlaid in the center */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="text-center text-[var(--color-text-primary)] drop-shadow-sm">
+            {isActive && currentPhase ? (
               <>
-                <p className="text-2xl font-bold">{currentPhase.name}</p>
-                <p className="text-5xl font-bold mt-2 tabular-nums">
+                <p className="text-xl font-semibold tracking-wide">
+                  {currentPhase.name}
+                </p>
+                <p className="text-4xl font-bold mt-1 tabular-nums">
                   {phaseTimeRemaining}
                 </p>
               </>
             ) : (
-              <span className="text-lg text-gray-500">Ready</span>
+              <span className="text-base text-[var(--color-text-secondary)]">Ready</span>
             )}
           </div>
         </div>
-
-        {/* Decorative rings */}
-        {isActive && (
-          <>
-            <div
-              className={cn(
-                "absolute rounded-full border-2 opacity-20 transition-all",
-                currentPhase.name === "Breathe In"
-                  ? "border-cyan-300"
-                  : currentPhase.name === "Hold"
-                    ? "border-orange-300"
-                    : "border-amber-300"
-              )}
-              style={{
-                width: 280,
-                height: 280,
-                transform: `scale(${getScale()})`,
-                transitionDuration: "0.3s",
-              }}
-            />
-          </>
-        )}
       </div>
 
       {/* Stats */}
@@ -367,6 +354,8 @@ export function BreathingPatterns() {
         {pattern.name === "box" &&
           "Box breathing is used by Navy SEALs for stress relief. Equal phases create balance and clarity."}
       </p>
+
+      </div>
     </div>
   );
 }

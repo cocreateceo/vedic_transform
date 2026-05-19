@@ -5,6 +5,7 @@ import { apiFetch } from "@/lib/api";
 import { InsightsFeed } from "@/components/features/insights";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
+import { InsightGlyph } from "@/components/features/daily/page-glyphs";
 
 interface Insight {
   id: string;
@@ -147,11 +148,14 @@ export function InsightsPageClient({
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Insights</h1>
-          <p className="text-sm sm:text-base text-gray-600 mt-1">
-            Personalized recommendations based on your journey
-          </p>
+        <div className="flex items-center gap-4">
+          <InsightGlyph />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Insights</h1>
+            <p className="text-sm sm:text-base text-gray-600 mt-1">
+              Personalized recommendations based on your journey
+            </p>
+          </div>
         </div>
         <Button
           variant="outline"

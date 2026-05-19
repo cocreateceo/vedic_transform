@@ -5,8 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Trophy, Volume2, VolumeX, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
+import { PexelsVideo } from "@/components/ui/pexels-video";
 
 const SESSION_PILLAR = "movement";
+
+const VOICE = {
+  start:    "/audio/movement/start.mp3",
+  work:     "/audio/movement/work.mp3",
+  rest:     "/audio/movement/rest.mp3",
+  final:    "/audio/movement/final.mp3",
+  complete: "/audio/movement/complete.mp3",
+};
 
 export function MovementTimer() {
   const [workTime, setWorkTime] = useState(30);
@@ -22,7 +31,18 @@ export function MovementTimer() {
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const voiceRef = useRef<HTMLAudioElement | null>(null);
   const checkinFiredRef = useRef(false);
+
+  const playVoice = useCallback((src: string) => {
+    if (!soundEnabled) return;
+    const prev = voiceRef.current;
+    if (prev) { try { prev.pause(); prev.currentTime = 0; } catch {} }
+    const a = new Audio(src);
+    a.volume = 0.9;
+    a.play().catch(() => {});
+    voiceRef.current = a;
+  }, [soundEnabled]);
 
   const playCue = useCallback(
     (kind: "work" | "rest" | "finale") => {
@@ -83,13 +103,14 @@ export function MovementTimer() {
     if (phase !== "complete" || checkinFiredRef.current) return;
     checkinFiredRef.current = true;
     playCue("finale");
+    playVoice(VOICE.complete);
     apiFetch("/data/checkin", {
       method: "POST",
       body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
     })
       .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
       .catch(() => {});
-  }, [phase, playCue]);
+  }, [phase, playCue, playVoice]);
 
   useEffect(() => {
     if (!isActive || phase === "idle" || phase === "complete") return;
@@ -105,12 +126,16 @@ export function MovementTimer() {
             }
             setPhase("rest");
             playCue("rest");
+            playVoice(VOICE.rest);
             return restTime;
           } else {
             // rest -> next work round
-            setCurrentRound((r) => r + 1);
+            const nextRound = currentRound + 1;
+            setCurrentRound(nextRound);
             setPhase("work");
             playCue("work");
+            // Special voice cue on the last round; otherwise the regular work cue.
+            playVoice(nextRound === totalRounds ? VOICE.final : VOICE.work);
             return workTime;
           }
         }
@@ -119,7 +144,7 @@ export function MovementTimer() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isActive, phase, currentRound, totalRounds, workTime, restTime, playCue]);
+  }, [isActive, phase, currentRound, totalRounds, workTime, restTime, playCue, playVoice]);
 
   const startTimer = () => {
     if (phase === "idle" || phase === "complete") {
@@ -127,6 +152,10 @@ export function MovementTimer() {
       setCurrentRound(1);
       setTimeRemaining(workTime);
       playCue("work");
+      // Opening cue once at session start, then queue the first "Work" cue
+      // about 4s later so they don't overlap.
+      playVoice(VOICE.start);
+      setTimeout(() => playVoice(VOICE.work), 4000);
     }
     setIsActive(true);
   };
@@ -182,7 +211,20 @@ export function MovementTimer() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 py-8">
+    <div className="relative flex flex-col items-center gap-8 py-8 rounded-3xl overflow-hidden">
+      {/* Yoga-silhouette backdrop. Brighter during work, dim during rest/idle. */}
+      <div
+        className={cn(
+          "absolute inset-0 pointer-events-none transition-opacity duration-1000",
+          phase === "work" ? "opacity-30" : "opacity-12",
+        )}
+      >
+        <PexelsVideo slug="movement-ambient" showAttribution={false} className="w-full h-full" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/35 to-white/75 pointer-events-none" />
+
+      <div className="relative z-10 flex flex-col items-center gap-8 w-full">
+
       {/* Configuration (only when idle) */}
       {phase === "idle" && (
         <div className="flex flex-wrap items-center justify-center gap-6">
@@ -415,6 +457,8 @@ export function MovementTimer() {
         High-intensity interval training. Push hard during work phases, recover
         during rest. Modify the intervals to match your fitness level.
       </p>
+
+      </div>
     </div>
   );
 }

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Sparkles, Wind, Flame, Droplet } from "lucide-react";
+import {
+  DoshaIntroListenButton,
+  VataGlyph,
+  PittaGlyph,
+  KaphaGlyph,
+} from "@/components/features/dosha/dosha-visuals";
 
 export const metadata: Metadata = {
   title: "Free Dosha Test — Discover Your Ayurvedic Constitution",
@@ -60,13 +66,16 @@ export default function DoshaTestLandingPage() {
             12 quick questions reveal your Ayurvedic constitution — Vata, Pitta, or Kapha — and
             the body, mind, and spirit practices most aligned with you.
           </p>
-          <Link
-            href="/dosha-test/quiz"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold shadow-lg shadow-orange-500/25 hover:from-orange-600 hover:to-amber-600 transition-all"
-          >
-            Start the test
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/dosha-test/quiz"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold shadow-lg shadow-orange-500/25 hover:from-orange-600 hover:to-amber-600 transition-all"
+            >
+              Start the test
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <DoshaIntroListenButton />
+          </div>
         </div>
       </section>
 
@@ -81,16 +90,15 @@ export default function DoshaTestLandingPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {doshas.map((d) => {
-              const Icon = d.icon;
+              const Glyph =
+                d.name === "Vata" ? VataGlyph : d.name === "Pitta" ? PittaGlyph : KaphaGlyph;
               return (
                 <div
                   key={d.name}
                   className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-orange-500/30 transition-all"
                 >
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${d.color} flex items-center justify-center mb-4`}
-                  >
-                    <Icon className="w-6 h-6 text-white" />
+                  <div className="w-16 h-16 mb-4">
+                    <Glyph />
                   </div>
                   <div className="text-xs text-orange-300 mb-1">{d.element}</div>
                   <div className="flex items-baseline gap-2 mb-2">

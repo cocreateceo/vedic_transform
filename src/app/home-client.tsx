@@ -24,6 +24,8 @@ import { PILLARS } from "@/constants/pillars";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { FAQ_DATA } from "@/data/faq";
 import { TransformationFlow } from "@/components/features/landing/transformation-flow";
+import { MandalaBackdrop } from "@/components/features/onboarding/mandala-backdrop";
+import { PexelsVideo } from "@/components/ui/pexels-video";
 
 /* ─── Category colors for pillar badges ─── */
 const categoryStyles: Record<string, { label: string; bg: string; text: string }> = {
@@ -62,9 +64,17 @@ export function HomePageClient() {
 
       {/* ═══ 2. Hero Section ═══ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+        {/* Looping ambient hero video — kept very dim so text stays legible */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <PexelsVideo slug="home-hero" showAttribution={false} className="w-full h-full" />
+        </div>
+        {/* Dark gradient overlay on top of the video for text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f0d08]/70 via-[#0f0d08]/50 to-[#1a1508]/85 pointer-events-none" />
         {/* Ambient glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
+        {/* Slow-rotating mandala behind the hero title */}
+        <MandalaBackdrop className="mix-blend-screen" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/15 border border-orange-500/20 text-orange-300 text-sm font-medium mb-8">
