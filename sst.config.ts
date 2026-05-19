@@ -286,8 +286,10 @@ export default $config({
     // preview deploy, etc.) here — wildcards leak the API to any site.
     const allowedOrigins = [
       "http://localhost:3000",
-      "https://d3l6jfw1mfhlf1.cloudfront.net",
-      "https://10x.vedics.net",
+      "http://localhost:3001",
+      "https://d3l6jfw1mfhlf1.cloudfront.net",     // production site
+      "https://d1uhicw265qo0d.cloudfront.net",     // dev stage site
+      "https://10x.vedics.net",                    // custom domain
     ];
 
     const api = new sst.aws.ApiGatewayV2("Api", {
@@ -582,16 +584,21 @@ export default $config({
     // construct so the (public) route group is server-rendered and
     // crawlable. (main) and (auth) routes keep their "use client" layouts
     // — they still hydrate the same way, just from a real SSR shell now.
+    // Direct (non-spread) domain config so Pulumi sees the change as an
+    // explicit property. The spread-conditional pattern was being treated
+    // as a no-op by the diff engine and the CloudFront distribution wasn't
+    // updated. Only the production stage owns 10x.vedics.net; other
+    // stages set this to undefined.
+    const siteDomain = $app.stage === "production"
+      ? {
+          name: "10x.vedics.net",
+          dns: false as const,
+          cert: "arn:aws:acm:us-east-1:248825820556:certificate/8c0c846b-733a-4b5a-a9a0-e70101fdbb34",
+        }
+      : undefined;
+
     const site = new sst.aws.Nextjs("VedicTransformSite", {
-      // NOTE: domain config temporarily disabled — re-enable AFTER
-      // GoDaddy CNAME for 10x.vedics.net is updated to point to the
-      // new distribution. Leaving it on with stale DNS causes the
-      // CloudFront Function to reject all traffic to the bare URL.
-      // domain: {
-      //   name: "10x.vedics.net",
-      //   dns: false,
-      //   cert: "arn:aws:acm:us-east-1:248825820556:certificate/8c0c846b-733a-4b5a-a9a0-e70101fdbb34",
-      // },
+      domain: siteDomain,
       environment: {
         NEXT_PUBLIC_API_URL: api.url,
         // Expose only the *public* VAPID key to the client; the private
