@@ -77,6 +77,89 @@ export function MoodGlyph({ className }: { className?: string }) {
   );
 }
 
+/** Per-badge category glyphs used in the achievements grid.
+ *  Each one is sized to fit inside the existing 14x14 (h-14 w-14) badge
+ *  tile and uses a single-colour fill so the earned / locked styling
+ *  (color + opacity) is controlled by the parent.
+ */
+function MiniWrap({ children, color }: { children: React.ReactNode; color: string }) {
+  return (
+    <svg viewBox="-50 -50 100 100" className="w-full h-full" style={{ color }}>
+      <g fill="currentColor" stroke="currentColor">{children}</g>
+    </svg>
+  );
+}
+
+/** Streak — flame */
+export function StreakBadgeGlyph({ color = "currentColor" }: { color?: string }) {
+  return (
+    <MiniWrap color={color}>
+      <path
+        d="M 0 -40 Q 18 -16 14 8 Q 12 28 0 36 Q -12 28 -14 8 Q -18 -16 0 -40 Z"
+        strokeWidth="2"
+      />
+      <ellipse cx="0" cy="14" rx="5" ry="11" fill="white" opacity="0.55" stroke="none" />
+    </MiniWrap>
+  );
+}
+
+/** Milestone — target with rising sun */
+export function MilestoneBadgeGlyph({ color = "currentColor" }: { color?: string }) {
+  return (
+    <MiniWrap color={color}>
+      <circle cx="0" cy="0" r="30" fill="none" strokeWidth="3" />
+      <circle cx="0" cy="0" r="18" fill="none" strokeWidth="3" />
+      <circle cx="0" cy="0" r="7" stroke="none" />
+      <path d="M -38 -36 L -14 -12" strokeWidth="4" strokeLinecap="round" />
+      <polygon points="-14,-12 -22,-7 -19,-19" stroke="none" />
+    </MiniWrap>
+  );
+}
+
+/** Mastery — lotus star (4 petals + center) */
+export function MasteryBadgeGlyph({ color = "currentColor" }: { color?: string }) {
+  return (
+    <MiniWrap color={color}>
+      {[0, 90, 180, 270].map((a) => (
+        <g key={a} transform={`rotate(${a})`}>
+          <path d="M 0 -8 Q -14 -25 0 -42 Q 14 -25 0 -8 Z" stroke="none" />
+        </g>
+      ))}
+      {[45, 135, 225, 315].map((a) => (
+        <g key={a} transform={`rotate(${a})`}>
+          <path d="M 0 -6 Q -10 -20 0 -34 Q 10 -20 0 -6 Z" stroke="none" opacity="0.7" />
+        </g>
+      ))}
+      <circle cx="0" cy="0" r="8" stroke="none" />
+      <circle cx="0" cy="0" r="4" fill="white" stroke="none" />
+    </MiniWrap>
+  );
+}
+
+/** Special — sparkle burst */
+export function SpecialBadgeGlyph({ color = "currentColor" }: { color?: string }) {
+  return (
+    <MiniWrap color={color}>
+      <path d="M 0 -42 L 6 -8 L 42 0 L 6 8 L 0 42 L -6 8 L -42 0 L -6 -8 Z" stroke="none" />
+      <circle cx="0" cy="0" r="6" fill="white" stroke="none" />
+      <circle cx="-30" cy="-22" r="2" stroke="none" />
+      <circle cx="28" cy="24" r="2.5" stroke="none" />
+      <circle cx="-26" cy="22" r="1.5" stroke="none" />
+      <circle cx="30" cy="-20" r="2" stroke="none" />
+    </MiniWrap>
+  );
+}
+
+/** Dispatch helper — pick the right glyph by category. */
+export function BadgeGlyphForCategory({ category, color }: { category: string; color?: string }) {
+  switch (category) {
+    case "streak":    return <StreakBadgeGlyph color={color} />;
+    case "milestone": return <MilestoneBadgeGlyph color={color} />;
+    case "mastery":   return <MasteryBadgeGlyph color={color} />;
+    default:          return <SpecialBadgeGlyph color={color} />;
+  }
+}
+
 /** Laurel-wreath trophy for Achievements */
 export function TrophyGlyph({ className }: { className?: string }) {
   return (

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { apiFetch } from "@/lib/api";
 import { Award, Star, Trophy, Flame, Target, Sparkles } from "lucide-react";
 import { ShareButton } from "@/components/ui/share-button";
-import { TrophyGlyph } from "@/components/features/daily/page-glyphs";
+import { TrophyGlyph, BadgeGlyphForCategory } from "@/components/features/daily/page-glyphs";
 
 interface BadgeWithEarned {
   id: string;
@@ -196,13 +196,14 @@ export default function AchievementsPage() {
                         : "bg-[var(--color-card-bg)]"
                     }`}
                   >
-                    <Award
-                      className={`h-7 w-7 ${
-                        badge.earned
-                          ? "text-[var(--color-secondary)]"
-                          : "text-[var(--color-text-muted)]"
-                      }`}
-                    />
+                    <div className="w-8 h-8">
+                      <BadgeGlyphForCategory
+                        category={category}
+                        color={badge.earned
+                          ? "var(--color-secondary, #F59E0B)"
+                          : "var(--color-text-muted, #9CA3AF)"}
+                      />
+                    </div>
                   </div>
 
                   <h3 className="text-sm font-semibold text-[var(--color-text-primary)] line-clamp-1">

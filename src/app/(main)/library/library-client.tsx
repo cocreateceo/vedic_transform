@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAudioPlayer } from "@/context/audio-player-context";
+import { MantraIntroButton } from "@/components/features/library/mantra-intro-button";
 import {
   Search,
   CheckCircle2,
@@ -389,6 +390,9 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
                         <ExternalLink className="w-4 h-4 mr-1.5" />
                         Open
                       </Button>
+                    )}
+                    {item.id.startsWith("mantra-") && (
+                      <MantraIntroButton itemId={item.id} />
                     )}
                     <Button
                       size="sm"

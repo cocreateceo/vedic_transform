@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BreathingVisualizer } from "@/components/features/pillars/breathing-visualizer";
 import { PillarHero, PillarHeroStyles } from "@/components/features/pillars/pillar-hero";
+import { PillarContentPanel } from "@/components/features/pillars/pillar-content-panel";
 import { Check, ArrowLeft, Clock, Sparkles, Download, FileText, Compass } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
@@ -215,6 +216,10 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
           </a>
         </div>
       </div>
+
+      {/* Long-form pillar content — was previously only in the PDF download */}
+      <PillarContentPanel slug={pillar.slug} />
+      <div className="h-8" />
 
       {/* No-journey CTA — previously the Mark Complete button just silently
           vanished, leaving the user on a dead-end page. */}
