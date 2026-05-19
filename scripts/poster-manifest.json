@@ -1,0 +1,121 @@
+{
+  "posters": [
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.07 AM (5).jpeg",
+      "slug": "morning-routine-5-step",
+      "concept": "morning-routine",
+      "suggestedPillarSlug": "morning-initiation",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "body"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.03 AM (14).jpeg",
+      "slug": "morning-sandhya-meditation",
+      "concept": "sandhya-meditation",
+      "suggestedPillarSlug": "sandhya-meditation",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "spirit"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.02 AM.jpeg",
+      "slug": "path-of-manifestation",
+      "concept": "manifestation-6-steps",
+      "suggestedPillarSlug": "divine-manifestation",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "spirit"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.03 AM.jpeg",
+      "slug": "five-principles-of-manifestation",
+      "concept": "manifestation-principles",
+      "suggestedPillarSlug": "divine-manifestation",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "spirit"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.05 AM (5).jpeg",
+      "slug": "manifestation-secrets-patanjali",
+      "concept": "manifestation-secrets",
+      "suggestedPillarSlug": "divine-manifestation",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "spirit"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.07 AM.jpeg",
+      "slug": "step-by-step-healing",
+      "concept": "healing",
+      "suggestedPillarSlug": "healing-meditation",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "mind"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.03 AM (10).jpeg",
+      "slug": "gratitude-way-of-life",
+      "concept": "gratitude",
+      "suggestedPillarSlug": "gratitude",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "mind"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.04 AM (10).jpeg",
+      "slug": "ayurvedic-nutrition-fasting",
+      "concept": "nutrition-fasting",
+      "suggestedPillarSlug": "nutrition-fasting",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "body"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.06 AM (5).jpeg",
+      "slug": "mind-purification-5-step",
+      "concept": "mind-purification",
+      "suggestedPillarSlug": "thoughts-intention",
+      "suggestedDosha": null,
+      "suggestedKind": "general",
+      "category": "mind"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.04 AM (5).jpeg",
+      "slug": "vata-balancing-yoga",
+      "concept": "dosha-yoga",
+      "suggestedPillarSlug": "movement",
+      "suggestedDosha": "vata",
+      "suggestedKind": "yoga",
+      "category": "body"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.05 AM.jpeg",
+      "slug": "pitta-balancing-yoga",
+      "concept": "dosha-yoga",
+      "suggestedPillarSlug": "movement",
+      "suggestedDosha": "pitta",
+      "suggestedKind": "yoga",
+      "category": "body"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.06 AM (10).jpeg",
+      "slug": "vata-pranayama",
+      "concept": "dosha-pranayama",
+      "suggestedPillarSlug": "breathing-meditation",
+      "suggestedDosha": "vata",
+      "suggestedKind": "pranayama",
+      "category": "mind"
+    },
+    {
+      "source": "WhatsApp Image 2026-05-19 at 7.39.06 AM.jpeg",
+      "slug": "kapha-pranayama",
+      "concept": "dosha-pranayama",
+      "suggestedPillarSlug": "breathing-meditation",
+      "suggestedDosha": "kapha",
+      "suggestedKind": "pranayama",
+      "category": "mind"
+    }
+  ]
+}
