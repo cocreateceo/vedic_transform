@@ -20,3 +20,27 @@ Extracted at: YYYY-MM-DD HH:MM by Claude Code
 Phase 2 fills this file in batches of 3-4 posters.
 
 ---
+
+## Batch 1 — 2026-05-19
+
+### morning-routine-5-step
+- Source: `WhatsApp Image 2026-05-19 at 7.39.07 AM (5).jpeg`
+- Outputs: `/posters/morning-routine-5-step.webp`, `@2x.webp`, `.thumb.webp` (768x512)
+- Extracted by: Claude Code (Opus 4.7)
+- Scripture: Yoga Sutra 1.2 (yogaḥ chitta vṛtti nirodhaḥ)
+- Sections: 5 numbered steps (wake early → breath → awareness → gratitude → manifestation), each with 4-step benefits bullets
+
+### morning-sandhya-meditation
+- Source: `WhatsApp Image 2026-05-19 at 7.39.03 AM (14).jpeg`
+- Outputs: `/posters/morning-sandhya-meditation.webp`, `@2x.webp`, `.thumb.webp` (768x512)
+- Extracted by: Claude Code (Opus 4.7)
+- Scripture: none cited in poster
+- Sections: 3 panels (why → 7 practice steps → 7 benefits)
+
+### path-of-manifestation
+- Source: `WhatsApp Image 2026-05-19 at 7.39.02 AM (1).jpeg` (manifest corrected — original mapping pointed to nutrition poster)
+- Outputs: `/posters/path-of-manifestation.webp`, `@2x.webp`, `.thumb.webp` (768x1152)
+- Extracted by: Claude Code (Opus 4.7)
+- Scripture: none cited in poster
+- Sections: 6 numbered manifestation steps
+
