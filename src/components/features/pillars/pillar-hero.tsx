@@ -38,24 +38,35 @@ export function PillarHero({ slug, title, sanskritName, className }: PillarHeroP
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Stop on unmount so the cue doesn't leak across navigation.
+  // Autoplay the intro cue when the user lands on the pillar. Browsers
+  // generally allow autoplay when there's a fresh user-gesture (the nav
+  // click that brought them here counts). If the gesture has expired the
+  // promise rejects and the Listen button remains as fallback.
   useEffect(() => {
+    const audio = new Audio(audioSrc);
+    audio.volume = 0.95;
+    audio.onended = () => setIsPlaying(false);
+    audio.onerror = () => setIsPlaying(false);
+    audioRef.current = audio;
+    audio.play()
+      .then(() => setIsPlaying(true))
+      .catch(() => setIsPlaying(false));
     return () => {
-      const a = audioRef.current;
-      if (a) { try { a.pause(); a.currentTime = 0; } catch {} }
+      try { audio.pause(); audio.currentTime = 0; } catch {}
+      if (audioRef.current === audio) audioRef.current = null;
     };
-  }, []);
+  }, [audioSrc]);
 
   const toggle = () => {
     const a = audioRef.current;
     if (isPlaying && a) {
       try { a.pause(); a.currentTime = 0; } catch {}
-      audioRef.current = null;
       setIsPlaying(false);
       return;
     }
+    // Restart from the beginning.
     const audio = new Audio(audioSrc);
-    audio.volume = 0.9;
+    audio.volume = 0.95;
     audio.onended = () => setIsPlaying(false);
     audio.onerror = () => setIsPlaying(false);
     audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
@@ -64,14 +75,15 @@ export function PillarHero({ slug, title, sanskritName, className }: PillarHeroP
 
   return (
     <div className={cn(
-      "relative rounded-3xl overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100",
-      "border border-orange-100 p-6 md:p-8",
+      "relative rounded-3xl overflow-hidden border border-black/10 shadow-lg shadow-orange-900/10",
+      "p-6 md:p-8 min-h-[260px]",
       className,
     )}>
       {/* Backdrop — prefer the curated ambient video for this pillar; fall
-          back to a still Pexels photo otherwise. Either way the SVG glyph
-          stays the visual lead. */}
-      <div className="absolute inset-0 opacity-25 pointer-events-none">
+          back to a still Pexels photo otherwise. Pumped to 100% opacity so
+          the imagery actually reads; a dark gradient overlay carries the
+          text contrast. */}
+      <div className="absolute inset-0 pointer-events-none">
         {PILLAR_VIDEO[slug] ? (
           <PexelsVideo slug={PILLAR_VIDEO[slug]} showAttribution={false} className="w-full h-full" />
         ) : (
@@ -81,32 +93,36 @@ export function PillarHero({ slug, title, sanskritName, className }: PillarHeroP
           />
         )}
       </div>
+      {/* Gradient overlay — darker at the bottom-left where the text sits,
+          lighter at top-right so the photo/video stays visible. */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/40 to-black/10 pointer-events-none" />
 
       <div className="relative flex flex-col md:flex-row items-center gap-6">
         {/* SVG illustration */}
-        <div className="w-40 h-40 md:w-48 md:h-48 flex-shrink-0">
+        <div className="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 drop-shadow-2xl">
           <PillarSymbol slug={slug} />
         </div>
 
         {/* Title + intro listen */}
-        <div className="flex-1 text-center md:text-left">
-          <p className="text-sm uppercase tracking-wider text-orange-600 font-semibold">
+        <div className="flex-1 text-center md:text-left text-white">
+          <p className="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">
             {sanskritName}
           </p>
-          <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-text-primary)] mt-1">
+          <h1 className="text-3xl md:text-4xl font-bold mt-2 drop-shadow-md">
             {title}
           </h1>
-          <p className="text-sm text-[var(--color-text-secondary)] mt-3 max-w-md mx-auto md:mx-0">
-            Listen to a short introduction from your guide before you begin.
+          <p className="text-sm text-white/85 mt-3 max-w-md mx-auto md:mx-0">
+            {isPlaying
+              ? "Your guide is speaking. Let the words settle in."
+              : "Tap below to replay your guide's introduction."}
           </p>
           <Button
             onClick={toggle}
             size="sm"
-            variant="outline"
-            className="mt-4 inline-flex items-center gap-2"
+            className="mt-4 inline-flex items-center gap-2 bg-white text-orange-700 hover:bg-orange-50 border-0 shadow-md"
           >
             {isPlaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            {isPlaying ? "Stop" : "Listen"}
+            {isPlaying ? "Stop" : "Replay"}
             <Volume2 className="w-4 h-4 opacity-60" />
           </Button>
         </div>

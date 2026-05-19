@@ -12,10 +12,28 @@ export function GreetingPlayButton() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  // Autoplay the greeting on dashboard load. We gate to once-per-session
+  // via sessionStorage so the user doesn't get re-greeted on every tab
+  // switch / re-mount.
   useEffect(() => {
+    const PLAYED_KEY = "vt:dashboard:greeting:played";
+    if (typeof window !== "undefined" && window.sessionStorage.getItem(PLAYED_KEY)) {
+      return; // already greeted this session
+    }
+    const audio = new Audio("/audio/dashboard/greeting.mp3");
+    audio.volume = 0.95;
+    audio.onended = () => setIsPlaying(false);
+    audio.onerror = () => setIsPlaying(false);
+    audioRef.current = audio;
+    audio.play()
+      .then(() => {
+        setIsPlaying(true);
+        try { window.sessionStorage.setItem(PLAYED_KEY, "1"); } catch {}
+      })
+      .catch(() => setIsPlaying(false));
     return () => {
-      const a = audioRef.current;
-      if (a) { try { a.pause(); a.currentTime = 0; } catch {} }
+      try { audio.pause(); audio.currentTime = 0; } catch {}
+      if (audioRef.current === audio) audioRef.current = null;
     };
   }, []);
 

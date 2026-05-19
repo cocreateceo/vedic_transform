@@ -83,10 +83,22 @@ interface DoshaListenButtonProps {
 export function DoshaListenButton({ dosha }: DoshaListenButtonProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  useEffect(() => () => {
-    const a = audioRef.current;
-    if (a) { try { a.pause(); a.currentTime = 0; } catch {} }
-  }, []);
+
+  // Autoplay the result reading when the user lands on this page — this is
+  // a high-impact moment and the spoken reveal of "your dosha is X" makes
+  // it feel personal.
+  useEffect(() => {
+    const a = new Audio(`/audio/dosha/result-${dosha}.mp3`);
+    a.volume = 0.95;
+    a.onended = () => setIsPlaying(false);
+    a.onerror = () => setIsPlaying(false);
+    audioRef.current = a;
+    a.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    return () => {
+      try { a.pause(); a.currentTime = 0; } catch {}
+      if (audioRef.current === a) audioRef.current = null;
+    };
+  }, [dosha]);
 
   const toggle = () => {
     if (isPlaying && audioRef.current) {
@@ -117,9 +129,27 @@ export function DoshaListenButton({ dosha }: DoshaListenButtonProps) {
 export function DoshaIntroListenButton() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  useEffect(() => () => {
-    const a = audioRef.current;
-    if (a) { try { a.pause(); a.currentTime = 0; } catch {} }
+
+  // Autoplay the intro on first visit to /dosha-test each session.
+  useEffect(() => {
+    const PLAYED_KEY = "vt:dosha:intro:played";
+    if (typeof window === "undefined") return;
+    if (window.sessionStorage.getItem(PLAYED_KEY)) return;
+    const a = new Audio("/audio/dosha/intro.mp3");
+    a.volume = 0.95;
+    a.onended = () => setIsPlaying(false);
+    a.onerror = () => setIsPlaying(false);
+    audioRef.current = a;
+    a.play()
+      .then(() => {
+        setIsPlaying(true);
+        try { window.sessionStorage.setItem(PLAYED_KEY, "1"); } catch {}
+      })
+      .catch(() => setIsPlaying(false));
+    return () => {
+      try { a.pause(); a.currentTime = 0; } catch {}
+      if (audioRef.current === a) audioRef.current = null;
+    };
   }, []);
 
   const toggle = () => {
