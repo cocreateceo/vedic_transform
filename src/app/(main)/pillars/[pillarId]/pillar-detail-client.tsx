@@ -12,7 +12,9 @@ import {
   YesNoReflection,
   type YesNoAnswer,
   type YesNoStep,
+  type YesNoConfig,
 } from "@/components/features/pillars/yesno-reflection";
+import { PILLAR_REFLECTIONS_BY_SLUG } from "@/data/pillar-reflections";
 import {
   Check,
   ArrowLeft,
@@ -67,6 +69,23 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   );
   const [breathingAnswers, setBreathingAnswers] = useState<YesNoAnswer[]>(
     () => Array(BREATHING_STEPS.length).fill(null) as YesNoAnswer[],
+  );
+
+  // Generic reflection state — used by the seven pillars that share a
+  // pure yes/no reflection surface (no custom practice tool). Each
+  // pillar slug has its own localStorage key so answers don't leak.
+  const genericReflection = PILLAR_REFLECTIONS_BY_SLUG[pillarId];
+  const genericReflectionKey = useMemo(
+    () =>
+      `pillar-reflection-${pillarId}-${new Date().toISOString().split("T")[0]}`,
+    [pillarId],
+  );
+  const [genericReflectionAnswers, setGenericReflectionAnswers] = useState<
+    YesNoAnswer[]
+  >(() =>
+    genericReflection
+      ? (Array(genericReflection.steps.length).fill(null) as YesNoAnswer[])
+      : [],
   );
 
   // Rehydrate today's morning answers from localStorage. Day-scoped key
@@ -137,6 +156,34 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       window.localStorage.setItem(breathingKey, JSON.stringify(breathingAnswers));
     } catch {}
   }, [breathingAnswers, breathingKey]);
+
+  useEffect(() => {
+    if (!genericReflection || typeof window === "undefined") return;
+    try {
+      const stored = window.localStorage.getItem(genericReflectionKey);
+      if (!stored) return;
+      const parsed = JSON.parse(stored);
+      if (
+        !Array.isArray(parsed) ||
+        parsed.length !== genericReflection.steps.length
+      )
+        return;
+      const normalized: YesNoAnswer[] = parsed.map((v) =>
+        v === "yes" || v === "no" ? v : null,
+      );
+      setGenericReflectionAnswers(normalized);
+    } catch {}
+  }, [genericReflectionKey, genericReflection]);
+
+  useEffect(() => {
+    if (!genericReflection || typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(
+        genericReflectionKey,
+        JSON.stringify(genericReflectionAnswers),
+      );
+    } catch {}
+  }, [genericReflectionAnswers, genericReflectionKey, genericReflection]);
 
   useEffect(() => {
     async function fetchData() {
@@ -366,6 +413,14 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
             <NutritionContent
               answers={nutritionAnswers}
               setAnswers={setNutritionAnswers}
+            />
+          ) : genericReflection ? (
+            <GenericReflectionContent
+              pillar={pillar}
+              steps={genericReflection.steps}
+              config={genericReflection.config}
+              answers={genericReflectionAnswers}
+              setAnswers={setGenericReflectionAnswers}
             />
           ) : (
             <GenericPillarContent pillar={pillar} />
@@ -1094,6 +1149,54 @@ function BreathingMeditationContent({
           summaryClosingNote:
             "Your breath is the one thing you carry everywhere. The more often you remember it during the day, the more it remembers you when you need it. Mark this pillar complete to record your karma for today.",
         }}
+      />
+    </div>
+  );
+}
+
+// Generic guided reflection used by the seven pillars that don't have
+// their own custom practice surface — thoughts, movement, healing,
+// sandhya, brahman, manifestation, sleep. A small intro card frames
+// the pillar, then the shared YesNoReflection runs the questions.
+function GenericReflectionContent({
+  pillar,
+  steps,
+  config,
+  answers,
+  setAnswers,
+}: {
+  pillar: (typeof PILLARS)[number];
+  steps: YesNoStep[];
+  config: YesNoConfig;
+  answers: YesNoAnswer[];
+  setAnswers: (next: YesNoAnswer[]) => void;
+}) {
+  const Icon = pillar.icon;
+  return (
+    <div className="space-y-6">
+      <div className="rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-6 flex items-start gap-4">
+        <div
+          className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ backgroundColor: `${pillar.color}22` }}
+        >
+          <Icon className="w-7 h-7" style={{ color: pillar.color }} />
+        </div>
+        <div className="flex-1">
+          <p className="text-xs uppercase tracking-wide text-amber-700 font-medium">
+            {pillar.sanskritName}
+          </p>
+          <h3 className="text-lg font-semibold text-gray-900 mt-0.5">
+            {pillar.name}
+          </h3>
+          <p className="text-sm text-gray-600 mt-1">{pillar.description}</p>
+        </div>
+      </div>
+
+      <YesNoReflection
+        steps={steps}
+        answers={answers}
+        setAnswers={setAnswers}
+        config={config}
       />
     </div>
   );
