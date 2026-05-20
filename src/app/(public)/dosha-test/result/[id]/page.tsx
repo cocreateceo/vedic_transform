@@ -9,6 +9,8 @@ import {
   PittaGlyph,
   KaphaGlyph,
 } from "@/components/features/dosha/dosha-visuals";
+import { getPosterByDosha } from "@/data/posters";
+import { PosterSection } from "@/components/features/posters/poster-section";
 
 interface AnonymousDoshaResult {
   id: string;
@@ -180,6 +182,22 @@ export default async function DoshaResultPage({
               ))}
             </div>
           </div>
+
+          {(() => {
+            const yogaPoster = getPosterByDosha(result.primary, "yoga");
+            const pranayamaPoster = getPosterByDosha(result.primary, "pranayama");
+            if (!yogaPoster && !pranayamaPoster) return null;
+            return (
+              <section className="mt-6 space-y-4">
+                {yogaPoster && (
+                  <PosterSection poster={yogaPoster} heading={`${primary.name} Balancing Yoga`} />
+                )}
+                {pranayamaPoster && (
+                  <PosterSection poster={pranayamaPoster} heading={`Pranayama for ${primary.name}`} />
+                )}
+              </section>
+            );
+          })()}
 
           <div className="mt-10 p-6 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-amber-500/30 text-center">
             <Sparkles className="w-8 h-8 text-amber-400 mx-auto mb-3" />
