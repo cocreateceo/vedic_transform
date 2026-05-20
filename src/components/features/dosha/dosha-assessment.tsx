@@ -11,6 +11,8 @@ import {
   type DoshaResult,
   type DoshaScores,
 } from "@/lib/dosha";
+import { getPosterByDosha } from "@/data/posters";
+import { PosterSection } from "@/components/features/posters/poster-section";
 
 export type DoshaAssessmentMode = "authenticated" | "anonymous";
 
@@ -207,6 +209,29 @@ export function DoshaAssessment({ mode = "authenticated" }: DoshaAssessmentProps
             </div>
           </div>
         </div>
+
+        {/* Dosha-matched posters */}
+        {(() => {
+          const yogaPoster = getPosterByDosha(result.primary, "yoga");
+          const pranayamaPoster = getPosterByDosha(result.primary, "pranayama");
+          if (!yogaPoster && !pranayamaPoster) return null;
+          return (
+            <div className="space-y-4">
+              {yogaPoster && (
+                <PosterSection
+                  poster={yogaPoster}
+                  heading={`${primary.name} Balancing Yoga`}
+                />
+              )}
+              {pranayamaPoster && (
+                <PosterSection
+                  poster={pranayamaPoster}
+                  heading={`Pranayama for ${primary.name}`}
+                />
+              )}
+            </div>
+          );
+        })()}
 
         {/* Actions */}
         <div className="flex gap-3">
