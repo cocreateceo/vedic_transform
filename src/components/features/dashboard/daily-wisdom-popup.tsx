@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { type WisdomEntry } from "@/data/daily-wisdom";
-import { getTodaysWisdom } from "@/lib/wisdom";
+import { getTodaysWisdom, getTodaysPosterScripture } from "@/lib/wisdom";
 import { ShareButton } from "@/components/ui/share-button";
 import { X } from "lucide-react";
+import Link from "next/link";
 
 function getTodayKey(): string {
   const today = new Date();
@@ -14,13 +15,30 @@ function getTodayKey(): string {
 export function DailyWisdomPopup() {
   const [visible, setVisible] = useState(false);
   const [wisdom, setWisdom] = useState<WisdomEntry | null>(null);
+  const [posterSlug, setPosterSlug] = useState<string | null>(null);
   const [shareUrl, setShareUrl] = useState<string>("");
 
   useEffect(() => {
     const key = getTodayKey();
     if (localStorage.getItem(key)) return;
 
-    setWisdom(getTodaysWisdom());
+    // On Sundays, surface a scripture pulled from one of the teaching
+    // posters (rotated by day-of-year). All other days use the standard
+    // daily-wisdom rotation.
+    const posterPick =
+      new Date().getDay() === 0 ? getTodaysPosterScripture() : null;
+    if (posterPick) {
+      setWisdom({
+        id: -1,
+        text: posterPick.scripture.translation,
+        source: posterPick.scripture.sutra,
+        category: "vedic",
+        sanskrit: posterPick.scripture.sanskrit,
+      });
+      setPosterSlug(posterPick.poster.slug);
+    } else {
+      setWisdom(getTodaysWisdom());
+    }
     // The popup fires on /dashboard, but shared links should land on /wisdom
     // (which carries the same featured entry plus context). Build the URL
     // here rather than letting ShareButton default to window.location.href.
@@ -114,6 +132,15 @@ export function DailyWisdomPopup() {
           <p className="text-amber-900 font-semibold text-sm">
             — {wisdom.source}
           </p>
+
+          {posterSlug && (
+            <Link
+              href="/posters"
+              className="inline-block mt-3 text-xs font-medium text-amber-700 hover:text-amber-900"
+            >
+              View full poster &rarr;
+            </Link>
+          )}
 
           {/* Decorative divider */}
           <div className="flex items-center gap-3 mt-6 mb-5">
