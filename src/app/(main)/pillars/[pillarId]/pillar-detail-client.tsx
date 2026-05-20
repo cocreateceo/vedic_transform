@@ -50,6 +50,14 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
     () => Array(7).fill(null) as MorningAnswer[],
   );
 
+  const nutritionKey = useMemo(
+    () => `nutrition-reflection-${new Date().toISOString().split("T")[0]}`,
+    [],
+  );
+  const [nutritionAnswers, setNutritionAnswers] = useState<MorningAnswer[]>(
+    () => Array(NUTRITION_STEPS.length).fill(null) as MorningAnswer[],
+  );
+
   // Rehydrate today's morning answers from localStorage. Day-scoped key
   // means yesterday's progress doesn't leak in. The old shape was a
   // boolean[] (pre-2026-05-20) — convert true → "yes", false → null since
@@ -76,6 +84,27 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       window.localStorage.setItem(morningKey, JSON.stringify(morningAnswers));
     } catch {}
   }, [morningAnswers, morningKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = window.localStorage.getItem(nutritionKey);
+      if (!stored) return;
+      const parsed = JSON.parse(stored);
+      if (!Array.isArray(parsed) || parsed.length !== NUTRITION_STEPS.length) return;
+      const normalized: MorningAnswer[] = parsed.map((v) =>
+        v === "yes" || v === "no" ? v : null,
+      );
+      setNutritionAnswers(normalized);
+    } catch {}
+  }, [nutritionKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(nutritionKey, JSON.stringify(nutritionAnswers));
+    } catch {}
+  }, [nutritionAnswers, nutritionKey]);
 
   useEffect(() => {
     async function fetchData() {
@@ -303,7 +332,10 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
               setEntries={setGratitudeEntries}
             />
           ) : pillarId === "nutrition-fasting" ? (
-            <NutritionContent />
+            <NutritionContent
+              answers={nutritionAnswers}
+              setAnswers={setNutritionAnswers}
+            />
           ) : (
             <GenericPillarContent pillar={pillar} />
           )}
@@ -1119,13 +1151,131 @@ function GratitudeSummaryCard({
   );
 }
 
-// Nutrition specific content
-function NutritionContent() {
+type NutritionStep = {
+  title: string;
+  description: string;
+  question: string;
+  successMessage: string;
+  tryAgainMessage: string;
+};
+
+const NUTRITION_STEPS: NutritionStep[] = [
+  {
+    title: "Sattvic Foods",
+    description:
+      "Fresh fruits, vegetables, whole grains, legumes, nuts, seeds — foods that are alive and carry prana.",
+    question: "Did you eat fresh fruits or vegetables today?",
+    successMessage:
+      "Wonderful. Sattvic foods are alive — they carry prana (life force) into your body directly. Keep this rhythm.",
+    tryAgainMessage:
+      "No worries. For tomorrow, add just one fresh fruit or a small salad to one meal. Small additions compound fast.",
+  },
+  {
+    title: "Avoid Processed & Fried",
+    description:
+      "Tamasic foods — processed, fried, packaged, stale — dull the mind and slow agni (digestive fire).",
+    question: "Did you avoid processed, fried, or packaged food today?",
+    successMessage:
+      "Excellent. By skipping tamasic food today you kept agni bright and your mind clear. You'll feel it tomorrow too.",
+    tryAgainMessage:
+      "It happens. For tomorrow, swap one fried or packaged item for something fresh or steamed. Notice how different you feel by evening.",
+  },
+  {
+    title: "Eat by Sunset",
+    description:
+      "Your digestive fire (agni) is strongest at midday and weakest after sunset. Finishing dinner early dramatically improves sleep.",
+    question:
+      "Did you finish your last meal by sunset, or at least 3 hours before bed?",
+    successMessage:
+      "Beautiful. Eating earlier aligns with your body's digestive cycle. You'll sleep deeper and wake up sharper.",
+    tryAgainMessage:
+      "Try this tomorrow: move dinner just 30 minutes earlier than usual. Each week, shift it 30 more minutes — until you finish by sunset.",
+  },
+  {
+    title: "Intermittent Fasting (16:8)",
+    description:
+      "Eating within an 8-hour window gives your body 16 hours to repair, rather than digest constantly.",
+    question: "Did you keep your eating within an 8-hour window?",
+    successMessage:
+      "Wonderful. The 16-hour fast gives your body time for cellular cleanup — autophagy. This is where the real transformation happens.",
+    tryAgainMessage:
+      "Start small. Tomorrow, just push breakfast 30 minutes later — that's all. Each week extend the gap by an hour until you reach 16:8.",
+  },
+  {
+    title: "Mindful Eating",
+    description:
+      "Eating with attention activates parasympathetic digestion — you absorb more, eat less, and feel more satisfied.",
+    question: "Did you eat at least one meal without screens or your phone?",
+    successMessage:
+      "Beautiful. When you eat with attention, your nervous system actually digests — instead of bracing against whatever's on the screen.",
+    tryAgainMessage:
+      "Try this tomorrow: just one meal. Put the phone in another room. Notice the taste, the texture, and when you actually feel full.",
+  },
+  {
+    title: "Hydration",
+    description:
+      "Sip warm water and herbal teas between meals — but avoid large amounts during meals, which dilutes agni.",
+    question: "Did you drink enough water and herbal tea today?",
+    successMessage:
+      "Excellent. Warm water between meals supports agni without putting it out during digestion. Your skin and digestion both thank you.",
+    tryAgainMessage:
+      "Try this tomorrow: keep a copper or steel bottle nearby and sip warm water every 30-45 minutes. Avoid drinking large amounts with meals.",
+  },
+];
+
+// Nutrition: same guided one-step-at-a-time pattern as the morning
+// pillar. Sattvic/Tamasic reference cards stay at the top for quick
+// orientation, then the user works through six honest yes/no
+// reflections about today's eating — each with tailored coaching.
+function NutritionContent({
+  answers,
+  setAnswers,
+}: {
+  answers: MorningAnswer[];
+  setAnswers: (next: MorningAnswer[]) => void;
+}) {
+  const total = NUTRITION_STEPS.length;
+  const firstUnanswered = answers.findIndex((a) => a === null);
+  const initialStep = firstUnanswered === -1 ? total : firstUnanswered;
+  const [activeStep, setActiveStep] = useState<number>(initialStep);
+  const [phase, setPhase] = useState<"question" | "feedback">(() =>
+    initialStep < total && answers[initialStep] != null ? "feedback" : "question",
+  );
+
+  const yesCount = answers.filter((a) => a === "yes").length;
+  const answeredCount = answers.filter((a) => a !== null).length;
+  const allAnswered = answeredCount === total;
+
+  const recordAnswer = (idx: number, value: MorningAnswer) => {
+    const next = [...answers];
+    next[idx] = value;
+    setAnswers(next);
+    setPhase("feedback");
+  };
+
+  const continueToNext = () => {
+    if (activeStep + 1 >= total) {
+      setActiveStep(total);
+    } else {
+      setActiveStep(activeStep + 1);
+      setPhase("question");
+    }
+  };
+
+  const goToStep = (idx: number) => {
+    setActiveStep(idx);
+    setPhase(answers[idx] != null ? "feedback" : "question");
+  };
+
+  const restart = () => {
+    setAnswers(Array(total).fill(null) as MorningAnswer[]);
+    setActiveStep(0);
+    setPhase("question");
+  };
+
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-gray-900">
-        Vedic Nutrition Guidelines
-      </h3>
+      {/* Quick reference: what counts as sattvic vs tamasic */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 rounded-xl bg-green-50 border border-green-200">
           <h4 className="font-medium text-green-800 mb-2">Sattvic Foods</h4>
@@ -1133,7 +1283,7 @@ function NutritionContent() {
             <li>- Fresh fruits and vegetables</li>
             <li>- Whole grains and legumes</li>
             <li>- Nuts, seeds, and honey</li>
-            <li>- Herbal teas and water</li>
+            <li>- Herbal teas and warm water</li>
             <li>- Light, easily digestible meals</li>
           </ul>
         </div>
@@ -1154,9 +1304,289 @@ function NutritionContent() {
         </h4>
         <p className="text-sm text-amber-700">
           Fast for 16 hours and eat within an 8-hour window. This aligns with
-          circadian rhythm and promotes natural fat loss and high energy.
+          your circadian rhythm and gives your body time to repair.
         </p>
       </div>
+
+      {/* Header + progress strip */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-semibold text-gray-900">
+            Today&apos;s Nutrition Reflection
+          </h3>
+          <span className="text-sm font-medium text-amber-600">
+            {answeredCount === 0
+              ? `${total} reflections`
+              : `${answeredCount} / ${total} answered`}
+          </span>
+        </div>
+        <p className="text-sm text-gray-600">
+          One question at a time. Honest answers — there&apos;s no wrong one.
+        </p>
+        <div className="flex gap-1.5">
+          {NUTRITION_STEPS.map((step, i) => {
+            const a = answers[i];
+            const isActive = i === activeStep;
+            const segColor =
+              a === "yes"
+                ? "bg-green-500"
+                : a === "no"
+                  ? "bg-amber-400"
+                  : "bg-gray-200";
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => goToStep(i)}
+                title={`Step ${i + 1}: ${step.title}`}
+                aria-label={`Go to step ${i + 1}: ${step.title}`}
+                className={cn(
+                  "h-2 flex-1 rounded-full transition-all",
+                  segColor,
+                  isActive && "ring-2 ring-offset-2 ring-amber-500",
+                )}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      {!allAnswered || activeStep < total ? (
+        <NutritionStepCard
+          stepIndex={activeStep}
+          step={NUTRITION_STEPS[activeStep]}
+          phase={phase}
+          currentAnswer={answers[activeStep]}
+          totalSteps={total}
+          onAnswer={(v) => recordAnswer(activeStep, v)}
+          onContinue={continueToNext}
+          onChangeAnswer={() => setPhase("question")}
+        />
+      ) : (
+        <NutritionSummaryCard
+          answers={answers}
+          yesCount={yesCount}
+          totalSteps={total}
+          onRestart={restart}
+          onJumpToStep={goToStep}
+        />
+      )}
+    </div>
+  );
+}
+
+function NutritionStepCard({
+  stepIndex,
+  step,
+  phase,
+  currentAnswer,
+  totalSteps,
+  onAnswer,
+  onContinue,
+  onChangeAnswer,
+}: {
+  stepIndex: number;
+  step: NutritionStep;
+  phase: "question" | "feedback";
+  currentAnswer: MorningAnswer;
+  totalSteps: number;
+  onAnswer: (v: "yes" | "no") => void;
+  onContinue: () => void;
+  onChangeAnswer: () => void;
+}) {
+  const isLast = stepIndex === totalSteps - 1;
+  const wasYes = currentAnswer === "yes";
+
+  return (
+    <div className="rounded-2xl bg-white border-2 border-amber-200 shadow-sm p-6 md:p-8">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white font-semibold flex items-center justify-center shadow-sm">
+          {stepIndex + 1}
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-wide text-amber-600 font-medium">
+            Step {stepIndex + 1} of {totalSteps}
+          </p>
+          <h4 className="text-xl font-semibold text-gray-900">{step.title}</h4>
+        </div>
+      </div>
+
+      <p className="text-gray-700 leading-relaxed mb-6">{step.description}</p>
+
+      {phase === "question" ? (
+        <>
+          <p className="text-lg font-medium text-gray-900 mb-5">
+            {step.question}
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              size="lg"
+              onClick={() => onAnswer("yes")}
+              className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white"
+            >
+              <Check className="w-5 h-5 mr-2" />
+              Yes, I did
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => onAnswer("no")}
+              className="border-amber-300 text-amber-800 hover:bg-amber-50"
+            >
+              <X className="w-5 h-5 mr-2" />
+              Not today
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div
+          className={cn(
+            "rounded-xl p-5 border",
+            wasYes
+              ? "bg-green-50 border-green-200"
+              : "bg-amber-50 border-amber-200",
+          )}
+        >
+          <div className="flex items-start gap-3 mb-4">
+            <div
+              className={cn(
+                "w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0",
+                wasYes ? "bg-green-500 text-white" : "bg-amber-500 text-white",
+              )}
+            >
+              {wasYes ? (
+                <Check className="w-5 h-5" />
+              ) : (
+                <Lightbulb className="w-5 h-5" />
+              )}
+            </div>
+            <div className="flex-1">
+              <p
+                className={cn(
+                  "font-semibold mb-1",
+                  wasYes ? "text-green-800" : "text-amber-900",
+                )}
+              >
+                {wasYes ? "Beautiful — keep this rhythm." : "Tomorrow's nudge"}
+              </p>
+              <p
+                className={cn(
+                  "text-sm leading-relaxed",
+                  wasYes ? "text-green-700" : "text-amber-800",
+                )}
+              >
+                {wasYes ? step.successMessage : step.tryAgainMessage}
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button onClick={onContinue} className="flex-1 sm:flex-initial">
+              {isLast ? "See today's summary" : "Next reflection →"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onChangeAnswer}
+              className="text-gray-600"
+            >
+              Change my answer
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function NutritionSummaryCard({
+  answers,
+  yesCount,
+  totalSteps,
+  onRestart,
+  onJumpToStep,
+}: {
+  answers: MorningAnswer[];
+  yesCount: number;
+  totalSteps: number;
+  onRestart: () => void;
+  onJumpToStep: (idx: number) => void;
+}) {
+  const wins = NUTRITION_STEPS.map((s, i) => ({ s, i })).filter(
+    ({ i }) => answers[i] === "yes",
+  );
+  const opportunities = NUTRITION_STEPS.map((s, i) => ({ s, i })).filter(
+    ({ i }) => answers[i] === "no",
+  );
+
+  return (
+    <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 p-6 md:p-8 space-y-5">
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h4 className="text-2xl font-bold text-gray-900">
+            Today&apos;s Nutrition Reflection
+          </h4>
+          <p className="text-sm text-gray-600 mt-1">
+            You honored <strong>{yesCount} of {totalSteps}</strong> habits today.
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onRestart}
+          className="text-gray-700"
+        >
+          <RotateCcw className="w-4 h-4 mr-2" />
+          Start over
+        </Button>
+      </div>
+
+      {wins.length > 0 && (
+        <div className="rounded-xl bg-white/70 border border-green-200 p-4">
+          <p className="font-semibold text-green-800 mb-2 flex items-center gap-2">
+            <Check className="w-5 h-5" /> Keep this rhythm
+          </p>
+          <ul className="space-y-1.5">
+            {wins.map(({ s, i }) => (
+              <li key={i}>
+                <button
+                  type="button"
+                  onClick={() => onJumpToStep(i)}
+                  className="text-sm text-green-700 hover:underline text-left"
+                >
+                  • {s.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {opportunities.length > 0 && (
+        <div className="rounded-xl bg-white/70 border border-amber-200 p-4">
+          <p className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
+            <Lightbulb className="w-5 h-5" /> Try these tomorrow
+          </p>
+          <ul className="space-y-1.5">
+            {opportunities.map(({ s, i }) => (
+              <li key={i}>
+                <button
+                  type="button"
+                  onClick={() => onJumpToStep(i)}
+                  className="text-sm text-amber-800 hover:underline text-left"
+                >
+                  • {s.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <p className="text-sm text-gray-600 italic">
+        Food is the most repeated decision of your day. Small, honest
+        shifts compound faster than any single perfect meal. Mark this
+        pillar complete to record your karma for today.
+      </p>
     </div>
   );
 }
