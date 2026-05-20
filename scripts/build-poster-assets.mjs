@@ -12,7 +12,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const MANIFEST = resolve(ROOT, "scripts/poster-manifest.json");
 const SOURCE_DIR = resolve(ROOT, "Posters/Posters");
-const OUT_DIR = resolve(ROOT, "public/posters");
+const OUT_DIR = resolve(ROOT, "public/poster-images");
 
 const SIZES = [
   { suffix: "", maxWidth: 768, quality: 82 },
