@@ -61,3 +61,20 @@ Phase 2 fills this file in batches of 3-4 posters.
 - Scripture: Yoga Sutra 1.2
 - Sections: 9 numbered healing steps (calm mind → consistency)
 
+## Batch 3 — 2026-05-19
+
+### gratitude-way-of-life
+- Source: `WhatsApp Image 2026-05-19 at 7.39.03 AM (10).jpeg` (768x512, triptych)
+- Scripture: Yoga Sutra 2.42 (Santosha)
+- Sections: 3 panels (Patanjali connection → science & yogic wisdom → way of life with daily habits)
+
+### ayurvedic-nutrition-fasting
+- Source: `WhatsApp Image 2026-05-19 at 7.39.04 AM (10).jpeg` (768x768)
+- Scripture: Bhagavad Gita 6.17 + Yoga Sutra 2.40
+- Sections: 5 numbered (sun's window → warm water → sattvic food → 80% rule → hydration)
+
+### mind-purification-5-step
+- Source: `WhatsApp Image 2026-05-19 at 7.39.06 AM (5).jpeg` (768x1152)
+- Scripture: none cited
+- Sections: 5 numbered (positive inputs → mental nutrition → avoid tamasic → remove negatives → high-vibration influences)
+

@@ -426,6 +426,171 @@ export const POSTERS: Poster[] = [
     ],
     tagline: "Heal your mind. Balance your emotions. Purify your body. Transform your life. Om Shanti.",
   },
+  {
+    slug: "gratitude-way-of-life",
+    title: "Gratitude — A Way of Life",
+    concept: "gratitude",
+    pillarSlug: "gratitude",
+    kind: "general",
+    category: "mind",
+    image: {
+      src: "/posters/gratitude-way-of-life.webp",
+      src2x: "/posters/gratitude-way-of-life@2x.webp",
+      thumb: "/posters/gratitude-way-of-life.thumb.webp",
+      width: 768,
+      height: 512,
+      alt: "Triptych infographic on Gratitude — its place in Patanjali Yoga Sutras, the science and yogic wisdom behind it, and gratitude as a way of life.",
+    },
+    scripture: [
+      {
+        sutra: "Yoga Sutra 2.42",
+        sanskrit: "सन्तोषादनुत्तमः सुखलाभः । Santoṣād anuttamaḥ sukha-lābhaḥ.",
+        translation: "From contentment (santosha), supreme happiness is attained.",
+      },
+    ],
+    sections: [
+      {
+        number: 1,
+        title: "Gratitude in Patanjali Yoga Sutras",
+        body: "Cultivate contentment, gratitude, and surrender — the mind becomes peaceful and pure. Gratitude is woven through Santosha (contentment), Ahimsa (a grateful heart is kind), Ishvara Pranidhana (gratitude strengthens trust in the divine), and Chatta Prasadanam (gratitude purifies the mind and removes negativity).",
+        bullets: [
+          "Creates inner peace",
+          "Reduces stress",
+          "Improves emotional balance",
+          "Strengthens spiritual growth",
+          "Generates positive energy",
+          "Improves relationships, mental clarity, and sleep",
+        ],
+      },
+      {
+        number: 2,
+        title: "The Science & Yogic Wisdom",
+        body: "Gratitude changes the mind, brain, and life. Science: it reduces stress hormones, improves mood and emotional balance, strengthens positive neural pathways, and boosts immunity. Yogic wisdom: repeated emotions become samskaras (mental impressions), and gratitude lays down positive samskaras in the subconscious.",
+        bullets: [
+          "Sit quietly and take deep breaths",
+          "Think of five things you are grateful for",
+          "Feel the gratitude emotionally, not just intellectually",
+          "Silently repeat: 'Thank you for health, peace, and wisdom'",
+          "Rest in peace and inner balance",
+        ],
+      },
+      {
+        number: 3,
+        title: "A Way of Life",
+        body: "A grateful mind lives in the present, appreciates the moment, and trusts the divine. Replace dissatisfaction, comparison, and complaint with emotional stability, compassion, patience, and faith.",
+        bullets: [
+          "Thank before meals",
+          "Appreciate nature",
+          "Speak kindly",
+          "Maintain a gratitude journal",
+          "Avoid unnecessary complaints",
+          "End the day with thankful thoughts",
+        ],
+      },
+    ],
+    tagline: "Gratitude turns what we have into enough.",
+  },
+  {
+    slug: "ayurvedic-nutrition-fasting",
+    title: "Nutrition & Fasting — Ayurvedic Eating & Intermittent Fasting",
+    concept: "nutrition-fasting",
+    pillarSlug: "nutrition-fasting",
+    kind: "general",
+    category: "body",
+    image: {
+      src: "/posters/ayurvedic-nutrition-fasting.webp",
+      src2x: "/posters/ayurvedic-nutrition-fasting@2x.webp",
+      thumb: "/posters/ayurvedic-nutrition-fasting.thumb.webp",
+      width: 768,
+      height: 768,
+      alt: "Square infographic on Ayurvedic eating and intermittent fasting — eat during the sun's power window, start with warm water, choose sattvic food, follow the 80% full rule, and hydrate the Vedic way.",
+    },
+    scripture: [
+      {
+        sutra: "Bhagavad Gita 6.17",
+        sanskrit: "युक्ताहारविहारस्य युक्तचेष्टस्य कर्मसु । युक्तस्वप्नावबोधस्य योगो भवति दुःखहा ॥",
+        translation: "For one who is moderate in food and recreation, moderate in effort, and regulated in sleep and wakefulness, yoga becomes the destroyer of sorrow.",
+      },
+      {
+        sutra: "Yoga Sutra 2.40",
+        sanskrit: "शौचात्स्वाङ्गजुगुप्सा परैरसंसर्गः ॥",
+        translation: "Purity in body and mind leads to dispassion toward what is impure and unnecessary.",
+      },
+    ],
+    sections: [
+      {
+        number: 1,
+        title: "Eat During the Sun's Power Window",
+        body: "Digestive fire (Agni) is at peak when the sun is strongest. Take the main meal between 10:30 AM and 2:00 PM, a light dinner before sunset (6 PM at the latest), and after 6 PM drink water or eat under 20-calorie items only.",
+      },
+      {
+        number: 2,
+        title: "Start the Day with Warm Water",
+        body: "Drink 1–2 glasses of warm water on waking. It helps the body detox, starts digestion, and improves elimination — a simple ritual with outsized benefits.",
+      },
+      {
+        number: 3,
+        title: "Eat Fresh, Sattvic, Simple Food",
+        body: "Prefer freshly cooked, plant-forward meals. Include vegetables, fruits, whole grains (rice, millets), lentils, ghee, nuts, and seeds. Avoid heavy fried foods, processed items, sugar, and stale food.",
+      },
+      {
+        number: 4,
+        title: "Follow the 80% Full Rule",
+        body: "Stop eating when you feel satisfied, not stuffed. The remaining 20% allows proper digestion, prevents lethargy, and keeps the mind clear.",
+      },
+      {
+        number: 5,
+        title: "Hydrate the Vedic Way",
+        body: "Sip warm water or herbal teas throughout the day. Avoid iced drinks — they weaken Agni — and don't drown meals in water; small sips only. Add ginger + lime before lunch to boost Agni, turmeric + pepper at night for immunity, and pause five seconds before eating to bring presence.",
+      },
+    ],
+    tagline: "Let food be your medicine. Let awareness be your guru. Let yoga be your way of life.",
+  },
+  {
+    slug: "mind-purification-5-step",
+    title: "5 Steps to a Pure Mind",
+    concept: "mind-purification",
+    pillarSlug: "thoughts-intention",
+    kind: "general",
+    category: "mind",
+    image: {
+      src: "/posters/mind-purification-5-step.webp",
+      src2x: "/posters/mind-purification-5-step@2x.webp",
+      thumb: "/posters/mind-purification-5-step.thumb.webp",
+      width: 768,
+      height: 1152,
+      alt: "Portrait infographic with five steps to a pure mind — start the day with positive inputs, consume positive mental nutrition, avoid tamasic intake, remove negative people, and add high-vibration influences.",
+    },
+    scripture: [],
+    sections: [
+      {
+        number: 1,
+        title: "Start the Day with Positive Inputs (Before 8 AM)",
+        body: "What you feed your mind in the first hour shapes your whole day. Read or listen to uplifting content — a scripture verse or five minutes of positive philosophy. Avoid news, social media, and arguments in the first hour.",
+      },
+      {
+        number: 2,
+        title: "Consume Positive Mental Nutrition",
+        body: "Just as the body digests food, the mind digests what you expose it to. Choose inputs that create clarity, peace, and inspiration — mantras, spiritual texts, inspirational books, nature, silence, and conversations with kind people.",
+      },
+      {
+        number: 3,
+        title: "Avoid Tamasic Mental Intake (Especially After Sunset)",
+        body: "Just as we don't eat heavy food late, avoid heavy mental food after evening. Violent content, gossip, toxic conversations, doom-scrolling, and complaints weaken the mind exactly like junk food weakens the body.",
+      },
+      {
+        number: 4,
+        title: "Remove Negative People & Energies",
+        body: "Reduce interaction with people who drain, criticize, or manipulate. Limit exposure to phones, media, or groups that pull you down. Create healthy boundaries — satsang transforms, dussang destroys.",
+      },
+      {
+        number: 5,
+        title: "Add Positive, High-Vibration Influences",
+        body: "Feed your mind what lifts you. Surround yourself with supportive people, inspiring teachers, peaceful environments, and the daily practice of silence, prayer, and meditation — your mental superfoods.",
+      },
+    ],
+    tagline: "A pure mind sees clearly. A positive mind creates miracles.",
+  },
 ];
 
 export function getPostersByPillar(slug: string): Poster[] {
