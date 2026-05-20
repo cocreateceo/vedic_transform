@@ -44,3 +44,20 @@ Phase 2 fills this file in batches of 3-4 posters.
 - Scripture: none cited in poster
 - Sections: 6 numbered manifestation steps
 
+## Batch 2 — 2026-05-19
+
+### five-principles-of-manifestation
+- Source: `WhatsApp Image 2026-05-19 at 7.39.03 AM.jpeg` (768x1152)
+- Scripture: Yoga Sutra 1.2
+- Sections: 5 numbered principles (mental stillness, sankalpa, dharana, non-attachment, samskaras)
+
+### manifestation-secrets-patanjali
+- Source: `WhatsApp Image 2026-05-19 at 7.39.05 AM (5).jpeg` (768x1152)
+- Scripture: Yoga Sutra 1.2
+- Sections: 8 numbered secrets (mind control, sankalpa, dharana, dhyana, samskaras, pranayama, sattvic lifestyle, faith)
+
+### step-by-step-healing
+- Source: `WhatsApp Image 2026-05-19 at 7.39.07 AM.jpeg` (768x1152)
+- Scripture: Yoga Sutra 1.2
+- Sections: 9 numbered healing steps (calm mind → consistency)
+

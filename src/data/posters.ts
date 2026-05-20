@@ -238,6 +238,194 @@ export const POSTERS: Poster[] = [
     ],
     tagline: "Your mind is the seed. Your energy is the water. Your actions are the soil. Your reality is the result.",
   },
+  {
+    slug: "five-principles-of-manifestation",
+    title: "5 Principles of Manifestation",
+    concept: "manifestation-principles",
+    pillarSlug: "divine-manifestation",
+    kind: "general",
+    category: "spirit",
+    image: {
+      src: "/posters/five-principles-of-manifestation.webp",
+      src2x: "/posters/five-principles-of-manifestation@2x.webp",
+      thumb: "/posters/five-principles-of-manifestation.thumb.webp",
+      width: 768,
+      height: 1152,
+      alt: "Portrait infographic on the 5 Principles of Manifestation according to Patanjali Yoga Sutras — mental stillness, sankalpa, dharana, non-attachment, and samskaras.",
+    },
+    scripture: [
+      {
+        sutra: "Yoga Sutra 1.2",
+        sanskrit: "योगश्चित्तवृत्तिनिरोधः । Yogaḥ chitta vṛtti nirodhaḥ.",
+        translation: "Yoga is the stilling of the fluctuations of the mind.",
+      },
+    ],
+    sections: [
+      {
+        number: 1,
+        title: "Mental Stillness (Chitta Vritti Nirodha)",
+        body: "When thoughts are focused and peaceful, energy aligns with intention. Sit for ten minutes daily, observe thoughts, breathe deeply, and reduce mental noise.",
+      },
+      {
+        number: 2,
+        title: "Sankalpa — Power of Intention",
+        body: "A clear intention is a seed planted in the subconscious mind. Whatever is repeatedly imagined begins shaping reality. Light a diya, write your intention, and affirm it daily.",
+      },
+      {
+        number: 3,
+        title: "Dharana — One-Pointed Concentration",
+        body: "Sustained focus creates magnetic energy. Concentrate on one thought or object for 5–10 minutes daily.",
+      },
+      {
+        number: 4,
+        title: "Ishvara Pranidhana — Non-Attachment",
+        body: "Patanjali teaches surrender to the divine. Detach from the outcome, trust the process, and let go.",
+      },
+      {
+        number: 5,
+        title: "Samskaras — Subconscious Programming",
+        body: "Repeated thoughts become subconscious patterns, and the subconscious shapes reality. Use positive affirmations, gratitude, and awareness to rewrite samskaras.",
+      },
+    ],
+    tagline: "Pure mind • Clear intention • Focused action • Divine trust • Your reality.",
+  },
+  {
+    slug: "manifestation-secrets-patanjali",
+    title: "Manifestation Secrets by Patanjali Yoga Sutra",
+    concept: "manifestation-secrets",
+    pillarSlug: "divine-manifestation",
+    kind: "general",
+    category: "spirit",
+    image: {
+      src: "/posters/manifestation-secrets-patanjali.webp",
+      src2x: "/posters/manifestation-secrets-patanjali@2x.webp",
+      thumb: "/posters/manifestation-secrets-patanjali.thumb.webp",
+      width: 768,
+      height: 1152,
+      alt: "Portrait infographic with eight Patanjali-rooted manifestation secrets: control the mind, sankalpa, dharana, dhyana, samskaras, pranayama, sattvic lifestyle, and faith in the divine.",
+    },
+    scripture: [
+      {
+        sutra: "Yoga Sutra 1.2",
+        sanskrit: "योगश्चित्तवृत्तिनिरोधः । Yogaḥ chitta vṛtti nirodhaḥ.",
+        translation: "Yoga is the stilling of the fluctuations of the mind.",
+      },
+    ],
+    sections: [
+      {
+        number: 1,
+        title: "Control the Mind (Chitta Vritti Nirodha)",
+        body: "A calm mind manifests powerfully. Sit quietly for ten minutes; observe and release each thought as it arises.",
+      },
+      {
+        number: 2,
+        title: "Sankalpa — Power of Intention",
+        body: "A clear, focused intention activates inner power. Visualize, repeat, and believe — daily.",
+      },
+      {
+        number: 3,
+        title: "Dharana — Concentration Creates Energy",
+        body: "A focused mind is a magnetic mind. Hold one image or thought for 5–10 minutes to gather your energy.",
+      },
+      {
+        number: 4,
+        title: "Dhyana — Meditation Raises Consciousness",
+        body: "Higher awareness allows higher manifestation. Sit in meditation for at least 15 minutes daily.",
+      },
+      {
+        number: 5,
+        title: "Samskaras Shape Reality",
+        body: "Repeated thoughts shape the subconscious, and the subconscious shapes reality. Replace negative samskaras with positive ones through awareness and affirmation.",
+      },
+      {
+        number: 6,
+        title: "Pranayama Increases Life Force",
+        body: "Controlled breath amplifies prana. Practice ten minutes of nadi shodhana (alternate-nostril breathing) daily.",
+      },
+      {
+        number: 7,
+        title: "Sattvic Lifestyle Raises Vibration",
+        body: "A sattvic diet, a clean environment, and positive company raise your baseline frequency. Choose pure food and peaceful surroundings.",
+      },
+      {
+        number: 8,
+        title: "Faith & Divine Connection",
+        body: "Trust in a higher power completes the work. Surrender, pray, and live in gratitude.",
+      },
+    ],
+    tagline: "Live in awareness, act in alignment, surrender to the divine.",
+  },
+  {
+    slug: "step-by-step-healing",
+    title: "Step-by-Step Guide to Manifest Healing & Get Rid of Disease",
+    concept: "healing",
+    pillarSlug: "healing-meditation",
+    kind: "general",
+    category: "mind",
+    image: {
+      src: "/posters/step-by-step-healing.webp",
+      src2x: "/posters/step-by-step-healing@2x.webp",
+      thumb: "/posters/step-by-step-healing.thumb.webp",
+      width: 768,
+      height: 1152,
+      alt: "Portrait infographic with nine Patanjali-rooted steps to manifest healing — calm the mind, sankalpa, pranayama, meditation, release samskaras, sattvic lifestyle, gratitude, surrender, and consistency.",
+    },
+    scripture: [
+      {
+        sutra: "Yoga Sutra 1.2",
+        sanskrit: "योगश्चित्तवृत्तिनिरोधः । Yogaḥ chitta vṛtti nirodhaḥ.",
+        translation: "Yoga is the stilling of the fluctuations of the mind — the ground on which healing begins.",
+      },
+    ],
+    sections: [
+      {
+        number: 1,
+        title: "Calm the Mind (Chitta Vritti Nirodha)",
+        body: "Healing begins when mental noise quiets. Sit for ten minutes of meditation daily and let the breath settle the mind.",
+      },
+      {
+        number: 2,
+        title: "Create a Healing Sankalpa",
+        body: "Set a clear healing intention. Visualize yourself in full health and write the affirmation as if it is already true.",
+      },
+      {
+        number: 3,
+        title: "Practice Pranayama",
+        body: "Breath control purifies the body and mind. Practice nadi shodhana and kapalabhati daily for cleansing prana.",
+      },
+      {
+        number: 4,
+        title: "Meditation (Dhyana)",
+        body: "Deep stillness allows the nervous system to repair. Meditate for 15–20 minutes daily.",
+      },
+      {
+        number: 5,
+        title: "Release Negative Samskaras",
+        body: "Replace harmful subconscious patterns. Use gratitude and positive affirmation to rewrite the imprint.",
+      },
+      {
+        number: 6,
+        title: "Follow a Sattvic Lifestyle",
+        body: "Pure food, clean environment, and positive company support healing. Choose simple sattvic meals and a peaceful daily rhythm.",
+      },
+      {
+        number: 7,
+        title: "Practice Gratitude",
+        body: "Gratitude activates the body's healing response. Note three things you are grateful for each morning and evening.",
+      },
+      {
+        number: 8,
+        title: "Surrender & Trust the Divine",
+        body: "Faith calms fear, and fear blocks healing. Pray, surrender outcomes, and trust the body's wisdom.",
+      },
+      {
+        number: 9,
+        title: "Consistency Creates Transformation",
+        body: "Healing follows daily discipline. Hold the routine without exception and trust the slow shift.",
+      },
+    ],
+    tagline: "Heal your mind. Balance your emotions. Purify your body. Transform your life. Om Shanti.",
+  },
 ];
 
 export function getPostersByPillar(slug: string): Poster[] {
