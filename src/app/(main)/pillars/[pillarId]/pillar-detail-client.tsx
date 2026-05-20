@@ -9,6 +9,11 @@ import { BreathingVisualizer } from "@/components/features/pillars/breathing-vis
 import { PillarHero, PillarHeroStyles } from "@/components/features/pillars/pillar-hero";
 import { PillarContentPanel } from "@/components/features/pillars/pillar-content-panel";
 import {
+  YesNoReflection,
+  type YesNoAnswer,
+  type YesNoStep,
+} from "@/components/features/pillars/yesno-reflection";
+import {
   Check,
   ArrowLeft,
   Clock,
@@ -16,9 +21,7 @@ import {
   Download,
   FileText,
   Compass,
-  Lightbulb,
   RotateCcw,
-  X,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
@@ -46,16 +49,24 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
     () => `morning-checklist-${new Date().toISOString().split("T")[0]}`,
     [],
   );
-  const [morningAnswers, setMorningAnswers] = useState<MorningAnswer[]>(
-    () => Array(7).fill(null) as MorningAnswer[],
+  const [morningAnswers, setMorningAnswers] = useState<YesNoAnswer[]>(
+    () => Array(MORNING_STEPS.length).fill(null) as YesNoAnswer[],
   );
 
   const nutritionKey = useMemo(
     () => `nutrition-reflection-${new Date().toISOString().split("T")[0]}`,
     [],
   );
-  const [nutritionAnswers, setNutritionAnswers] = useState<MorningAnswer[]>(
-    () => Array(NUTRITION_STEPS.length).fill(null) as MorningAnswer[],
+  const [nutritionAnswers, setNutritionAnswers] = useState<YesNoAnswer[]>(
+    () => Array(NUTRITION_STEPS.length).fill(null) as YesNoAnswer[],
+  );
+
+  const breathingKey = useMemo(
+    () => `breathing-reflection-${new Date().toISOString().split("T")[0]}`,
+    [],
+  );
+  const [breathingAnswers, setBreathingAnswers] = useState<YesNoAnswer[]>(
+    () => Array(BREATHING_STEPS.length).fill(null) as YesNoAnswer[],
   );
 
   // Rehydrate today's morning answers from localStorage. Day-scoped key
@@ -68,8 +79,8 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       const stored = window.localStorage.getItem(morningKey);
       if (!stored) return;
       const parsed = JSON.parse(stored);
-      if (!Array.isArray(parsed) || parsed.length !== 7) return;
-      const normalized: MorningAnswer[] = parsed.map((v) => {
+      if (!Array.isArray(parsed) || parsed.length !== MORNING_STEPS.length) return;
+      const normalized: YesNoAnswer[] = parsed.map((v) => {
         if (v === "yes" || v === "no") return v;
         if (v === true) return "yes";
         return null;
@@ -92,7 +103,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       if (!stored) return;
       const parsed = JSON.parse(stored);
       if (!Array.isArray(parsed) || parsed.length !== NUTRITION_STEPS.length) return;
-      const normalized: MorningAnswer[] = parsed.map((v) =>
+      const normalized: YesNoAnswer[] = parsed.map((v) =>
         v === "yes" || v === "no" ? v : null,
       );
       setNutritionAnswers(normalized);
@@ -105,6 +116,27 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       window.localStorage.setItem(nutritionKey, JSON.stringify(nutritionAnswers));
     } catch {}
   }, [nutritionAnswers, nutritionKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = window.localStorage.getItem(breathingKey);
+      if (!stored) return;
+      const parsed = JSON.parse(stored);
+      if (!Array.isArray(parsed) || parsed.length !== BREATHING_STEPS.length) return;
+      const normalized: YesNoAnswer[] = parsed.map((v) =>
+        v === "yes" || v === "no" ? v : null,
+      );
+      setBreathingAnswers(normalized);
+    } catch {}
+  }, [breathingKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(breathingKey, JSON.stringify(breathingAnswers));
+    } catch {}
+  }, [breathingAnswers, breathingKey]);
 
   useEffect(() => {
     async function fetchData() {
@@ -315,11 +347,10 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       <Card className="mb-6">
         <CardContent className="py-8">
           {pillarId === "breathing-meditation" ? (
-            <BreathingVisualizer
-              inhaleDuration={4}
-              exhaleDuration={6}
-              totalDuration={5}
-              onComplete={breathingAutoComplete}
+            <BreathingMeditationContent
+              onAutoComplete={breathingAutoComplete}
+              answers={breathingAnswers}
+              setAnswers={setBreathingAnswers}
             />
           ) : pillarId === "morning-initiation" ? (
             <MorningInitiationContent
@@ -370,17 +401,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   );
 }
 
-type MorningAnswer = "yes" | "no" | null;
-
-type MorningStep = {
-  title: string;
-  description: string;
-  question: string;
-  successMessage: string;
-  tryAgainMessage: string;
-};
-
-const MORNING_STEPS: MorningStep[] = [
+const MORNING_STEPS: YesNoStep[] = [
   {
     title: "Wake Up Early",
     description:
@@ -451,63 +472,18 @@ const MORNING_STEPS: MorningStep[] = [
   },
 ];
 
-// Morning Initiation: a guided one-step-at-a-time reflection instead of a
-// passive checklist. For each step we ask a yes/no question, then show
-// tailored coaching — encouragement on "yes", a gentle starter habit on
-// "no". The user advances one step at a time so the experience feels
-// like a real morning routine debrief, not a tally page.
+// Morning Initiation: a guided one-step-at-a-time reflection. Keeps the
+// Brahma Muhurta guide download at the top, then delegates the actual
+// step-by-step flow to the shared YesNoReflection component.
 function MorningInitiationContent({
   answers,
   setAnswers,
 }: {
-  answers: MorningAnswer[];
-  setAnswers: (next: MorningAnswer[]) => void;
+  answers: YesNoAnswer[];
+  setAnswers: (next: YesNoAnswer[]) => void;
 }) {
-  // Resume at the first unanswered step on mount and after navigation.
-  // If all 7 are answered we land on the summary card (activeStep === 7).
-  const firstUnanswered = answers.findIndex((a) => a === null);
-  const initialStep = firstUnanswered === -1 ? answers.length : firstUnanswered;
-  const [activeStep, setActiveStep] = useState<number>(initialStep);
-  const [phase, setPhase] = useState<"question" | "feedback">(() =>
-    initialStep < answers.length && answers[initialStep] != null
-      ? "feedback"
-      : "question",
-  );
-
-  const yesCount = answers.filter((a) => a === "yes").length;
-  const answeredCount = answers.filter((a) => a !== null).length;
-  const allAnswered = answeredCount === MORNING_STEPS.length;
-
-  const recordAnswer = (idx: number, value: MorningAnswer) => {
-    const next = [...answers];
-    next[idx] = value;
-    setAnswers(next);
-    setPhase("feedback");
-  };
-
-  const continueToNext = () => {
-    if (activeStep + 1 >= MORNING_STEPS.length) {
-      setActiveStep(MORNING_STEPS.length);
-    } else {
-      setActiveStep(activeStep + 1);
-      setPhase("question");
-    }
-  };
-
-  const goToStep = (idx: number) => {
-    setActiveStep(idx);
-    setPhase(answers[idx] != null ? "feedback" : "question");
-  };
-
-  const restart = () => {
-    setAnswers(Array(MORNING_STEPS.length).fill(null) as MorningAnswer[]);
-    setActiveStep(0);
-    setPhase("question");
-  };
-
   return (
     <div className="space-y-6">
-      {/* Download Guide Section */}
       <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6">
         <div className="flex items-start gap-4">
           <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
@@ -537,286 +513,20 @@ function MorningInitiationContent({
         </div>
       </div>
 
-      {/* Header + progress strip */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-gray-900">
-            Today&apos;s Morning Reflection
-          </h3>
-          <span className="text-sm font-medium text-amber-600">
-            {answeredCount === 0
-              ? `${MORNING_STEPS.length} reflections`
-              : `${answeredCount} / ${MORNING_STEPS.length} answered`}
-          </span>
-        </div>
-        <p className="text-sm text-gray-600">
-          One question at a time. Honest answers — there&apos;s no wrong one.
-        </p>
-        <div className="flex gap-1.5">
-          {MORNING_STEPS.map((_, i) => {
-            const a = answers[i];
-            const isActive = i === activeStep;
-            const segColor =
-              a === "yes"
-                ? "bg-green-500"
-                : a === "no"
-                  ? "bg-amber-400"
-                  : "bg-gray-200";
-            return (
-              <button
-                key={i}
-                type="button"
-                onClick={() => goToStep(i)}
-                title={`Step ${i + 1}: ${MORNING_STEPS[i].title}`}
-                aria-label={`Go to step ${i + 1}: ${MORNING_STEPS[i].title}`}
-                className={cn(
-                  "h-2 flex-1 rounded-full transition-all",
-                  segColor,
-                  isActive && "ring-2 ring-offset-2 ring-amber-500",
-                )}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Active step card OR summary */}
-      {!allAnswered || activeStep < MORNING_STEPS.length ? (
-        <MorningStepCard
-          stepIndex={activeStep}
-          step={MORNING_STEPS[activeStep]}
-          phase={phase}
-          currentAnswer={answers[activeStep]}
-          totalSteps={MORNING_STEPS.length}
-          onAnswer={(v) => recordAnswer(activeStep, v)}
-          onContinue={continueToNext}
-          onChangeAnswer={() => setPhase("question")}
-        />
-      ) : (
-        <MorningSummaryCard
-          answers={answers}
-          yesCount={yesCount}
-          totalSteps={MORNING_STEPS.length}
-          onRestart={restart}
-          onJumpToStep={goToStep}
-        />
-      )}
-    </div>
-  );
-}
-
-function MorningStepCard({
-  stepIndex,
-  step,
-  phase,
-  currentAnswer,
-  totalSteps,
-  onAnswer,
-  onContinue,
-  onChangeAnswer,
-}: {
-  stepIndex: number;
-  step: MorningStep;
-  phase: "question" | "feedback";
-  currentAnswer: MorningAnswer;
-  totalSteps: number;
-  onAnswer: (v: "yes" | "no") => void;
-  onContinue: () => void;
-  onChangeAnswer: () => void;
-}) {
-  const isLast = stepIndex === totalSteps - 1;
-  const wasYes = currentAnswer === "yes";
-
-  return (
-    <div className="rounded-2xl bg-white border-2 border-amber-200 shadow-sm p-6 md:p-8">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white font-semibold flex items-center justify-center shadow-sm">
-          {stepIndex + 1}
-        </div>
-        <div>
-          <p className="text-xs uppercase tracking-wide text-amber-600 font-medium">
-            Step {stepIndex + 1} of {totalSteps}
-          </p>
-          <h4 className="text-xl font-semibold text-gray-900">{step.title}</h4>
-        </div>
-      </div>
-
-      <p className="text-gray-700 leading-relaxed mb-6">{step.description}</p>
-
-      {phase === "question" ? (
-        <>
-          <p className="text-lg font-medium text-gray-900 mb-5">
-            {step.question}
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              size="lg"
-              onClick={() => onAnswer("yes")}
-              className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white"
-            >
-              <Check className="w-5 h-5 mr-2" />
-              Yes, I did
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => onAnswer("no")}
-              className="border-amber-300 text-amber-800 hover:bg-amber-50"
-            >
-              <X className="w-5 h-5 mr-2" />
-              Not today
-            </Button>
-          </div>
-        </>
-      ) : (
-        <div
-          className={cn(
-            "rounded-xl p-5 border",
-            wasYes
-              ? "bg-green-50 border-green-200"
-              : "bg-amber-50 border-amber-200",
-          )}
-        >
-          <div className="flex items-start gap-3 mb-4">
-            <div
-              className={cn(
-                "w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0",
-                wasYes ? "bg-green-500 text-white" : "bg-amber-500 text-white",
-              )}
-            >
-              {wasYes ? (
-                <Check className="w-5 h-5" />
-              ) : (
-                <Lightbulb className="w-5 h-5" />
-              )}
-            </div>
-            <div className="flex-1">
-              <p
-                className={cn(
-                  "font-semibold mb-1",
-                  wasYes ? "text-green-800" : "text-amber-900",
-                )}
-              >
-                {wasYes ? "Beautiful — keep this rhythm." : "Tomorrow's nudge"}
-              </p>
-              <p
-                className={cn(
-                  "text-sm leading-relaxed",
-                  wasYes ? "text-green-700" : "text-amber-800",
-                )}
-              >
-                {wasYes ? step.successMessage : step.tryAgainMessage}
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Button onClick={onContinue} className="flex-1 sm:flex-initial">
-              {isLast ? "See today's summary" : "Next reflection →"}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onChangeAnswer}
-              className="text-gray-600"
-            >
-              Change my answer
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function MorningSummaryCard({
-  answers,
-  yesCount,
-  totalSteps,
-  onRestart,
-  onJumpToStep,
-}: {
-  answers: MorningAnswer[];
-  yesCount: number;
-  totalSteps: number;
-  onRestart: () => void;
-  onJumpToStep: (idx: number) => void;
-}) {
-  const wins = MORNING_STEPS.map((s, i) => ({ s, i })).filter(
-    ({ i }) => answers[i] === "yes",
-  );
-  const opportunities = MORNING_STEPS.map((s, i) => ({ s, i })).filter(
-    ({ i }) => answers[i] === "no",
-  );
-
-  return (
-    <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 p-6 md:p-8 space-y-5">
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h4 className="text-2xl font-bold text-gray-900">
-            Today&apos;s Morning Reflection
-          </h4>
-          <p className="text-sm text-gray-600 mt-1">
-            You completed <strong>{yesCount} of {totalSteps}</strong> habits today.
-          </p>
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onRestart}
-          className="text-gray-700"
-        >
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Start over
-        </Button>
-      </div>
-
-      {wins.length > 0 && (
-        <div className="rounded-xl bg-white/70 border border-green-200 p-4">
-          <p className="font-semibold text-green-800 mb-2 flex items-center gap-2">
-            <Check className="w-5 h-5" /> Keep this rhythm
-          </p>
-          <ul className="space-y-1.5">
-            {wins.map(({ s, i }) => (
-              <li key={i}>
-                <button
-                  type="button"
-                  onClick={() => onJumpToStep(i)}
-                  className="text-sm text-green-700 hover:underline text-left"
-                >
-                  • {s.title}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {opportunities.length > 0 && (
-        <div className="rounded-xl bg-white/70 border border-amber-200 p-4">
-          <p className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
-            <Lightbulb className="w-5 h-5" /> Try these tomorrow
-          </p>
-          <ul className="space-y-1.5">
-            {opportunities.map(({ s, i }) => (
-              <li key={i}>
-                <button
-                  type="button"
-                  onClick={() => onJumpToStep(i)}
-                  className="text-sm text-amber-800 hover:underline text-left"
-                >
-                  • {s.title}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <p className="text-sm text-gray-600 italic">
-        Reflection itself is progress. You showed up — that&apos;s what
-        builds the 48-day rhythm. Mark this pillar complete below to
-        record your karma for today.
-      </p>
+      <YesNoReflection
+        steps={MORNING_STEPS}
+        answers={answers}
+        setAnswers={setAnswers}
+        config={{
+          headerTitle: "Today's Morning Reflection",
+          headerSubtitle:
+            "One question at a time. Honest answers — there's no wrong one.",
+          summaryTitle: "Today's Morning Reflection",
+          summaryStatLabel: "habits",
+          summaryClosingNote:
+            "Reflection itself is progress. You showed up — that's what builds the 48-day rhythm. Mark this pillar complete below to record your karma for today.",
+        }}
+      />
     </div>
   );
 }
@@ -1151,15 +861,7 @@ function GratitudeSummaryCard({
   );
 }
 
-type NutritionStep = {
-  title: string;
-  description: string;
-  question: string;
-  successMessage: string;
-  tryAgainMessage: string;
-};
-
-const NUTRITION_STEPS: NutritionStep[] = [
+const NUTRITION_STEPS: YesNoStep[] = [
   {
     title: "Sattvic Foods",
     description:
@@ -1223,59 +925,18 @@ const NUTRITION_STEPS: NutritionStep[] = [
   },
 ];
 
-// Nutrition: same guided one-step-at-a-time pattern as the morning
-// pillar. Sattvic/Tamasic reference cards stay at the top for quick
-// orientation, then the user works through six honest yes/no
-// reflections about today's eating — each with tailored coaching.
+// Nutrition: keeps the Sattvic / Tamasic / 16:8 reference cards at the
+// top, then delegates to the shared YesNoReflection for the guided
+// six-step debrief.
 function NutritionContent({
   answers,
   setAnswers,
 }: {
-  answers: MorningAnswer[];
-  setAnswers: (next: MorningAnswer[]) => void;
+  answers: YesNoAnswer[];
+  setAnswers: (next: YesNoAnswer[]) => void;
 }) {
-  const total = NUTRITION_STEPS.length;
-  const firstUnanswered = answers.findIndex((a) => a === null);
-  const initialStep = firstUnanswered === -1 ? total : firstUnanswered;
-  const [activeStep, setActiveStep] = useState<number>(initialStep);
-  const [phase, setPhase] = useState<"question" | "feedback">(() =>
-    initialStep < total && answers[initialStep] != null ? "feedback" : "question",
-  );
-
-  const yesCount = answers.filter((a) => a === "yes").length;
-  const answeredCount = answers.filter((a) => a !== null).length;
-  const allAnswered = answeredCount === total;
-
-  const recordAnswer = (idx: number, value: MorningAnswer) => {
-    const next = [...answers];
-    next[idx] = value;
-    setAnswers(next);
-    setPhase("feedback");
-  };
-
-  const continueToNext = () => {
-    if (activeStep + 1 >= total) {
-      setActiveStep(total);
-    } else {
-      setActiveStep(activeStep + 1);
-      setPhase("question");
-    }
-  };
-
-  const goToStep = (idx: number) => {
-    setActiveStep(idx);
-    setPhase(answers[idx] != null ? "feedback" : "question");
-  };
-
-  const restart = () => {
-    setAnswers(Array(total).fill(null) as MorningAnswer[]);
-    setActiveStep(0);
-    setPhase("question");
-  };
-
   return (
     <div className="space-y-6">
-      {/* Quick reference: what counts as sattvic vs tamasic */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="p-4 rounded-xl bg-green-50 border border-green-200">
           <h4 className="font-medium text-green-800 mb-2">Sattvic Foods</h4>
@@ -1308,285 +969,132 @@ function NutritionContent({
         </p>
       </div>
 
-      {/* Header + progress strip */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-gray-900">
-            Today&apos;s Nutrition Reflection
-          </h3>
-          <span className="text-sm font-medium text-amber-600">
-            {answeredCount === 0
-              ? `${total} reflections`
-              : `${answeredCount} / ${total} answered`}
-          </span>
-        </div>
-        <p className="text-sm text-gray-600">
-          One question at a time. Honest answers — there&apos;s no wrong one.
-        </p>
-        <div className="flex gap-1.5">
-          {NUTRITION_STEPS.map((step, i) => {
-            const a = answers[i];
-            const isActive = i === activeStep;
-            const segColor =
-              a === "yes"
-                ? "bg-green-500"
-                : a === "no"
-                  ? "bg-amber-400"
-                  : "bg-gray-200";
-            return (
-              <button
-                key={i}
-                type="button"
-                onClick={() => goToStep(i)}
-                title={`Step ${i + 1}: ${step.title}`}
-                aria-label={`Go to step ${i + 1}: ${step.title}`}
-                className={cn(
-                  "h-2 flex-1 rounded-full transition-all",
-                  segColor,
-                  isActive && "ring-2 ring-offset-2 ring-amber-500",
-                )}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {!allAnswered || activeStep < total ? (
-        <NutritionStepCard
-          stepIndex={activeStep}
-          step={NUTRITION_STEPS[activeStep]}
-          phase={phase}
-          currentAnswer={answers[activeStep]}
-          totalSteps={total}
-          onAnswer={(v) => recordAnswer(activeStep, v)}
-          onContinue={continueToNext}
-          onChangeAnswer={() => setPhase("question")}
-        />
-      ) : (
-        <NutritionSummaryCard
-          answers={answers}
-          yesCount={yesCount}
-          totalSteps={total}
-          onRestart={restart}
-          onJumpToStep={goToStep}
-        />
-      )}
+      <YesNoReflection
+        steps={NUTRITION_STEPS}
+        answers={answers}
+        setAnswers={setAnswers}
+        config={{
+          headerTitle: "Today's Nutrition Reflection",
+          headerSubtitle:
+            "One question at a time. Honest answers — there's no wrong one.",
+          summaryTitle: "Today's Nutrition Reflection",
+          summaryStatLabel: "habits",
+          summaryStatVerb: "honored",
+          summaryClosingNote:
+            "Food is the most repeated decision of your day. Small, honest shifts compound faster than any single perfect meal. Mark this pillar complete to record your karma for today.",
+        }}
+      />
     </div>
   );
 }
 
-function NutritionStepCard({
-  stepIndex,
-  step,
-  phase,
-  currentAnswer,
-  totalSteps,
-  onAnswer,
-  onContinue,
-  onChangeAnswer,
-}: {
-  stepIndex: number;
-  step: NutritionStep;
-  phase: "question" | "feedback";
-  currentAnswer: MorningAnswer;
-  totalSteps: number;
-  onAnswer: (v: "yes" | "no") => void;
-  onContinue: () => void;
-  onChangeAnswer: () => void;
-}) {
-  const isLast = stepIndex === totalSteps - 1;
-  const wasYes = currentAnswer === "yes";
+const BREATHING_STEPS: YesNoStep[] = [
+  {
+    title: "Daily Practice",
+    description:
+      "Even five minutes of formal breathing or meditation, done daily, rewires your stress response over weeks.",
+    question:
+      "Did you do a formal breathing or meditation practice today (5+ minutes)?",
+    successMessage:
+      "Wonderful. Five minutes daily is the practice. The compounding is invisible day-to-day and unmistakable over weeks.",
+    tryAgainMessage:
+      "Use this moment. The visualizer above is exactly five minutes — start it now. The hardest breath is always the first.",
+  },
+  {
+    title: "Conscious Breathing",
+    description:
+      "Awareness during stress is more powerful than any practice you do alone — you're rewiring in real time.",
+    question:
+      "Did you catch yourself holding your breath or breathing shallow today, and consciously deepen it?",
+    successMessage:
+      "Beautiful. That mid-stress awareness is the actual point of the practice. You're applying it where it matters most.",
+    tryAgainMessage:
+      "Tomorrow, set 3 silent reminders on your phone. At each one, take just 3 slow breaths. That's the practice.",
+  },
+  {
+    title: "Pranayama Technique",
+    description:
+      "Different techniques work on different systems — calming (4-7-8), balancing (alternate nostril), energizing (kapalabhati), focusing (box).",
+    question:
+      "Did you try a structured technique today — alternate nostril, box, or 4-7-8?",
+    successMessage:
+      "Excellent. Each technique is a different tool. You're building a real toolkit for whatever the day throws at you.",
+    tryAgainMessage:
+      "Try alternate nostril (anulom vilom) tomorrow: close right nostril, inhale left, switch, exhale right, inhale right, switch, exhale left. Three rounds — that's all.",
+  },
+  {
+    title: "Stillness",
+    description:
+      "Stillness is where the nervous system finally lets go. Your body knows what to do — it just needs permission.",
+    question:
+      "Did you spend at least 5 quiet minutes today with no input — no podcast, music, or screen?",
+    successMessage:
+      "Beautiful. Modern life is constant input. Those five quiet minutes are an act of nervous-system protection.",
+    tryAgainMessage:
+      "Try this tomorrow: one walk, one meal, or one cup of tea — phone away, no audio. Just notice. That's meditation in motion.",
+  },
+  {
+    title: "Breath Between Tasks",
+    description:
+      "Micro-pauses between meetings, tasks, or screens prevent tension from compounding through the day.",
+    question:
+      "Did you pause for 3 conscious breaths between meetings, tasks, or screens today?",
+    successMessage:
+      "Wonderful. Those micro-pauses are how you keep the day from compounding. You're protecting your nervous system in real time.",
+    tryAgainMessage:
+      "Tomorrow, set one rule: before opening any new tab or app, three slow breaths first. It only takes 10 seconds.",
+  },
+  {
+    title: "Evening Wind-Down",
+    description:
+      "Slow exhales tell your nervous system the day is done. One of the highest-leverage habits for sleep quality.",
+    question: "Did you do any slow breathing in the hour before bed last night?",
+    successMessage:
+      "Excellent. Slow exhales tell your nervous system the day is done. Your sleep quality is going to thank you.",
+    tryAgainMessage:
+      "Tonight, try 4-7-8 in bed — inhale 4, hold 7, exhale 8. Three rounds, and most people are asleep before the third.",
+  },
+];
 
-  return (
-    <div className="rounded-2xl bg-white border-2 border-amber-200 shadow-sm p-6 md:p-8">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white font-semibold flex items-center justify-center shadow-sm">
-          {stepIndex + 1}
-        </div>
-        <div>
-          <p className="text-xs uppercase tracking-wide text-amber-600 font-medium">
-            Step {stepIndex + 1} of {totalSteps}
-          </p>
-          <h4 className="text-xl font-semibold text-gray-900">{step.title}</h4>
-        </div>
-      </div>
-
-      <p className="text-gray-700 leading-relaxed mb-6">{step.description}</p>
-
-      {phase === "question" ? (
-        <>
-          <p className="text-lg font-medium text-gray-900 mb-5">
-            {step.question}
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              size="lg"
-              onClick={() => onAnswer("yes")}
-              className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white"
-            >
-              <Check className="w-5 h-5 mr-2" />
-              Yes, I did
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => onAnswer("no")}
-              className="border-amber-300 text-amber-800 hover:bg-amber-50"
-            >
-              <X className="w-5 h-5 mr-2" />
-              Not today
-            </Button>
-          </div>
-        </>
-      ) : (
-        <div
-          className={cn(
-            "rounded-xl p-5 border",
-            wasYes
-              ? "bg-green-50 border-green-200"
-              : "bg-amber-50 border-amber-200",
-          )}
-        >
-          <div className="flex items-start gap-3 mb-4">
-            <div
-              className={cn(
-                "w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0",
-                wasYes ? "bg-green-500 text-white" : "bg-amber-500 text-white",
-              )}
-            >
-              {wasYes ? (
-                <Check className="w-5 h-5" />
-              ) : (
-                <Lightbulb className="w-5 h-5" />
-              )}
-            </div>
-            <div className="flex-1">
-              <p
-                className={cn(
-                  "font-semibold mb-1",
-                  wasYes ? "text-green-800" : "text-amber-900",
-                )}
-              >
-                {wasYes ? "Beautiful — keep this rhythm." : "Tomorrow's nudge"}
-              </p>
-              <p
-                className={cn(
-                  "text-sm leading-relaxed",
-                  wasYes ? "text-green-700" : "text-amber-800",
-                )}
-              >
-                {wasYes ? step.successMessage : step.tryAgainMessage}
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Button onClick={onContinue} className="flex-1 sm:flex-initial">
-              {isLast ? "See today's summary" : "Next reflection →"}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onChangeAnswer}
-              className="text-gray-600"
-            >
-              Change my answer
-            </Button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function NutritionSummaryCard({
+// Breathing & Meditation: the interactive visualizer is the named
+// practice and stays at the top. Below it we run the same guided
+// six-step reflection as the other pillars — debriefing the user's
+// broader breathing & meditation habits beyond this five-minute
+// session.
+function BreathingMeditationContent({
+  onAutoComplete,
   answers,
-  yesCount,
-  totalSteps,
-  onRestart,
-  onJumpToStep,
+  setAnswers,
 }: {
-  answers: MorningAnswer[];
-  yesCount: number;
-  totalSteps: number;
-  onRestart: () => void;
-  onJumpToStep: (idx: number) => void;
+  onAutoComplete?: () => void;
+  answers: YesNoAnswer[];
+  setAnswers: (next: YesNoAnswer[]) => void;
 }) {
-  const wins = NUTRITION_STEPS.map((s, i) => ({ s, i })).filter(
-    ({ i }) => answers[i] === "yes",
-  );
-  const opportunities = NUTRITION_STEPS.map((s, i) => ({ s, i })).filter(
-    ({ i }) => answers[i] === "no",
-  );
-
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 p-6 md:p-8 space-y-5">
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h4 className="text-2xl font-bold text-gray-900">
-            Today&apos;s Nutrition Reflection
-          </h4>
-          <p className="text-sm text-gray-600 mt-1">
-            You honored <strong>{yesCount} of {totalSteps}</strong> habits today.
-          </p>
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onRestart}
-          className="text-gray-700"
-        >
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Start over
-        </Button>
-      </div>
+    <div className="space-y-10">
+      <BreathingVisualizer
+        inhaleDuration={4}
+        exhaleDuration={6}
+        totalDuration={5}
+        onComplete={onAutoComplete}
+      />
 
-      {wins.length > 0 && (
-        <div className="rounded-xl bg-white/70 border border-green-200 p-4">
-          <p className="font-semibold text-green-800 mb-2 flex items-center gap-2">
-            <Check className="w-5 h-5" /> Keep this rhythm
-          </p>
-          <ul className="space-y-1.5">
-            {wins.map(({ s, i }) => (
-              <li key={i}>
-                <button
-                  type="button"
-                  onClick={() => onJumpToStep(i)}
-                  className="text-sm text-green-700 hover:underline text-left"
-                >
-                  • {s.title}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div className="border-t border-gray-200" />
 
-      {opportunities.length > 0 && (
-        <div className="rounded-xl bg-white/70 border border-amber-200 p-4">
-          <p className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
-            <Lightbulb className="w-5 h-5" /> Try these tomorrow
-          </p>
-          <ul className="space-y-1.5">
-            {opportunities.map(({ s, i }) => (
-              <li key={i}>
-                <button
-                  type="button"
-                  onClick={() => onJumpToStep(i)}
-                  className="text-sm text-amber-800 hover:underline text-left"
-                >
-                  • {s.title}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <p className="text-sm text-gray-600 italic">
-        Food is the most repeated decision of your day. Small, honest
-        shifts compound faster than any single perfect meal. Mark this
-        pillar complete to record your karma for today.
-      </p>
+      <YesNoReflection
+        steps={BREATHING_STEPS}
+        answers={answers}
+        setAnswers={setAnswers}
+        config={{
+          headerTitle: "Today's Breathing & Meditation Reflection",
+          headerSubtitle:
+            "Beyond the five-minute practice above — how was the rest of your day with your breath?",
+          summaryTitle: "Today's Breathing & Meditation Reflection",
+          summaryStatLabel: "habits",
+          summaryClosingNote:
+            "Your breath is the one thing you carry everywhere. The more often you remember it during the day, the more it remembers you when you need it. Mark this pillar complete to record your karma for today.",
+        }}
+      />
     </div>
   );
 }
