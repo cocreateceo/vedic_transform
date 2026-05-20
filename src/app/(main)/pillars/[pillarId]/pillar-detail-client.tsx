@@ -789,7 +789,49 @@ function MorningSummaryCard({
   );
 }
 
-// Gratitude specific content
+type GratitudePrompt = {
+  label: string;
+  question: string;
+  hint: string;
+  placeholder: string;
+  affirmation: string;
+};
+
+// Three differentiated prompts so users move past surface-level "family,
+// health, food" toward specific, vivid gratitudes — which is what
+// actually rewires the brain.
+const GRATITUDE_PROMPTS: GratitudePrompt[] = [
+  {
+    label: "A person",
+    question: "Who has helped, supported, or made you smile recently?",
+    hint: "Be specific — a name, a face, even a stranger. What did they do, and how did it land for you?",
+    placeholder: "I'm grateful for ___ because…",
+    affirmation:
+      "Beautiful. Holding someone in gratitude — even silently — strengthens that bond. If you can, tell them today.",
+  },
+  {
+    label: "A moment",
+    question: "What small moment from today brought you joy, ease, or surprise?",
+    hint: "Not the big things — the small ones. A warm cup. Sunlight on a wall. A song. A laugh. The smaller, the better.",
+    placeholder: "I'm grateful for the moment when…",
+    affirmation:
+      "Wonderful. Naming small moments trains your attention to find more of them. Your brain genuinely starts looking.",
+  },
+  {
+    label: "Yourself",
+    question:
+      "What's something about yourself, your body, or your effort today that you appreciate?",
+    hint: "This one is hardest, and the most important. A choice you made. A small win. Even just showing up.",
+    placeholder: "I appreciate myself for…",
+    affirmation:
+      "This matters. Self-gratitude isn't ego — it's accurate accounting of your own effort. Keep doing this.",
+  },
+];
+
+// Gratitude: a guided three-step reflection. Each step has its own
+// prompt designed to take the user past generic gratitudes and toward
+// specific, vivid ones. Entries persist through the parent so
+// handleComplete still writes them to the journal on check-in.
 function GratitudeContent({
   entries,
   setEntries,
@@ -797,36 +839,282 @@ function GratitudeContent({
   entries: [string, string, string];
   setEntries: (next: [string, string, string]) => void;
 }) {
+  const total = GRATITUDE_PROMPTS.length;
+  const isFilled = (s: string) => s.trim().length >= 3;
+  const firstUnfilled = entries.findIndex((e) => !isFilled(e));
+  const initialStep = firstUnfilled === -1 ? total : firstUnfilled;
+  const [activeStep, setActiveStep] = useState<number>(initialStep);
+  const [phase, setPhase] = useState<"writing" | "affirmation">("writing");
+  const [draft, setDraft] = useState<string>(() =>
+    initialStep < total ? entries[initialStep] : "",
+  );
+
   const update = (i: 0 | 1 | 2, value: string) => {
-    const next: [string, string, string] = [...entries] as [string, string, string];
+    const next: [string, string, string] = [...entries] as [
+      string,
+      string,
+      string,
+    ];
     next[i] = value;
     setEntries(next);
   };
+
+  const filledCount = entries.filter(isFilled).length;
+  const allFilled = filledCount === total;
+
+  const saveAndAffirm = () => {
+    const idx = activeStep as 0 | 1 | 2;
+    update(idx, draft.trim());
+    setPhase("affirmation");
+  };
+
+  const continueToNext = () => {
+    if (activeStep + 1 >= total) {
+      setActiveStep(total);
+    } else {
+      const next = activeStep + 1;
+      setActiveStep(next);
+      setDraft(entries[next] || "");
+      setPhase("writing");
+    }
+  };
+
+  const goToStep = (idx: number) => {
+    setActiveStep(idx);
+    setDraft(entries[idx] || "");
+    setPhase(isFilled(entries[idx]) ? "affirmation" : "writing");
+  };
+
+  const restart = () => {
+    setEntries(["", "", ""]);
+    setActiveStep(0);
+    setDraft("");
+    setPhase("writing");
+  };
+
   return (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-gray-900">
-        Today&apos;s Gratitude
-      </h3>
-      <p className="text-gray-600">
-        Take a moment to reflect on three things you&apos;re grateful for today.
-        Your entries are saved to your journal when you mark this pillar complete.
-      </p>
-      <div className="space-y-4">
-        {([0, 1, 2] as const).map((idx) => (
-          <div key={idx}>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Gratitude #{idx + 1}
-            </label>
-            <textarea
-              value={entries[idx]}
-              onChange={(e) => update(idx, e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 resize-none"
-              rows={2}
-              placeholder="I am grateful for..."
-            />
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-semibold text-gray-900">
+            Today&apos;s Gratitude Reflection
+          </h3>
+          <span className="text-sm font-medium text-amber-600">
+            {filledCount === 0
+              ? `${total} reflections`
+              : `${filledCount} / ${total} written`}
+          </span>
+        </div>
+        <p className="text-sm text-gray-600">
+          One at a time. Be specific — the more vivid, the more it lands.
+          Your entries are saved to your journal when you mark this pillar
+          complete.
+        </p>
+        <div className="flex gap-1.5">
+          {GRATITUDE_PROMPTS.map((p, i) => {
+            const filled = isFilled(entries[i]);
+            const isActive = i === activeStep;
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => goToStep(i)}
+                title={`${i + 1}. ${p.label}`}
+                aria-label={`Go to step ${i + 1}: ${p.label}`}
+                className={cn(
+                  "h-2 flex-1 rounded-full transition-all",
+                  filled ? "bg-green-500" : "bg-gray-200",
+                  isActive && "ring-2 ring-offset-2 ring-amber-500",
+                )}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      {!allFilled || activeStep < total ? (
+        <GratitudeStepCard
+          stepIndex={activeStep}
+          prompt={GRATITUDE_PROMPTS[activeStep]}
+          phase={phase}
+          draft={draft}
+          setDraft={setDraft}
+          total={total}
+          onSave={saveAndAffirm}
+          onContinue={continueToNext}
+          onEdit={() => {
+            setDraft(entries[activeStep] || "");
+            setPhase("writing");
+          }}
+        />
+      ) : (
+        <GratitudeSummaryCard
+          entries={entries}
+          onRestart={restart}
+          onJumpToStep={goToStep}
+        />
+      )}
+    </div>
+  );
+}
+
+function GratitudeStepCard({
+  stepIndex,
+  prompt,
+  phase,
+  draft,
+  setDraft,
+  total,
+  onSave,
+  onContinue,
+  onEdit,
+}: {
+  stepIndex: number;
+  prompt: GratitudePrompt;
+  phase: "writing" | "affirmation";
+  draft: string;
+  setDraft: (s: string) => void;
+  total: number;
+  onSave: () => void;
+  onContinue: () => void;
+  onEdit: () => void;
+}) {
+  const isLast = stepIndex === total - 1;
+  const canSave = draft.trim().length >= 3;
+
+  return (
+    <div className="rounded-2xl bg-white border-2 border-amber-200 shadow-sm p-6 md:p-8">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 text-white font-semibold flex items-center justify-center shadow-sm">
+          {stepIndex + 1}
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-wide text-amber-600 font-medium">
+            Step {stepIndex + 1} of {total} · {prompt.label}
+          </p>
+          <h4 className="text-xl font-semibold text-gray-900">
+            {prompt.question}
+          </h4>
+        </div>
+      </div>
+
+      <p className="text-gray-700 leading-relaxed mb-5">{prompt.hint}</p>
+
+      {phase === "writing" ? (
+        <>
+          <textarea
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 resize-none"
+            rows={3}
+            placeholder={prompt.placeholder}
+            autoFocus
+          />
+          <div className="mt-4">
+            <Button
+              size="lg"
+              onClick={onSave}
+              disabled={!canSave}
+              className="w-full sm:w-auto"
+            >
+              <Check className="w-5 h-5 mr-2" />
+              Save reflection
+            </Button>
+            {!canSave && (
+              <p className="text-xs text-gray-500 mt-2">
+                Write at least a few words to continue.
+              </p>
+            )}
           </div>
+        </>
+      ) : (
+        <div className="rounded-xl bg-green-50 border border-green-200 p-5">
+          <div className="flex items-start gap-3 mb-4">
+            <div className="w-9 h-9 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0">
+              <Check className="w-5 h-5" />
+            </div>
+            <div className="flex-1">
+              <p className="font-semibold text-green-800 mb-1">Saved.</p>
+              <p className="text-sm text-green-700 leading-relaxed mb-3">
+                {prompt.affirmation}
+              </p>
+              <p className="text-sm text-gray-700 italic border-l-4 border-green-300 pl-3 py-1">
+                &ldquo;{draft.trim()}&rdquo;
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button onClick={onContinue} className="flex-1 sm:flex-initial">
+              {isLast ? "See today's reflection" : "Next reflection →"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onEdit}
+              className="text-gray-600"
+            >
+              Edit
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GratitudeSummaryCard({
+  entries,
+  onRestart,
+  onJumpToStep,
+}: {
+  entries: [string, string, string];
+  onRestart: () => void;
+  onJumpToStep: (idx: number) => void;
+}) {
+  return (
+    <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 p-6 md:p-8 space-y-5">
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h4 className="text-2xl font-bold text-gray-900">
+            Today&apos;s Three Gratitudes
+          </h4>
+          <p className="text-sm text-gray-600 mt-1">
+            These will save to your journal when you mark this pillar
+            complete.
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onRestart}
+          className="text-gray-700"
+        >
+          <RotateCcw className="w-4 h-4 mr-2" />
+          Start over
+        </Button>
+      </div>
+
+      <div className="space-y-3">
+        {GRATITUDE_PROMPTS.map((p, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => onJumpToStep(i)}
+            className="w-full text-left rounded-xl bg-white/70 border border-amber-200 p-4 hover:border-amber-300 transition-colors"
+          >
+            <p className="text-xs uppercase tracking-wide text-amber-700 font-semibold mb-1">
+              {i + 1}. {p.label}
+            </p>
+            <p className="text-gray-800 leading-relaxed">{entries[i]}</p>
+          </button>
         ))}
       </div>
+
+      <p className="text-sm text-gray-600 italic">
+        Three specific gratitudes — a person, a moment, yourself. This is
+        the daily practice that, over weeks, genuinely rewires how your
+        brain looks at the world.
+      </p>
     </div>
   );
 }
