@@ -78,3 +78,45 @@ Phase 2 fills this file in batches of 3-4 posters.
 - Scripture: none cited
 - Sections: 5 numbered (positive inputs → mental nutrition → avoid tamasic → remove negatives → high-vibration influences)
 
+## Batch 4 — 2026-05-19 (dosha-specific)
+
+### vata-balancing-yoga (dosha=vata, kind=yoga)
+- Source: `WhatsApp Image 2026-05-19 at 7.39.04 AM (5).jpeg` (768x512)
+- Scripture: Yoga Sutra 2.46 (Sthira-sukham asanam)
+- Sections: 12 (intro + 10 asanas + Vata tips)
+
+### pitta-balancing-yoga (dosha=pitta, kind=yoga)
+- Source: `WhatsApp Image 2026-05-19 at 7.39.05 AM.jpeg` (768x512)
+- Scripture: Yoga Sutra 1.33
+- Sections: 5 themed sets (cool & calm, soothe & release, cool the body, balance & harmony, restore & renew); each with sutra + 5 asanas + tip
+
+### vata-pranayama (dosha=vata, kind=pranayama)
+- Source: `WhatsApp Image 2026-05-19 at 7.39.06 AM (10).jpeg` (768x1152)
+- Scripture: none cited
+- Sections: 5 (about + 3 practices: Nadi Shodhana, Ujjayi, Dirgha Shvasana + guidelines)
+
+### kapha-pranayama (dosha=kapha, kind=pranayama)
+- Source: `WhatsApp Image 2026-05-19 at 7.39.06 AM.jpeg` (768x1152)
+- Scripture: none cited
+- Sections: 5 (about + 3 practices: Kapalabhati, Bhastrika, Surya Bhedana + guidelines)
+
+---
+
+## Summary
+
+**13 posters OCR'd, verified, and committed.**
+- 8 general (morning routine, sandhya, manifestation x3, healing, gratitude, nutrition, mind-purification)
+- 5 dosha-tagged (vata yoga, pitta yoga, vata pranayama, kapha pranayama)
+- Note: Pitta pranayama poster not present in source set; gallery and dosha-result page handle the absence gracefully via `getPosterByDosha()` returning undefined.
+
+Pillar coverage:
+- morning-initiation: 1 (5-step morning routine)
+- sandhya-meditation: 1 (morning sandhya)
+- divine-manifestation: 3 (path, 5 principles, manifestation secrets)
+- healing-meditation: 1 (step-by-step healing)
+- gratitude: 1 (way of life)
+- nutrition-fasting: 1 (Ayurvedic eating)
+- thoughts-intention: 1 (5-step mind purification)
+- movement: 2 (Vata yoga, Pitta yoga)
+- breathing-meditation: 2 (Vata pranayama, Kapha pranayama)
+
