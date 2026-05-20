@@ -13,9 +13,12 @@ import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import { useRouter } from "next/navigation";
 import { setStreakEvent, type StreakEventType } from "@/lib/streak-events";
+import { getPostersByPillar } from "@/data/posters";
+import { PosterSection } from "@/components/features/posters/poster-section";
 
 export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const pillar = getPillarBySlug(pillarId);
+  const pillarPosters = getPostersByPillar(pillarId);
   const router = useRouter();
 
   const [isCompleted, setIsCompleted] = useState(false);
@@ -216,6 +219,14 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
           </a>
         </div>
       </div>
+
+      {pillarPosters.length > 0 && (
+        <div className="space-y-6 mt-2 mb-8">
+          {pillarPosters.map((p) => (
+            <PosterSection key={p.slug} poster={p} heading="Teaching Poster" />
+          ))}
+        </div>
+      )}
 
       {/* Long-form pillar content — was previously only in the PDF download */}
       <PillarContentPanel slug={pillar.slug} />
