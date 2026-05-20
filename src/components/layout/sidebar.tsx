@@ -15,12 +15,15 @@ import {
   Settings,
   Timer,
   BookMarked,
+  Image as ImageIcon,
   Quote,
   SmilePlus,
   Trophy,
   Leaf,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { useAuth } from "@/context/auth-context";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -33,6 +36,7 @@ const navigation = [
 
 const secondaryNav = [
   { name: "Library", href: "/library", icon: BookMarked },
+  { name: "Posters", href: "/posters", icon: ImageIcon },
   { name: "Dosha Quiz", href: "/dosha-assessment", icon: Leaf },
   { name: "Wisdom", href: "/wisdom", icon: Quote },
   { name: "Mood", href: "/mood", icon: SmilePlus },
@@ -45,6 +49,8 @@ const secondaryNav = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const isAdmin = (user as { role?: string } | null)?.role === "admin";
 
   return (
     <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[var(--color-bg-surface)] border-r-2 border-[#DAA520]/50">
@@ -119,6 +125,24 @@ export function Sidebar() {
               </Link>
             );
           })}
+
+          {/* Admin link — rendered only for users with Users.role === 'admin'.
+              The Lambda enforces the same check, so non-admins who somehow
+              navigate to /admin are redirected back to /dashboard. */}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={cn(
+                "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all mt-2",
+                pathname === "/admin" || pathname.startsWith("/admin/")
+                  ? "bg-slate-900 text-white"
+                  : "text-gray-500 hover:bg-[var(--color-card-bg)] hover:text-[var(--color-primary)]"
+              )}
+            >
+              <Shield className="w-4 h-4" />
+              Admin
+            </Link>
+          )}
         </div>
       </nav>
 
