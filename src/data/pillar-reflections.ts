@@ -89,10 +89,20 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Daily movement — yoga, walking, strength, anything deliberate — is the biggest single lever for metabolism, mood, and longevity.",
     practice: {
-      kind: "image",
-      pexelsSlug: "posture-outdoor",
-      caption:
-        "The form doesn't matter much — the consistency does. Pick what fits today and start.",
+      kind: "media-compare",
+      gif: {
+        src: "/images/pexels/posture-30min-movement.gif",
+        caption: "GIF · ~830 KB · loops automatically",
+      },
+      video: {
+        src: "/videos/pexels/posture-30min-movement.mp4",
+        caption: "MP4 · ~240 KB · hardware-decoded",
+      },
+      attribution: {
+        name: "Vlada Karpovich",
+        url: "https://www.pexels.com/@vlada-karpovich",
+        source: "Footage",
+      },
     },
     question:
       "Did you move for at least 30 minutes today (yoga, walk, strength, or any deliberate movement)?",
@@ -106,10 +116,20 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Moving within an hour of waking signals your circadian clock that the day has begun — energy, focus, and sleep all improve.",
     practice: {
-      kind: "image",
-      pexelsSlug: "posture-morning-stretch",
-      caption:
-        "Five slow stretches by a window with morning light — that's the entire entry-level practice.",
+      kind: "media-compare",
+      gif: {
+        src: "/images/pexels/posture-morning-stretch.gif",
+        caption: "GIF · ~3.5 MB · loops automatically",
+      },
+      video: {
+        src: "/videos/pexels/posture-morning-stretch.mp4",
+        caption: "MP4 · ~310 KB · hardware-decoded",
+      },
+      attribution: {
+        name: "Alexy Almond",
+        url: "https://www.pexels.com/@alexy-almond",
+        source: "Footage",
+      },
     },
     question: "Did you stretch or do any movement within an hour of waking?",
     successMessage:
@@ -122,10 +142,20 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Sitting more than 60 minutes at a stretch is metabolically expensive. A 60-second stand-and-stretch every hour adds up to enormous benefit.",
     practice: {
-      kind: "image",
-      pexelsSlug: "posture-hourly-standing",
-      caption:
-        "Stand up, reach overhead, twist gently side to side, roll the shoulders. 30 seconds is enough.",
+      kind: "media-compare",
+      gif: {
+        src: "/images/pexels/posture-hourly-standing.gif",
+        caption: "GIF · ~2.1 MB · loops automatically",
+      },
+      video: {
+        src: "/videos/pexels/posture-hourly-standing.mp4",
+        caption: "MP4 · ~250 KB · hardware-decoded",
+      },
+      attribution: {
+        name: "RDNE Stock project",
+        url: "https://www.pexels.com/@rdne",
+        source: "Footage",
+      },
     },
     question:
       "Did you stand up and move at least once per hour during the day?",
@@ -139,10 +169,20 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Outdoor movement adds sunlight, fresh air, and visual depth — combined benefits no gym can match.",
     practice: {
-      kind: "image",
-      pexelsSlug: "posture-outdoor",
-      caption:
-        "Even barefoot on grass counts. Sunlight on skin and earth underfoot — the most ancient practice we have.",
+      kind: "media-compare",
+      gif: {
+        src: "/images/pexels/posture-outdoor.gif",
+        caption: "GIF · ~3.3 MB · loops automatically",
+      },
+      video: {
+        src: "/videos/pexels/posture-outdoor.mp4",
+        caption: "MP4 · ~360 KB · hardware-decoded",
+      },
+      attribution: {
+        name: "RDNE Stock project",
+        url: "https://www.pexels.com/@rdne",
+        source: "Footage",
+      },
     },
     question: "Did you spend at least 15 minutes moving outdoors today?",
     successMessage:
@@ -155,10 +195,20 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Strength work preserves muscle, bone density, and metabolic health as you age — and it doesn't require a gym.",
     practice: {
-      kind: "image",
-      pexelsSlug: "posture-strength",
-      caption:
-        "Beginner circuit: 10 squats, 10 push-ups (knees down is fine), 30-second plank. Repeat 2-3 times. Three minutes total.",
+      kind: "media-compare",
+      gif: {
+        src: "/images/pexels/posture-strength.gif",
+        caption: "GIF · ~1.9 MB · loops automatically",
+      },
+      video: {
+        src: "/videos/pexels/posture-strength.mp4",
+        caption: "MP4 · ~270 KB · hardware-decoded",
+      },
+      attribution: {
+        name: "KoolShooters",
+        url: "https://www.pexels.com/@koolshooters",
+        source: "Footage",
+      },
     },
     question:
       "Did you do any strength or resistance work today (push-ups, planks, squats, weights)?",
@@ -172,10 +222,20 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "A 10-minute walk after dinner blunts the blood-sugar spike, supports digestion, and improves sleep quality.",
     practice: {
-      kind: "image",
-      pexelsSlug: "posture-walking",
-      caption:
-        "Just 10 minutes. Slow pace, full belly, ideally outside. Notice how different your evening feels.",
+      kind: "media-compare",
+      gif: {
+        src: "/images/pexels/posture-walking.gif",
+        caption: "GIF · ~2.7 MB · loops automatically",
+      },
+      video: {
+        src: "/videos/pexels/posture-walking.mp4",
+        caption: "MP4 · ~250 KB · hardware-decoded",
+      },
+      attribution: {
+        name: "K (Kelly)",
+        url: "https://www.pexels.com/@kelly",
+        source: "Footage",
+      },
     },
     question: "Did you take a short walk after dinner?",
     successMessage:
