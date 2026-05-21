@@ -455,7 +455,16 @@ const SLEEP_STEPS: YesNoStep[] = [
   {
     title: "Pre-Sleep Breath",
     description:
-      "Slow breathing in bed activates the parasympathetic nervous system — the \"rest and digest\" mode that lets you fall asleep.",
+      "Slow breathing in bed activates the parasympathetic nervous system — the \"rest and digest\" mode that lets you fall asleep. The pacer below is 4-7-8, the classic bedtime pattern.",
+    practice: {
+      kind: "breathing",
+      pattern: {
+        inhaleSeconds: 4,
+        holdSeconds: 7,
+        exhaleSeconds: 8,
+        rounds: 3,
+      },
+    },
     question: "Did you do slow breathing or a body scan in bed before sleep?",
     successMessage:
       "Wonderful. You signaled your nervous system that the day is done. Sleep onset is faster, sleep is deeper.",

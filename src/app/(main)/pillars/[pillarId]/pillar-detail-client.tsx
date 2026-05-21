@@ -488,7 +488,11 @@ const MORNING_STEPS: YesNoStep[] = [
   {
     title: "Center Your Breath",
     description:
-      "2-5 minutes of slow breathing. Inhale 4 seconds, exhale 6 seconds.",
+      "2-5 minutes of slow breathing. Inhale 4 seconds, exhale 6 seconds. Try it now with the pacer below — three rounds takes 30 seconds.",
+    practice: {
+      kind: "breathing",
+      pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 3 },
+    },
     question: "Did you take a few minutes for slow breathing?",
     successMessage:
       "Wonderful. The 4-in / 6-out rhythm activates your parasympathetic system and sets a calm tone for the whole day.",
@@ -1058,7 +1062,11 @@ const BREATHING_STEPS: YesNoStep[] = [
   {
     title: "Conscious Breathing",
     description:
-      "Awareness during stress is more powerful than any practice you do alone — you're rewiring in real time.",
+      "Awareness during stress is more powerful than any practice you do alone — you're rewiring in real time. The pacer below is the rescue pattern: 4 in, 6 out.",
+    practice: {
+      kind: "breathing",
+      pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 3 },
+    },
     question:
       "Did you catch yourself holding your breath or breathing shallow today, and consciously deepen it?",
     successMessage:
@@ -1069,7 +1077,16 @@ const BREATHING_STEPS: YesNoStep[] = [
   {
     title: "Pranayama Technique",
     description:
-      "Different techniques work on different systems — calming (4-7-8), balancing (alternate nostril), energizing (kapalabhati), focusing (box).",
+      "Different techniques work on different systems — calming (4-7-8), balancing (alternate nostril), energizing (kapalabhati), focusing (box). The pacer below runs 4-7-8 — the most universally calming pattern.",
+    practice: {
+      kind: "breathing",
+      pattern: {
+        inhaleSeconds: 4,
+        holdSeconds: 7,
+        exhaleSeconds: 8,
+        rounds: 3,
+      },
+    },
     question:
       "Did you try a structured technique today — alternate nostril, box, or 4-7-8?",
     successMessage:
@@ -1102,7 +1119,16 @@ const BREATHING_STEPS: YesNoStep[] = [
   {
     title: "Evening Wind-Down",
     description:
-      "Slow exhales tell your nervous system the day is done. One of the highest-leverage habits for sleep quality.",
+      "Slow exhales tell your nervous system the day is done. One of the highest-leverage habits for sleep quality. The pacer below runs the classic 4-7-8 — most people are asleep before the third round.",
+    practice: {
+      kind: "breathing",
+      pattern: {
+        inhaleSeconds: 4,
+        holdSeconds: 7,
+        exhaleSeconds: 8,
+        rounds: 3,
+      },
+    },
     question: "Did you do any slow breathing in the hour before bed last night?",
     successMessage:
       "Excellent. Slow exhales tell your nervous system the day is done. Your sleep quality is going to thank you.",

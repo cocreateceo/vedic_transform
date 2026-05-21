@@ -4,6 +4,10 @@ import { useState } from "react";
 import { Check, Lightbulb, RotateCcw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
+import {
+  MiniBreathingDemo,
+  type BreathPattern,
+} from "@/components/features/pillars/mini-breathing-demo";
 
 // Shared one-question-at-a-time reflection used by the Morning Initiation,
 // Nutrition, and Breathing & Meditation pillars. Each pillar supplies its
@@ -14,12 +18,20 @@ import { cn } from "@/lib/utils/cn";
 
 export type YesNoAnswer = "yes" | "no" | null;
 
+export type StepPractice = { kind: "breathing"; pattern: BreathPattern };
+
 export type YesNoStep = {
   title: string;
   description: string;
   question: string;
   successMessage: string;
   tryAgainMessage: string;
+  /**
+   * Optional inline practice widget shown between the description and
+   * the question. Lets the user try the technique in place before
+   * honestly answering whether they did it today.
+   */
+  practice?: StepPractice;
 };
 
 export type YesNoConfig = {
@@ -197,7 +209,13 @@ function StepCard({
         </div>
       </div>
 
-      <p className="text-gray-700 leading-relaxed mb-6">{step.description}</p>
+      <p className="text-gray-700 leading-relaxed mb-2">{step.description}</p>
+
+      {step.practice?.kind === "breathing" && (
+        <MiniBreathingDemo pattern={step.practice.pattern} />
+      )}
+
+      <div className="mt-4" />
 
       {phase === "question" ? (
         <>
