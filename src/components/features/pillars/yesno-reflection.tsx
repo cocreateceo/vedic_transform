@@ -8,6 +8,7 @@ import {
   MiniBreathingDemo,
   type BreathPattern,
 } from "@/components/features/pillars/mini-breathing-demo";
+import { PexelsImage } from "@/components/ui/pexels-image";
 
 // Shared one-question-at-a-time reflection used by the Morning Initiation,
 // Nutrition, and Breathing & Meditation pillars. Each pillar supplies its
@@ -18,7 +19,21 @@ import {
 
 export type YesNoAnswer = "yes" | "no" | null;
 
-export type StepPractice = { kind: "breathing"; pattern: BreathPattern };
+export type StepPractice =
+  | { kind: "breathing"; pattern: BreathPattern }
+  /**
+   * Posture / position image rendered inline below the description.
+   * `pexelsSlug` references an entry in public/images/pexels/manifest.json.
+   * Use `caption` for an instructional cue ("How the pose feels: …"),
+   * and `poseList` for sequence-based practices like Surya Namaskar so
+   * the named poses sit next to the photo.
+   */
+  | {
+      kind: "image";
+      pexelsSlug: string;
+      caption?: string;
+      poseList?: string[];
+    };
 
 export type YesNoStep = {
   title: string;
@@ -213,6 +228,32 @@ function StepCard({
 
       {step.practice?.kind === "breathing" && (
         <MiniBreathingDemo pattern={step.practice.pattern} />
+      )}
+
+      {step.practice?.kind === "image" && (
+        <div className="my-5 rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
+          <PexelsImage
+            slug={step.practice.pexelsSlug}
+            className="rounded-lg overflow-hidden"
+          />
+          {step.practice.caption && (
+            <p className="text-sm text-gray-700 leading-relaxed mt-3 px-1">
+              {step.practice.caption}
+            </p>
+          )}
+          {step.practice.poseList && step.practice.poseList.length > 0 && (
+            <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 mt-3 px-1 text-sm text-gray-700">
+              {step.practice.poseList.map((pose, i) => (
+                <li key={i} className="flex gap-2">
+                  <span className="text-amber-600 font-semibold flex-shrink-0">
+                    {i + 1}.
+                  </span>
+                  <span>{pose}</span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
       )}
 
       <div className="mt-4" />

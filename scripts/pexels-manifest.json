@@ -21,6 +21,15 @@
     { "slug": "blog-lifestyle",              "query": "balanced lifestyle calm home",       "orientation": "landscape" },
 
     { "slug": "home-hero",                   "query": "meditation sunset mountains spiritual", "orientation": "landscape" },
-    { "slug": "about-mission",               "query": "community circle meditation",        "orientation": "landscape" }
+    { "slug": "about-mission",               "query": "community circle meditation",        "orientation": "landscape" },
+
+    { "slug": "posture-sitting-meditation",  "query": "woman sitting meditation lotus cross legged", "orientation": "portrait" },
+    { "slug": "posture-surya-namaskar",      "query": "sun salutation yoga warrior pose outdoor",    "orientation": "landscape" },
+    { "slug": "posture-morning-stretch",     "query": "morning stretch yoga sunrise window",         "orientation": "portrait" },
+    { "slug": "posture-strength",            "query": "bodyweight push up plank floor exercise",     "orientation": "landscape" },
+    { "slug": "posture-walking",             "query": "evening walk path nature peaceful",           "orientation": "landscape" },
+    { "slug": "posture-body-scan",           "query": "savasana yoga relaxation lying down",         "orientation": "landscape" },
+    { "slug": "posture-outdoor",             "query": "yoga outdoors grass park barefoot",           "orientation": "landscape" },
+    { "slug": "posture-hourly-standing",     "query": "person stretching standing office desk",      "orientation": "landscape" }
   ]
 }

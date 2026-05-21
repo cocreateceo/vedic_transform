@@ -88,6 +88,12 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     title: "30 Minutes of Movement",
     description:
       "Daily movement — yoga, walking, strength, anything deliberate — is the biggest single lever for metabolism, mood, and longevity.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-outdoor",
+      caption:
+        "The form doesn't matter much — the consistency does. Pick what fits today and start.",
+    },
     question:
       "Did you move for at least 30 minutes today (yoga, walk, strength, or any deliberate movement)?",
     successMessage:
@@ -99,6 +105,12 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     title: "Morning Movement",
     description:
       "Moving within an hour of waking signals your circadian clock that the day has begun — energy, focus, and sleep all improve.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-morning-stretch",
+      caption:
+        "Five slow stretches by a window with morning light — that's the entire entry-level practice.",
+    },
     question: "Did you stretch or do any movement within an hour of waking?",
     successMessage:
       "Beautiful. Morning movement is one of the cleanest hacks for a sharp day and a deep sleep that night.",
@@ -109,6 +121,12 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     title: "Hourly Standing",
     description:
       "Sitting more than 60 minutes at a stretch is metabolically expensive. A 60-second stand-and-stretch every hour adds up to enormous benefit.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-hourly-standing",
+      caption:
+        "Stand up, reach overhead, twist gently side to side, roll the shoulders. 30 seconds is enough.",
+    },
     question:
       "Did you stand up and move at least once per hour during the day?",
     successMessage:
@@ -120,6 +138,12 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     title: "Outdoor Time",
     description:
       "Outdoor movement adds sunlight, fresh air, and visual depth — combined benefits no gym can match.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-outdoor",
+      caption:
+        "Even barefoot on grass counts. Sunlight on skin and earth underfoot — the most ancient practice we have.",
+    },
     question: "Did you spend at least 15 minutes moving outdoors today?",
     successMessage:
       "Wonderful. Outdoor light alone resets your circadian rhythm and lifts your mood. Movement on top is a bonus.",
@@ -130,6 +154,12 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     title: "Strength or Resistance",
     description:
       "Strength work preserves muscle, bone density, and metabolic health as you age — and it doesn't require a gym.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-strength",
+      caption:
+        "Beginner circuit: 10 squats, 10 push-ups (knees down is fine), 30-second plank. Repeat 2-3 times. Three minutes total.",
+    },
     question:
       "Did you do any strength or resistance work today (push-ups, planks, squats, weights)?",
     successMessage:
@@ -141,6 +171,12 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     title: "Post-Dinner Walk",
     description:
       "A 10-minute walk after dinner blunts the blood-sugar spike, supports digestion, and improves sleep quality.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-walking",
+      caption:
+        "Just 10 minutes. Slow pace, full belly, ideally outside. Notice how different your evening feels.",
+    },
     question: "Did you take a short walk after dinner?",
     successMessage:
       "Beautiful. The post-meal walk is one of the highest-leverage 10-minute habits for both blood sugar and sleep.",
@@ -154,6 +190,12 @@ const HEALING_STEPS: YesNoStep[] = [
     title: "Sitting Practice",
     description:
       "Formal sitting meditation builds the muscle you use during the day. 10 minutes daily compounds enormously over weeks.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-sitting-meditation",
+      caption:
+        "Sukhasana (easy cross-legged) is the simplest seat. Spine tall but soft. Hands resting on knees or thighs. Eyes closed or softly lowered. If your knees rise above your hips, sit on a cushion until they sink below.",
+    },
     question: "Did you sit for a formal meditation today (10+ minutes)?",
     successMessage:
       "Wonderful. The daily sit is the practice. Everything else in the day flows from this anchor.",
@@ -208,6 +250,12 @@ const HEALING_STEPS: YesNoStep[] = [
     title: "Body Scan",
     description:
       "A body scan reveals where you're holding tension you didn't know about — and naming it is most of the work of releasing it.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-body-scan",
+      caption:
+        "Lie flat on your back (savasana) — arms a few inches from the body, palms up, legs hip-width apart. Slowly move attention from feet to crown, pausing wherever you find tension and breathing into it.",
+    },
     question:
       "Did you do a body scan today — noticing tension and inviting it to soften?",
     successMessage:
@@ -274,6 +322,26 @@ const SANDHYA_STEPS: YesNoStep[] = [
     title: "Surya Namaskar",
     description:
       "One round of Surya Namaskar is twelve poses that work every major muscle and breath together — the most efficient warmup ever designed.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-surya-namaskar",
+      caption:
+        "The twelve poses of one round. Move with the breath — inhale to extend, exhale to fold. One round is about 90 seconds.",
+      poseList: [
+        "Pranamasana — Prayer pose, stand tall, palms together at heart",
+        "Hasta Uttanasana — Inhale, arms overhead, gentle backbend",
+        "Padahastasana — Exhale, forward fold, hands to feet",
+        "Ashwa Sanchalanasana — Inhale, right leg back, low lunge",
+        "Dandasana — Hold breath, plank, body straight",
+        "Ashtanga Namaskara — Exhale, knees-chest-chin to floor",
+        "Bhujangasana — Inhale, cobra, lift chest, hips down",
+        "Adho Mukha Svanasana — Exhale, downward dog, hips up",
+        "Ashwa Sanchalanasana — Inhale, right leg forward, low lunge",
+        "Padahastasana — Exhale, forward fold, hands to feet",
+        "Hasta Uttanasana — Inhale, rise, arms overhead, gentle backbend",
+        "Pranamasana — Exhale, palms together at heart",
+      ],
+    },
     question: "Did you do at least one Surya Namaskar (sun salutation) today?",
     successMessage:
       "Beautiful. One round daily keeps body and mind both supple. You honored the practice.",
@@ -287,6 +355,12 @@ const BRAHMAN_STEPS: YesNoStep[] = [
     title: "Silent Sitting",
     description:
       "Silence is the doorway. Even 10 minutes of just being — not doing, not seeking — is where the deepest reset happens.",
+    practice: {
+      kind: "image",
+      pexelsSlug: "posture-sitting-meditation",
+      caption:
+        "Sit comfortably — cross-legged on a cushion, or in a chair with feet flat on the floor. Spine upright but soft. Hands resting. Eyes closed or softly lowered. Just sit. That's the whole practice.",
+    },
     question:
       "Did you spend at least 10 minutes in silent meditation today, simply being?",
     successMessage:
