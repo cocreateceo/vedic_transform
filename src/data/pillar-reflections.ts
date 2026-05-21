@@ -316,7 +316,12 @@ const SANDHYA_STEPS: YesNoStep[] = [
   {
     title: "Midday Pause",
     description:
-      "A 60-second pause at noon resets the nervous system and prevents afternoon fatigue.",
+      "A 60-second pause at noon resets the nervous system and prevents afternoon fatigue. The pacer below runs 4-in / 6-out for 6 rounds — about 60 seconds.",
+    practice: {
+      kind: "breathing",
+      pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 6 },
+      mandatory: true,
+    },
     question: "Did you pause at noon for a moment of stillness or breath?",
     successMessage:
       "Wonderful. Midday is where most days lose their thread. You held yours today.",
@@ -346,7 +351,12 @@ const SANDHYA_STEPS: YesNoStep[] = [
   {
     title: "Pranayama in Sandhya",
     description:
-      "Conscious breathwork — even just five rounds of alternate nostril — anchors the Sandhya practice in the body, not just the mind.",
+      "Conscious breathwork — even just five rounds of slow breath — anchors the Sandhya practice in the body, not just the mind. The pacer below runs 4-in / 6-out, the most common Sandhya rhythm.",
+    practice: {
+      kind: "breathing",
+      pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 5 },
+      mandatory: true,
+    },
     question:
       "Did you do conscious breathing as part of your Sandhya practice?",
     successMessage:
@@ -424,7 +434,12 @@ const BRAHMAN_STEPS: YesNoStep[] = [
   {
     title: "So Ham Practice",
     description:
-      "So Ham — \"I am that\" — is the natural sound of the breath. Inhale silent \"so\", exhale silent \"ham\". A practice as old as the Upanishads.",
+      "So Ham — \"I am that\" — is the natural sound of the breath. As the circle below grows, silently say \"so\". As it shrinks, silently say \"ham\". A practice as old as the Upanishads.",
+    practice: {
+      kind: "breathing",
+      pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 5 },
+      mandatory: true,
+    },
     question:
       "Did you practice So Ham — silent inhale \"so\", silent exhale \"ham\" — for a few minutes today?",
     successMessage:

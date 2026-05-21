@@ -1052,7 +1052,12 @@ const BREATHING_STEPS: YesNoStep[] = [
   {
     title: "Daily Practice",
     description:
-      "Even five minutes of formal breathing or meditation, done daily, rewires your stress response over weeks.",
+      "Even five minutes of formal breathing or meditation, done daily, rewires your stress response over weeks. The pacer below runs 5 rounds of 4-in / 6-out — about 50 seconds — as a daily starter.",
+    practice: {
+      kind: "breathing",
+      pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 5 },
+      mandatory: true,
+    },
     question:
       "Did you do a formal breathing or meditation practice today (5+ minutes)?",
     successMessage:
@@ -1111,7 +1116,12 @@ const BREATHING_STEPS: YesNoStep[] = [
   {
     title: "Breath Between Tasks",
     description:
-      "Micro-pauses between meetings, tasks, or screens prevent tension from compounding through the day.",
+      "Micro-pauses between meetings, tasks, or screens prevent tension from compounding through the day. The pacer below runs exactly 3 conscious breaths — about 30 seconds.",
+    practice: {
+      kind: "breathing",
+      pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 3 },
+      mandatory: true,
+    },
     question:
       "Did you pause for 3 conscious breaths between meetings, tasks, or screens today?",
     successMessage:
