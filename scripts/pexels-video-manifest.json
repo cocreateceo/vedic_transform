@@ -8,6 +8,7 @@
     { "slug": "movement-ambient",     "query": "yoga silhouette slow",              "min_duration_sec": 8,  "max_duration_sec": 25 },
     { "slug": "nature-flow",          "query": "river flowing forest slow",         "min_duration_sec": 8,  "max_duration_sec": 25 },
     { "slug": "candle-flame",         "query": "candle flame close-up",             "min_duration_sec": 6,  "max_duration_sec": 20 },
-    { "slug": "starry-night",         "query": "night sky milky way time lapse",    "min_duration_sec": 8,  "max_duration_sec": 25 }
+    { "slug": "starry-night",         "query": "night sky milky way time lapse",    "min_duration_sec": 8,  "max_duration_sec": 25 },
+    { "slug": "posture-surya-namaskar","query": "sun salutation yoga sequence flow", "min_duration_sec": 6,  "max_duration_sec": 30 }
   ]
 }

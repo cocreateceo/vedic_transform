@@ -321,12 +321,17 @@ const SANDHYA_STEPS: YesNoStep[] = [
   {
     title: "Surya Namaskar",
     description:
-      "One round of Surya Namaskar is twelve poses that work every major muscle and breath together — the most efficient warmup ever designed.",
+      "One round of Surya Namaskar is twelve poses that work every major muscle and breath together — the most efficient warmup ever designed. Compare the GIF vs the video below — both show the same flow.",
     practice: {
-      kind: "image",
-      pexelsSlug: "posture-surya-namaskar",
-      caption:
-        "The twelve poses of one round. Move with the breath — inhale to extend, exhale to fold. One round is about 90 seconds.",
+      kind: "media-compare",
+      gif: {
+        src: "/images/pexels/posture-surya-namaskar.gif",
+        caption: "GIF version · ~5.8 MB · animated image · auto-loops",
+      },
+      video: {
+        src: "/videos/pexels/posture-surya-namaskar.mp4",
+        caption: "MP4 version · ~570 KB · native player · smoother playback",
+      },
       poseList: [
         "Pranamasana — Prayer pose, stand tall, palms together at heart",
         "Hasta Uttanasana — Inhale, arms overhead, gentle backbend",
@@ -341,6 +346,11 @@ const SANDHYA_STEPS: YesNoStep[] = [
         "Hasta Uttanasana — Inhale, rise, arms overhead, gentle backbend",
         "Pranamasana — Exhale, palms together at heart",
       ],
+      attribution: {
+        name: "Klaus Nielsen",
+        url: "https://www.pexels.com/@klaus-nielsen",
+        source: "Footage",
+      },
     },
     question: "Did you do at least one Surya Namaskar (sun salutation) today?",
     successMessage:

@@ -33,6 +33,41 @@ export type StepPractice =
       pexelsSlug: string;
       caption?: string;
       poseList?: string[];
+    }
+  /**
+   * Animated GIF loop. `src` is a path under public/. Useful for
+   * sequence demonstrations that benefit from motion (sun salutation,
+   * strength circuit). Bigger than MP4 but works as a plain image.
+   */
+  | {
+      kind: "gif";
+      src: string;
+      caption?: string;
+      attribution?: { name: string; url?: string; source?: string };
+    }
+  /**
+   * Native <video> loop. `src` is a path under public/. Smaller and
+   * smoother than GIF for the same content, but needs JS-friendly
+   * autoplay (muted + playsInline).
+   */
+  | {
+      kind: "video";
+      src: string;
+      caption?: string;
+      attribution?: { name: string; url?: string; source?: string };
+    }
+  /**
+   * Side-by-side GIF + video for direct A/B comparison. Renders both
+   * with labeled headers so the viewer can decide which format reads
+   * better for this practice. Optional `poseList` lets sequence
+   * practices keep their named-step list visible during comparison.
+   */
+  | {
+      kind: "media-compare";
+      gif: { src: string; caption?: string };
+      video: { src: string; caption?: string };
+      poseList?: string[];
+      attribution?: { name: string; url?: string; source?: string };
     };
 
 export type YesNoStep = {
@@ -256,6 +291,108 @@ function StepCard({
         </div>
       )}
 
+      {step.practice?.kind === "gif" && (
+        <div className="my-5 rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={step.practice.src}
+            alt={step.title}
+            className="w-full rounded-lg"
+          />
+          {step.practice.caption && (
+            <p className="text-sm text-gray-700 leading-relaxed mt-3 px-1">
+              {step.practice.caption}
+            </p>
+          )}
+          <Attribution attribution={step.practice.attribution} />
+        </div>
+      )}
+
+      {step.practice?.kind === "video" && (
+        <div className="my-5 rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
+          <video
+            src={step.practice.src}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full rounded-lg"
+          />
+          {step.practice.caption && (
+            <p className="text-sm text-gray-700 leading-relaxed mt-3 px-1">
+              {step.practice.caption}
+            </p>
+          )}
+          <Attribution attribution={step.practice.attribution} />
+        </div>
+      )}
+
+      {step.practice?.kind === "media-compare" && (
+        <div className="my-5 space-y-4">
+          <div className="rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <span className="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
+                GIF
+              </span>
+              <span className="text-xs text-gray-500">animated image · auto-loops</span>
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={step.practice.gif.src}
+              alt={`${step.title} (GIF)`}
+              className="w-full rounded-lg"
+            />
+            {step.practice.gif.caption && (
+              <p className="text-sm text-gray-700 leading-relaxed mt-2 px-1">
+                {step.practice.gif.caption}
+              </p>
+            )}
+          </div>
+
+          <div className="rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <span className="text-xs font-bold text-cyan-700 bg-cyan-100 px-2 py-0.5 rounded">
+                VIDEO
+              </span>
+              <span className="text-xs text-gray-500">native player · smaller file</span>
+            </div>
+            <video
+              src={step.practice.video.src}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full rounded-lg"
+            />
+            {step.practice.video.caption && (
+              <p className="text-sm text-gray-700 leading-relaxed mt-2 px-1">
+                {step.practice.video.caption}
+              </p>
+            )}
+          </div>
+
+          <Attribution attribution={step.practice.attribution} />
+
+          {step.practice.poseList && step.practice.poseList.length > 0 && (
+            <div className="rounded-xl bg-amber-50/40 border border-amber-200 p-3">
+              <p className="text-xs uppercase tracking-wide text-amber-700 font-semibold mb-2 px-1">
+                The 12 poses in sequence
+              </p>
+              <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 px-1 text-sm text-gray-700">
+                {step.practice.poseList.map((pose, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="text-amber-600 font-semibold flex-shrink-0">
+                      {i + 1}.
+                    </span>
+                    <span>{pose}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="mt-4" />
 
       {phase === "question" ? (
@@ -340,6 +477,36 @@ function StepCard({
         </div>
       )}
     </div>
+  );
+}
+
+function Attribution({
+  attribution,
+}: {
+  attribution?: { name: string; url?: string; source?: string };
+}) {
+  if (!attribution) return null;
+  return (
+    <p className="text-[10px] text-gray-400 mt-2 text-right px-1">
+      {attribution.url ? (
+        <>
+          {attribution.source ? `${attribution.source} by ` : "By "}
+          <a
+            href={attribution.url}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            {attribution.name}
+          </a>
+        </>
+      ) : (
+        <>
+          {attribution.source ? `${attribution.source} by ` : "By "}
+          {attribution.name}
+        </>
+      )}
+    </p>
   );
 }
 

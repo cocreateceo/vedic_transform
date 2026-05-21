@@ -94,5 +94,17 @@
     "photographer_url": "https://www.pexels.com/@luz-calor-som-99374650",
     "pexels_url": "https://www.pexels.com/video/milky-way-starry-night-and-a-palm-tree-27426486/",
     "poster": "https://images.pexels.com/videos/27426486/4k-resolution-astrology-astronomy-astrophotography-27426486.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
+  },
+  "posture-surya-namaskar": {
+    "query": "sun salutation yoga sequence flow",
+    "duration": 12,
+    "width": 3840,
+    "height": 2160,
+    "file_width": 426,
+    "file_height": 240,
+    "photographer": "Klaus Nielsen",
+    "photographer_url": "https://www.pexels.com/@klaus-nielsen",
+    "pexels_url": "https://www.pexels.com/video/man-stretching-6297112/",
+    "poster": "https://images.pexels.com/videos/6297112/pexels-photo-6297112.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=630&w=1200"
   }
 }
