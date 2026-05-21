@@ -1,6 +1,7 @@
 import { Resource } from 'sst';
 import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, hashPassword, createToken, generateId, parseBody } from '../lib/utils';
+import { emit, EventType } from '../lib/events';
 
 export async function handler(event: any) {
   if (event.requestContext?.http?.method === 'OPTIONS')
@@ -34,12 +35,14 @@ export async function handler(event: any) {
         phone: null,
         avatarUrl: null,
         onboardingCompleted: false,
+        role: 'user',
         createdAt: now,
         updatedAt: now,
       },
     }));
 
     const token = await createToken({ id, email: email.toLowerCase(), name });
+    void emit(id, EventType.AUTH_REGISTER, { email: email.toLowerCase() });
     return ok({ success: true, token, user: { id, email: email.toLowerCase(), name, onboardingCompleted: false } });
   } catch (e: any) {
     console.error('Registration error:', e);

@@ -208,11 +208,11 @@ items.sort((a, b) => {
 
 ### Production Environment
 
-**URL:** https://d10e61fglnub0a.cloudfront.net
+**URL:** https://d1wkrhl40vhx82.cloudfront.net
 
 **Infrastructure:**
 - Lambda Functions: 4 (server, image optimizer, revalidation, warmer)
-- CloudFront Distribution: d10e61fglnub0a.cloudfront.net
+- CloudFront Distribution: d1wkrhl40vhx82.cloudfront.net
 - S3 Bucket: Asset storage
 - DynamoDB Tables: 20 (19 app + 1 ISR cache)
 - SQS Queue: Revalidation events

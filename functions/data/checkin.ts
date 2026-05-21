@@ -3,6 +3,7 @@ import { QueryCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, getUserFromEvent, generateId ,parseBody } from '../lib/utils';
 import { resolvePillar } from '../lib/pillars';
 import { BADGES, parseRequirement, type BadgeDef } from '../lib/badges';
+import { emit, EventType } from '../lib/events';
 
 const TOTAL_JOURNEY_DAYS = 48;
 
@@ -407,6 +408,15 @@ export async function handler(event: any) {
     } catch (e) {
       console.error('Badge evaluation error:', e);
     }
+
+    void emit(user.id, EventType.CHECKIN_COMPLETED, {
+      pillarSlug: pillar.slug,
+      pillarId: pillar.id,
+      karmaAwarded: pillar.karmaPointsBase,
+      streakEvent,
+      currentStreak: streakAfter?.currentStreak ?? 0,
+      newBadgeIds: newBadges.map((b) => b.id),
+    });
 
     return ok({
       success: true,

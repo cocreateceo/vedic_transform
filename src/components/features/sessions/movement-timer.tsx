@@ -6,6 +6,7 @@ import { Play, Pause, RotateCcw, Trophy, Volume2, VolumeX, Sparkles } from "luci
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { PexelsVideo } from "@/components/ui/pexels-video";
+import { NextPracticeCta } from "./next-practice-cta";
 
 const SESSION_PILLAR = "movement";
 
@@ -202,9 +203,10 @@ export function MovementTimer() {
             </p>
           )}
         </div>
-        <Button size="lg" onClick={reset}>
-          <RotateCcw className="w-5 h-5 mr-2" />
-          New Workout
+        <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
+        <Button variant="outline" onClick={reset}>
+          <RotateCcw className="w-4 h-4 mr-2" />
+          New workout
         </Button>
       </div>
     );

@@ -1,6 +1,7 @@
 import { Resource } from 'sst';
 import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, generateId, parseBody } from '../lib/utils';
+import { emit, EventType } from '../lib/events';
 
 // 90-day TTL on anonymous results — long enough for sharers to point a
 // friend back, short enough that abandoned data doesn't pile up. Stored
@@ -42,6 +43,12 @@ export async function handler(event: any) {
         ttl,
       },
     }));
+
+    void emit(null, EventType.DOSHA_COMPLETED_ANON, {
+      anonId: id,
+      primary,
+      secondary,
+    });
 
     return ok({ id, primary, secondary });
   }

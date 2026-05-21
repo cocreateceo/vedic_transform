@@ -1,6 +1,6 @@
 # API Documentation
 
-**Base URL:** `https://d10e61fglnub0a.cloudfront.net`
+**Base URL:** `https://d1wkrhl40vhx82.cloudfront.net`
 
 ---
 
@@ -160,16 +160,16 @@ All endpoints return errors in this format:
 
 ```bash
 # Register
-curl -X POST https://d10e61fglnub0a.cloudfront.net/api/auth/register \
+curl -X POST https://d1wkrhl40vhx82.cloudfront.net/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email":"user@example.com","password":"Pass123","name":"John"}' \
   -c cookies.txt
 
 # Use authenticated endpoint
-curl https://d10e61fglnub0a.cloudfront.net/api/goals -b cookies.txt
+curl https://d1wkrhl40vhx82.cloudfront.net/api/goals -b cookies.txt
 
 # Logout
-curl -X POST https://d10e61fglnub0a.cloudfront.net/api/auth/logout -b cookies.txt
+curl -X POST https://d1wkrhl40vhx82.cloudfront.net/api/auth/logout -b cookies.txt
 ```
 
 ---

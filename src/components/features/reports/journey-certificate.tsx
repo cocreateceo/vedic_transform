@@ -107,8 +107,8 @@ export const JourneyCertificate = forwardRef<HTMLDivElement, JourneyCertificateP
             {/* Footer */}
             <div className="pt-6 space-y-2">
               <p className="text-sm text-amber-700 italic">
-                "Through discipline, devotion, and daily practice,
-                transformation becomes inevitable."
+                &ldquo;Through discipline, devotion, and daily practice,
+                transformation becomes inevitable.&rdquo;
               </p>
               <p className="text-xs text-gray-400">
                 10X Vedic Transformation • www.10xvedic.com

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Sun, Timer, Wind, UtensilsCrossed, Dumbbell } from "lucide-react";
 import { MorningRoutine } from "@/components/features/sessions/morning-routine";
 import { MeditationTimer } from "@/components/features/sessions/meditation-timer";
@@ -8,17 +9,35 @@ import { BreathingPatterns } from "@/components/features/sessions/breathing-patt
 import { FastingTimer } from "@/components/features/sessions/fasting-timer";
 import { MovementTimer } from "@/components/features/sessions/movement-timer";
 import { cn } from "@/lib/utils/cn";
+import { sessionKeyToTabIndex } from "@/lib/practice-routes";
 
+// Tab order MUST stay in lockstep with SESSION_KEYS in
+// src/lib/practice-routes.ts. Order follows the pillar ID sequence so the
+// daily ritual reads naturally top-to-bottom: Morning (1) → Fasting (2) →
+// Breathing (4) → Movement (5) → Meditation (6).
 const tabs = [
   { name: "Morning Routine", icon: Sun, component: MorningRoutine },
-  { name: "Meditation", icon: Timer, component: MeditationTimer },
-  { name: "Breathing", icon: Wind, component: BreathingPatterns },
   { name: "Fasting", icon: UtensilsCrossed, component: FastingTimer },
+  { name: "Breathing", icon: Wind, component: BreathingPatterns },
   { name: "Movement", icon: Dumbbell, component: MovementTimer },
+  { name: "Meditation", icon: Timer, component: MeditationTimer },
 ];
 
 export default function SessionsPage() {
-  const [activeTab, setActiveTab] = useState(0);
+  // Read ?practice=<key> so the dashboard's TodaysPractice CTA — and the
+  // "Next" button on each completion view — can deep-link straight into
+  // the right timer. Defaults to tab 0 when missing or unknown.
+  const searchParams = useSearchParams();
+  const desiredTab = sessionKeyToTabIndex(searchParams?.get("practice"));
+  const [activeTab, setActiveTab] = useState(desiredTab);
+
+  // Re-sync when the URL param changes (e.g. user clicks "Next: Breathing"
+  // on the meditation completion view — without this the tab wouldn't
+  // switch because useState's initializer only runs once).
+  useEffect(() => {
+    setActiveTab(desiredTab);
+  }, [desiredTab]);
+
   const ActiveComponent = tabs[activeTab].component;
 
   return (

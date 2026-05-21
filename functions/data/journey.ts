@@ -1,6 +1,7 @@
 import { Resource } from 'sst';
 import { QueryCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, getUserFromEvent, generateId } from '../lib/utils';
+import { emit, EventType } from '../lib/events';
 
 export async function handler(event: any) {
   if (event.requestContext?.http?.method === 'OPTIONS')
@@ -69,6 +70,8 @@ export async function handler(event: any) {
         updatedAt: now.toISOString(),
       },
     }));
+
+    void emit(user.id, EventType.JOURNEY_STARTED, { journeyId });
 
     return ok({ success: true, journey });
   }

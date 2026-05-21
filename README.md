@@ -4,16 +4,16 @@ A 48-day transformation program combining ancient Vedic wisdom with modern techn
 
 ## Architecture
 
-**Modern Serverless Stack:**
-- **Frontend**: Next.js 16.1.1 with App Router & Server-Side Rendering
-- **Backend**: AWS Lambda (serverless functions)
-- **Database**: AWS DynamoDB (19 tables)
-- **CDN**: CloudFront
-- **Storage**: S3 (static assets)
-- **IaC**: SST (Serverless Stack) v3.17.25
-- **Deployment**: Automated via SST
+**Serverless stack on AWS (deployed via SST v4):**
 
-**Monthly Cost**: ~$1.60-2.00 (serverless pay-per-use)
+- **Frontend**: Next.js 15.5 (App Router) compiled to a **static export** in `out/`, served from S3 + CloudFront via `sst.aws.StaticSite`.
+- **API**: AWS API Gateway v2 (HTTP API) fronting Lambda handlers in `functions/`.
+- **Database**: AWS DynamoDB — 19 tables, one per entity, with `userId` GSIs for per-user queries.
+- **AI**: `/chat` Lambda calls the Anthropic Claude API with the "Vedic Guide" system prompt.
+- **Secrets**: `JwtSecret` and `AnthropicApiKey` provisioned as `sst.Secret` (set via `sst secret set`).
+- **Infra-as-code**: `sst.config.ts` defines tables, API routes, secrets, and the static site.
+
+The frontend is a fully client-side single-page app — there is **no server-side rendering**. Authenticated pages mount, then call the API at runtime using a JWT stored in `localStorage` (`vedic-token`).
 
 ## Features
 
@@ -22,7 +22,7 @@ A 48-day transformation program combining ancient Vedic wisdom with modern techn
 **Body:**
 - Morning Initiation (5 AM Brahma Muhurta)
 - Mindful Nutrition & Fasting
-- Sacred Movement (Yoga/Exercise)
+- Sacred Movement (Yoga / Exercise)
 - Sleep Optimization
 
 **Mind:**
@@ -37,149 +37,162 @@ A 48-day transformation program combining ancient Vedic wisdom with modern techn
 - Divine Manifestation
 
 ### Application Features
-- User authentication & journey tracking
+- User authentication & 48-day journey tracking
 - Daily check-ins for all 11 pillars
-- Karma points & gamification
-- Streak tracking & badges
-- Weekly goal setting
-- Progress reports & insights
-- Gratitude journal
-- Mood logging & self-assessments
+- Karma points & gamification, streak tracking, badges
+- Weekly goal setting and progress reports
+- Gratitude / intention / manifestation journal
+- Mood logging and self-assessments
 - Customizable reminders
+- AI-generated insights and a Vedic Guide chat assistant (Anthropic Claude)
 
 ## Getting Started
 
 ### Prerequisites
 - Node.js 20+
-- AWS Account with credentials configured
-- AWS CLI installed
+- AWS account with credentials configured (`aws configure`)
+- An Anthropic API key (for the chat assistant)
 
 ### Environment Variables
 
-Create `.env.local`:
+Create `.env.local` for the Next.js dev server:
 
 ```bash
-# JWT Secret
-JWT_SECRET=your-secure-secret-key-change-in-production
-
-# AWS Region (optional - defaults to us-east-1)
-AWS_REGION=us-east-1
-
-# Node Environment
-NODE_ENV=development
+# URL of the deployed API Gateway (printed by `sst deploy`)
+NEXT_PUBLIC_API_URL=https://<your-api-id>.execute-api.us-east-1.amazonaws.com
 ```
 
-### Development Setup
+Backend secrets are stored in SST, not in `.env`:
 
-1. **Install dependencies:**
 ```bash
+npx sst secret set JwtSecret "<random-32-byte-string>"
+npx sst secret set AnthropicApiKey "<your-anthropic-api-key>"
+```
+
+### Development
+
+```bash
+# Install dependencies (root + functions workspace)
 npm install
-```
+(cd functions && npm install)
 
-2. **Run development server:**
-```bash
+# Run the Next.js dev server
 npm run dev
 ```
 
-3. **Open application:**
-Navigate to [http://localhost:3000](http://localhost:3000)
+The app is available at [http://localhost:3000](http://localhost:3000) and talks to the deployed API. To iterate on Lambda code locally, use `npx sst dev`.
+
+### CORS
+
+The API Gateway has an explicit allowlist defined in `sst.config.ts`:
+
+```ts
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://d1wkrhl40vhx82.cloudfront.net",
+];
+```
+
+Add any new deployed origin (custom domain, preview environment) here. Lambda handlers intentionally do **not** emit `Access-Control-Allow-Origin` themselves — API Gateway v2 echoes the matched origin from this allowlist into the response and handles OPTIONS preflight automatically.
 
 ## Database
 
-### DynamoDB Tables
+### DynamoDB Tables (19)
 
-The application uses 19 DynamoDB tables with the prefix `VedicTransform-`:
+All tables are provisioned in `sst.config.ts`. Per-user tables use a GSI named `userId-index`.
 
-**Core Tables:**
-- Users - User accounts & authentication
-- Journeys - 48-day journey tracking
-- Streaks - Daily completion streaks
-- Pillars - 11 transformation pillars (seeded data)
+**Identity & journey**
+- `Users` — accounts, profile, dosha results (`email-index` GSI)
+- `Journeys` — 48-day journey records
+- `Streaks` — current / longest streak per user
+- `Pillars` — 11 pillar definitions (seeded)
 
-**Activity Tables:**
-- DailyCheckins - Daily pillar completions
-- GoalTasks - Weekly goals
-- FocusPillars - User's selected focus areas
-- KarmaTransactions - Points earned
-- GratitudeEntries - Daily gratitude journal
-- Intentions - Daily intention setting
-- Manifestations - Goals & manifestations
-- MoodLogs - Mood tracking
-- SelfAssessments - Self-evaluation responses
+**Daily activity**
+- `DailyCheckins` — per-pillar daily completions
+- `GoalTasks` — weekly goals
+- `FocusPillars` — user's selected focus areas (1–3)
+- `KarmaTransactions` — points earned
+- `GratitudeEntries`, `Intentions`, `Manifestations` — journal entries
+- `MoodLogs` — mood / energy / stress / sleep
+- `SelfAssessments` — periodic wellbeing self-evals
+- `ContentProgress` — library / session progress
 
-**System Tables:**
-- Badges - Achievement definitions
-- UserBadges - Earned achievements
-- UserInsights - AI-generated insights
-- WeeklyGoals - Week-by-week objectives
-- WeeklySummaries - Progress summaries
-- ReminderSettings - Notification preferences
+**System**
+- `Badges`, `UserBadges` — achievement definitions and earnings
+- `UserInsights` — AI-generated insights
+- `ReminderSettings` — per-user notification preferences (hash key: `userId`)
+- `Notifications` — in-app notification feed
 
-### Database Layer
+### Data access
 
-Custom DynamoDB abstraction (`src/lib/dynamodb.ts`) provides Prisma-like API:
+Lambda handlers use the AWS SDK directly via a small helper in `functions/lib/utils.ts`:
 
-```typescript
-import { db } from '@/lib/dynamodb';
+```ts
+import { Resource } from 'sst';
+import { QueryCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { db, ok, err, getUserFromEvent, generateId } from '../lib/utils';
 
-// Create
-const user = await db.user.create({
-  data: { email, passwordHash, name }
-});
+const user = await getUserFromEvent(event);
+if (!user) return err(401, 'Unauthorized');
 
-// Find
-const user = await db.user.findUnique({
-  where: { email }
-});
+const result = await db.send(new QueryCommand({
+  TableName: Resource.DailyCheckins.name,
+  IndexName: 'userId-index',
+  KeyConditionExpression: 'userId = :userId',
+  ExpressionAttributeValues: { ':userId': user.id },
+}));
 
-// Update
-await db.user.update({
-  where: { id },
-  data: { name: 'New Name' }
-});
+return ok({ checkins: result.Items || [] });
 ```
+
+There is no ORM — `Resource.<TableName>.name` resolves to the deployed table name through the SST link binding.
+
+DynamoDB has no joins. When a handler needs related data (e.g. checkins with their pillar), it queries each table separately and joins in memory.
+
+## API Routes
+
+All routes are wired up in `sst.config.ts`:
+
+```
+POST   /auth/register          POST /auth/login
+GET    /data/user              PATCH /data/user
+GET    /data/journey           POST  /data/journey
+GET    /data/checkin           POST  /data/checkin
+GET    /data/goals             POST/PATCH/DELETE /data/goals
+GET    /data/focus-pillars     POST  /data/focus-pillars
+GET    /data/journal           POST  /data/journal     (gratitude | intention | manifestation)
+GET    /data/mood              POST  /data/mood
+GET    /data/assessment        POST  /data/assessment
+GET    /data/insights          POST/PATCH /data/insights
+GET    /data/reminders         PUT   /data/reminders
+GET    /data/reports
+GET    /data/notifications     PATCH /data/notifications
+GET    /data/content-progress  POST  /data/content-progress
+GET    /data/achievements
+POST   /chat
+```
+
+Authentication is a `Bearer` JWT in the `Authorization` header, signed with `JwtSecret` via `jose` (HS256, 7-day expiry).
 
 ## Deployment
 
-### Deploy to AWS
-
-The application is deployed using SST (Serverless Stack):
-
 ```bash
-# Deploy to production
+# Production
 npx sst deploy --stage production
 
-# Deploy to development
+# Dev / personal stage
 npx sst deploy --stage dev
 ```
 
-### Deployment Output
+After deploy, SST prints:
+- The CloudFront URL of the static site
+- The API Gateway base URL (use this for `NEXT_PUBLIC_API_URL`)
 
-After deployment, SST provides:
-- CloudFront URL (e.g., `https://d10e61fglnub0a.cloudfront.net`)
-- Lambda function names
-- S3 bucket names
-- DynamoDB table references
-
-### Infrastructure as Code
-
-The `sst.config.ts` file defines all infrastructure:
-
-```typescript
-const site = new sst.aws.Nextjs("VedicTransformSite", {
-  permissions: [
-    {
-      actions: ["dynamodb:*"],
-      resources: ["arn:aws:dynamodb:us-east-1:*:table/VedicTransform-*"],
-    },
-  ],
-});
-```
-
-### Remove Deployment
+Set `NEXT_PUBLIC_API_URL` before re-running `sst deploy` so the static site is rebuilt with the API URL embedded.
 
 ```bash
-npx sst remove --stage production
+# Tear down a stage
+npx sst remove --stage dev
 ```
 
 ## Project Structure
@@ -187,91 +200,69 @@ npx sst remove --stage production
 ```
 vedic-transform/
 ├── src/
-│   ├── app/                    # Next.js App Router
-│   │   ├── (main)/            # Protected routes
-│   │   │   ├── dashboard/     # User dashboard
-│   │   │   ├── goals/         # Weekly goals
-│   │   │   ├── pillars/       # Pillar details
-│   │   │   ├── journal/       # Gratitude journal
-│   │   │   └── ...
-│   │   ├── api/               # API routes
-│   │   │   ├── auth/          # Authentication
-│   │   │   ├── goals/         # Goals CRUD
-│   │   │   └── ...
-│   │   ├── login/             # Login page
-│   │   ├── register/          # Registration
-│   │   └── page.tsx           # Landing page
-│   ├── components/            # React components
-│   │   ├── features/          # Feature-specific
-│   │   ├── layout/            # Layout components
-│   │   └── ui/                # Reusable UI
-│   └── lib/
-│       ├── auth.ts            # Authentication logic
-│       └── dynamodb.ts        # Database layer
-├── public/                    # Static assets
-├── sst.config.ts             # Infrastructure config
-├── next.config.ts            # Next.js config
-└── package.json              # Dependencies
+│   ├── app/
+│   │   ├── (auth)/             # login, register, onboarding
+│   │   ├── (main)/             # authenticated app: dashboard, pillars,
+│   │   │                       # goals, journal, mood, insights, reports,
+│   │   │                       # library, sessions, achievements, etc.
+│   │   ├── (public)/           # marketing pages: about, blog, faq, ...
+│   │   ├── layout.tsx
+│   │   ├── home-client.tsx
+│   │   └── page.tsx            # landing page entry
+│   ├── components/
+│   │   ├── features/           # feature components (chat, dashboard,
+│   │   │                       # pillars, audio, dosha, ...)
+│   │   ├── layout/             # header, sidebar, mobile-nav, navbar
+│   │   └── ui/                 # shared primitives
+│   ├── context/                # auth-context, audio-player-context
+│   ├── constants/              # pillar definitions
+│   ├── data/                   # static content: blog, daily-wisdom, faq, ...
+│   ├── lib/                    # api client, theme, utils
+│   └── types/                  # shared types
+├── functions/
+│   ├── auth/                   # login.ts, register.ts
+│   ├── chat/                   # chat.ts (Anthropic proxy)
+│   ├── data/                   # one handler per /data/* route
+│   ├── lib/                    # utils.ts (db client, JWT, CORS, helpers)
+│   └── package.json            # Lambda-only deps (smaller bundle)
+├── docs/                       # architecture, deployment, API docs
+├── public/                     # static assets, manifest, service worker
+├── scripts/                    # tooling (icon generation, ...)
+├── landing-page/               # standalone marketing HTML
+├── sst.config.ts               # infra-as-code (tables, API, site, secrets)
+├── next.config.ts              # next config (output: 'export')
+└── package.json
 ```
 
 ## Build
 
 ```bash
-# Build for production
-npm run build
-
-# Build with type checking
-npm run build
+npm run build     # next build → static export in out/
+npm run lint
 ```
 
 ## Tech Stack
 
-- **Framework**: Next.js 16.1.1 (Turbopack)
+- **Framework**: Next.js 15.5 (App Router, static export)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui + Radix UI
-- **Icons**: Lucide React
-- **Authentication**: JWT (custom implementation)
-- **Database ORM**: Custom DynamoDB abstraction
-- **Deployment**: SST + OpenNext
-- **Cloud**: AWS (Lambda, DynamoDB, S3, CloudFront)
-
-## Development Notes
-
-### Key Files Modified for DynamoDB Migration
-
-- `src/lib/dynamodb.ts` - Database abstraction layer (NEW)
-- `src/lib/auth.ts` - Updated to use DynamoDB
-- All `src/app/(main)/*/page.tsx` - Updated database imports
-- All `src/app/api/*/route.ts` - Updated database imports
-- `sst.config.ts` - Added DynamoDB permissions
-- `next.config.ts` - Configured for Lambda deployment
-- `tsconfig.json` - Excluded build artifacts
-
-### Manual Joins Required
-
-DynamoDB doesn't support SQL-like joins. Use manual joining:
-
-```typescript
-// Get related data
-const pillars = await db.pillar.findMany();
-const checkins = await db.dailyCheckin.findMany({ where: { userId } });
-
-// Manual join
-const pillarMap = new Map(pillars.map(p => [p.id, p]));
-const checkinsWithPillars = checkins.map(c => ({
-  ...c,
-  pillar: pillarMap.get(c.pillarId)
-}));
-```
+- **Styling**: Tailwind CSS v4
+- **State / data**: Zustand, TanStack React Query
+- **Animation / charts**: framer-motion, recharts
+- **Icons**: lucide-react
+- **Auth**: JWT via `jose` (HS256), `bcryptjs` for password hashing
+- **API**: AWS API Gateway v2 + Lambda (Node 20)
+- **Database**: DynamoDB via `@aws-sdk/lib-dynamodb`
+- **AI**: Anthropic Claude (Sonnet) via direct REST call from Lambda
+- **Infra**: SST v4 (`StaticSite`, `ApiGatewayV2`, `Dynamo`, `Secret`)
+- **Cloud**: AWS (S3, CloudFront, API Gateway, Lambda, DynamoDB)
 
 ## Production URL
 
-Current deployment: https://d10e61fglnub0a.cloudfront.net
+Current deployment: https://d1wkrhl40vhx82.cloudfront.net
 
 ## License
 
-Proprietary - 10X Vedic
+Proprietary — 10X Vedic
 
 ## Support
 

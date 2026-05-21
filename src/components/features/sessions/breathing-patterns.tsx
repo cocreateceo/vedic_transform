@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { BreathingLotus } from "./breathing-lotus";
 import { PexelsVideo } from "@/components/ui/pexels-video";
+import { NextPracticeCta } from "./next-practice-cta";
 
 const SESSION_PILLAR = "breathing-meditation";
 // A "real session" threshold so accidentally hitting Start then Stop doesn't
@@ -343,6 +344,14 @@ export function BreathingPatterns() {
         <p className="text-xs text-gray-500">
           Already checked in today — this session is recorded.
         </p>
+      )}
+
+      {/* "Next practice" CTA appears once a check-in has been credited.
+          Closes the loop: breathing done → onto the next focus pillar. */}
+      {karmaAwarded !== null && (
+        <div className="mt-2">
+          <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
+        </div>
       )}
 
       {/* Pattern description */}

@@ -6,6 +6,7 @@ import { Play, Square, UtensilsCrossed, Moon, Sparkles, Volume2, VolumeX } from 
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { PexelsVideo } from "@/components/ui/pexels-video";
+import { NextPracticeCta } from "./next-practice-cta";
 
 const FASTING_HOURS = 16;
 const EATING_HOURS = 8;
@@ -473,6 +474,15 @@ export function FastingTimer() {
           >
             {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
           </Button>
+        </div>
+      )}
+
+      {/* Next-practice CTA once the fasting target has been hit and the
+          check-in fired. Only the fasting target awards a pillar credit
+          (eating window does not), so the CTA only renders when fasting. */}
+      {targetHit && isFasting && karmaAwarded !== null && (
+        <div className="mt-2">
+          <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
         </div>
       )}
 

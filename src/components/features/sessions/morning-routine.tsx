@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { SunriseIllustration } from "./sunrise-illustration";
+import { NextPracticeCta } from "./next-practice-cta";
 
 const STEPS = [
   { name: "Wake Up",      icon: Sparkles, voice: "/audio/morning/wake.mp3" },
@@ -329,8 +330,9 @@ export function MorningRoutine() {
             Already checked in today — your morning routine is recorded.
           </p>
         )}
+        <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
         <Button
-          size="lg"
+          variant="outline"
           onClick={() => {
             setCurrentStep(0);
             setCompletedSteps(new Set());
@@ -345,7 +347,7 @@ export function MorningRoutine() {
             checkinFiredRef.current = false;
           }}
         >
-          Start Again
+          Start morning routine again
         </Button>
       </div>
     );

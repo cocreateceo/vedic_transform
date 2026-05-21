@@ -6,11 +6,13 @@ import bcrypt from 'bcryptjs';
 
 export const db = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
+// CORS allow-origin / methods / headers are configured on the ApiGatewayV2
+// resource in sst.config.ts. API Gateway v2 echoes the matched origin from its
+// allowlist back to the browser and handles OPTIONS preflights automatically,
+// so handlers do not (and must not) emit Access-Control-Allow-* headers
+// themselves — those would override the gateway's restricted allowlist.
 export const CORS_HEADERS = {
   'Content-Type': 'application/json',
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type,Authorization',
 };
 
 export const ok = (data: any) => ({
@@ -29,17 +31,25 @@ function getJwtSecret(): Uint8Array {
   return new TextEncoder().encode(Resource.JwtSecret.value);
 }
 
+const JWT_ISSUER = 'vedic-transform';
+const JWT_AUDIENCE = 'vedic-transform-api';
+
 export async function createToken(payload: any): Promise<string> {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
+    .setIssuer(JWT_ISSUER)
+    .setAudience(JWT_AUDIENCE)
     .setExpirationTime('7d')
     .sign(getJwtSecret());
 }
 
 export async function verifyToken(token: string): Promise<any | null> {
   try {
-    const { payload } = await jwtVerify(token, getJwtSecret());
+    const { payload } = await jwtVerify(token, getJwtSecret(), {
+      issuer: JWT_ISSUER,
+      audience: JWT_AUDIENCE,
+    });
     return payload;
   } catch {
     return null;
@@ -65,7 +75,10 @@ export function parseBody(event: any): any {
   }
   try {
     return JSON.parse(body);
-  } catch {
+  } catch (e) {
+    // Surface malformed JSON in CloudWatch — handlers still see {} so a
+    // missing-field check returns the usual 400, but ops can debug.
+    console.error('parseBody: invalid JSON in request body', e, body);
     return {};
   }
 }

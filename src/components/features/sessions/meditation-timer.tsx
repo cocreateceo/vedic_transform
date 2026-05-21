@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { MeditationPosture } from "./meditation-posture";
 import { PexelsVideo } from "@/components/ui/pexels-video";
+import { NextPracticeCta } from "./next-practice-cta";
 
 const SESSION_PILLAR = "healing-meditation";
 
@@ -271,9 +272,10 @@ export function MeditationTimer() {
             </p>
           )}
         </div>
-        <Button size="lg" onClick={reset}>
-          <RotateCcw className="w-5 h-5 mr-2" />
-          New Session
+        <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
+        <Button variant="outline" onClick={reset}>
+          <RotateCcw className="w-4 h-4 mr-2" />
+          Restart meditation
         </Button>
       </div>
     );

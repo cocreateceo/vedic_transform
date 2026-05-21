@@ -51,6 +51,7 @@ interface User {
   email: string;
   name?: string;
   onboardingCompleted?: boolean;
+  role?: "user" | "admin";
 }
 
 interface AuthContextType {

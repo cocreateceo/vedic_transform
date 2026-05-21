@@ -2,6 +2,7 @@ import { Resource } from 'sst';
 import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { OAuth2Client } from 'google-auth-library';
 import { db, ok, err, CORS_HEADERS, createToken, generateId, parseBody } from '../lib/utils';
+import { emit, EventType } from '../lib/events';
 
 // Google sign-in handler. Frontend uses Google Identity Services (GIS),
 // which produces a short-lived JWT credential. We verify that credential
@@ -45,8 +46,10 @@ export async function handler(event: any) {
 
     let user = existing.Items?.[0];
     const now = new Date().toISOString();
+    let isNewUser = false;
 
     if (!user) {
+      isNewUser = true;
       // First time signing in — create a passwordless user. We store
       // `googleSub` so future logins are matched by sub even if the
       // user later changes their Google email.
@@ -60,6 +63,7 @@ export async function handler(event: any) {
         phone: null,
         avatarUrl,
         onboardingCompleted: false,
+        role: 'user',
         createdAt: now,
         updatedAt: now,
       };
@@ -74,6 +78,12 @@ export async function handler(event: any) {
       email: user.email,
       name: user.name,
     });
+
+    void emit(
+      user.id,
+      isNewUser ? EventType.AUTH_GOOGLE_REGISTER : EventType.AUTH_GOOGLE_LOGIN,
+      { email: user.email },
+    );
 
     return ok({
       success: true,

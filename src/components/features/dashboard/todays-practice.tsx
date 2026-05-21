@@ -15,6 +15,8 @@ import {
   Flame,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { practiceRouteForPillar } from "@/lib/practice-routes";
+import { getJourneyPhase } from "@/lib/journey-phases";
 
 interface TodaysPracticeProps {
   journeyDay: number;
@@ -47,6 +49,25 @@ export function TodaysPractice({
   const allCompletedToday = completedPillarSlugs.length >= PILLARS.length;
   if (allCompletedToday) {
     return <MasterDayCard journeyDay={journeyDay} />;
+  }
+
+  // Gentler-but-still-celebratory state: the user completed every focus
+  // pillar they committed to (the common 1–3 daily target), but not all 11.
+  // This is the moment that needed an emotional climax and didn't have one.
+  const focusDoneTodayCount = focusPillarSlugs.filter((s) =>
+    completedPillarSlugs.includes(s),
+  ).length;
+  const allFocusDone =
+    focusPillarSlugs.length > 0 &&
+    focusDoneTodayCount >= focusPillarSlugs.length;
+  if (allFocusDone) {
+    return (
+      <FocusCompleteCard
+        journeyDay={journeyDay}
+        focusCount={focusPillarSlugs.length}
+        currentStreak={currentStreak}
+      />
+    );
   }
 
   const pillarSlug = getPillarOfDay(journeyDay, focusPillarSlugs);
@@ -158,7 +179,7 @@ function PendingPracticeCard({
           </div>
 
           <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-3">
-            <Link href={`/pillars/${pillarSlug}`} className="flex-1">
+            <Link href={practiceRouteForPillar(pillarSlug)} className="flex-1">
               <Button size="lg" className="w-full">
                 {sessionDurationText}
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -173,7 +194,7 @@ function PendingPracticeCard({
           {showShortFallback && (
             <div className="mt-3 text-center">
               <Link
-                href="/pillars/breathing-meditation"
+                href={practiceRouteForPillar("breathing-meditation")}
                 className="text-xs text-gray-500 hover:text-amber-600 inline-flex items-center gap-1"
               >
                 <Clock className="w-3 h-3" />
@@ -260,6 +281,80 @@ function CompletedPracticeCard({
             </Link>
           </div>
         </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─── Focus-complete state (all focus pillars done today) ───────────────────
+//
+// Sits between "1 pillar done" and "all 11 done" — the common climactic
+// moment the daily ritual was missing. Pulls phase copy so the line reads
+// "Phase 2: Cleansing — breath cleared" instead of generic praise.
+
+function FocusCompleteCard({
+  journeyDay,
+  focusCount,
+  currentStreak,
+}: {
+  journeyDay: number;
+  focusCount: number;
+  currentStreak: number;
+}) {
+  const phase = getJourneyPhase(journeyDay);
+  const phraseText = phase.completionPhrase;
+
+  return (
+    <Card
+      variant="elevated"
+      className="overflow-hidden border-amber-200 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50"
+    >
+      <CardContent className="p-6 text-center">
+        <div className="mx-auto w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30 mb-4">
+          {/* Lotus motif — sacred reward without being loud. */}
+          <span className="text-2xl" aria-hidden>🪷</span>
+        </div>
+
+        <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">
+          {phase.id === "completed"
+            ? "Journey complete"
+            : `Phase ${phase.ordinal} · ${phase.name}`}
+        </p>
+        <h2 className="text-xl font-bold text-amber-900 mt-1">
+          Today&apos;s mandala is complete.
+        </h2>
+        <p className="text-sm text-amber-800/90 mt-2 max-w-md mx-auto">
+          You honored all {focusCount} focus practice{focusCount === 1 ? "" : "s"}.
+          {" "}{phraseText}
+        </p>
+
+        <div className="mt-3 flex items-center justify-center gap-4 text-sm text-amber-700">
+          {currentStreak > 0 && (
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <Flame className="w-4 h-4" />
+              {currentStreak}-day streak
+            </span>
+          )}
+          <span className="text-amber-600">Day {journeyDay} of {TOTAL_JOURNEY_DAYS}</span>
+        </div>
+
+        <div className="mt-5 flex flex-col sm:flex-row gap-2 justify-center">
+          <Link href="/journal">
+            <Button variant="outline" size="sm">
+              <BookOpen className="w-4 h-4 mr-2" />
+              Capture a reflection
+            </Button>
+          </Link>
+          <Link href="/pillars">
+            <Button variant="ghost" size="sm">
+              Explore another pillar
+            </Button>
+          </Link>
+        </div>
+
+        <p className="text-xs text-amber-700/80 mt-4">
+          See you tomorrow at sunrise.
+        </p>
       </CardContent>
     </Card>
   );

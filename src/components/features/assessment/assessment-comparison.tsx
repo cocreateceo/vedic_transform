@@ -222,7 +222,7 @@ export function AssessmentComparison({
         >
           {overallDirection === "improved" ? (
             <>
-              <strong>Amazing progress!</strong> You've improved in most areas.
+              <strong>Amazing progress!</strong> You&apos;ve improved in most areas.
               Keep up the great work!
             </>
           ) : overallDirection === "declined" ? (
@@ -232,7 +232,7 @@ export function AssessmentComparison({
             </>
           ) : (
             <>
-              <strong>Steady progress.</strong> You're maintaining your baseline.
+              <strong>Steady progress.</strong> You&apos;re maintaining your baseline.
               Keep showing up!
             </>
           )}

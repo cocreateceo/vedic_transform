@@ -281,6 +281,25 @@ export default $config({
       ttl: "ttl",
     });
 
+    // Event log — fire-and-forget rows written by functions/lib/events.ts.
+    // Foundation for analytics + admin audit. Schema:
+    //   id, userId, eventType ('auth.register' | 'checkin.completed' | ...)
+    //   props (free-form JSON), createdAt (ISO)
+    // Two GSIs so we can scan by user OR by eventType without a full table
+    // scan once volume is non-trivial.
+    const events = new sst.aws.Dynamo("Events", {
+      fields: {
+        id: "string",
+        userId: "string",
+        eventType: "string",
+      },
+      primaryIndex: { hashKey: "id" },
+      globalIndexes: {
+        "userId-index": { hashKey: "userId" },
+        "eventType-index": { hashKey: "eventType" },
+      },
+    });
+
     // ── API Gateway ─────────────────────────────────────────────────
     // Explicit CORS allowlist. Add any new deployed origin (custom domain,
     // preview deploy, etc.) here — wildcards leak the API to any site.
@@ -303,7 +322,10 @@ export default $config({
     });
 
     // ── Auth Routes ─────────────────────────────────────────────────
-    const authLink = [users, jwtSecret];
+    // `events` linked here so register/login/me can emit auth.* analytics
+    // events (functions/lib/events.ts is no-op when the Events resource
+    // isn't bound, so unbound handlers are still safe).
+    const authLink = [users, jwtSecret, events];
 
     api.route("POST /auth/register", {
       handler: "functions/auth/register.handler",
@@ -323,7 +345,22 @@ export default $config({
     // Google sign-in (GIS credential verification + create/find user)
     api.route("POST /auth/google", {
       handler: "functions/auth/google.handler",
-      link: [users, jwtSecret, googleClientId],
+      link: [users, jwtSecret, googleClientId, events],
+    });
+
+    // ── Admin routes (Wedge A) ───────────────────────────────────
+    // Gated by Users.role === 'admin'. See docs/ADMIN_BOOTSTRAP.md.
+    const adminLink = [users, jwtSecret, events,
+      journeys, streaks, focusPillars, dailyCheckins, moodLogs,
+      gratitudeEntries, intentions, manifestations, selfAssessments,
+      karmaTransactions];
+    api.route("GET /admin/users", {
+      handler: "functions/data/admin-users.handler",
+      link: adminLink,
+    });
+    api.route("GET /admin/users/{userId}", {
+      handler: "functions/data/admin-users.handler",
+      link: adminLink,
     });
 
     // ── Data Routes ─────────────────────────────────────────────────
@@ -340,7 +377,7 @@ export default $config({
     });
 
     // Journey
-    const journeyLink = [journeys, streaks, jwtSecret];
+    const journeyLink = [journeys, streaks, jwtSecret, events];
     api.route("GET /data/journey", {
       handler: "functions/data/journey.handler",
       link: journeyLink,
@@ -351,7 +388,7 @@ export default $config({
     });
 
     // Checkin
-    const checkinLink = [dailyCheckins, streaks, karmaTransactions, userBadges, journeys, jwtSecret];
+    const checkinLink = [dailyCheckins, streaks, karmaTransactions, userBadges, journeys, jwtSecret, events];
     api.route("GET /data/checkin", {
       handler: "functions/data/checkin.handler",
       link: checkinLink,
@@ -511,6 +548,32 @@ export default $config({
       link: achievementsLink,
     });
 
+    // ── Daily Brief (Phase 2 wedge) ─────────────────────────────
+    // GET-only. Live-composes a personalized one-liner from the User Context
+    // Pack — fans out across 11 per-user tables. Template-only in V1; the AI
+    // swap-in replaces composeBrief() without changing the route shape.
+    // See docs/superpowers/specs/2026-05-19-user-context-pack-and-daily-brief-design.md
+    const dailyBriefLink = [
+      users,
+      journeys,
+      streaks,
+      focusPillars,
+      dailyCheckins,
+      moodLogs,
+      gratitudeEntries,
+      intentions,
+      manifestations,
+      selfAssessments,
+      karmaTransactions,
+      jwtSecret,
+      events,
+      anthropicApiKey, // Wedge C: AI swap-in for the daily brief
+    ];
+    api.route("GET /data/daily-brief", {
+      handler: "functions/data/daily-brief.handler",
+      link: dailyBriefLink,
+    });
+
     // ── Chat (AI Assistant) ─────────────────────────────────────
     api.route("POST /chat", {
       handler: "functions/chat/chat.handler",
@@ -521,11 +584,11 @@ export default $config({
     // No auth — anyone can take the test and share their result link.
     api.route("POST /data/dosha-test/anonymous", {
       handler: "functions/data/dosha-test-anonymous.handler",
-      link: [anonymousDoshaResults],
+      link: [anonymousDoshaResults, events],
     });
     api.route("GET /data/dosha-test/anonymous", {
       handler: "functions/data/dosha-test-anonymous.handler",
-      link: [anonymousDoshaResults],
+      link: [anonymousDoshaResults, events],
     });
 
     // ── Web Push (P0-1) ─────────────────────────────────────────

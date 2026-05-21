@@ -30,6 +30,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "Events": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "FocusPillars": {
       "name": string
       "type": "sst.aws.Dynamo"
@@ -37,6 +41,10 @@ declare module "sst" {
     "GoalTasks": {
       "name": string
       "type": "sst.aws.Dynamo"
+    }
+    "GoogleClientId": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
     "GratitudeEntries": {
       "name": string
@@ -111,7 +119,7 @@ declare module "sst" {
       "value": string
     }
     "VedicTransformSite": {
-      "type": "sst.aws.StaticSite"
+      "type": "sst.aws.Nextjs"
       "url": string
     }
   }
