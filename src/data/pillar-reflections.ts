@@ -89,15 +89,11 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Daily movement — yoga, walking, strength, anything deliberate — is the biggest single lever for metabolism, mood, and longevity.",
     practice: {
-      kind: "media-compare",
-      gif: {
-        src: "/images/pexels/posture-30min-movement.gif",
-        caption: "GIF · ~830 KB · loops automatically",
-      },
-      video: {
-        src: "/videos/pexels/posture-30min-movement.mp4",
-        caption: "MP4 · ~240 KB · hardware-decoded",
-      },
+      kind: "gif",
+      src: "/images/pexels/posture-30min-movement.gif",
+      caption:
+        "Move along with the demo. The form doesn't matter much — the consistency does.",
+      mandatory: { practiceSeconds: 30 },
       attribution: {
         name: "Vlada Karpovich",
         url: "https://www.pexels.com/@vlada-karpovich",
@@ -116,15 +112,11 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Moving within an hour of waking signals your circadian clock that the day has begun — energy, focus, and sleep all improve.",
     practice: {
-      kind: "media-compare",
-      gif: {
-        src: "/images/pexels/posture-morning-stretch.gif",
-        caption: "GIF · ~3.5 MB · loops automatically",
-      },
-      video: {
-        src: "/videos/pexels/posture-morning-stretch.mp4",
-        caption: "MP4 · ~310 KB · hardware-decoded",
-      },
+      kind: "gif",
+      src: "/images/pexels/posture-morning-stretch.gif",
+      caption:
+        "Stretch along with the demo. Five slow stretches by a window with morning light is the entire entry-level practice.",
+      mandatory: { practiceSeconds: 30 },
       attribution: {
         name: "Alexy Almond",
         url: "https://www.pexels.com/@alexy-almond",
@@ -142,15 +134,11 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Sitting more than 60 minutes at a stretch is metabolically expensive. A 60-second stand-and-stretch every hour adds up to enormous benefit.",
     practice: {
-      kind: "media-compare",
-      gif: {
-        src: "/images/pexels/posture-hourly-standing.gif",
-        caption: "GIF · ~2.1 MB · loops automatically",
-      },
-      video: {
-        src: "/videos/pexels/posture-hourly-standing.mp4",
-        caption: "MP4 · ~250 KB · hardware-decoded",
-      },
+      kind: "gif",
+      src: "/images/pexels/posture-hourly-standing.gif",
+      caption:
+        "Stretch along with the demo. Stand up, reach overhead, twist gently side to side, roll the shoulders.",
+      mandatory: { practiceSeconds: 30 },
       attribution: {
         name: "RDNE Stock project",
         url: "https://www.pexels.com/@rdne",
@@ -169,15 +157,11 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Outdoor movement adds sunlight, fresh air, and visual depth — combined benefits no gym can match.",
     practice: {
-      kind: "media-compare",
-      gif: {
-        src: "/images/pexels/posture-outdoor.gif",
-        caption: "GIF · ~3.3 MB · loops automatically",
-      },
-      video: {
-        src: "/videos/pexels/posture-outdoor.mp4",
-        caption: "MP4 · ~360 KB · hardware-decoded",
-      },
+      kind: "gif",
+      src: "/images/pexels/posture-outdoor.gif",
+      caption:
+        "Practice along with the demo. Even barefoot on grass counts — sunlight on skin and earth underfoot.",
+      mandatory: { practiceSeconds: 30 },
       attribution: {
         name: "RDNE Stock project",
         url: "https://www.pexels.com/@rdne",
@@ -195,15 +179,11 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "Strength work preserves muscle, bone density, and metabolic health as you age — and it doesn't require a gym.",
     practice: {
-      kind: "media-compare",
-      gif: {
-        src: "/images/pexels/posture-strength.gif",
-        caption: "GIF · ~1.9 MB · loops automatically",
-      },
-      video: {
-        src: "/videos/pexels/posture-strength.mp4",
-        caption: "MP4 · ~270 KB · hardware-decoded",
-      },
+      kind: "gif",
+      src: "/images/pexels/posture-strength.gif",
+      caption:
+        "Practice along with the demo. Beginner circuit: 10 squats, 10 push-ups (knees down is fine), 30-second plank.",
+      mandatory: { practiceSeconds: 30 },
       attribution: {
         name: "KoolShooters",
         url: "https://www.pexels.com/@koolshooters",
@@ -222,15 +202,11 @@ const MOVEMENT_STEPS: YesNoStep[] = [
     description:
       "A 10-minute walk after dinner blunts the blood-sugar spike, supports digestion, and improves sleep quality.",
     practice: {
-      kind: "media-compare",
-      gif: {
-        src: "/images/pexels/posture-walking.gif",
-        caption: "GIF · ~2.7 MB · loops automatically",
-      },
-      video: {
-        src: "/videos/pexels/posture-walking.mp4",
-        caption: "MP4 · ~250 KB · hardware-decoded",
-      },
+      kind: "gif",
+      src: "/images/pexels/posture-walking.gif",
+      caption:
+        "Walk along with the demo. Just 10 minutes IRL — slow pace, full belly, ideally outside.",
+      mandatory: { practiceSeconds: 30 },
       attribution: {
         name: "K (Kelly)",
         url: "https://www.pexels.com/@kelly",
@@ -383,15 +359,11 @@ const SANDHYA_STEPS: YesNoStep[] = [
     description:
       "One round of Surya Namaskar is twelve poses that work every major muscle and breath together — the most efficient warmup ever designed. Compare the GIF vs the video below — both show the same flow.",
     practice: {
-      kind: "media-compare",
-      gif: {
-        src: "/images/pexels/posture-surya-namaskar.gif",
-        caption: "GIF version · ~5.8 MB · animated image · auto-loops",
-      },
-      video: {
-        src: "/videos/pexels/posture-surya-namaskar.mp4",
-        caption: "MP4 version · ~570 KB · native player · smoother playback",
-      },
+      kind: "gif",
+      src: "/images/pexels/posture-surya-namaskar.gif",
+      caption:
+        "Follow the demo and move with the breath — inhale to extend, exhale to fold. One full round is about 90 seconds.",
+      mandatory: { practiceSeconds: 90, label: "Practice one full round (90s)" },
       poseList: [
         "Pranamasana — Prayer pose, stand tall, palms together at heart",
         "Hasta Uttanasana — Inhale, arms overhead, gentle backbend",
@@ -608,6 +580,7 @@ const SLEEP_STEPS: YesNoStep[] = [
         exhaleSeconds: 8,
         rounds: 3,
       },
+      mandatory: true,
     },
     question: "Did you do slow breathing or a body scan in bed before sleep?",
     successMessage:

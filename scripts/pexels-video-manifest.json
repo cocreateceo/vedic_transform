@@ -8,13 +8,6 @@
     { "slug": "movement-ambient",     "query": "yoga silhouette slow",              "min_duration_sec": 8,  "max_duration_sec": 25 },
     { "slug": "nature-flow",          "query": "river flowing forest slow",         "min_duration_sec": 8,  "max_duration_sec": 25 },
     { "slug": "candle-flame",         "query": "candle flame close-up",             "min_duration_sec": 6,  "max_duration_sec": 20 },
-    { "slug": "starry-night",         "query": "night sky milky way time lapse",    "min_duration_sec": 8,  "max_duration_sec": 25 },
-    { "slug": "posture-surya-namaskar","query": "sun salutation yoga sequence flow", "min_duration_sec": 6,  "max_duration_sec": 30 },
-    { "slug": "posture-strength",      "query": "push up exercise workout",          "min_duration_sec": 5,  "max_duration_sec": 30 },
-    { "slug": "posture-morning-stretch","query": "morning stretch yoga home",         "min_duration_sec": 5,  "max_duration_sec": 30 },
-    { "slug": "posture-walking",       "query": "person walking path nature",         "min_duration_sec": 6,  "max_duration_sec": 30 },
-    { "slug": "posture-outdoor",       "query": "outdoor yoga grass park",            "min_duration_sec": 5,  "max_duration_sec": 30 },
-    { "slug": "posture-hourly-standing","query": "office stretch break standing",      "min_duration_sec": 4,  "max_duration_sec": 25 },
-    { "slug": "posture-30min-movement","query": "yoga flow practice indoor",          "min_duration_sec": 6,  "max_duration_sec": 30 }
+    { "slug": "starry-night",         "query": "night sky milky way time lapse",    "min_duration_sec": 8,  "max_duration_sec": 25 }
   ]
 }

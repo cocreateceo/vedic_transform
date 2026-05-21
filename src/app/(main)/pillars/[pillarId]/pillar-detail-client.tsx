@@ -492,6 +492,7 @@ const MORNING_STEPS: YesNoStep[] = [
     practice: {
       kind: "breathing",
       pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 3 },
+      mandatory: true,
     },
     question: "Did you take a few minutes for slow breathing?",
     successMessage:
@@ -1066,6 +1067,7 @@ const BREATHING_STEPS: YesNoStep[] = [
     practice: {
       kind: "breathing",
       pattern: { inhaleSeconds: 4, exhaleSeconds: 6, rounds: 3 },
+      mandatory: true,
     },
     question:
       "Did you catch yourself holding your breath or breathing shallow today, and consciously deepen it?",
@@ -1086,6 +1088,7 @@ const BREATHING_STEPS: YesNoStep[] = [
         exhaleSeconds: 8,
         rounds: 3,
       },
+      mandatory: true,
     },
     question:
       "Did you try a structured technique today — alternate nostril, box, or 4-7-8?",
@@ -1128,6 +1131,7 @@ const BREATHING_STEPS: YesNoStep[] = [
         exhaleSeconds: 8,
         rounds: 3,
       },
+      mandatory: true,
     },
     question: "Did you do any slow breathing in the hour before bed last night?",
     successMessage:

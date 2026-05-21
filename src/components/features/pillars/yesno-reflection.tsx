@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Check, Lightbulb, RotateCcw, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, Lightbulb, Play, RotateCcw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
 import {
@@ -19,14 +19,28 @@ import { PexelsImage } from "@/components/ui/pexels-image";
 
 export type YesNoAnswer = "yes" | "no" | null;
 
+/**
+ * Practice surfaces rendered between a step's description and its
+ * yes/no buttons. Some are pure reference (image); others are
+ * "mandatory" — the user has to engage with the practice before
+ * the "Yes, I did" button unlocks. Breathing pacers and animated
+ * posture GIFs are both gating; simple reference images are not.
+ *
+ * For questions that don't need demonstrating ("Did you drink warm
+ * water?"), omit `practice` entirely — the user just answers.
+ */
 export type StepPractice =
-  | { kind: "breathing"; pattern: BreathPattern }
   /**
-   * Posture / position image rendered inline below the description.
-   * `pexelsSlug` references an entry in public/images/pexels/manifest.json.
-   * Use `caption` for an instructional cue ("How the pose feels: …"),
-   * and `poseList` for sequence-based practices like Surya Namaskar so
-   * the named poses sit next to the photo.
+   * Breathing pacer. When `mandatory` is true the user must finish all
+   * rounds (Try it now → complete cycle) before Yes unlocks.
+   */
+  | { kind: "breathing"; pattern: BreathPattern; mandatory?: boolean }
+  /**
+   * Posture / position image (static, non-gating reference). Use this
+   * for poses where the practice happens elsewhere in the user's day
+   * (sitting meditation, body scan in bed). `caption` adds an
+   * instructional cue; `poseList` adds a numbered sequence next to
+   * the photo for steps like Surya Namaskar.
    */
   | {
       kind: "image";
@@ -35,39 +49,18 @@ export type StepPractice =
       poseList?: string[];
     }
   /**
-   * Animated GIF loop. `src` is a path under public/. Useful for
-   * sequence demonstrations that benefit from motion (sun salutation,
-   * strength circuit). Bigger than MP4 but works as a plain image.
+   * Animated GIF demo. When `mandatory` is set the user must press
+   * "Practice along" and let the timer reach zero before Yes unlocks.
+   * Used for active sequence demos: sun salutation, strength circuit,
+   * stretches.
    */
   | {
       kind: "gif";
       src: string;
       caption?: string;
-      attribution?: { name: string; url?: string; source?: string };
-    }
-  /**
-   * Native <video> loop. `src` is a path under public/. Smaller and
-   * smoother than GIF for the same content, but needs JS-friendly
-   * autoplay (muted + playsInline).
-   */
-  | {
-      kind: "video";
-      src: string;
-      caption?: string;
-      attribution?: { name: string; url?: string; source?: string };
-    }
-  /**
-   * Side-by-side GIF + video for direct A/B comparison. Renders both
-   * with labeled headers so the viewer can decide which format reads
-   * better for this practice. Optional `poseList` lets sequence
-   * practices keep their named-step list visible during comparison.
-   */
-  | {
-      kind: "media-compare";
-      gif: { src: string; caption?: string };
-      video: { src: string; caption?: string };
       poseList?: string[];
       attribution?: { name: string; url?: string; source?: string };
+      mandatory?: { practiceSeconds: number; label?: string };
     };
 
 export type YesNoStep = {
@@ -245,6 +238,20 @@ function StepCard({
   const isLast = stepIndex === totalSteps - 1;
   const wasYes = currentAnswer === "yes";
 
+  // Mandatory-practice gating. Tracks whether the user has finished the
+  // breathing rounds or GIF practice timer for THIS step. Reset whenever
+  // we land on a new step or the user switches back to the question
+  // phase, so re-answering forces a re-practice.
+  const requiresPractice =
+    (step.practice?.kind === "breathing" && step.practice.mandatory === true) ||
+    (step.practice?.kind === "gif" && step.practice.mandatory !== undefined);
+  const [practiceDone, setPracticeDone] = useState(false);
+  useEffect(() => {
+    setPracticeDone(false);
+  }, [stepIndex, phase]);
+
+  const yesLocked = requiresPractice && !practiceDone;
+
   return (
     <div className="rounded-2xl bg-white border-2 border-amber-200 shadow-sm p-6 md:p-8">
       <div className="flex items-center gap-3 mb-4">
@@ -262,7 +269,10 @@ function StepCard({
       <p className="text-gray-700 leading-relaxed mb-2">{step.description}</p>
 
       {step.practice?.kind === "breathing" && (
-        <MiniBreathingDemo pattern={step.practice.pattern} />
+        <MiniBreathingDemo
+          pattern={step.practice.pattern}
+          onComplete={() => setPracticeDone(true)}
+        />
       )}
 
       {step.practice?.kind === "image" && (
@@ -292,105 +302,15 @@ function StepCard({
       )}
 
       {step.practice?.kind === "gif" && (
-        <div className="my-5 rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={step.practice.src}
-            alt={step.title}
-            className="w-full rounded-lg"
-          />
-          {step.practice.caption && (
-            <p className="text-sm text-gray-700 leading-relaxed mt-3 px-1">
-              {step.practice.caption}
-            </p>
-          )}
-          <Attribution attribution={step.practice.attribution} />
-        </div>
-      )}
-
-      {step.practice?.kind === "video" && (
-        <div className="my-5 rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
-          <video
-            src={step.practice.src}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full rounded-lg"
-          />
-          {step.practice.caption && (
-            <p className="text-sm text-gray-700 leading-relaxed mt-3 px-1">
-              {step.practice.caption}
-            </p>
-          )}
-          <Attribution attribution={step.practice.attribution} />
-        </div>
-      )}
-
-      {step.practice?.kind === "media-compare" && (
-        <div className="my-5 space-y-4">
-          <div className="rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
-            <div className="flex items-center gap-2 mb-2 px-1">
-              <span className="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">
-                GIF
-              </span>
-              <span className="text-xs text-gray-500">animated image · auto-loops</span>
-            </div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={step.practice.gif.src}
-              alt={`${step.title} (GIF)`}
-              className="w-full rounded-lg"
-            />
-            {step.practice.gif.caption && (
-              <p className="text-sm text-gray-700 leading-relaxed mt-2 px-1">
-                {step.practice.gif.caption}
-              </p>
-            )}
-          </div>
-
-          <div className="rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
-            <div className="flex items-center gap-2 mb-2 px-1">
-              <span className="text-xs font-bold text-cyan-700 bg-cyan-100 px-2 py-0.5 rounded">
-                VIDEO
-              </span>
-              <span className="text-xs text-gray-500">native player · smaller file</span>
-            </div>
-            <video
-              src={step.practice.video.src}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full rounded-lg"
-            />
-            {step.practice.video.caption && (
-              <p className="text-sm text-gray-700 leading-relaxed mt-2 px-1">
-                {step.practice.video.caption}
-              </p>
-            )}
-          </div>
-
-          <Attribution attribution={step.practice.attribution} />
-
-          {step.practice.poseList && step.practice.poseList.length > 0 && (
-            <div className="rounded-xl bg-amber-50/40 border border-amber-200 p-3">
-              <p className="text-xs uppercase tracking-wide text-amber-700 font-semibold mb-2 px-1">
-                The 12 poses in sequence
-              </p>
-              <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 px-1 text-sm text-gray-700">
-                {step.practice.poseList.map((pose, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="text-amber-600 font-semibold flex-shrink-0">
-                      {i + 1}.
-                    </span>
-                    <span>{pose}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-        </div>
+        <GifPractice
+          src={step.practice.src}
+          alt={step.title}
+          caption={step.practice.caption}
+          poseList={step.practice.poseList}
+          attribution={step.practice.attribution}
+          mandatory={step.practice.mandatory}
+          onComplete={() => setPracticeDone(true)}
+        />
       )}
 
       <div className="mt-4" />
@@ -400,11 +320,24 @@ function StepCard({
           <p className="text-lg font-medium text-gray-900 mb-5">
             {step.question}
           </p>
+          {yesLocked && (
+            <div className="mb-4 rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-900">
+              Practice along with the demo above to unlock <strong>Yes</strong>.
+              If you didn&apos;t do this today, you can still pick{" "}
+              <strong>Not today</strong>.
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-3">
             <Button
               size="lg"
-              onClick={() => onAnswer("yes")}
-              className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white"
+              onClick={() => !yesLocked && onAnswer("yes")}
+              disabled={yesLocked}
+              className={cn(
+                "text-white",
+                yesLocked
+                  ? "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
+                  : "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600",
+              )}
             >
               <Check className="w-5 h-5 mr-2" />
               Yes, I did
@@ -474,6 +407,118 @@ function StepCard({
               Change my answer
             </Button>
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * GIF practice surface. When `mandatory` is set, the user must press
+ * "Practice along" and let the countdown reach zero before `onComplete`
+ * fires — that's what unlocks the parent's "Yes, I did" button. When
+ * `mandatory` is omitted, the GIF is just reference and `onComplete`
+ * fires immediately on mount.
+ */
+function GifPractice({
+  src,
+  alt,
+  caption,
+  poseList,
+  attribution,
+  mandatory,
+  onComplete,
+}: {
+  src: string;
+  alt: string;
+  caption?: string;
+  poseList?: string[];
+  attribution?: { name: string; url?: string; source?: string };
+  mandatory?: { practiceSeconds: number; label?: string };
+  onComplete: () => void;
+}) {
+  const total = mandatory?.practiceSeconds ?? 0;
+  const [active, setActive] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(total);
+  const [done, setDone] = useState(false);
+
+  // Reference-only GIFs don't need engagement — unlock immediately.
+  useEffect(() => {
+    if (!mandatory) onComplete();
+  }, [mandatory, onComplete]);
+
+  useEffect(() => {
+    if (!active) return;
+    const id = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          setActive(false);
+          setDone(true);
+          onComplete();
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [active, onComplete]);
+
+  return (
+    <div className="my-5 rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} className="w-full rounded-lg" />
+      {caption && (
+        <p className="text-sm text-gray-700 leading-relaxed mt-3 px-1">
+          {caption}
+        </p>
+      )}
+
+      {mandatory && (
+        <div className="mt-3 px-1">
+          {!active && !done && (
+            <Button
+              size="sm"
+              onClick={() => {
+                setSecondsLeft(total);
+                setActive(true);
+              }}
+              className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white"
+            >
+              <Play className="w-4 h-4 mr-1.5" />
+              {mandatory.label ?? `Practice along (${total}s)`}
+            </Button>
+          )}
+          {active && (
+            <p className="text-sm font-semibold text-cyan-800">
+              Practicing… <span className="font-mono">{secondsLeft}s</span>{" "}
+              remaining
+            </p>
+          )}
+          {done && (
+            <p className="text-sm font-semibold text-green-700 flex items-center gap-1.5">
+              <Check className="w-4 h-4" /> Practice complete — Yes is unlocked
+            </p>
+          )}
+        </div>
+      )}
+
+      <Attribution attribution={attribution} />
+
+      {poseList && poseList.length > 0 && (
+        <div className="mt-3 rounded-xl bg-amber-50/40 border border-amber-200 p-3">
+          <p className="text-xs uppercase tracking-wide text-amber-700 font-semibold mb-2 px-1">
+            The 12 poses in sequence
+          </p>
+          <ol className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 px-1 text-sm text-gray-700">
+            {poseList.map((pose, i) => (
+              <li key={i} className="flex gap-2">
+                <span className="text-amber-600 font-semibold flex-shrink-0">
+                  {i + 1}.
+                </span>
+                <span>{pose}</span>
+              </li>
+            ))}
+          </ol>
         </div>
       )}
     </div>

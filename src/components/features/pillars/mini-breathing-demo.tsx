@@ -37,7 +37,18 @@ function phaseAt(
   return { phase: "exhale", secondsLeft: cycle - within, round };
 }
 
-export function MiniBreathingDemo({ pattern }: { pattern: BreathPattern }) {
+export function MiniBreathingDemo({
+  pattern,
+  onComplete,
+}: {
+  pattern: BreathPattern;
+  /**
+   * Fires once when the user finishes all rounds in a single uninterrupted
+   * session. Used by gating reflection steps to unlock the "Yes" button —
+   * abandoning early (via Stop) does NOT fire this callback.
+   */
+  onComplete?: () => void;
+}) {
   const [active, setActive] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const rounds = pattern.rounds ?? 3;
@@ -52,13 +63,14 @@ export function MiniBreathingDemo({ pattern }: { pattern: BreathPattern }) {
         const next = e + 1;
         if (next >= totalSec) {
           setActive(false);
+          if (onComplete) onComplete();
           return 0;
         }
         return next;
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [active, totalSec]);
+  }, [active, totalSec, onComplete]);
 
   const { phase, secondsLeft, round } = active
     ? phaseAt(elapsed, pattern)
