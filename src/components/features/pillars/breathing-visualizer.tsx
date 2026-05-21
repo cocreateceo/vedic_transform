@@ -4,6 +4,15 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { BreathingLotus } from "@/components/features/sessions/breathing-lotus";
+
+// The full 5-minute breathing practice that sits at the top of the
+// Breathing & Meditation pillar. Visually + sonically aligned with the
+// Sessions "Breathing" tab: same animated lotus (BreathingLotus) and the
+// same CEO voice cue MP3s under /audio/breathing/. The Sessions surface
+// remains the pattern picker (4:6, 4:7:8, box); this surface is the
+// duration-locked daily practice with pause/resume/reset controls and
+// an onComplete hook for auto check-in.
 
 interface BreathingVisualizerProps {
   inhaleDuration?: number; // seconds
@@ -12,7 +21,10 @@ interface BreathingVisualizerProps {
   onComplete?: () => void;
 }
 
-type BreathPhase = "idle" | "inhale" | "exhale";
+type BreathPhase = "idle" | "in" | "out";
+
+const VOICE_INHALE = "/audio/breathing/inhale.mp3";
+const VOICE_EXHALE = "/audio/breathing/exhale.mp3";
 
 export function BreathingVisualizer({
   inhaleDuration = 4,
@@ -27,46 +39,46 @@ export function BreathingVisualizer({
   const [phaseProgress, setPhaseProgress] = useState(0);
   const [muted, setMuted] = useState(false);
 
-  // Lazy-init audio so we don't burn an AudioContext on every page render
-  // and to satisfy iOS Safari's "first audio after user gesture" rule —
-  // first tone fires from Start, which is a click.
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const playTone = useCallback((kind: "in" | "out") => {
-    if (muted) return;
-    try {
-      if (!audioCtxRef.current) {
-        const Ctx = window.AudioContext ||
-          (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-        if (!Ctx) return;
-        audioCtxRef.current = new Ctx();
-      }
-      const ctx = audioCtxRef.current;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      // Singing-bowl-ish: A4 rising note for inhale, lower E4 falling note for exhale.
-      osc.frequency.value = kind === "in" ? 440 : 330;
-      osc.type = "sine";
-      const t = ctx.currentTime;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.12, t + 0.05);
-      gain.gain.linearRampToValueAtTime(0, t + 0.6);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(t);
-      osc.stop(t + 0.7);
-    } catch {}
-  }, [muted]);
-
-  // Fire a tone whenever the breath phase transitions. setPhase to the same
-  // value is a React no-op, so this effect runs once per inhale↔exhale flip.
+  // Pre-load the CEO voice cues once so the first phase tone is instant
+  // and replays don't re-fetch. Plain <audio> elements (not AudioContext)
+  // so iOS Safari is happy without unlock gymnastics.
+  const inhaleAudio = useRef<HTMLAudioElement | null>(null);
+  const exhaleAudio = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
-    if (phase === "inhale") playTone("in");
-    else if (phase === "exhale") playTone("out");
-  }, [phase, playTone]);
+    if (typeof window === "undefined") return;
+    inhaleAudio.current = new Audio(VOICE_INHALE);
+    inhaleAudio.current.preload = "auto";
+    exhaleAudio.current = new Audio(VOICE_EXHALE);
+    exhaleAudio.current.preload = "auto";
+    return () => {
+      inhaleAudio.current?.pause();
+      exhaleAudio.current?.pause();
+    };
+  }, []);
+
+  // Only fire on phase TRANSITION, not on every re-render. Without this
+  // ref guard, toggling mute mid-phase would replay the cue immediately.
+  const lastPhaseRef = useRef<BreathPhase>("idle");
+  useEffect(() => {
+    if (phase === lastPhaseRef.current) return;
+    lastPhaseRef.current = phase;
+    if (muted) return;
+    const a = phase === "in" ? inhaleAudio.current : phase === "out" ? exhaleAudio.current : null;
+    if (!a) return;
+    try {
+      a.currentTime = 0;
+      void a.play().catch(() => {});
+    } catch {}
+  }, [phase, muted]);
 
   const cycleDuration = inhaleDuration + exhaleDuration;
   const totalSeconds = totalDuration * 60;
   const totalCycles = Math.floor(totalSeconds / cycleDuration);
+
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   const resetSession = useCallback(() => {
     setIsActive(false);
@@ -74,44 +86,34 @@ export function BreathingVisualizer({
     setCycleCount(0);
     setElapsedTime(0);
     setPhaseProgress(0);
+    lastPhaseRef.current = "idle";
   }, []);
 
   useEffect(() => {
     if (!isActive) return;
-
-    const interval = setInterval(() => {
+    const id = setInterval(() => {
       setElapsedTime((prev) => {
         const newTime = prev + 0.1;
-
         if (newTime >= totalSeconds) {
           setIsActive(false);
           setPhase("idle");
-          onComplete?.();
+          if (onCompleteRef.current) onCompleteRef.current();
           return totalSeconds;
         }
-
-        // Calculate current position in cycle
         const cyclePosition = newTime % cycleDuration;
-
         if (cyclePosition < inhaleDuration) {
-          setPhase("inhale");
+          setPhase("in");
           setPhaseProgress(cyclePosition / inhaleDuration);
         } else {
-          setPhase("exhale");
+          setPhase("out");
           setPhaseProgress((cyclePosition - inhaleDuration) / exhaleDuration);
         }
-
-        // Track cycle count
         const newCycleCount = Math.floor(newTime / cycleDuration);
-        if (newCycleCount > cycleCount) {
-          setCycleCount(newCycleCount);
-        }
-
+        if (newCycleCount > cycleCount) setCycleCount(newCycleCount);
         return newTime;
       });
     }, 100);
-
-    return () => clearInterval(interval);
+    return () => clearInterval(id);
   }, [
     isActive,
     inhaleDuration,
@@ -119,17 +121,12 @@ export function BreathingVisualizer({
     cycleDuration,
     totalSeconds,
     cycleCount,
-    onComplete,
   ]);
 
   const toggleSession = () => {
-    if (elapsedTime >= totalSeconds) {
-      resetSession();
-    }
+    if (elapsedTime >= totalSeconds) resetSession();
     setIsActive(!isActive);
-    if (!isActive && phase === "idle") {
-      setPhase("inhale");
-    }
+    if (!isActive && phase === "idle") setPhase("in");
   };
 
   const formatTime = (seconds: number) => {
@@ -138,80 +135,34 @@ export function BreathingVisualizer({
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Calculate circle scale based on phase
-  const getScale = () => {
-    if (phase === "idle") return 1;
-    if (phase === "inhale") return 1 + phaseProgress * 0.3;
-    return 1.3 - phaseProgress * 0.3;
-  };
+  // 0 = closed bud (fully exhaled), 1 = fully open (fully inhaled).
+  const openness =
+    phase === "idle"
+      ? 0
+      : phase === "in"
+        ? phaseProgress
+        : 1 - phaseProgress;
 
   return (
     <div className="flex flex-col items-center gap-8 py-8">
-      {/* Breathing circle visualization */}
-      <div className="relative">
-        {/* Outer glow */}
-        <div
-          className={cn(
-            "absolute inset-0 rounded-full transition-all duration-500",
-            phase === "inhale" && "bg-cyan-400/20 blur-xl",
-            phase === "exhale" && "bg-amber-400/20 blur-xl"
-          )}
-          style={{
-            transform: `scale(${getScale() * 1.2})`,
-          }}
+      <div className="relative w-64 h-64 flex items-center justify-center">
+        <BreathingLotus
+          openness={openness}
+          phase={phase}
+          className="w-64 h-64"
         />
-
-        {/* Main circle */}
-        <div
-          className={cn(
-            "relative w-64 h-64 rounded-full flex items-center justify-center transition-all",
-            phase === "idle" && "bg-gradient-to-br from-gray-100 to-gray-200",
-            phase === "inhale" && "bg-gradient-to-br from-cyan-400 to-blue-500",
-            phase === "exhale" && "bg-gradient-to-br from-amber-400 to-orange-500"
-          )}
-          style={{
-            transform: `scale(${getScale()})`,
-            transitionDuration: phase === "inhale" ? `${inhaleDuration}s` : `${exhaleDuration}s`,
-          }}
-        >
-          {/* Inner circle content */}
-          <div className="text-center text-white">
-            {phase === "idle" ? (
-              <span className="text-gray-500 text-lg">Ready</span>
-            ) : (
-              <>
-                <p className="text-3xl font-bold capitalize">{phase}</p>
-                <p className="text-sm opacity-80 mt-1">
-                  {phase === "inhale"
-                    ? `${inhaleDuration} seconds`
-                    : `${exhaleDuration} seconds`}
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Lotus petals decoration */}
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={i}
-            className={cn(
-              "absolute w-8 h-16 rounded-full opacity-30 transition-all duration-1000",
-              phase === "inhale" && "bg-cyan-300",
-              phase === "exhale" && "bg-amber-300",
-              phase === "idle" && "bg-gray-300"
-            )}
-            style={{
-              top: "50%",
-              left: "50%",
-              transform: `rotate(${i * 45}deg) translateY(-140px) scale(${getScale()})`,
-              transformOrigin: "center center",
-            }}
-          />
-        ))}
+        {phase === "idle" && (
+          <span className="absolute text-gray-600 text-lg font-medium pointer-events-none">
+            Ready
+          </span>
+        )}
+        {phase !== "idle" && (
+          <span className="absolute text-white text-2xl font-bold drop-shadow-md pointer-events-none">
+            {phase === "in" ? "Breathe In" : "Breathe Out"}
+          </span>
+        )}
       </div>
 
-      {/* Stats */}
       <div className="flex items-center gap-8 text-center">
         <div>
           <p className="text-3xl font-bold text-gray-900">
@@ -233,7 +184,6 @@ export function BreathingVisualizer({
         </div>
       </div>
 
-      {/* Progress bar */}
       <div className="w-full max-w-md">
         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
@@ -246,7 +196,6 @@ export function BreathingVisualizer({
         </p>
       </div>
 
-      {/* Controls */}
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
@@ -262,7 +211,7 @@ export function BreathingVisualizer({
           onClick={toggleSession}
           className={cn(
             "min-w-[140px]",
-            isActive && "bg-red-500 hover:bg-red-600"
+            isActive && "bg-red-500 hover:bg-red-600",
           )}
         >
           {isActive ? (
@@ -286,14 +235,13 @@ export function BreathingVisualizer({
           variant="outline"
           size="lg"
           onClick={() => setMuted((m) => !m)}
-          aria-label={muted ? "Unmute breath tones" : "Mute breath tones"}
-          title={muted ? "Unmute breath tones" : "Mute breath tones"}
+          aria-label={muted ? "Unmute breath cues" : "Mute breath cues"}
+          title={muted ? "Unmute breath cues" : "Mute breath cues"}
         >
           {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
         </Button>
       </div>
 
-      {/* Instructions */}
       <div className="text-center text-sm text-gray-600 max-w-md">
         <p className="font-medium mb-2">Pranayama Breathing Pattern</p>
         <p>

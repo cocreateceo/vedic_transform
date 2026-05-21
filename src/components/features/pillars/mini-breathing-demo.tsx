@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Play, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BreathingLotus } from "@/components/features/sessions/breathing-lotus";
 
-// Inline breathing pacer used inside a reflection step. When a step's
-// description says "inhale 4 seconds, exhale 6 seconds", a static
-// sentence isn't enough — the user needs to actually try the pattern
-// before they can honestly say whether they did it today. This widget
-// gives them that practice in place: a pulsing circle that grows on
-// inhale, holds (optional), and shrinks on exhale, with a per-second
-// countdown and a visible round counter.
+// Inline breathing pacer used inside a reflection step. Renders the same
+// animated lotus the Sessions "Breathing" tab uses so the visual feels
+// continuous across the app — but stays silent (no CEO voice cues, no
+// tones) since reflection cards are scrolled past quickly and a stack of
+// six audible breathing demos would be a lot. Sessions remains the
+// "full immersive practice" surface with voice + ambient video; this is
+// the "try this pattern" companion inside a reflection.
 
 export type BreathPattern = {
   inhaleSeconds: number;
@@ -19,22 +20,49 @@ export type BreathPattern = {
   rounds?: number;
 };
 
-type Phase = "idle" | "inhale" | "hold" | "exhale";
+type Phase = "in" | "hold" | "out" | "idle";
 
-function phaseAt(
-  t: number,
-  p: BreathPattern,
-): { phase: Phase; secondsLeft: number; round: number } {
-  const cycle = p.inhaleSeconds + (p.holdSeconds ?? 0) + p.exhaleSeconds;
+interface PhaseState {
+  phase: Phase;
+  secondsLeft: number;
+  round: number;
+  /** 0 = closed bud (fully exhaled), 1 = fully open (fully inhaled). */
+  openness: number;
+}
+
+function phaseAt(elapsedMs: number, p: BreathPattern): PhaseState {
+  const cycleSec = p.inhaleSeconds + (p.holdSeconds ?? 0) + p.exhaleSeconds;
   const totalRounds = p.rounds ?? 3;
-  if (t >= cycle * totalRounds) return { phase: "idle", secondsLeft: 0, round: 0 };
-  const round = Math.floor(t / cycle) + 1;
-  const within = t % cycle;
-  if (within < p.inhaleSeconds)
-    return { phase: "inhale", secondsLeft: p.inhaleSeconds - within, round };
-  const ih = p.inhaleSeconds + (p.holdSeconds ?? 0);
-  if (within < ih) return { phase: "hold", secondsLeft: ih - within, round };
-  return { phase: "exhale", secondsLeft: cycle - within, round };
+  const t = elapsedMs / 1000;
+  if (t >= cycleSec * totalRounds) {
+    return { phase: "idle", secondsLeft: 0, round: 0, openness: 0 };
+  }
+  const round = Math.floor(t / cycleSec) + 1;
+  const within = t % cycleSec;
+  if (within < p.inhaleSeconds) {
+    const progress = within / p.inhaleSeconds;
+    return {
+      phase: "in",
+      secondsLeft: Math.ceil(p.inhaleSeconds - within),
+      round,
+      openness: progress,
+    };
+  }
+  const ihEnd = p.inhaleSeconds + (p.holdSeconds ?? 0);
+  if (within < ihEnd) {
+    return {
+      phase: "hold",
+      secondsLeft: Math.ceil(ihEnd - within),
+      round,
+      openness: 1,
+    };
+  }
+  return {
+    phase: "out",
+    secondsLeft: Math.ceil(cycleSec - within),
+    round,
+    openness: 1 - (within - ihEnd) / p.exhaleSeconds,
+  };
 }
 
 export function MiniBreathingDemo({
@@ -50,102 +78,89 @@ export function MiniBreathingDemo({
   onComplete?: () => void;
 }) {
   const [active, setActive] = useState(false);
-  const [elapsed, setElapsed] = useState(0);
+  const [elapsedMs, setElapsedMs] = useState(0);
   const rounds = pattern.rounds ?? 3;
   const cycleSec =
     pattern.inhaleSeconds + (pattern.holdSeconds ?? 0) + pattern.exhaleSeconds;
+  const totalMs = cycleSec * rounds * 1000;
   const totalSec = cycleSec * rounds;
 
-  // Stabilize the optional onComplete reference so a parent re-render
-  // doesn't tear down + re-create the 1s interval mid-tick.
+  // Stable callback ref so parent re-renders don't tear down the interval.
   const onCompleteRef = useRef(onComplete);
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
 
+  // 100ms ticks match the Sessions BreathingPatterns cadence; the lotus
+  // SVG's CSS transitions interpolate smoothly between samples.
   useEffect(() => {
     if (!active) return;
     const id = setInterval(() => {
-      setElapsed((e) => {
-        const next = e + 1;
-        if (next >= totalSec) {
+      setElapsedMs((e) => {
+        const next = e + 100;
+        if (next >= totalMs) {
           setActive(false);
           if (onCompleteRef.current) onCompleteRef.current();
           return 0;
         }
         return next;
       });
-    }, 1000);
+    }, 100);
     return () => clearInterval(id);
-  }, [active, totalSec]);
+  }, [active, totalMs]);
 
-  const { phase, secondsLeft, round } = active
-    ? phaseAt(elapsed, pattern)
-    : ({ phase: "idle" as Phase, secondsLeft: 0, round: 0 });
+  const state = active
+    ? phaseAt(elapsedMs, pattern)
+    : { phase: "idle" as Phase, secondsLeft: 0, round: 0, openness: 0 };
 
   const start = () => {
-    setElapsed(0);
+    setElapsedMs(0);
     setActive(true);
   };
   const stop = () => {
     setActive(false);
-    setElapsed(0);
+    setElapsedMs(0);
   };
-
-  const scale =
-    phase === "inhale" || phase === "hold"
-      ? 1.3
-      : phase === "exhale"
-        ? 0.8
-        : 1.0;
-  const duration =
-    phase === "inhale"
-      ? pattern.inhaleSeconds
-      : phase === "exhale"
-        ? pattern.exhaleSeconds
-        : 0.3;
 
   const patternLabel = pattern.holdSeconds
     ? `${pattern.inhaleSeconds} in · hold ${pattern.holdSeconds} · ${pattern.exhaleSeconds} out`
     : `${pattern.inhaleSeconds} in · ${pattern.exhaleSeconds} out`;
   const phaseLabel =
-    phase === "idle"
+    state.phase === "idle"
       ? "Ready"
-      : phase === "inhale"
-        ? "Breathe in"
-        : phase === "hold"
+      : state.phase === "in"
+        ? "Breathe In"
+        : state.phase === "hold"
           ? "Hold"
-          : "Breathe out";
+          : "Breathe Out";
 
   return (
-    <div className="rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-200 p-4 my-5">
+    <div className="rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 p-4 my-5">
       <div className="flex items-center gap-5">
-        <div className="relative w-24 h-24 flex-shrink-0 flex items-center justify-center">
-          <div
-            className="absolute w-20 h-20 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 shadow-md ease-in-out"
-            style={{
-              transform: `scale(${scale})`,
-              transitionProperty: "transform",
-              transitionDuration: `${duration}s`,
-              transitionTimingFunction: "ease-in-out",
-            }}
+        <div className="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
+          <BreathingLotus
+            openness={state.openness}
+            phase={state.phase}
+            className="w-28 h-28"
           />
-          <span className="relative text-white font-bold text-2xl drop-shadow-sm">
-            {active ? secondsLeft : ""}
-          </span>
+          {active && (
+            <span className="absolute text-white font-bold text-2xl drop-shadow-md pointer-events-none">
+              {state.secondsLeft}
+            </span>
+          )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs uppercase tracking-wide text-cyan-700 font-semibold">
+          <p className="text-xs uppercase tracking-wide text-amber-700 font-semibold">
             Try the pattern
           </p>
-          <p className="text-sm font-semibold text-cyan-900 mt-0.5">
+          <p className="text-sm font-semibold text-amber-900 mt-0.5">
             {patternLabel}
           </p>
-          <p className="text-sm text-cyan-800 mt-1">
+          <p className="text-sm text-amber-800 mt-1">
             {active ? (
               <>
                 <span className="font-semibold">{phaseLabel}</span> · round{" "}
-                {round} of {rounds}
+                {state.round} of {rounds}
               </>
             ) : (
               <>
@@ -159,7 +174,7 @@ export function MiniBreathingDemo({
                 size="sm"
                 variant="outline"
                 onClick={stop}
-                className="border-cyan-300 text-cyan-800 hover:bg-cyan-100"
+                className="border-amber-300 text-amber-800 hover:bg-amber-100"
               >
                 <Square className="w-4 h-4 mr-1.5" /> Stop
               </Button>
@@ -167,7 +182,7 @@ export function MiniBreathingDemo({
               <Button
                 size="sm"
                 onClick={start}
-                className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white"
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
               >
                 <Play className="w-4 h-4 mr-1.5" /> Try it now
               </Button>
