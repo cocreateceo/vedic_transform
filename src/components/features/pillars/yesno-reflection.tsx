@@ -297,8 +297,16 @@ function StepCard({
 
       <p className="text-gray-700 leading-relaxed mb-2">{step.description}</p>
 
+      {/*
+        key={stepIndex} on every practice surface forces a fresh mount
+        when the user jumps between steps. Without it, React reuses the
+        same component instance and the previous step's internal state
+        (active timer, secondsLeft, played audio) bleeds into the new
+        step.
+       */}
       {step.practice?.kind === "breathing" && (
         <MiniBreathingDemo
+          key={stepIndex}
           pattern={step.practice.pattern}
           onComplete={() => setPracticeDone(true)}
         />
@@ -332,6 +340,7 @@ function StepCard({
 
       {step.practice?.kind === "gif" && (
         <GifPractice
+          key={stepIndex}
           src={step.practice.src}
           alt={step.title}
           caption={step.practice.caption}
@@ -344,6 +353,7 @@ function StepCard({
 
       {step.practice?.kind === "timer" && (
         <TimerPractice
+          key={stepIndex}
           totalSeconds={step.practice.totalSeconds}
           label={step.practice.label}
           guidance={step.practice.guidance}
@@ -354,6 +364,7 @@ function StepCard({
 
       {step.practice?.kind === "audio" && (
         <AudioPractice
+          key={stepIndex}
           src={step.practice.src}
           title={step.practice.title}
           guidance={step.practice.guidance}

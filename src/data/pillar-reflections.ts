@@ -272,6 +272,14 @@ const HEALING_STEPS: YesNoStep[] = [
     title: "Forgiveness",
     description:
       "Forgiveness isn't condoning — it's releasing the energetic weight you carry. The person who benefits most is you.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 45,
+      label: "Forgiveness practice (45s)",
+      guidance:
+        "Bring to mind someone you're holding something against — including yourself. Silently say: \"I forgive you. I release this. I let this go.\" Repeat as the timer runs. Let the body soften with each pass.",
+      mandatory: true,
+    },
     question:
       "Did you offer forgiveness to someone today — including yourself — even silently?",
     successMessage:
@@ -448,6 +456,14 @@ const BRAHMAN_STEPS: YesNoStep[] = [
     title: "Witness Awareness",
     description:
       "Behind every thought, feeling, and sensation is the awareness watching them. Resting in that awareness — even briefly — is the doorway home.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 60,
+      label: "Witness practice (60s)",
+      guidance:
+        "Close your eyes. Notice a thought arise. Now ask: \"Who is aware of this thought?\" Don't answer in words — just notice the awareness itself. Rest there. When the mind wanders, just notice that too, and return.",
+      mandatory: true,
+    },
     question:
       "Did you take a moment today to notice — \"I am the awareness watching this\" — and rest there?",
     successMessage:
@@ -475,6 +491,14 @@ const BRAHMAN_STEPS: YesNoStep[] = [
     title: "Nature Connection",
     description:
       "Truly seeing nature — without the filter of thought — is itself a connection to Brahman. A tree, the sky, a leaf. Just look.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 30,
+      label: "Look at one thing (30s)",
+      guidance:
+        "Look out the nearest window — or at a plant, the sky, even your own hand. Don't analyze. Don't name. Just look. Let the seeing happen without the thinking.",
+      mandatory: true,
+    },
     question:
       "Did you spend a moment today truly seeing nature — a tree, the sky, the breath of wind?",
     successMessage:
@@ -559,6 +583,14 @@ const MANIFESTATION_STEPS: YesNoStep[] = [
     title: "Gratitude for the Future",
     description:
       "Feeling grateful for what you're creating — as if it's already real — pulls it forward more powerfully than wanting ever does.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 30,
+      label: "Feel it as already real (30s)",
+      guidance:
+        "Close your eyes. Silently say: \"Thank you for ___\" — your 48-day goal, in the present tense. Feel the gratitude in the body, as if it were already done. The body doesn't distinguish past from future.",
+      mandatory: true,
+    },
     question:
       "Did you feel gratitude today for what you're manifesting — as if it's already real?",
     successMessage:
@@ -570,6 +602,14 @@ const MANIFESTATION_STEPS: YesNoStep[] = [
     title: "Spoken Affirmation",
     description:
       "Saying your goal aloud — in present tense, with feeling — engages both voice and ear and rewires faster than silent thought.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 20,
+      label: "Say it aloud, three times (20s)",
+      guidance:
+        "Now: say your goal aloud, in one sentence, present tense — \"I am ___\". Say it three times, slowly. Let yourself hear it. Mean it.",
+      mandatory: true,
+    },
     question:
       "Did you speak your goal aloud today as a present-tense affirmation?",
     successMessage:
