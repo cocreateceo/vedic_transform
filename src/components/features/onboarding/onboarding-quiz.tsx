@@ -377,20 +377,21 @@ export function OnboardingQuiz() {
             Back
           </button>
 
-          <button
-            onClick={handleSkipStep}
-            disabled={saving}
-            aria-label={
-              isLastStep
-                ? "Skip this question and finish setup"
-                : "Skip this question and continue"
-            }
-            className="px-4 py-2 text-xs font-medium text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            Skip this question &rarr;
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleSkipStep}
+              disabled={saving}
+              aria-label={
+                isLastStep
+                  ? "Skip this question and finish setup"
+                  : "Skip this question and continue"
+              }
+              className="px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-600 underline-offset-2 hover:underline transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              Skip this question
+            </button>
 
-          {step.type === "multi" || isLastStep ? (
+            {step.type === "multi" || isLastStep ? (
             <button
               onClick={isLastStep ? handleComplete : handleNext}
               disabled={!isStepComplete() || saving}
@@ -411,6 +412,7 @@ export function OnboardingQuiz() {
               )}
             </button>
           ) : null}
+          </div>
         </div>
       </div>
     </div>
