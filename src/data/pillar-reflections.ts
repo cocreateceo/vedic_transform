@@ -242,6 +242,14 @@ const HEALING_STEPS: YesNoStep[] = [
     title: "Healing Visualization",
     description:
       "Visualizing healing light or energy moving through the body activates a real physiological relaxation response.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 60,
+      label: "Guided visualization (60s)",
+      guidance:
+        "Close your eyes. Picture a warm golden light entering through the crown of your head. Slowly let it move down — through your face, neck, shoulders, chest, belly, hips, legs, feet — melting tension wherever it lands.",
+      mandatory: true,
+    },
     question:
       "Did you spend a few minutes visualizing healing light or energy moving through your body?",
     successMessage:
@@ -275,6 +283,14 @@ const HEALING_STEPS: YesNoStep[] = [
     title: "Loving-Kindness (Metta)",
     description:
       "Sending good wishes — even silently, even to strangers — measurably improves your own nervous system within minutes.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 90,
+      label: "Metta practice (90s)",
+      guidance:
+        "Bring to mind someone you love. Silently say toward them: \"May you be happy. May you be safe. May you be at peace.\" Then do the same for yourself, then a friend, then a stranger, then a difficult person.",
+      mandatory: true,
+    },
     question:
       "Did you send a moment of loving-kindness to someone today (friend, stranger, or difficult person)?",
     successMessage:
@@ -342,6 +358,14 @@ const SANDHYA_STEPS: YesNoStep[] = [
     title: "Gayatri Mantra",
     description:
       "The Gayatri Mantra (Om Bhur Bhuvah Svaha…) is the most universal Sandhya prayer — chanted at the day's transitions for over 3,000 years.",
+    practice: {
+      kind: "audio",
+      src: "/audio/library/mantra-gayatri.mp3",
+      title: "Gayatri Mantra — listen, then chant along",
+      guidance:
+        "Press play. Listen through once to learn the rhythm, then chant along silently or aloud.",
+      mandatory: true,
+    },
     question: "Did you chant or silently recite the Gayatri Mantra today?",
     successMessage:
       "Excellent. You joined a chain of practitioners stretching back millennia. The vibration alone changes the field.",
@@ -462,6 +486,14 @@ const BRAHMAN_STEPS: YesNoStep[] = [
     title: "Mantra Japa",
     description:
       "Mantra repetition — Om, So Ham, Aham Brahmasmi — is the most direct technique for quieting the mind and feeling the underlying field.",
+    practice: {
+      kind: "audio",
+      src: "/audio/library/mantra-om-namah-shivaya.mp3",
+      title: "Om Namah Shivaya — listen, then repeat",
+      guidance:
+        "Press play. Listen through once, then silently repeat the mantra at your own pace.",
+      mandatory: true,
+    },
     question:
       "Did you chant or silently repeat a mantra (Om, So Ham, Aham Brahmasmi) for 5+ minutes?",
     successMessage:
@@ -486,6 +518,14 @@ const MANIFESTATION_STEPS: YesNoStep[] = [
     title: "Daily Vision",
     description:
       "Visualizing your goal as already achieved — in vivid sensory detail — trains the subconscious to look for the path.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 60,
+      label: "Visualization (60s)",
+      guidance:
+        "Close your eyes. Picture your 48-day goal already achieved — in vivid sensory detail. What do you see? What do you hear? Who is with you? What does it feel like in your body to be there?",
+      mandatory: true,
+    },
     question:
       "Did you visualize your 48-day goal as already achieved today (in vivid sensory detail)?",
     successMessage:

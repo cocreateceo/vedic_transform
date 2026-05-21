@@ -504,6 +504,14 @@ const MORNING_STEPS: YesNoStep[] = [
     title: "Connect to Awareness",
     description:
       "1-2 minutes of stillness. Sit quietly and feel your connection to something larger than yourself.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 60,
+      label: "Silent stillness (60s)",
+      guidance:
+        "Sit comfortably. Eyes closed or softly lowered. Notice your breath without trying to change it. Notice that the awareness watching the breath is watching everything else too. Rest in that awareness.",
+      mandatory: true,
+    },
     question: "Did you sit in stillness today?",
     successMessage:
       "Beautiful. That stillness is the foundation of every other practice. You're building it daily.",
@@ -524,6 +532,14 @@ const MORNING_STEPS: YesNoStep[] = [
     title: "Visualization",
     description:
       "2 minutes seeing yourself succeeding in your 48-day goal — in vivid detail.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 60,
+      label: "Visualization (60s)",
+      guidance:
+        "Close your eyes. See yourself moving through today with focus, kindness, and energy. See the 48-day goal closer than yesterday. Feel it in the body as if it were already true.",
+      mandatory: true,
+    },
     question: "Did you visualize your goal today?",
     successMessage:
       "Beautiful. Seeing it daily makes the path real. Your subconscious starts working on it whether you're aware of it or not.",
@@ -1106,6 +1122,14 @@ const BREATHING_STEPS: YesNoStep[] = [
     title: "Stillness",
     description:
       "Stillness is where the nervous system finally lets go. Your body knows what to do — it just needs permission.",
+    practice: {
+      kind: "timer",
+      totalSeconds: 90,
+      label: "Sit in silence (90s)",
+      guidance:
+        "Just sit. Don't try to meditate. Don't follow your breath. Don't fix your posture. Just sit. The mind will quiet on its own — let it.",
+      mandatory: true,
+    },
     question:
       "Did you spend at least 5 quiet minutes today with no input — no podcast, music, or screen?",
     successMessage:

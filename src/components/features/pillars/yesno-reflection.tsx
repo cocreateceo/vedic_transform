@@ -8,6 +8,8 @@ import {
   MiniBreathingDemo,
   type BreathPattern,
 } from "@/components/features/pillars/mini-breathing-demo";
+import { TimerPractice } from "@/components/features/pillars/timer-practice";
+import { AudioPractice } from "@/components/features/pillars/audio-practice";
 import { PexelsImage } from "@/components/ui/pexels-image";
 
 // Shared one-question-at-a-time reflection used by the Morning Initiation,
@@ -61,6 +63,31 @@ export type StepPractice =
       poseList?: string[];
       attribution?: { name: string; url?: string; source?: string };
       mandatory?: { practiceSeconds: number; label?: string };
+    }
+  /**
+   * Countdown timer with a guidance script — used for silent sitting,
+   * visualization, metta. Mandatory mode keeps the parent's Yes
+   * disabled until the timer reaches zero.
+   */
+  | {
+      kind: "timer";
+      totalSeconds: number;
+      label?: string;
+      guidance?: string;
+      mandatory?: boolean;
+    }
+  /**
+   * Inline audio player — used for mantra recitation and other
+   * listen-along practices. Mandatory mode requires playback to
+   * reach the audio's end event before Yes unlocks.
+   */
+  | {
+      kind: "audio";
+      src: string;
+      title?: string;
+      guidance?: string;
+      attribution?: { name: string; url?: string; source?: string };
+      mandatory?: boolean;
     };
 
 export type YesNoStep = {
@@ -244,7 +271,9 @@ function StepCard({
   // phase, so re-answering forces a re-practice.
   const requiresPractice =
     (step.practice?.kind === "breathing" && step.practice.mandatory === true) ||
-    (step.practice?.kind === "gif" && step.practice.mandatory !== undefined);
+    (step.practice?.kind === "gif" && step.practice.mandatory !== undefined) ||
+    (step.practice?.kind === "timer" && step.practice.mandatory === true) ||
+    (step.practice?.kind === "audio" && step.practice.mandatory === true);
   const [practiceDone, setPracticeDone] = useState(false);
   useEffect(() => {
     setPracticeDone(false);
@@ -307,6 +336,27 @@ function StepCard({
           alt={step.title}
           caption={step.practice.caption}
           poseList={step.practice.poseList}
+          attribution={step.practice.attribution}
+          mandatory={step.practice.mandatory}
+          onComplete={() => setPracticeDone(true)}
+        />
+      )}
+
+      {step.practice?.kind === "timer" && (
+        <TimerPractice
+          totalSeconds={step.practice.totalSeconds}
+          label={step.practice.label}
+          guidance={step.practice.guidance}
+          mandatory={step.practice.mandatory}
+          onComplete={() => setPracticeDone(true)}
+        />
+      )}
+
+      {step.practice?.kind === "audio" && (
+        <AudioPractice
+          src={step.practice.src}
+          title={step.practice.title}
+          guidance={step.practice.guidance}
           attribution={step.practice.attribution}
           mandatory={step.practice.mandatory}
           onComplete={() => setPracticeDone(true)}
