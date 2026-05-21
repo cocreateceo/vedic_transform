@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Play, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -56,6 +56,13 @@ export function MiniBreathingDemo({
     pattern.inhaleSeconds + (pattern.holdSeconds ?? 0) + pattern.exhaleSeconds;
   const totalSec = cycleSec * rounds;
 
+  // Stabilize the optional onComplete reference so a parent re-render
+  // doesn't tear down + re-create the 1s interval mid-tick.
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
   useEffect(() => {
     if (!active) return;
     const id = setInterval(() => {
@@ -63,14 +70,14 @@ export function MiniBreathingDemo({
         const next = e + 1;
         if (next >= totalSec) {
           setActive(false);
-          if (onComplete) onComplete();
+          if (onCompleteRef.current) onCompleteRef.current();
           return 0;
         }
         return next;
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [active, totalSec, onComplete]);
+  }, [active, totalSec]);
 
   const { phase, secondsLeft, round } = active
     ? phaseAt(elapsed, pattern)

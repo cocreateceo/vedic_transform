@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Play, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -28,11 +28,22 @@ export function TimerPractice({
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [done, setDone] = useState(false);
 
-  // Reference-only timers unlock immediately so the parent's Yes
-  // doesn't stay disabled forever.
+  // The parent passes `onComplete` as an inline arrow which is a fresh
+  // reference every render. Capture it in a ref so the interval-
+  // creating effect doesn't depend on it — otherwise every parent
+  // re-render clears and re-creates the 1s interval, resetting the
+  // tick countdown and effectively stalling the timer.
+  const onCompleteRef = useRef(onComplete);
   useEffect(() => {
-    if (!mandatory) onComplete();
-  }, [mandatory, onComplete]);
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  // Reference-only timers unlock immediately so the parent's Yes
+  // doesn't stay disabled forever. Mandatory is a primitive boolean,
+  // so this effect only fires once per mount (not on every render).
+  useEffect(() => {
+    if (!mandatory) onCompleteRef.current();
+  }, [mandatory]);
 
   useEffect(() => {
     if (!active) return;
@@ -41,14 +52,14 @@ export function TimerPractice({
         if (s <= 1) {
           setActive(false);
           setDone(true);
-          onComplete();
+          onCompleteRef.current();
           return 0;
         }
         return s - 1;
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [active, onComplete]);
+  }, [active]);
 
   const elapsed = totalSeconds - secondsLeft;
   const progress = totalSeconds > 0 ? elapsed / totalSeconds : 0;

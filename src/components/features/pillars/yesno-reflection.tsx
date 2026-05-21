@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Lightbulb, Play, RotateCcw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils/cn";
@@ -503,10 +503,18 @@ function GifPractice({
   const [secondsLeft, setSecondsLeft] = useState(total);
   const [done, setDone] = useState(false);
 
+  // Stabilize onComplete via ref so parent re-renders don't tear down
+  // the 1s interval mid-tick (same pattern as TimerPractice and
+  // MiniBreathingDemo).
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
   // Reference-only GIFs don't need engagement — unlock immediately.
   useEffect(() => {
-    if (!mandatory) onComplete();
-  }, [mandatory, onComplete]);
+    if (!mandatory) onCompleteRef.current();
+  }, [mandatory]);
 
   useEffect(() => {
     if (!active) return;
@@ -515,14 +523,14 @@ function GifPractice({
         if (s <= 1) {
           setActive(false);
           setDone(true);
-          onComplete();
+          onCompleteRef.current();
           return 0;
         }
         return s - 1;
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [active, onComplete]);
+  }, [active]);
 
   return (
     <div className="my-5 rounded-xl overflow-hidden border border-amber-200 bg-amber-50/40 p-3">

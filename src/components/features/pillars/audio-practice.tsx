@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 
+
 // Inline audio practice — used for mantra recitation and CEO voice
 // explanations. When `mandatory` is true the parent step's "Yes"
 // stays locked until the audio plays through to its end event;
@@ -27,9 +28,16 @@ export function AudioPractice({
   const audioRef = useRef<HTMLAudioElement>(null);
   const [played, setPlayed] = useState(false);
 
+  // Same ref pattern as the other practice components — keeps the
+  // immediate-unlock effect from firing on every parent render.
+  const onCompleteRef = useRef(onComplete);
   useEffect(() => {
-    if (!mandatory) onComplete();
-  }, [mandatory, onComplete]);
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
+    if (!mandatory) onCompleteRef.current();
+  }, [mandatory]);
 
   return (
     <div className="my-5 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 p-4">
@@ -48,7 +56,7 @@ export function AudioPractice({
         className="w-full"
         onEnded={() => {
           setPlayed(true);
-          onComplete();
+          onCompleteRef.current();
         }}
       />
       {mandatory && (

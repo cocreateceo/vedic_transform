@@ -179,42 +179,6 @@
     "pexels_url": "https://www.pexels.com/photo/woman-sitting-in-yoga-position-6648590/",
     "alt": "A woman practicing yoga indoors in a peaceful environment, focusing on mindfulness and relaxation."
   },
-  "posture-surya-namaskar": {
-    "query": "sun salutation yoga warrior pose outdoor",
-    "width": 9286,
-    "height": 6754,
-    "photographer": "Jordi Costa Tomé",
-    "photographer_url": "https://www.pexels.com/@jordicosta",
-    "pexels_url": "https://www.pexels.com/photo/silhouette-of-woman-practicing-yoga-at-sunset-beach-32658879/",
-    "alt": "A woman practices yoga under palm trees during a vibrant sunset on a tropical beach."
-  },
-  "posture-morning-stretch": {
-    "query": "morning stretch yoga sunrise window",
-    "width": 2176,
-    "height": 3264,
-    "photographer": "Mehmet Turgut  Kirkgoz",
-    "photographer_url": "https://www.pexels.com/@tkirkgoz",
-    "pexels_url": "https://www.pexels.com/photo/silhouette-of-person-at-sunrise-in-mountainous-landscape-37268457/",
-    "alt": "A person silhouetted against a vibrant sunrise over a mountainous landscape, displaying a sense of serenity and adventure."
-  },
-  "posture-strength": {
-    "query": "bodyweight push up plank floor exercise",
-    "width": 6700,
-    "height": 4467,
-    "photographer": "Maksim Goncharenok",
-    "photographer_url": "https://www.pexels.com/@maksgelatin",
-    "pexels_url": "https://www.pexels.com/photo/woman-in-black-tank-top-and-black-leggings-doing-yoga-4775196/",
-    "alt": "A woman in activewear performs a plank exercise outdoors on a sunny day."
-  },
-  "posture-walking": {
-    "query": "evening walk path nature peaceful",
-    "width": 6270,
-    "height": 4180,
-    "photographer": "Helena Jankovičová Kováčová",
-    "photographer_url": "https://www.pexels.com/@helen1",
-    "pexels_url": "https://www.pexels.com/photo/people-walking-on-footpath-in-countryside-20410814/",
-    "alt": "Two people walking along a rural path at sunset with bare trees silhouetted."
-  },
   "posture-body-scan": {
     "query": "savasana yoga relaxation lying down",
     "width": 3500,
@@ -223,23 +187,5 @@
     "photographer_url": "https://www.pexels.com/@arina-krasnikova",
     "pexels_url": "https://www.pexels.com/photo/woman-lying-down-on-floor-relaxing-and-meditating-6998214/",
     "alt": "Woman lying on a yoga mat indoors, meditating and relaxing in a calm setting."
-  },
-  "posture-outdoor": {
-    "query": "yoga outdoors grass park barefoot",
-    "width": 3000,
-    "height": 2000,
-    "photographer": "Polina Tankilevitch",
-    "photographer_url": "https://www.pexels.com/@polina-tankilevitch",
-    "pexels_url": "https://www.pexels.com/photo/a-woman-in-pink-bodysuit-stretching-her-legs-at-the-park-5256333/",
-    "alt": "Redhead woman stretching in a park wearing a pink bodysuit, surrounded by trees."
-  },
-  "posture-hourly-standing": {
-    "query": "person stretching standing office desk",
-    "width": 6720,
-    "height": 4480,
-    "photographer": "www.kaboompics.com",
-    "photographer_url": "https://www.pexels.com/@karola-g",
-    "pexels_url": "https://www.pexels.com/photo/woman-exercising-with-laptop-and-headphones-5899200/",
-    "alt": "Woman exercising with headphones in a cozy home office setting. Lifestyle and wellness focus."
   }
 }
