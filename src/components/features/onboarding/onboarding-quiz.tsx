@@ -201,9 +201,24 @@ export function OnboardingQuiz() {
   }
 
   async function handleSkip() {
+    // Skips the *entire* onboarding flow. Wired to the header "Exit setup"
+    // button. Different from handleSkipStep below, which advances past a
+    // single question while keeping the user inside the flow.
     setSaving(true);
     await markOnboardingComplete();
     router.push("/dashboard");
+  }
+
+  async function handleSkipStep() {
+    // Advances past the current question without recording an answer for
+    // it. On the last step, treats the skip as a graceful completion so
+    // the user still ends up on the dashboard with their prior answers
+    // saved.
+    if (isLastStep) {
+      await handleComplete();
+      return;
+    }
+    setCurrentStep((s) => s + 1);
   }
 
   const isStepComplete = () => {
@@ -235,9 +250,10 @@ export function OnboardingQuiz() {
         <button
           onClick={handleSkip}
           disabled={saving}
+          aria-label="Exit setup and go to the dashboard"
           className="text-sm text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
         >
-          {saving ? "Skipping…" : "Skip for now"}
+          {saving ? "Exiting…" : "Exit setup"}
         </button>
       </div>
 
@@ -359,6 +375,19 @@ export function OnboardingQuiz() {
             className="px-6 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Back
+          </button>
+
+          <button
+            onClick={handleSkipStep}
+            disabled={saving}
+            aria-label={
+              isLastStep
+                ? "Skip this question and finish setup"
+                : "Skip this question and continue"
+            }
+            className="px-4 py-2 text-xs font-medium text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            Skip this question &rarr;
           </button>
 
           {step.type === "multi" || isLastStep ? (
