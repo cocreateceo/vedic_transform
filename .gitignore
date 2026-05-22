@@ -13,6 +13,10 @@ functions/node_modules
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/tmp_verify_shots/
+/tmp_verify_*.cjs
 
 # next.js
 /.next/

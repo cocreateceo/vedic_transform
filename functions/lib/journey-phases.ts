@@ -1,20 +1,20 @@
 // Six-phase transformation arc across the 48-day journey.
 //
 // Day 1 and Day 32 used to feel structurally identical in the UI. Phases
-// give the journey shape and the Daily Brief tone — Awakening (rhythm),
-// Cleansing (purification), Stabilization (grounding), Expansion (energy),
-// Alignment (synchronization), Integration (identity).
+// give the journey shape and the Daily Brief tone. Aligned with the
+// Vedics Design System kit: Foundation → Cleansing → Integration →
+// Expansion → Manifestation → Completion.
 //
 // Mirrored at src/lib/journey-phases.ts for frontend use. Keep both in sync
 // when adjusting boundaries or copy.
 
 export type PhaseId =
-  | 'awakening'
+  | 'foundation'
   | 'cleansing'
-  | 'stabilization'
-  | 'expansion'
-  | 'alignment'
   | 'integration'
+  | 'expansion'
+  | 'manifestation'
+  | 'completion'
   | 'completed';
 
 export interface JourneyPhase {
@@ -33,52 +33,52 @@ export interface JourneyPhase {
 
 const PHASES: JourneyPhase[] = [
   {
-    id: 'awakening',
+    id: 'foundation',
     ordinal: 1,
-    name: 'Awakening',
+    name: 'Foundation',
     range: [1, 7],
-    description: 'Building rhythm. Your nervous system begins to remember a steadier cadence.',
-    recommendedPillars: ['morning-initiation', 'sleep-optimization', 'nutrition-fasting'],
+    description: 'Lay down rhythm — wake, breath, hydration.',
+    recommendedPillars: ['morning-initiation', 'sleep-optimization'],
   },
   {
     id: 'cleansing',
     ordinal: 2,
     name: 'Cleansing',
-    range: [8, 14],
-    description: 'Purification. Breath and movement release what the body has been carrying.',
-    recommendedPillars: ['breathing-meditation', 'movement', 'nutrition-fasting'],
+    range: [8, 15],
+    description: 'Lighten the system — diet, pranayama, gratitude.',
+    recommendedPillars: ['breathing-meditation', 'nutrition-fasting'],
   },
   {
-    id: 'stabilization',
+    id: 'integration',
     ordinal: 3,
-    name: 'Stabilization',
-    range: [15, 21],
-    description: 'Grounding the habit. Mental patterns settle as the practice becomes yours.',
-    recommendedPillars: ['thoughts-intention', 'gratitude', 'breathing-meditation'],
+    name: 'Integration',
+    range: [16, 23],
+    description: 'Deepen practices, layer in healing meditation.',
+    recommendedPillars: ['healing-meditation', 'movement'],
   },
   {
     id: 'expansion',
     ordinal: 4,
     name: 'Expansion',
-    range: [22, 30],
-    description: 'Energy rises. Meditation deepens; awareness widens.',
-    recommendedPillars: ['healing-meditation', 'breathing-meditation', 'movement'],
+    range: [24, 31],
+    description: 'Sandhya, Brahman connection, sustained focus.',
+    recommendedPillars: ['sandhya-meditation', 'brahman-connection'],
   },
   {
-    id: 'alignment',
+    id: 'manifestation',
     ordinal: 5,
-    name: 'Alignment',
-    range: [31, 40],
-    description: 'The pillars synchronize. Three-times-daily rhythm of Sandhya begins to feel natural.',
-    recommendedPillars: ['sandhya-meditation', 'healing-meditation', 'gratitude'],
+    name: 'Manifestation',
+    range: [32, 41],
+    description: 'Channel intentions outward; teach what you know.',
+    recommendedPillars: ['divine-manifestation', 'gratitude'],
   },
   {
-    id: 'integration',
+    id: 'completion',
     ordinal: 6,
-    name: 'Integration',
-    range: [41, 48],
-    description: 'Identity transformation. The practice and the practitioner become one.',
-    recommendedPillars: ['brahman-connection', 'divine-manifestation', 'sandhya-meditation'],
+    name: 'Completion',
+    range: [42, 48],
+    description: 'Reflect, integrate, prepare the next mandala.',
+    recommendedPillars: ['thoughts-intention', 'movement'],
   },
 ];
 
@@ -87,7 +87,7 @@ const COMPLETED: JourneyPhase = {
   ordinal: 7,
   name: 'Completed',
   range: [49, Infinity],
-  description: 'Mandala complete. The cycle has been walked end to end.',
+  description: 'Mandala walked end to end.',
   recommendedPillars: [],
 };
 

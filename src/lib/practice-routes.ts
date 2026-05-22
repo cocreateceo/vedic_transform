@@ -1,57 +1,67 @@
 // Pillar-slug → "where to actually do the practice" mapping.
 //
-// 5 of the 11 pillars have an interactive session timer in /sessions.
-// Each of those timers already POSTs /data/checkin on completion (see
-// src/components/features/sessions/*.tsx → SESSION_PILLAR), so routing
-// the dashboard CTA here closes the bridge: Today's Practice → run timer
-// → check-in fires → karma updates. No code change in the timers needed.
+// All 11 pillars now have a dedicated interactive Sessions practice except
+// `gratitude` and `thoughts-intention`, which route to the Journal page
+// (writing-based practices). Aligned to the Vedics Design System kit.
 //
-// Pillars without a timer route to the pillar detail page as before.
+// Each Sessions tab fires /data/checkin on completion (see
+// src/components/features/sessions/*.tsx → SESSION_PILLAR), so routing
+// the dashboard CTA / pillar card here closes the bridge automatically.
 
 export type SessionKey =
   | "morning-routine"
-  | "meditation"
-  | "breathing"
   | "fasting"
-  | "movement";
+  | "breathing"
+  | "movement"
+  | "meditation"
+  | "sandhya"
+  | "brahman"
+  | "manifestation"
+  | "sleep";
 
 // Order MUST match the `tabs` array in src/app/(main)/sessions/page.tsx so
 // the page can resolve the URL param back to a tab index in one line.
 //
-// Ordered to match the pillar ID sequence (1=Morning, 2=Fasting, 4=Breathing,
-// 5=Movement, 6=Meditation) so the daily-ritual flow Morning → Fasting →
-// Breathing → Movement → Meditation reads top-to-bottom naturally.
+// Ordered to match the pillar ID sequence:
+//   1 Morning · 2 Fasting · 4 Breathing · 5 Movement · 6 Meditation ·
+//   8 Sandhya · 9 Brahman · 10 Manifestation · 11 Sleep
 export const SESSION_KEYS: SessionKey[] = [
   "morning-routine",
   "fasting",
   "breathing",
   "movement",
   "meditation",
+  "sandhya",
+  "brahman",
+  "manifestation",
+  "sleep",
 ];
 
 const PILLAR_TO_SESSION: Record<string, SessionKey> = {
   "morning-initiation": "morning-routine",
-  "healing-meditation": "meditation",
-  // Sandhya is conceptually a 3x/day meditation — the generic Meditation
-  // timer is the closest practice we have for it today.
-  "sandhya-meditation": "meditation",
-  "breathing-meditation": "breathing",
   "nutrition-fasting": "fasting",
+  "breathing-meditation": "breathing",
   "movement": "movement",
+  "healing-meditation": "meditation",
+  "sandhya-meditation": "sandhya",
+  "brahman-connection": "brahman",
+  "divine-manifestation": "manifestation",
+  "sleep-optimization": "sleep",
 };
 
 const PILLAR_TO_JOURNAL: Record<string, "gratitude" | "intention" | "manifestation"> = {
   "gratitude": "gratitude",
   "thoughts-intention": "intention",
-  "divine-manifestation": "manifestation",
 };
 
 /**
- * Returns the route the dashboard's "Today's Practice" CTA should send the
- * user to for the given pillar. Three buckets:
- *   - Session timer  → /sessions?practice=<key>  (auto check-in on completion)
- *   - Journal entry  → /journal?action=<kind>    (gratitude / intention / manifestation)
- *   - Otherwise      → /pillars/<slug>           (existing pillar-detail flow)
+ * Returns the route the dashboard's "Today's Practice" CTA — and the
+ * Pillars catalog cards — should send the user to for the given pillar.
+ *
+ * Three buckets:
+ *   - Session timer  → /sessions?practice=<key>  (9 pillars; auto check-in on completion)
+ *   - Journal entry  → /journal?action=<kind>    (gratitude, thoughts-intention)
+ *   - Otherwise      → /pillars/<slug>           (fallback; no pillar currently lands here)
  */
 export function practiceRouteForPillar(pillarSlug: string): string {
   const session = PILLAR_TO_SESSION[pillarSlug];

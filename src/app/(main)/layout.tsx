@@ -4,6 +4,7 @@ import { AuthGuard } from "@/components/auth-guard";
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { CommandPalette } from "@/components/layout/command-palette";
 import { useAuth } from "@/context/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -34,6 +35,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           <main className="p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">{children}</main>
         </div>
         <MobileNav />
+        <CommandPalette />
       </div>
     </AuthGuard>
   );

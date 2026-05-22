@@ -7,6 +7,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BreathingVisualizer } from "@/components/features/pillars/breathing-visualizer";
 import { PillarHero, PillarHeroStyles } from "@/components/features/pillars/pillar-hero";
+import { PillarAnimation } from "@/components/features/pillars/pillar-animations";
+
+// Slugs that have a custom animated scene in PillarAnimation (8 of 11). The
+// remaining three — breathing-meditation, movement, healing-meditation —
+// fall back to the existing PillarHero, which already has rich
+// video/image backdrops tuned for those pillars.
+const PILLARS_WITH_ANIMATION = new Set([
+  "morning-initiation",
+  "nutrition-fasting",
+  "thoughts-intention",
+  "gratitude",
+  "sandhya-meditation",
+  "brahman-connection",
+  "divine-manifestation",
+  "sleep-optimization",
+]);
 import { PillarContentPanel } from "@/components/features/pillars/pillar-content-panel";
 import {
   YesNoReflection,
@@ -294,12 +310,21 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       </Link>
 
       <PillarHeroStyles />
-      <PillarHero
-        slug={pillar.slug}
-        title={pillar.name}
-        sanskritName={pillar.sanskritName}
-        className="mb-8"
-      />
+      {/* Custom animated scene for the 8 pillars that have one; the other
+          three (breathing / movement / healing meditation) fall through to
+          the existing PillarHero with its video/image backdrops. */}
+      {PILLARS_WITH_ANIMATION.has(pillar.slug) ? (
+        <div className="mb-8">
+          <PillarAnimation slug={pillar.slug} />
+        </div>
+      ) : (
+        <PillarHero
+          slug={pillar.slug}
+          title={pillar.name}
+          sanskritName={pillar.sanskritName}
+          className="mb-8"
+        />
+      )}
 
       {/* Header */}
       <div className="flex items-start gap-6 mb-8">

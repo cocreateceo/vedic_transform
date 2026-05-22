@@ -62,7 +62,7 @@ Scripted replies for dosha, pranayama, ayurveda, and the 48-day mandala.
 |---|---|
 | `OnboardingFlow` (4 steps) | Welcome → goal-picker → 3-pillar focus → name confirm; deep-links to dashboard on finish. Reachable via signup. |
 | `NotFoundPage` | Branded 404 for unknown routes. |
-| `CommandPalette` | ⌘K spotlight-style route switcher with Lucide icons (toggleable from any screen). |
+| `CommandPalette` | ⌘K spotlight-style route switcher with Lucide icons (toggleable from any screen). Production equivalent at `src/components/layout/command-palette.tsx`, mounted in `src/app/(main)/layout.tsx` — groups commands into Navigate / Sessions / Settings, with deep-links into each Sessions tab. |
 | `LoadingSkeleton` / `EmptyState` | Shared shimmer + empty primitives reused across Journal, Library, Mood, etc. |
 | `StreakShield` / `AvatarUploader` / `PhaseReflectionCard` | Polish components surfaced inside Dashboard / Settings. |
 

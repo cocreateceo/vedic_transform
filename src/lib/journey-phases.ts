@@ -2,14 +2,18 @@
 //
 // Lambdas can't import from src/, so the phase definitions live in two
 // places. Update both when adjusting boundaries or copy.
+//
+// Phase names + ranges + gradient palette aligned to the canonical Vedics
+// Design System kit (Foundation → Cleansing → Integration → Expansion →
+// Manifestation → Completion).
 
 export type PhaseId =
-  | 'awakening'
+  | 'foundation'
   | 'cleansing'
-  | 'stabilization'
-  | 'expansion'
-  | 'alignment'
   | 'integration'
+  | 'expansion'
+  | 'manifestation'
+  | 'completion'
   | 'completed';
 
 export interface JourneyPhase {
@@ -22,80 +26,80 @@ export interface JourneyPhase {
   /** Subtle background tone for chips/badges. */
   tone: string;
   /** Full-weight gradient tone for the dashboard banner. Each phase owns
-   *  a distinct elemental palette so "Phase 2: Cleansing" actually LOOKS
-   *  different from "Phase 4: Expansion" instead of being decorative text. */
+   *  a distinct elemental palette so the dashboard literally changes
+   *  color when the user crosses into a new phase. */
   bannerGradient: string;
-  /** Optional one-line phase verb pair for the all-focus-done celebration
-   *  state — concrete language that names what's stabilizing this phase. */
+  /** Short phase-specific phrase shown on the focus-complete celebration
+   *  card. Concrete and grounded; not "consciousness expanding" talk. */
   completionPhrase: string;
 }
 
 const PHASES: JourneyPhase[] = [
   {
-    id: 'awakening',
+    id: 'foundation',
     ordinal: 1,
-    name: 'Awakening',
+    name: 'Foundation',
     range: [1, 7],
-    description: 'Building rhythm. Your nervous system begins to remember a steadier cadence.',
-    recommendedPillars: ['morning-initiation', 'sleep-optimization', 'nutrition-fasting'],
+    description: 'Lay down rhythm — wake, breath, hydration.',
+    recommendedPillars: ['morning-initiation', 'sleep-optimization'],
     tone: 'bg-amber-50 text-amber-800 border-amber-200',
     bannerGradient: 'from-amber-500 to-orange-500',
-    completionPhrase: 'Rhythm preserved.',
+    completionPhrase: 'Rhythm established.',
   },
   {
     id: 'cleansing',
     ordinal: 2,
     name: 'Cleansing',
-    range: [8, 14],
-    description: 'Purification. Breath and movement release what the body has been carrying.',
-    recommendedPillars: ['breathing-meditation', 'movement', 'nutrition-fasting'],
+    range: [8, 15],
+    description: 'Lighten the system — diet, pranayama, gratitude.',
+    recommendedPillars: ['breathing-meditation', 'nutrition-fasting'],
     tone: 'bg-sky-50 text-sky-800 border-sky-200',
     bannerGradient: 'from-sky-500 to-cyan-500',
     completionPhrase: 'Breath cleared.',
   },
   {
-    id: 'stabilization',
+    id: 'integration',
     ordinal: 3,
-    name: 'Stabilization',
-    range: [15, 21],
-    description: 'Grounding the habit. Mental patterns settle as the practice becomes yours.',
-    recommendedPillars: ['thoughts-intention', 'gratitude', 'breathing-meditation'],
-    tone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-    bannerGradient: 'from-emerald-500 to-teal-500',
-    completionPhrase: 'Mind grounded.',
+    name: 'Integration',
+    range: [16, 23],
+    description: 'Deepen practices, layer in healing meditation.',
+    recommendedPillars: ['healing-meditation', 'movement'],
+    tone: 'bg-violet-50 text-violet-800 border-violet-200',
+    bannerGradient: 'from-violet-500 to-indigo-500',
+    completionPhrase: 'Healing deepened.',
   },
   {
     id: 'expansion',
     ordinal: 4,
     name: 'Expansion',
-    range: [22, 30],
-    description: 'Energy rises. Meditation deepens; awareness widens.',
-    recommendedPillars: ['healing-meditation', 'breathing-meditation', 'movement'],
-    tone: 'bg-orange-50 text-orange-800 border-orange-200',
-    bannerGradient: 'from-orange-500 to-amber-600',
+    range: [24, 31],
+    description: 'Sandhya, Brahman connection, sustained focus.',
+    recommendedPillars: ['sandhya-meditation', 'brahman-connection'],
+    tone: 'bg-pink-50 text-pink-800 border-pink-200',
+    bannerGradient: 'from-pink-500 to-rose-500',
     completionPhrase: 'Awareness widened.',
   },
   {
-    id: 'alignment',
+    id: 'manifestation',
     ordinal: 5,
-    name: 'Alignment',
-    range: [31, 40],
-    description: 'The pillars synchronize. Three-times-daily Sandhya begins to feel natural.',
-    recommendedPillars: ['sandhya-meditation', 'healing-meditation', 'gratitude'],
-    tone: 'bg-indigo-50 text-indigo-800 border-indigo-200',
-    bannerGradient: 'from-indigo-500 to-purple-500',
-    completionPhrase: 'Practice aligned.',
+    name: 'Manifestation',
+    range: [32, 41],
+    description: 'Channel intentions outward; teach what you know.',
+    recommendedPillars: ['divine-manifestation', 'gratitude'],
+    tone: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    bannerGradient: 'from-emerald-500 to-teal-500',
+    completionPhrase: 'Intention set.',
   },
   {
-    id: 'integration',
+    id: 'completion',
     ordinal: 6,
-    name: 'Integration',
-    range: [41, 48],
-    description: 'Identity transformation. The practice and the practitioner become one.',
-    recommendedPillars: ['brahman-connection', 'divine-manifestation', 'sandhya-meditation'],
-    tone: 'bg-violet-50 text-violet-800 border-violet-200',
-    bannerGradient: 'from-violet-500 to-amber-500',
-    completionPhrase: 'Practice integrated.',
+    name: 'Completion',
+    range: [42, 48],
+    description: 'Reflect, integrate, prepare the next mandala.',
+    recommendedPillars: ['thoughts-intention', 'movement'],
+    tone: 'bg-orange-50 text-orange-900 border-orange-300',
+    bannerGradient: 'from-amber-600 to-amber-900',
+    completionPhrase: 'Mandala complete.',
   },
 ];
 
@@ -104,7 +108,7 @@ const COMPLETED: JourneyPhase = {
   ordinal: 7,
   name: 'Completed',
   range: [49, Infinity],
-  description: 'Mandala complete. The cycle has been walked end to end.',
+  description: 'Mandala walked end to end.',
   recommendedPillars: [],
   tone: 'bg-gradient-to-r from-amber-50 to-violet-50 text-amber-900 border-amber-200',
   bannerGradient: 'from-amber-500 via-orange-500 to-violet-500',

@@ -12,6 +12,7 @@
 // recommended, rest quiet" principle.
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { apiFetch } from "@/lib/api";
 import { PILLARS, type Pillar } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
@@ -304,22 +305,39 @@ function PillarCard({
     <Link href={practiceRouteForPillar(pillar.slug)}>
       <Card
         className={cn(
-          "transition-all cursor-pointer h-full",
+          "transition-all cursor-pointer h-full overflow-hidden",
           tierClasses,
           isCompleted && "ring-2 ring-green-500 bg-green-50",
         )}
       >
-        <CardContent className="p-5 relative">
+        {/* Hero image strip — Pexels JPG per pillar, with a white fade so
+            the icon and copy beneath it have enough contrast. */}
+        <div className="relative h-24 -mx-px -mt-px overflow-hidden">
+          <Image
+            src={pillar.image}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 240px, (min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+            priority={tier === "active"}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
+        </div>
+
+        <CardContent className="p-5 pt-3 relative">
           {isCompleted && (
-            <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+            <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shadow-sm">
               <Check className="w-4 h-4 text-white" />
             </div>
           )}
+          {/* Icon tile floats over the image-to-card seam. Negative margin
+              pulls it up so it visually anchors the card. */}
           <div
             className={cn(
-              "w-12 h-12 rounded-xl flex items-center justify-center mb-3",
+              "w-12 h-12 rounded-xl flex items-center justify-center mb-3 -mt-9 relative shadow-md",
               pillar.bgColor,
             )}
+            style={{ backgroundColor: undefined }}
           >
             <Icon className="w-6 h-6" style={{ color: pillar.color }} />
           </div>

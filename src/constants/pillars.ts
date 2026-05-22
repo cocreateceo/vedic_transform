@@ -26,6 +26,8 @@ export interface Pillar {
   category: PillarCategory;
   defaultDurationMinutes: number;
   karmaPointsBase: number;
+  /** Hero image path served from /public — used on rich pillar cards. */
+  image: string;
 }
 
 export const PILLARS: Pillar[] = [
@@ -41,6 +43,7 @@ export const PILLARS: Pillar[] = [
     category: "body",
     defaultDurationMinutes: 10,
     karmaPointsBase: 15,
+    image: "/images/pillars/pillar-morning-initiation.jpg",
   },
   {
     id: 2,
@@ -54,6 +57,7 @@ export const PILLARS: Pillar[] = [
     category: "body",
     defaultDurationMinutes: 0,
     karmaPointsBase: 10,
+    image: "/images/pillars/pillar-nutrition-fasting.jpg",
   },
   {
     id: 3,
@@ -67,6 +71,7 @@ export const PILLARS: Pillar[] = [
     category: "mind",
     defaultDurationMinutes: 5,
     karmaPointsBase: 12,
+    image: "/images/pillars/pillar-thoughts-intention.jpg",
   },
   {
     id: 4,
@@ -80,6 +85,7 @@ export const PILLARS: Pillar[] = [
     category: "mind",
     defaultDurationMinutes: 15,
     karmaPointsBase: 15,
+    image: "/images/pillars/pillar-breathing-meditation.jpg",
   },
   {
     id: 5,
@@ -93,6 +99,7 @@ export const PILLARS: Pillar[] = [
     category: "body",
     defaultDurationMinutes: 30,
     karmaPointsBase: 12,
+    image: "/images/pillars/pillar-movement.jpg",
   },
   {
     id: 6,
@@ -106,6 +113,7 @@ export const PILLARS: Pillar[] = [
     category: "mind",
     defaultDurationMinutes: 20,
     karmaPointsBase: 15,
+    image: "/images/pillars/pillar-healing-meditation.jpg",
   },
   {
     id: 7,
@@ -119,6 +127,7 @@ export const PILLARS: Pillar[] = [
     category: "mind",
     defaultDurationMinutes: 5,
     karmaPointsBase: 10,
+    image: "/images/pillars/pillar-gratitude.jpg",
   },
   {
     id: 8,
@@ -132,6 +141,7 @@ export const PILLARS: Pillar[] = [
     category: "spirit",
     defaultDurationMinutes: 15,
     karmaPointsBase: 20,
+    image: "/images/pillars/pillar-sandhya-meditation.jpg",
   },
   {
     id: 9,
@@ -145,6 +155,7 @@ export const PILLARS: Pillar[] = [
     category: "spirit",
     defaultDurationMinutes: 10,
     karmaPointsBase: 15,
+    image: "/images/pillars/pillar-brahman-connection.jpg",
   },
   {
     id: 10,
@@ -158,6 +169,7 @@ export const PILLARS: Pillar[] = [
     category: "spirit",
     defaultDurationMinutes: 10,
     karmaPointsBase: 12,
+    image: "/images/pillars/pillar-divine-manifestation.jpg",
   },
   {
     id: 11,
@@ -171,6 +183,7 @@ export const PILLARS: Pillar[] = [
     category: "body",
     defaultDurationMinutes: 0,
     karmaPointsBase: 10,
+    image: "/images/pillars/pillar-sleep-optimization.jpg",
   },
 ];
 

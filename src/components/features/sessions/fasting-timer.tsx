@@ -2,14 +2,24 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Square, UtensilsCrossed, Moon, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { Square, UtensilsCrossed, Moon, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { PexelsVideo } from "@/components/ui/pexels-video";
 import { NextPracticeCta } from "./next-practice-cta";
 
-const FASTING_HOURS = 16;
-const EATING_HOURS = 8;
+// Eating-window presets the user can pick before starting. Fasting window is
+// always 24 - eating. 16:8 stays the default because it's the most common
+// intermittent-fasting pattern.
+const PRESETS = [
+  { eatingHours: 6,  label: "18:6",  blurb: "Intensive — longer cellular cleanup" },
+  { eatingHours: 8,  label: "16:8",  blurb: "Standard — most popular pattern" },
+  { eatingHours: 10, label: "14:10", blurb: "Gentle — easier on social meals" },
+  { eatingHours: 12, label: "12:12", blurb: "Starter — modest overnight fast" },
+] as const;
+type Preset = (typeof PRESETS)[number];
+const DEFAULT_PRESET: Preset = PRESETS[1];
+
 const STORAGE_KEY = "fasting-session-v1";
 const SESSION_PILLAR = "nutrition-fasting";
 
@@ -24,6 +34,9 @@ const VOICE = {
 type StoredSession = {
   startTime: number;
   isFasting: boolean;
+  // Older sessions predate presets — eatingHours may be missing, in which
+  // case we fall back to the default (16:8) on hydrate.
+  eatingHours?: number;
 };
 
 export function FastingTimer() {
@@ -35,6 +48,7 @@ export function FastingTimer() {
   const [targetHit, setTargetHit] = useState(false);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const [preset, setPreset] = useState<Preset>(DEFAULT_PRESET);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const voiceRef = useRef<HTMLAudioElement | null>(null);
@@ -52,9 +66,10 @@ export function FastingTimer() {
     voiceRef.current = a;
   }, [soundEnabled]);
 
+  const fastingHours = 24 - preset.eatingHours;
   const targetSeconds = isFasting
-    ? FASTING_HOURS * 3600
-    : EATING_HOURS * 3600;
+    ? fastingHours * 3600
+    : preset.eatingHours * 3600;
   const progress = targetSeconds > 0 ? Math.min(elapsedSeconds / targetSeconds, 1) : 0;
 
   // SVG parameters
@@ -98,6 +113,8 @@ export function FastingTimer() {
           setIsFasting(!!parsed.isFasting);
           setIsRunning(true);
           setElapsedSeconds(Math.floor((Date.now() - parsed.startTime) / 1000));
+          const stored = PRESETS.find((p) => p.eatingHours === parsed.eatingHours);
+          if (stored) setPreset(stored);
         }
       }
     } catch {}
@@ -142,8 +159,8 @@ export function FastingTimer() {
         if (Notification.permission === "granted") {
           new Notification(isFasting ? "Fast complete!" : "Eating window closed", {
             body: isFasting
-              ? `You completed a ${FASTING_HOURS}-hour fast.`
-              : `Your ${EATING_HOURS}-hour eating window is over.`,
+              ? `You completed a ${fastingHours}-hour fast.`
+              : `Your ${preset.eatingHours}-hour eating window is over.`,
           });
         }
       }
@@ -159,7 +176,7 @@ export function FastingTimer() {
         .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
         .catch(() => {});
     }
-  }, [elapsedSeconds, targetSeconds, isRunning, isFasting, playChime, playVoice]);
+  }, [elapsedSeconds, targetSeconds, isRunning, isFasting, fastingHours, preset.eatingHours, playChime, playVoice]);
 
   const startSession = useCallback(
     (fasting: boolean) => {
@@ -179,7 +196,11 @@ export function FastingTimer() {
       try {
         window.localStorage.setItem(
           STORAGE_KEY,
-          JSON.stringify({ startTime: now, isFasting: fasting } satisfies StoredSession),
+          JSON.stringify({
+            startTime: now,
+            isFasting: fasting,
+            eatingHours: preset.eatingHours,
+          } satisfies StoredSession),
         );
       } catch {}
 
@@ -191,7 +212,7 @@ export function FastingTimer() {
         }
       } catch {}
     },
-    [playVoice]
+    [playVoice, preset.eatingHours]
   );
 
   const stopSession = useCallback(() => {
@@ -255,6 +276,38 @@ export function FastingTimer() {
       <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/35 to-white/75 pointer-events-none" />
 
       <div className="relative z-10 flex flex-col items-center gap-8 w-full">
+
+      {/* Preset selector — only changeable when no session is active. The
+          active preset drives `targetSeconds` for the ring + the completion
+          notification, and is persisted alongside the session in localStorage. */}
+      {!isRunning && (
+        <div className="flex flex-col items-center gap-3">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+            Eating window
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {PRESETS.map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => setPreset(p)}
+                className={cn(
+                  "px-4 py-2 rounded-xl text-sm font-semibold border-2 transition-all",
+                  preset.eatingHours === p.eatingHours
+                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white border-transparent shadow-lg shadow-orange-500/25"
+                    : "bg-white text-gray-700 border-gray-200 hover:border-amber-400"
+                )}
+                aria-pressed={preset.eatingHours === p.eatingHours}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-gray-500 text-center max-w-xs">
+            {preset.blurb}
+          </p>
+        </div>
+      )}
 
       {/* Mode toggle (only when not running) */}
       {!isRunning && (
@@ -411,7 +464,7 @@ export function FastingTimer() {
           ) : (
             <>
               <span className="text-lg text-[var(--color-text-secondary)]">
-                16:8 Protocol
+                {preset.label} Protocol
               </span>
               <span className="text-sm text-[var(--color-text-secondary)] mt-1">
                 Tap to begin
@@ -488,10 +541,10 @@ export function FastingTimer() {
 
       {/* Info */}
       <div className="text-center text-sm text-[var(--color-text-secondary)] max-w-md">
-        <p className="font-medium mb-1">16:8 Intermittent Fasting</p>
+        <p className="font-medium mb-1">{preset.label} Intermittent Fasting</p>
         <p>
-          Fast for 16 hours, eat within an 8-hour window. This pattern supports
-          cellular repair, mental clarity, and metabolic health.
+          Fast for {fastingHours} hours, eat within a {preset.eatingHours}-hour window.
+          This pattern supports cellular repair, mental clarity, and metabolic health.
         </p>
       </div>
 
