@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>10X Vedic Transform — UI Kit Showcase</title>
+<link rel="icon" href="../ui_kits/10x_transform/assets/logo.jpg">
+<script src="deck-stage.js"></script>
+<script type="application/json" id="speaker-notes">
+[
+  "Open with the lotus mark. This is the kit we built — full faithful recreation of the production Next.js app at 10x.vedics.net.",
+  "The product: 48-day program, 11 daily Vedic pillars. Each pillar is body, mind, or spirit.",
+  "All 16 sidebar items shipped. Six primary nav, ten tools. Lucide icons, gold-saffron gradient on active.",
+  "The Dashboard: phase-tinted welcome banner, mandala ring, daily brief, today's practice, streak + karma.",
+  "Pillars page uses a 3-tier prioritization model. Active focus pillars get amber ring; phase-recommended ones below; rest quietly available.",
+  "Click any pillar tile for the detail view — hero image OR a custom animated SVG scene. Eleven unique animations across the kit.",
+  "Sessions: nine interactive practice tabs. Breathing has the animated lotus; Movement has real yoga GIFs.",
+  "Progress: consistency score, weekly trend, pillar radar, 48-day heatmap, badges. Charts in pure SVG.",
+  "Plus: AI insights, journal, dosha quiz, library, posters, wisdom, mood, achievements, reports, reminders, settings. Cmd-K to jump anywhere."
+]
+</script>
+<style>
+  :root {
+    --bg: #FFFEF5; --ink: #1a1a1a; --gold: #D97706; --sub: #64748b; --rail: #DAA520;
+  }
+  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #050514; color: var(--ink); }
+  deck-stage { --slide-bg: var(--bg); }
+  section { display: flex; flex-direction: column; padding: 80px; gap: 24px; }
+  .eyebrow { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+  h1 { font-family: 'Plus Jakarta Sans', Inter, system-ui; font-weight: 800; font-size: 5rem; line-height: 1; letter-spacing: -0.02em; margin: 0; }
+  h2 { font-family: 'Plus Jakarta Sans', Inter, system-ui; font-weight: 800; font-size: 3.2rem; line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+  .grad { background: linear-gradient(to right, #f97316, #f59e0b); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .lede { font-size: 1.4rem; color: var(--sub); line-height: 1.5; max-width: 1000px; }
+  .pillar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 24px; }
+  .pillar-card { background: #fff; border: 2px solid var(--rail); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 8px; }
+  .pillar-card .num { font-family: 'Plus Jakarta Sans'; font-size: 0.85rem; font-weight: 800; color: var(--gold); letter-spacing: 0.1em; }
+  .pillar-card h4 { font-size: 1.2rem; font-weight: 700; color: var(--ink); margin: 4px 0 0; }
+  .pillar-card .sk { font-size: 0.95rem; color: var(--sub); font-style: italic; }
+  .pillar-card .cat { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: #FEF3C7; color: #92400E; align-self: flex-start; }
+  .frame { width: 100%; flex: 1; border: 4px solid var(--rail); border-radius: 24px; overflow: hidden; background: #FFFEF5; box-shadow: 0 30px 80px rgba(0,0,0,0.18); position: relative; }
+  .frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .feat { padding: 22px 24px; background: #fff; border: 2px solid var(--rail); border-radius: 16px; display: flex; gap: 16px; align-items: flex-start; }
+  .feat .ico { width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, #fbbf24, #d97706); color: #fff; font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feat h4 { margin: 0; font-size: 1.15rem; font-weight: 700; }
+  .feat p { margin: 6px 0 0; color: var(--sub); font-size: 0.98rem; line-height: 1.5; }
+  .num-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+  .num-cell { background: #fff; border: 2px solid var(--rail); border-radius: 18px; padding: 26px; text-align: center; }
+  .num-cell .n { font-family: 'Plus Jakarta Sans'; font-size: 4rem; font-weight: 800; line-height: 1; background: linear-gradient(to right, #f97316, #f59e0b); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .num-cell .l { font-size: 0.95rem; color: var(--sub); margin-top: 10px; font-weight: 500; }
+  /* Title slide */
+  .title-slide { background: radial-gradient(circle at 50% 30%, #FEF3C7 0%, var(--bg) 60%); align-items: center; justify-content: center; text-align: center; }
+  .title-slide img.logo { width: 120px; height: 120px; border-radius: 28px; box-shadow: 0 14px 40px rgba(217,119,6,0.25); margin-bottom: 18px; }
+  .title-slide .tag { font-family: 'Plus Jakarta Sans'; font-size: 1.4rem; color: var(--sub); margin-top: 12px; max-width: 720px; line-height: 1.4; }
+</style>
+</head>
+<body>
+<deck-stage>
+
+<!-- 1. Title -->
+<section class="title-slide" data-screen-label="01 Title">
+  <img class="logo" src="../ui_kits/10x_transform/assets/logo.jpg" alt="10X Vedic" />
+  <div class="eyebrow">UI Kit · Faithful Recreation</div>
+  <h1><span class="grad">10X Vedic Transform</span></h1>
+  <p class="tag">A full hi-fi recreation of the production Next.js + Tailwind app — 16 routes, 11 animated pillars, 9 interactive sessions, command palette, theme toggle.</p>
+</section>
+
+<!-- 2. The product -->
+<section data-screen-label="02 The Product">
+  <div class="eyebrow">The product</div>
+  <h2>48 days. <span class="grad">11 daily Vedic pillars.</span><br/>One transformation.</h2>
+  <p class="lede">10X Vedic Transform combines ancient Vedic wisdom — Brahma Muhurta, Pranayama, Sandhya, Nidra — with a modern habit-tracking app. Users commit to a 48-day Mandala, complete 11 daily practices spanning body, mind, and spirit, and earn karma points + streak shields along the way.</p>
+  <div class="num-row">
+    <div class="num-cell"><div class="n">48</div><div class="l">Days · one Mandala cycle</div></div>
+    <div class="num-cell"><div class="n">11</div><div class="l">Daily Vedic pillars</div></div>
+    <div class="num-cell"><div class="n">9</div><div class="l">Interactive practice sessions</div></div>
+    <div class="num-cell"><div class="n">16</div><div class="l">Sidebar routes built</div></div>
+  </div>
+</section>
+
+<!-- 3. The 11 pillars -->
+<section data-screen-label="03 The 11 Pillars">
+  <div class="eyebrow">The 11 Vedic Pillars</div>
+  <h2>Body · Mind · Spirit</h2>
+  <div class="pillar-grid">
+    <div class="pillar-card"><div class="num">01</div><h4>5 AM Initiation</h4><div class="sk">Brahma Muhurta</div><span class="cat" style="background:#FEF3C7;color:#92400E">Body</span></div>
+    <div class="pillar-card"><div class="num">02</div><h4>Vedic Nutrition</h4><div class="sk">Ahara Vidhi</div><span class="cat" style="background:#FEF3C7;color:#92400E">Body</span></div>
+    <div class="pillar-card"><div class="num">03</div><h4>Thought Reset</h4><div class="sk">Sankalpa</div><span class="cat" style="background:#DBEAFE;color:#1E40AF">Mind</span></div>
+    <div class="pillar-card"><div class="num">04</div><h4>Breathing</h4><div class="sk">Pranayama</div><span class="cat" style="background:#DBEAFE;color:#1E40AF">Mind</span></div>
+    <div class="pillar-card"><div class="num">05</div><h4>Movement</h4><div class="sk">Vyayama</div><span class="cat" style="background:#FEF3C7;color:#92400E">Body</span></div>
+    <div class="pillar-card"><div class="num">06</div><h4>Healing Meditation</h4><div class="sk">Dhyana</div><span class="cat" style="background:#DBEAFE;color:#1E40AF">Mind</span></div>
+    <div class="pillar-card"><div class="num">07</div><h4>Gratitude</h4><div class="sk">Kritajnata</div><span class="cat" style="background:#DBEAFE;color:#1E40AF">Mind</span></div>
+    <div class="pillar-card"><div class="num">08</div><h4>Sandhya</h4><div class="sk">Sandhyavandana</div><span class="cat" style="background:#EDE9FE;color:#5B21B6">Spirit</span></div>
+    <div class="pillar-card"><div class="num">09</div><h4>Brahman</h4><div class="sk">Brahma Sambandha</div><span class="cat" style="background:#EDE9FE;color:#5B21B6">Spirit</span></div>
+    <div class="pillar-card"><div class="num">10</div><h4>Manifestation</h4><div class="sk">Sankalpa Shakti</div><span class="cat" style="background:#EDE9FE;color:#5B21B6">Spirit</span></div>
+    <div class="pillar-card"><div class="num">11</div><h4>Sleep</h4><div class="sk">Nidra</div><span class="cat" style="background:#FEF3C7;color:#92400E">Body</span></div>
+    <div class="pillar-card" style="background:linear-gradient(135deg,#fbbf24,#d97706);border-color:transparent;color:#fff;justify-content:center;text-align:center"><h4 style="color:#fff;font-size:1.4rem">All 11 are animated.</h4><div class="sk" style="color:#FEF3C7">Each pillar has its own SVG scene.</div></div>
+  </div>
+</section>
+
+<!-- 4. Dashboard -->
+<section data-screen-label="04 Dashboard">
+  <div class="eyebrow">Live · Dashboard</div>
+  <h2>Phase-tinted welcome banner with <span class="grad">Mandala progress ring</span></h2>
+  <div class="frame"><iframe src="../ui_kits/10x_transform/index.html" title="Dashboard" loading="lazy"></iframe></div>
+</section>
+
+<!-- 5. Pillars (3-tier) -->
+<section data-screen-label="05 Pillars 3-Tier">
+  <div class="eyebrow">Pillars page · 3-tier prioritization</div>
+  <h2>Active today · Recommended this phase · <span class="grad">Quietly available</span></h2>
+  <div class="features">
+    <div class="feat"><div class="ico">1</div><div><h4>Active Today</h4><p>The user's chosen 1–3 focus pillars get an amber ring and prominent placement at the top.</p></div></div>
+    <div class="feat"><div class="ico">2</div><div><h4>Recommended for this phase</h4><p>Each of the 6 journey phases (Foundation, Cleansing, Integration, Expansion, Manifestation, Completion) surfaces 2 phase-appropriate pillars.</p></div></div>
+    <div class="feat"><div class="ico">3</div><div><h4>Quietly available</h4><p>The rest of the 11 — always tappable, just visually de-emphasized. Nothing is locked.</p></div></div>
+    <div class="feat"><div class="ico">→</div><div><h4>Click → animated detail</h4><p>Every tile opens a pillar detail page with a custom SVG animation, 5-step practice guide, and a Begin Practice CTA that deep-links to the right Sessions tab.</p></div></div>
+  </div>
+</section>
+
+<!-- 6. Sessions -->
+<section data-screen-label="06 Sessions">
+  <div class="eyebrow">Sessions · 9 interactive practice tabs</div>
+  <h2><span class="grad">Breathing</span> lotus · <span class="grad">Movement</span> yoga GIFs · <span class="grad">Sandhya</span> compass · <span class="grad">Sleep</span> ritual</h2>
+  <div class="features">
+    <div class="feat"><div class="ico" style="background:linear-gradient(135deg,#0891b2,#22d3ee)">✦</div><div><h4>Breathing — animated lotus</h4><p>16-petal SVG opens on inhale, holds at full bloom, closes on exhale. Color shifts cyan→saffron→amber per phase. Three patterns: 4:6, 4:7:8, 4:4:4:4 box.</p></div></div>
+    <div class="feat"><div class="ico" style="background:linear-gradient(135deg,#FF5722,#F97316)">⚡</div><div><h4>Movement — real yoga GIFs</h4><p>Seven yoga poses: Surya Namaskar, Morning Stretch, Strength Flow, Outdoor Walk, Mindful Walk, Hourly Standing, Body Scan. Plus HIIT timer with Work/Rest/Rounds.</p></div></div>
+    <div class="feat"><div class="ico" style="background:linear-gradient(135deg,#F59E0B,#FFD700)">☀</div><div><h4>Sandhya — directional compass</h4><p>Dawn/noon/dusk picker, compass needle pointing east/north/west, 108-bead mantra counter for Gayatri.</p></div></div>
+    <div class="feat"><div class="ico" style="background:linear-gradient(135deg,#3F51B5,#6366F1)">☾</div><div><h4>Sleep — wind-down ritual</h4><p>Bedtime / wake-time picker, live hours-of-sleep calculation, 7-step checklist (screens off, warm milk, foot massage…).</p></div></div>
+  </div>
+</section>
+
+<!-- 7. Polish -->
+<section data-screen-label="07 Polish">
+  <div class="eyebrow">Polish · the small details</div>
+  <h2>Every interaction <span class="grad">considered</span></h2>
+  <div class="features">
+    <div class="feat"><div class="ico">⌘K</div><div><h4>Command palette</h4><p>Press Cmd-K (or Ctrl-K) from anywhere to jump to any of 18 destinations — including deep-links into Sessions sub-tabs.</p></div></div>
+    <div class="feat"><div class="ico">🎨</div><div><h4>Three themes</h4><p>Light (default), Sattva (warm evening), Dark (high-contrast night). Tokens defined as CSS variables, toggleable via header sun icon, persists to localStorage.</p></div></div>
+    <div class="feat"><div class="ico">📱</div><div><h4>Mobile bottom nav + More sheet</h4><p>Below 1024px: 4 primary tabs + a More button that opens a 5-column grid sheet of the 12 long-tail tools.</p></div></div>
+    <div class="feat"><div class="ico">🛡</div><div><h4>Streak shields</h4><p>Visual badge inside StreakCounter when shields {">"} 0 — protects against one missed day. Phase reflection card fires on day 8/15/22/31/41.</p></div></div>
+  </div>
+</section>
+
+<!-- 8. Tech & next -->
+<section data-screen-label="08 Tech & Handoff">
+  <div class="eyebrow">Tech & handoff</div>
+  <h2>Faithful to <span class="grad">cocreateceo/vedic_transform</span></h2>
+  <p class="lede">Built from the actual production source. Lucide React icons via CDN. CSS variables mirror <code>src/app/globals.css</code>. The PILLARS constant matches <code>src/constants/pillars.ts</code> exactly. Six journey phases match <code>src/lib/journey-phases.ts</code>.</p>
+  <div class="features">
+    <div class="feat"><div class="ico">📦</div><div><h4>14 JSX files · 1 CSS file · 20 assets</h4><p>Modular components — drop any one (Mandala ring, BreathingLotus, PillarCardRich) into a new layout.</p></div></div>
+    <div class="feat"><div class="ico">🪷</div><div><h4>Real Pexels assets</h4><p>11 pillar JPGs + 8 posture GIFs imported from the repo's public/images/pexels.</p></div></div>
+    <div class="feat"><div class="ico">→</div><div><h4>Next: real data layer</h4><p>Swap MOCK_USER for live apiFetch('/data/journey'). Wire your existing voice MP3s into the mute toggles. Self-host Geist Sans + the 5.8MB Surya Namaskar GIF.</p></div></div>
+    <div class="feat"><div class="ico">✓</div><div><h4>Ready to ship</h4><p>Open ui_kits/10x_transform/index.html. Cmd-K to start exploring.</p></div></div>
+  </div>
+</section>
+
+</deck-stage>
+</body>
+</html>
