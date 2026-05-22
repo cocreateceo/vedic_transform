@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10X Vedic Transform — UI Kit (faithful to source)</title>
+<link rel="icon" href="assets/logo.jpg">
+<link rel="stylesheet" href="styles.css">
+
+<!-- Lucide standalone UMD — same icon set used by the production codebase. -->
+<script src="https://unpkg.com/lucide@0.546.0/dist/umd/lucide.min.js" crossorigin="anonymous"></script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel" src="Primitives.jsx"></script>
+<script type="text/babel" src="PillarData.jsx"></script>
+<script type="text/babel" src="PillarAnimations.jsx"></script>
+<script type="text/babel" src="Sidebar.jsx"></script>
+<script type="text/babel" src="Dashboard.jsx"></script>
+<script type="text/babel" src="PillarsPage.jsx"></script>
+<script type="text/babel" src="PillarDetailPage.jsx"></script>
+<script type="text/babel" src="ProgressPage.jsx"></script>
+<script type="text/babel" src="SessionsPage.jsx"></script>
+<script type="text/babel" src="SessionsExtended.jsx"></script>
+<script type="text/babel" src="AppScreens2.jsx"></script>
+<script type="text/babel" src="AppScreens3.jsx"></script>
+<script type="text/babel" src="MarketingAndStubs.jsx"></script>
+<script type="text/babel" src="MorePolish.jsx"></script>
+<script type="text/babel" src="ChatBot.jsx"></script>
+
+<script type="text/babel">
+// ──────────────────────────────────────────────────────────────────
+//  10X Vedic Transform — UI Kit
+//  Faithful recreation of cocreateceo/vedic_transform (Next.js).
+//
+//  Routes:
+//    Marketing:        home · login
+//    In-app primary:   dashboard · pillars · sessions · goals · progress · journal
+//    In-app tools:     library · posters · dosha-assessment · wisdom · mood
+//                      achievements · insights · reports · reminders · settings
+//    In-app dynamic:   pillars/<slug>  (one of 11)
+// ──────────────────────────────────────────────────────────────────
+
+const APP_ROUTES = [
+  'dashboard', 'pillars', 'sessions', 'goals', 'progress', 'journal',
+  'library', 'posters', 'dosha-assessment', 'wisdom', 'mood',
+  'achievements', 'insights', 'reports', 'reminders', 'settings',
+];
+
+function App() {
+  const [route, setRoute] = React.useState('home');
+  // Session tab is shared across navigations so PillarDetail can hand off
+  // straight to the right tab (Breathing / Movement / Meditation / etc.).
+  const [sessionTab, setSessionTab] = React.useState(0);
+
+  React.useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [route]);
+
+  const baseRoute = route.split('/')[0];
+  const isPillarDetail = baseRoute === 'pillars' && route.includes('/');
+  const inApp = APP_ROUTES.includes(baseRoute);
+
+  if (inApp) {
+    // Pillar detail: pillars/<slug>
+    let content;
+    if (isPillarDetail) {
+      content = <PillarDetailPage slug={route.split('/')[1]} user={MOCK_USER}
+                  setRoute={setRoute} setSessionTab={setSessionTab} />;
+    } else if (baseRoute === 'dashboard') {
+      content = <DashboardPage user={MOCK_USER} setRoute={setRoute} />;
+    } else if (baseRoute === 'pillars') {
+      content = <PillarsPage user={MOCK_USER} setRoute={setRoute} />;
+    } else if (baseRoute === 'progress') {
+      content = <ProgressPage user={MOCK_USER} />;
+    } else if (baseRoute === 'sessions') {
+      content = <SessionsPage initialTab={sessionTab} key={'sess-' + sessionTab} />;
+    } else if (baseRoute === 'journal') {
+      content = <JournalPage setRoute={setRoute} />;
+    } else if (baseRoute === 'dosha-assessment') {
+      content = <DoshaAssessmentPage setRoute={setRoute} />;
+    } else if (baseRoute === 'goals') {
+      content = <GoalsPage user={MOCK_USER} setRoute={setRoute} />;
+    } else if (baseRoute === 'library') {
+      content = <LibraryPage />;
+    } else if (baseRoute === 'posters') {
+      content = <PostersPage />;
+    } else if (baseRoute === 'wisdom') {
+      content = <WisdomPage />;
+    } else if (baseRoute === 'mood') {
+      content = <MoodPage />;
+    } else if (baseRoute === 'achievements') {
+      content = <AchievementsPage />;
+    } else if (baseRoute === 'insights') {
+      content = <InsightsPage />;
+    } else if (baseRoute === 'reports') {
+      content = <ReportsPage />;
+    } else if (baseRoute === 'reminders') {
+      content = <RemindersPage />;
+    } else if (baseRoute === 'settings') {
+      content = <SettingsPage user={MOCK_USER} setRoute={setRoute} />;
+    } else {
+      content = <NotFoundPage route={baseRoute} setRoute={setRoute} />;
+    }
+
+    // Pass route='pillars' to sidebar when we're on a pillar detail so the
+    // Pillars tab stays highlighted in the sidebar.
+    const sidebarRoute = isPillarDetail ? 'pillars' : baseRoute;
+
+    return (
+      <div className="app-shell" data-screen-label={'app/' + route}>
+        <Sidebar route={sidebarRoute} setRoute={setRoute} user={MOCK_USER} />
+        <div className="app-shell-body">
+          <AppHeader user={MOCK_USER} route={sidebarRoute} setRoute={setRoute} />
+          <main className="app-shell-main">{content}</main>
+        </div>
+        <MobileNav route={sidebarRoute} setRoute={setRoute} />
+        <VedicWisdomGuide />
+        <CommandPalette setRoute={setRoute} />
+      </div>
+    );
+  }
+
+  // Marketing
+  return (
+    <div data-screen-label={route}>
+      {route === 'home'  && <PublicLanding setRoute={setRoute} />}
+      {route === 'login' && <LoginPage     setRoute={setRoute} />}
+      {route === 'onboarding' && <OnboardingFlow setRoute={setRoute} user={MOCK_USER} />}
+      <VedicWisdomGuide />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
