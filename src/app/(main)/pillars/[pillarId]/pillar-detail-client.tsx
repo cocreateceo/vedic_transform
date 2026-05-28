@@ -9,14 +9,14 @@ import { BreathingVisualizer } from "@/components/features/pillars/breathing-vis
 import { PillarHero, PillarHeroStyles } from "@/components/features/pillars/pillar-hero";
 import { PillarAnimation } from "@/components/features/pillars/pillar-animations";
 
-// Slugs that have a custom animated scene in PillarAnimation (8 of 11). The
-// remaining three — breathing-meditation, movement, healing-meditation —
-// fall back to the existing PillarHero, which already has rich
-// video/image backdrops tuned for those pillars.
+// All 11 pillars now have a custom animated scene in PillarAnimation.
 const PILLARS_WITH_ANIMATION = new Set([
   "morning-initiation",
   "nutrition-fasting",
   "thoughts-intention",
+  "breathing-meditation",
+  "movement",
+  "healing-meditation",
   "gratitude",
   "sandhya-meditation",
   "brahman-connection",

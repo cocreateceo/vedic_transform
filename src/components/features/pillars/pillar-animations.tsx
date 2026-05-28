@@ -517,6 +517,272 @@ function NidraScene() {
   );
 }
 
+// ── 9. Breathing Meditation — Pranayama orb + nadis ────────────────────
+function PranayamaScene() {
+  return (
+    <div className="pa-stage">
+      <svg className="pa-svg" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="pr-bg" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stopColor="#1a2c4a" />
+            <stop offset="100%" stopColor="#0a1224" />
+          </radialGradient>
+          <radialGradient id="pr-orb" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#a8e6ff" stopOpacity="1" />
+            <stop offset="40%" stopColor="#5cb8e6" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#1a4d80" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="pr-halo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#a8e6ff" stopOpacity="0.55" />
+            <stop offset="60%" stopColor="#5cb8e6" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#5cb8e6" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="600" height="360" fill="url(#pr-bg)" />
+        <g className="pr-nadis" stroke="#a8e6ff" strokeWidth="1.1" strokeLinecap="round">
+          {Array.from({ length: 12 }, (_, i) => {
+            const angle = (i / 12) * Math.PI * 2;
+            const x1 = 300 + Math.cos(angle) * 78;
+            const y1 = 180 + Math.sin(angle) * 78;
+            const x2 = 300 + Math.cos(angle) * 170;
+            const y2 = 180 + Math.sin(angle) * 170;
+            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} style={{ animationDelay: `${i * 0.15}s` }} />;
+          })}
+        </g>
+        <circle className="pr-halo" cx="300" cy="180" r="150" fill="url(#pr-halo)" />
+        <g className="pr-orb-group">
+          <circle cx="300" cy="180" r="78" fill="url(#pr-orb)" />
+          <circle cx="300" cy="180" r="30" fill="#e6f7ff" opacity="0.9" />
+        </g>
+        <g className="pr-particles" fill="#a8e6ff">
+          {Array.from({ length: 10 }, (_, i) => {
+            const angle = (i / 10) * Math.PI * 2 + 0.3;
+            const r = 110 + (i % 3) * 22;
+            const cx = 300 + Math.cos(angle) * r;
+            const cy = 180 + Math.sin(angle) * r;
+            return <circle key={i} cx={cx} cy={cy} r={1.6 + (i % 2)} style={{ animationDelay: `${i * 0.4}s` }} />;
+          })}
+        </g>
+        <text className="pr-om" x="300" y="194" textAnchor="middle" fontFamily="Plus Jakarta Sans, Inter, system-ui" fontSize="38" fontWeight="700" fill="#0a1224">ॐ</text>
+      </svg>
+      <div className="pa-caption">
+        <div className="pa-eyebrow">Pranayama · प्राणायाम</div>
+        <div className="pa-title">Breath is the bridge to stillness</div>
+        <div className="pa-sub">4 in · hold · 6 out · 12 rounds</div>
+      </div>
+      <style>{`
+        ${SHARED_STYLES}
+        @keyframes pr-breathe     { 0%, 100% { transform: scale(0.7); opacity: 0.75; } 50% { transform: scale(1.1); opacity: 1; } }
+        @keyframes pr-halo-pulse  { 0%, 100% { transform: scale(0.6); opacity: 0.3; } 50% { transform: scale(1.15); opacity: 0.75; } }
+        @keyframes pr-nadi-glow   { 0%, 100% { stroke-opacity: 0.15; } 50% { stroke-opacity: 0.7; } }
+        @keyframes pr-drift       { 0%, 100% { transform: translateY(0); opacity: 0.3; } 50% { transform: translateY(-8px); opacity: 0.9; } }
+        @keyframes pr-om-fade     { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.6; } }
+        .pa-stage .pr-orb-group   { animation: pr-breathe 8s ease-in-out infinite; transform-origin: 300px 180px; transform-box: fill-box; }
+        .pa-stage .pr-halo        { animation: pr-halo-pulse 8s ease-in-out infinite; transform-origin: 300px 180px; transform-box: fill-box; }
+        .pa-stage .pr-nadis line  { animation: pr-nadi-glow 8s ease-in-out infinite; }
+        .pa-stage .pr-particles circle { animation: pr-drift 4s ease-in-out infinite; }
+        .pa-stage .pr-om          { animation: pr-om-fade 8s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .pa-stage .pr-orb-group, .pa-stage .pr-halo, .pa-stage .pr-nadis line,
+          .pa-stage .pr-particles circle, .pa-stage .pr-om { animation: none; }
+          .pa-stage .pr-orb-group { transform: scale(1); }
+          .pa-stage .pr-halo { transform: scale(1); opacity: 0.5; }
+          .pa-stage .pr-om { opacity: 0.4; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// ── 10. Movement — Vyayama Surya Namaskar pose cycle ────────────────────
+function VyayamaScene() {
+  // Four pose silhouettes cycle in sequence across the same anchor point.
+  // Each pose is a stylized stick figure built from circles + rounded lines.
+  // The sun rises through the loop so the whole scene reads as "movement
+  // at sunrise" — the canonical time for Surya Namaskar.
+  const poseStroke = "#fff8dc";
+  return (
+    <div className="pa-stage">
+      <svg className="pa-svg" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="vy-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#3a1f4a" />
+            <stop offset="55%" stopColor="#e07b3a" />
+            <stop offset="100%" stopColor="#fbd089" />
+          </linearGradient>
+          <radialGradient id="vy-sun" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#fff8dc" />
+            <stop offset="40%" stopColor="#ffd166" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="#ff9933" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="600" height="360" fill="url(#vy-sky)" />
+        {/* Sun rising across the loop */}
+        <g className="vy-sun">
+          <circle cx="300" cy="260" r="110" fill="url(#vy-sun)" opacity="0.95" />
+          <circle cx="300" cy="260" r="42" fill="#fff8dc" opacity="0.95" />
+        </g>
+        {/* Foreground ground line */}
+        <path d="M 0 320 Q 150 305 300 318 Q 450 330 600 312 L 600 360 L 0 360 Z" fill="#1a0a14" opacity="0.85" />
+        {/* 4 poses, all at center bottom, cycling visibility.
+            Each group anchors so feet sit on y=312 */}
+        <g className="vy-pose vy-pose-1" fill="none" stroke={poseStroke} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          {/* Tadasana — Mountain pose (arms at sides) */}
+          <circle cx="300" cy="200" r="11" fill={poseStroke} />
+          <line x1="300" y1="211" x2="300" y2="280" />
+          <line x1="300" y1="225" x2="282" y2="265" />
+          <line x1="300" y1="225" x2="318" y2="265" />
+          <line x1="300" y1="280" x2="290" y2="312" />
+          <line x1="300" y1="280" x2="310" y2="312" />
+        </g>
+        <g className="vy-pose vy-pose-2" fill="none" stroke={poseStroke} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          {/* Urdhva Hastasana — Arms up */}
+          <circle cx="300" cy="200" r="11" fill={poseStroke} />
+          <line x1="300" y1="211" x2="300" y2="280" />
+          <line x1="300" y1="220" x2="278" y2="170" />
+          <line x1="300" y1="220" x2="322" y2="170" />
+          <line x1="300" y1="280" x2="290" y2="312" />
+          <line x1="300" y1="280" x2="310" y2="312" />
+        </g>
+        <g className="vy-pose vy-pose-3" fill="none" stroke={poseStroke} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          {/* Uttanasana — Forward fold */}
+          <circle cx="300" cy="278" r="11" fill={poseStroke} />
+          <path d="M 300 278 Q 304 250 300 222" />
+          <line x1="300" y1="278" x2="278" y2="305" />
+          <line x1="300" y1="278" x2="322" y2="305" />
+          <line x1="300" y1="222" x2="290" y2="312" />
+          <line x1="300" y1="222" x2="310" y2="312" />
+        </g>
+        <g className="vy-pose vy-pose-4" fill="none" stroke={poseStroke} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          {/* Adho Mukha Svanasana — Downward dog (inverted V) */}
+          <circle cx="265" cy="276" r="10" fill={poseStroke} />
+          <line x1="265" y1="286" x2="332" y2="232" />
+          <line x1="332" y1="232" x2="252" y2="312" />
+          <line x1="265" y1="286" x2="248" y2="312" />
+          <line x1="332" y1="232" x2="356" y2="312" />
+        </g>
+      </svg>
+      <div className="pa-caption">
+        <div className="pa-eyebrow">Vyayama · व्यायाम</div>
+        <div className="pa-title">Move the body, move the prana</div>
+        <div className="pa-sub">12 rounds · Surya Namaskar · before sunrise</div>
+      </div>
+      <style>{`
+        ${SHARED_STYLES}
+        @keyframes vy-sun-rise { 0% { transform: translateY(60px) scale(0.85); opacity: 0.55; } 100% { transform: translateY(-30px) scale(1.05); opacity: 1; } }
+        @keyframes vy-pose-cycle-1 { 0%, 22%, 100% { opacity: 1; } 25%, 97% { opacity: 0; } }
+        @keyframes vy-pose-cycle-2 { 0%, 22%, 100% { opacity: 0; } 25%, 47% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes vy-pose-cycle-3 { 0%, 47%, 100% { opacity: 0; } 50%, 72% { opacity: 1; } 75% { opacity: 0; } }
+        @keyframes vy-pose-cycle-4 { 0%, 72%, 100% { opacity: 0; } 75%, 97% { opacity: 1; } }
+        .pa-stage .vy-sun       { animation: vy-sun-rise 14s ease-in-out infinite alternate; transform-origin: 300px 260px; transform-box: fill-box; }
+        .pa-stage .vy-pose-1    { animation: vy-pose-cycle-1 12s ease-in-out infinite; }
+        .pa-stage .vy-pose-2    { animation: vy-pose-cycle-2 12s ease-in-out infinite; }
+        .pa-stage .vy-pose-3    { animation: vy-pose-cycle-3 12s ease-in-out infinite; }
+        .pa-stage .vy-pose-4    { animation: vy-pose-cycle-4 12s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .pa-stage .vy-sun, .pa-stage .vy-pose-1, .pa-stage .vy-pose-2, .pa-stage .vy-pose-3, .pa-stage .vy-pose-4 { animation: none; }
+          .pa-stage .vy-pose-2, .pa-stage .vy-pose-3, .pa-stage .vy-pose-4 { opacity: 0; }
+          .pa-stage .vy-pose-1 { opacity: 1; }
+          .pa-stage .vy-sun { transform: translateY(-20px); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// ── 11. Healing Meditation — Dhyana chakras awakening ───────────────────
+function DhyanaScene() {
+  // Seven chakra dots glow in sequence along the spine of a seated lotus
+  // silhouette. Healing waves emanate outward as the crown opens.
+  const chakras: Array<{ y: number; color: string; cls: string }> = [
+    { y: 280, color: "#dc2626", cls: "ch-1" },  // Muladhara - root
+    { y: 258, color: "#f97316", cls: "ch-2" },  // Svadhisthana - sacral
+    { y: 236, color: "#facc15", cls: "ch-3" },  // Manipura - solar plexus
+    { y: 214, color: "#10b981", cls: "ch-4" },  // Anahata - heart
+    { y: 192, color: "#3b82f6", cls: "ch-5" },  // Vishuddha - throat
+    { y: 170, color: "#6366f1", cls: "ch-6" },  // Ajna - third eye
+    { y: 148, color: "#e9d5ff", cls: "ch-7" },  // Sahasrara - crown
+  ];
+  return (
+    <div className="pa-stage">
+      <svg className="pa-svg" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="dh-bg" cx="50%" cy="60%" r="80%">
+            <stop offset="0%" stopColor="#2d1b4e" />
+            <stop offset="100%" stopColor="#0d0820" />
+          </radialGradient>
+          <radialGradient id="dh-aura" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#e9d5ff" stopOpacity="0.5" />
+            <stop offset="60%" stopColor="#a78bfa" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#a78bfa" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="600" height="360" fill="url(#dh-bg)" />
+        {/* Healing wave rings — three concentric circles pulsing outward */}
+        <g className="dh-waves" fill="none" stroke="#a78bfa" strokeWidth="1.5">
+          <circle cx="300" cy="218" r="60" className="dh-wave dh-wave-1" />
+          <circle cx="300" cy="218" r="60" className="dh-wave dh-wave-2" />
+          <circle cx="300" cy="218" r="60" className="dh-wave dh-wave-3" />
+        </g>
+        {/* Aura behind silhouette */}
+        <circle className="dh-aura" cx="300" cy="218" r="140" fill="url(#dh-aura)" />
+        {/* Lotus base */}
+        <g className="dh-lotus" fill="#5b21b6" opacity="0.85">
+          <ellipse cx="300" cy="305" rx="78" ry="14" />
+          <path d="M 230 305 Q 250 280 270 295 Q 280 300 270 308 Z" />
+          <path d="M 370 305 Q 350 280 330 295 Q 320 300 330 308 Z" />
+          <path d="M 250 305 Q 270 270 295 290 Q 305 300 295 310 Z" />
+          <path d="M 350 305 Q 330 270 305 290 Q 295 300 305 310 Z" />
+        </g>
+        {/* Seated meditator silhouette */}
+        <g fill="#1a0e3a">
+          {/* Body */}
+          <path d="M 300 158 Q 250 170 240 240 Q 235 280 260 295 L 340 295 Q 365 280 360 240 Q 350 170 300 158 Z" />
+          {/* Folded legs */}
+          <ellipse cx="260" cy="295" rx="32" ry="12" />
+          <ellipse cx="340" cy="295" rx="32" ry="12" />
+          {/* Head */}
+          <circle cx="300" cy="138" r="22" />
+          {/* Arms folded on lap */}
+          <path d="M 268 250 Q 300 260 332 250 Q 332 270 300 268 Q 268 270 268 250 Z" />
+        </g>
+        {/* Chakra dots — light up in sequence */}
+        <g className="dh-chakras">
+          {chakras.map((c, i) => (
+            <g key={c.cls} className={`dh-chakra ${c.cls}`} style={{ animationDelay: `${i * 1.2}s` }}>
+              <circle cx="300" cy={c.y} r="9" fill={c.color} opacity="0.95" />
+              <circle cx="300" cy={c.y} r="14" fill={c.color} opacity="0.35" />
+            </g>
+          ))}
+        </g>
+      </svg>
+      <div className="pa-caption">
+        <div className="pa-eyebrow">Dhyana · ध्यान</div>
+        <div className="pa-title">Seven gates, one stillness</div>
+        <div className="pa-sub">7 chakras · 7 minutes · once daily</div>
+      </div>
+      <style>{`
+        ${SHARED_STYLES}
+        @keyframes dh-wave { 0% { transform: scale(0.6); opacity: 0.8; } 100% { transform: scale(2.4); opacity: 0; } }
+        @keyframes dh-aura-pulse { 0%, 100% { opacity: 0.5; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
+        @keyframes dh-chakra-glow { 0%, 100% { opacity: 0.4; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.25); } }
+        .pa-stage .dh-wave        { transform-origin: 300px 218px; transform-box: fill-box; animation: dh-wave 6s ease-out infinite; }
+        .pa-stage .dh-wave-1      { animation-delay: 0s; }
+        .pa-stage .dh-wave-2      { animation-delay: 2s; }
+        .pa-stage .dh-wave-3      { animation-delay: 4s; }
+        .pa-stage .dh-aura        { animation: dh-aura-pulse 8s ease-in-out infinite; transform-origin: 300px 218px; transform-box: fill-box; }
+        .pa-stage .dh-chakra      { animation: dh-chakra-glow 8s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+        @media (prefers-reduced-motion: reduce) {
+          .pa-stage .dh-wave, .pa-stage .dh-aura, .pa-stage .dh-chakra { animation: none; }
+          .pa-stage .dh-wave { opacity: 0; }
+          .pa-stage .dh-aura { opacity: 0.6; }
+          .pa-stage .dh-chakra { opacity: 0.9; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export function PillarAnimation({ slug, className }: { slug: string; className?: string }) {
   const wrap = (child: React.ReactElement) => (
     <div className={className} style={{ width: "100%" }}>{child}</div>
@@ -525,6 +791,9 @@ export function PillarAnimation({ slug, className }: { slug: string; className?:
     case "morning-initiation":   return wrap(<BrahmaMuhurtaScene />);
     case "nutrition-fasting":    return wrap(<AharaVidhiScene />);
     case "thoughts-intention":   return wrap(<SankalpaScene />);
+    case "breathing-meditation": return wrap(<PranayamaScene />);
+    case "movement":             return wrap(<VyayamaScene />);
+    case "healing-meditation":   return wrap(<DhyanaScene />);
     case "gratitude":            return wrap(<KritajnataScene />);
     case "sandhya-meditation":   return wrap(<SandhyaScene />);
     case "brahman-connection":   return wrap(<BrahmaConnectionScene />);
@@ -539,6 +808,9 @@ export const Scenes = {
   BrahmaMuhurtaScene,
   AharaVidhiScene,
   SankalpaScene,
+  PranayamaScene,
+  VyayamaScene,
+  DhyanaScene,
   KritajnataScene,
   SandhyaScene,
   BrahmaConnectionScene,
