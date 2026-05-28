@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
-import { POSTERS, type Poster, type PosterCategory } from "@/data/posters";
+import { POSTERS, getPosterBySlug, type Poster, type PosterCategory } from "@/data/posters";
 import { PosterCard } from "@/components/features/posters/poster-card";
 import { PosterModal } from "@/components/features/posters/poster-modal";
 
@@ -33,6 +34,16 @@ export function PostersGallery() {
   const [category, setCategory] = useState<CategoryFilter>("all");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState<Poster | null>(null);
+
+  // Deep-link support — /posters?open=<slug> auto-opens that poster's modal.
+  // Used by Sessions completion CTA and Library Posters cards.
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const slug = searchParams?.get("open");
+    if (!slug) return;
+    const poster = getPosterBySlug(slug);
+    if (poster) setOpen(poster);
+  }, [searchParams]);
 
   const filtered = useMemo(() => {
     return POSTERS.filter((p) => (category === "all" || p.category === category) && matchesQuery(p, query));

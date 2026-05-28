@@ -4,12 +4,15 @@ import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { CONTENT_LIBRARY, type ContentItem } from "@/data/content-library";
+import { POSTERS, type Poster } from "@/data/posters";
 import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAudioPlayer } from "@/context/audio-player-context";
 import { MantraIntroButton } from "@/components/features/library/mantra-intro-button";
+import { PosterCard } from "@/components/features/posters/poster-card";
+import { PosterModal } from "@/components/features/posters/poster-modal";
 import {
   Search,
   CheckCircle2,
@@ -18,6 +21,7 @@ import {
   FileText,
   BookOpen,
   ExternalLink,
+  Image as ImageIcon,
   Library,
   Play,
   Pause,
@@ -37,7 +41,7 @@ interface LibraryPageClientProps {
 }
 
 type CategoryFilter = "all" | "body" | "mind" | "spirit";
-type TypeFilter = "all" | "video" | "audio" | "article" | "guide";
+type TypeFilter = "all" | "video" | "audio" | "article" | "guide" | "poster";
 
 const CATEGORY_TABS: { value: CategoryFilter; label: string; color: string }[] = [
   { value: "all", label: "All", color: "from-orange-500 to-amber-500" },
@@ -52,6 +56,7 @@ const TYPE_TABS: { value: TypeFilter; label: string; icon: string }[] = [
   { value: "video", label: "Video", icon: "" },
   { value: "article", label: "Articles", icon: "" },
   { value: "guide", label: "Guides", icon: "" },
+  { value: "poster", label: "Posters", icon: "" },
 ];
 
 const TYPE_CONFIG: Record<ContentItem["type"], { icon: typeof Video; label: string; color: string }> = {
@@ -87,11 +92,38 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
     return map;
   });
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
+  const [posterModalSlug, setPosterModalSlug] = useState<Poster | null>(null);
 
   const router = useRouter();
   const { currentTrack, isPlaying, playTrack, togglePlay } = useAudioPlayer();
 
+  // Are we showing posters instead of content-library items?
+  const isPosterMode = activeType === "poster";
+
+  const filteredPosters = useMemo(() => {
+    if (!isPosterMode) return [];
+    let items = POSTERS;
+    if (activeCategory !== "all") items = items.filter((p) => p.category === activeCategory);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      items = items.filter((p) => {
+        const hay = [
+          p.title,
+          p.concept,
+          p.tagline ?? "",
+          ...p.sections.flatMap((s) => [s.title, s.body, ...(s.bullets ?? [])]),
+          ...p.scripture.flatMap((s) => [s.sutra, s.translation, s.sanskrit ?? ""]),
+        ]
+          .join(" ")
+          .toLowerCase();
+        return hay.includes(q);
+      });
+    }
+    return items;
+  }, [isPosterMode, activeCategory, searchQuery]);
+
   const filteredContent = useMemo(() => {
+    if (isPosterMode) return [];
     let items = CONTENT_LIBRARY;
 
     if (activeCategory !== "all") {
@@ -112,7 +144,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
     }
 
     return items;
-  }, [activeCategory, activeType, searchQuery]);
+  }, [isPosterMode, activeCategory, activeType, searchQuery]);
 
   const stats = useMemo(() => {
     const total = CONTENT_LIBRARY.length;
@@ -290,8 +322,32 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
         </div>
       </div>
 
-      {/* Content Grid */}
-      {filteredContent.length === 0 ? (
+      {/* Poster grid — shown when the Posters type tab is active */}
+      {isPosterMode && (
+        <>
+          {filteredPosters.length === 0 ? (
+            <Card variant="elevated" className="text-center py-12">
+              <CardContent>
+                <p className="text-[var(--color-text-secondary)]">
+                  No posters match your filters.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filteredPosters.map((p) => (
+                <PosterCard key={p.slug} poster={p} onOpen={setPosterModalSlug} />
+              ))}
+            </div>
+          )}
+          {posterModalSlug && (
+            <PosterModal poster={posterModalSlug} onClose={() => setPosterModalSlug(null)} />
+          )}
+        </>
+      )}
+
+      {/* Content Grid — content-library items (audio/video/article/guide) */}
+      {!isPosterMode && filteredContent.length === 0 ? (
         <Card variant="elevated" className="text-center py-12">
           <CardContent>
             <p className="text-[var(--color-text-secondary)]">
@@ -299,7 +355,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
             </p>
           </CardContent>
         </Card>
-      ) : (
+      ) : !isPosterMode ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredContent.map((item) => {
             const isCompleted = progressMap.get(item.id)?.completed || false;
@@ -414,7 +470,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
             );
           })}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
