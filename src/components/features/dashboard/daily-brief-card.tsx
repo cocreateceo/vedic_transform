@@ -185,7 +185,7 @@ export function DailyBriefCard() {
                 <div className="flex-1 min-w-0">
                   <p className="text-[10px] uppercase tracking-wider text-indigo-600 font-medium flex items-center gap-1">
                     <BookOpen className="w-3 h-3" />
-                    Today's teaching
+                    Today&apos;s teaching
                   </p>
                   <p className="text-xs font-semibold text-gray-900 line-clamp-1">
                     {posterOfTheDay.title}
