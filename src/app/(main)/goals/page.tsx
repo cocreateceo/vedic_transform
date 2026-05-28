@@ -151,7 +151,7 @@ export default function GoalsPage() {
     return (
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Goals</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Goals</h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">
             Set and track your weekly transformation goals
           </p>
@@ -163,7 +163,7 @@ export default function GoalsPage() {
                 <Compass className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-[var(--color-text-primary)]">
                   Start your 48-day journey first
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">

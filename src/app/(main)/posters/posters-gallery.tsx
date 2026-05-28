@@ -52,7 +52,7 @@ export function PostersGallery() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-3xl font-bold text-gray-900">Teaching Posters</h1>
+        <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Teaching Posters</h1>
         <p className="text-gray-500 mt-1">
           Vedic infographics rooted in Patanjali&apos;s Yoga Sutras and Ayurveda.
         </p>

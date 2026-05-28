@@ -67,7 +67,7 @@ export default function SettingsPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">
           Settings
         </h1>
         <p className="text-sm sm:text-base text-gray-600 mt-1">
@@ -156,7 +156,7 @@ export default function SettingsPage() {
           >
             <Bell className="w-5 h-5 text-amber-500" />
             <div>
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm font-medium text-[var(--color-text-primary)]">
                 Reminder Settings
               </p>
               <p className="text-xs text-gray-500">

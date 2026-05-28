@@ -92,7 +92,7 @@ export default function AdminUserDetailPage() {
 
       <Card>
         <CardContent className="p-5">
-          <h1 className="text-xl font-bold text-gray-900">
+          <h1 className="text-xl font-bold text-[var(--color-text-primary)]">
             {u.name ?? u.email}
           </h1>
           <p className="text-sm text-gray-500">{u.email}</p>
@@ -116,7 +116,7 @@ export default function AdminUserDetailPage() {
 
       <Card>
         <CardContent className="p-5">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">Journey</h2>
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Journey</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
             <Field label="Status" value={pack?.journey?.status ?? "—"} />
             <Field
@@ -144,7 +144,7 @@ export default function AdminUserDetailPage() {
 
       <Card>
         <CardContent className="p-5">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">Activity</h2>
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Activity</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
             <Field label="Karma total" value={String(pack?.karma?.total ?? 0)} />
             <Field
@@ -181,7 +181,7 @@ export default function AdminUserDetailPage() {
 
       <Card>
         <CardContent className="p-5">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">
             Focus pillars
           </h2>
           {pack?.focusPillars?.length ? (
@@ -203,7 +203,7 @@ export default function AdminUserDetailPage() {
 
       <Card>
         <CardContent className="p-5">
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">
             Raw Context Pack (debug)
           </h2>
           <pre className="text-xs bg-gray-50 rounded-lg p-3 overflow-x-auto max-h-96">
@@ -230,8 +230,8 @@ function Field({
       <p
         className={
           mono
-            ? "font-mono text-xs text-gray-900 mt-0.5 break-all"
-            : "text-sm text-gray-900 mt-0.5"
+            ? "font-mono text-xs text-[var(--color-text-primary)] mt-0.5 break-all"
+            : "text-sm text-[var(--color-text-primary)] mt-0.5"
         }
       >
         {value}

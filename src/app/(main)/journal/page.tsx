@@ -175,7 +175,7 @@ export default function JournalPage() {
       <div className="flex items-center gap-4">
         <QuillGlyph />
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Journal</h1>
+          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Journal</h1>
           <p className="text-gray-600 mt-2">
             Record your gratitude, intentions, and manifestations
           </p>
@@ -286,7 +286,7 @@ export default function JournalPage() {
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <h4 className="font-medium text-gray-900 flex-1 min-w-0 break-words">
+                    <h4 className="font-medium text-[var(--color-text-primary)] flex-1 min-w-0 break-words">
                       {m.title}
                     </h4>
                     {m.isAchieved && (

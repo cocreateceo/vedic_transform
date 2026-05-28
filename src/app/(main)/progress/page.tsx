@@ -69,7 +69,7 @@ export default function ProgressPage() {
     return (
       <div className="max-w-7xl mx-auto space-y-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Your Progress</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Your Progress</h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">
             Track your transformation journey
           </p>
@@ -81,7 +81,7 @@ export default function ProgressPage() {
                 <Compass className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-[var(--color-text-primary)]">
                   Start your 48-day journey first
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
@@ -153,7 +153,7 @@ export default function ProgressPage() {
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Your Progress</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Your Progress</h1>
         <p className="text-sm sm:text-base text-gray-600 mt-1">
           Track your transformation journey
         </p>
@@ -185,7 +185,7 @@ export default function ProgressPage() {
       {/* Insights Section */}
       {insights.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">Insights</h2>
+          <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Insights</h2>
           <InsightList insights={insights} maxVisible={3} />
         </div>
       )}
@@ -220,7 +220,7 @@ export default function ProgressPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between mb-1">
-                        <span className="text-xs sm:text-sm font-medium text-gray-900 truncate">
+                        <span className="text-xs sm:text-sm font-medium text-[var(--color-text-primary)] truncate">
                           {pillar.name}
                         </span>
                         <span className="text-xs sm:text-sm text-gray-500 flex-shrink-0 ml-2">
@@ -260,7 +260,7 @@ export default function ProgressPage() {
                   <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-amber-100 flex items-center justify-center mb-2">
                     <Award className="w-6 h-6 sm:w-8 sm:h-8 text-amber-600" />
                   </div>
-                  <h4 className="font-medium text-gray-900 text-xs sm:text-sm">
+                  <h4 className="font-medium text-[var(--color-text-primary)] text-xs sm:text-sm">
                     {ub.badge?.name}
                   </h4>
                   <p className="text-[10px] sm:text-xs text-gray-500 mt-1 line-clamp-2">

@@ -54,10 +54,10 @@ export function PillarGrid({ completedPillars }: PillarGridProps) {
   return (
     <div className="space-y-6">
       {/* Overall Progress Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-[var(--color-bg-surface)] rounded-2xl shadow-sm border border-[var(--color-border)] p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Today&apos;s Progress</h3>
+            <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">Today&apos;s Progress</h3>
             <p className="text-sm text-gray-500">
               {completedCount} of {totalPillars} pillars completed
             </p>
@@ -98,7 +98,7 @@ export function PillarGrid({ completedPillars }: PillarGridProps) {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500">{config.title}</p>
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-semibold text-[var(--color-text-primary)]">
                     {completed}/{pillars.length}
                   </p>
                 </div>
@@ -152,13 +152,13 @@ function CategorySection({ pillars, completedPillars, config }: CategorySectionP
               <config.icon className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">{config.title}</h3>
+              <h3 className="font-semibold text-[var(--color-text-primary)]">{config.title}</h3>
               <p className="text-xs text-gray-500">{config.subtitle}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <span className="text-lg font-bold text-gray-900">{completedCount}</span>
+              <span className="text-lg font-bold text-[var(--color-text-primary)]">{completedCount}</span>
               <span className="text-gray-400">/{pillars.length}</span>
             </div>
             <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -225,7 +225,7 @@ function PillarCard({ pillar, isCompleted }: PillarCardProps) {
         <h4
           className={cn(
             "font-medium truncate",
-            isCompleted ? "text-green-700" : "text-gray-900"
+            isCompleted ? "text-green-700" : "text-[var(--color-text-primary)]"
           )}
         >
           {pillar.name}

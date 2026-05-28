@@ -74,7 +74,7 @@ export function ManifestationPractice() {
       <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#7C3AED" }}>
         Sankalpa Shakti · सङ्कल्प शक्ति
       </p>
-      <h2 className="text-2xl font-bold text-gray-900">Manifest with intention</h2>
+      <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">Manifest with intention</h2>
 
       {step === "write" && (
         <>
@@ -160,7 +160,7 @@ export function ManifestationPractice() {
           >
             <Sparkles className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-2xl font-extrabold text-gray-900">Sealed in.</h3>
+          <h3 className="text-2xl font-extrabold text-[var(--color-text-primary)]">Sealed in.</h3>
           <p className="text-gray-600 max-w-sm leading-relaxed">
             Your intention has been sent. Now — release attachment to the outcome.
           </p>

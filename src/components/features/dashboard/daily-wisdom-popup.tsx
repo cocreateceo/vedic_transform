@@ -117,7 +117,7 @@ export function DailyWisdomPopup() {
           </div>
 
           {/* Quote */}
-          <blockquote className="text-gray-800 text-lg sm:text-xl leading-relaxed font-serif italic mb-4">
+          <blockquote className="text-[var(--color-text-primary)] text-lg sm:text-xl leading-relaxed font-serif italic mb-4">
             &ldquo;{wisdom.text}&rdquo;
           </blockquote>
 

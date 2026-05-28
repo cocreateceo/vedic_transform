@@ -303,7 +303,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       {/* Back button */}
       <Link
         href="/pillars"
-        className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+        className="inline-flex items-center gap-2 text-gray-600 hover:text-[var(--color-text-primary)] mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Pillars
@@ -338,7 +338,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold text-gray-900">{pillar.name}</h1>
+            <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">{pillar.name}</h1>
             {isCompleted && (
               <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
                 <Check className="w-4 h-4" />
@@ -395,7 +395,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
                 <Compass className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-[var(--color-text-primary)]">
                   Start your 48-day journey first
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
@@ -591,7 +591,7 @@ function MorningInitiationContent({
             <FileText className="w-7 h-7 text-white" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-1">
               Complete 5 AM Morning Routine Guide
             </h3>
             <p className="text-sm text-gray-600 mb-4">
@@ -739,7 +739,7 @@ function GratitudeContent({
     <div className="space-y-6">
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold text-gray-900">
+          <h3 className="text-xl font-semibold text-[var(--color-text-primary)]">
             Today&apos;s Gratitude Reflection
           </h3>
           <span className="text-sm font-medium text-amber-600">
@@ -835,7 +835,7 @@ function GratitudeStepCard({
           <p className="text-xs uppercase tracking-wide text-amber-600 font-medium">
             Step {stepIndex + 1} of {total} · {prompt.label}
           </p>
-          <h4 className="text-xl font-semibold text-gray-900">
+          <h4 className="text-xl font-semibold text-[var(--color-text-primary)]">
             {prompt.question}
           </h4>
         </div>
@@ -918,7 +918,7 @@ function GratitudeSummaryCard({
     <div className="rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 p-6 md:p-8 space-y-5">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h4 className="text-2xl font-bold text-gray-900">
+          <h4 className="text-2xl font-bold text-[var(--color-text-primary)]">
             Today&apos;s Three Gratitudes
           </h4>
           <p className="text-sm text-gray-600 mt-1">
@@ -948,7 +948,7 @@ function GratitudeSummaryCard({
             <p className="text-xs uppercase tracking-wide text-amber-700 font-semibold mb-1">
               {i + 1}. {p.label}
             </p>
-            <p className="text-gray-800 leading-relaxed">{entries[i]}</p>
+            <p className="text-[var(--color-text-primary)] leading-relaxed">{entries[i]}</p>
           </button>
         ))}
       </div>
@@ -1274,7 +1274,7 @@ function GenericReflectionContent({
           <p className="text-xs uppercase tracking-wide text-amber-700 font-medium">
             {pillar.sanskritName}
           </p>
-          <h3 className="text-lg font-semibold text-gray-900 mt-0.5">
+          <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mt-0.5">
             {pillar.name}
           </h3>
           <p className="text-sm text-gray-600 mt-1">{pillar.description}</p>
@@ -1303,7 +1303,7 @@ function GenericPillarContent({
         className="w-16 h-16 mx-auto mb-4"
         style={{ color: pillar.color }}
       />
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">{pillar.name}</h3>
+      <h3 className="text-xl font-semibold text-[var(--color-text-primary)] mb-2">{pillar.name}</h3>
       <p className="text-gray-600 max-w-md mx-auto">{pillar.description}</p>
       {pillar.defaultDurationMinutes > 0 && (
         <p className="text-sm text-gray-500 mt-4">

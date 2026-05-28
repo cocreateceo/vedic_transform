@@ -172,7 +172,7 @@ function PendingPracticeCard({
               <Icon className="w-7 h-7" style={{ color }} />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-xl font-bold text-gray-900">{pillarName}</h2>
+              <h2 className="text-xl font-bold text-[var(--color-text-primary)]">{pillarName}</h2>
               <p className="text-sm text-amber-600 mt-0.5">{sanskritName}</p>
               <p className="text-sm text-gray-600 mt-2">{description}</p>
             </div>

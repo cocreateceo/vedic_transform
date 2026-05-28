@@ -125,7 +125,7 @@ export default function PillarsPage() {
     <div className="max-w-7xl mx-auto space-y-8">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
             11 Transformation Pillars
           </h1>
           <p className="text-gray-600 mt-2">
@@ -151,7 +151,7 @@ export default function PillarsPage() {
         <CardContent className="py-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-semibold text-gray-900">Today&apos;s Progress</h3>
+              <h3 className="font-semibold text-[var(--color-text-primary)]">Today&apos;s Progress</h3>
               <p className="text-sm text-gray-500">
                 {completedPillars.length} of {PILLARS.length} pillars completed
               </p>
@@ -267,7 +267,7 @@ function TierSection({
           {accentIcon}
           {eyebrow}
         </div>
-        <h2 className="text-xl font-semibold text-gray-900 mt-1">{title}</h2>
+        <h2 className="text-xl font-semibold text-[var(--color-text-primary)] mt-1">{title}</h2>
         <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>
       </div>
       {children}
@@ -341,7 +341,7 @@ function PillarCard({
           >
             <Icon className="w-6 h-6" style={{ color: pillar.color }} />
           </div>
-          <h3 className="font-semibold text-gray-900">{pillar.name}</h3>
+          <h3 className="font-semibold text-[var(--color-text-primary)]">{pillar.name}</h3>
           <p className="text-sm text-gray-500 mt-1">{pillar.sanskritName}</p>
           <p className="text-xs text-gray-400 mt-2 line-clamp-2">
             {pillar.description}

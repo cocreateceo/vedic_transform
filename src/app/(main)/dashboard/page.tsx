@@ -159,7 +159,7 @@ export default function DashboardPage() {
             <div className="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mb-6 shadow-lg shadow-amber-500/25">
               <Sunrise className="w-10 h-10 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+            <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-3">
               Begin Your Transformation
             </h1>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
@@ -301,7 +301,7 @@ export default function DashboardPage() {
           hasn't picked any yet. Always tacks Journal onto the end so the
           gratitude shortcut is reachable. */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-800 mb-3">
+        <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">
           {focusPillarSlugs.length > 0 ? "Your focus pillars" : "Quick actions"}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -323,7 +323,7 @@ export default function DashboardPage() {
                       <Icon className="w-6 h-6" style={{ color: pillar.color }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-gray-900 truncate">
+                      <h4 className="font-medium text-[var(--color-text-primary)] truncate">
                         {pillar.name}
                       </h4>
                       <p className="text-sm text-gray-500 truncate">
@@ -342,7 +342,7 @@ export default function DashboardPage() {
                   <Calendar className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900">Journal</h4>
+                  <h4 className="font-medium text-[var(--color-text-primary)]">Journal</h4>
                   <p className="text-sm text-gray-500">Record your gratitude</p>
                 </div>
               </CardContent>
@@ -353,7 +353,7 @@ export default function DashboardPage() {
 
       {/* Discover section */}
       <div>
-        <h2 className="text-lg font-semibold text-gray-800 mb-3">Discover</h2>
+        <h2 className="text-lg font-semibold text-[var(--color-text-primary)] mb-3">Discover</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Link href="/dosha-assessment">
             <Card variant="golden" className="hover:shadow-lg transition-all cursor-pointer group">
@@ -362,7 +362,7 @@ export default function DashboardPage() {
                   <Leaf className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900">Dosha Assessment</h4>
+                  <h4 className="font-medium text-[var(--color-text-primary)]">Dosha Assessment</h4>
                   <p className="text-sm text-gray-500">Discover your Ayurvedic type</p>
                 </div>
               </CardContent>
@@ -376,7 +376,7 @@ export default function DashboardPage() {
                   <Headphones className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900">Audio Meditations</h4>
+                  <h4 className="font-medium text-[var(--color-text-primary)]">Audio Meditations</h4>
                   <p className="text-sm text-gray-500">Play guided sessions in-app</p>
                 </div>
               </CardContent>
@@ -390,7 +390,7 @@ export default function DashboardPage() {
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900">AI Insights</h4>
+                  <h4 className="font-medium text-[var(--color-text-primary)]">AI Insights</h4>
                   <p className="text-sm text-gray-500">Personalized recommendations</p>
                 </div>
               </CardContent>

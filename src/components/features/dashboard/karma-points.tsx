@@ -52,7 +52,7 @@ export function KarmaPoints({ totalKarma, todayEarned }: KarmaPointsProps) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-orange-500" />
-          <h3 className="font-semibold text-gray-900">Karma Points</h3>
+          <h3 className="font-semibold text-[var(--color-text-primary)]">Karma Points</h3>
         </div>
         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
           <Star className="w-3 h-3 fill-amber-500 text-amber-500" />

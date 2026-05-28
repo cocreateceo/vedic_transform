@@ -143,7 +143,7 @@ export function GoalsPageClient({
       <div className="flex items-center gap-4">
         <TargetGlyph />
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Goals</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Goals</h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">
             Set and track your weekly transformation goals
           </p>
@@ -168,7 +168,7 @@ export function GoalsPageClient({
 
       {/* Weekly Goals */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-gray-900">Weekly Goals</h2>
+        <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Weekly Goals</h2>
 
         {/* Current Week */}
         <WeeklyGoalCard

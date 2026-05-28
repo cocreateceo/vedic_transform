@@ -77,7 +77,7 @@ export default function AdminUsersPage() {
           <Shield className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Admin</h1>
+          <h1 className="text-2xl font-bold text-[var(--color-text-primary)]">Admin</h1>
           <p className="text-sm text-gray-500">User search and inspection.</p>
         </div>
       </div>
@@ -126,7 +126,7 @@ export default function AdminUsersPage() {
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="min-w-0">
-                    <p className="font-medium text-gray-900 truncate">
+                    <p className="font-medium text-[var(--color-text-primary)] truncate">
                       {u.name ?? u.email}
                     </p>
                     <p className="text-xs text-gray-500 truncate">{u.email}</p>

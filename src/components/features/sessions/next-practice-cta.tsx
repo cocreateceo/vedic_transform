@@ -104,7 +104,7 @@ export function NextPracticeCta({ justCompletedPillarSlug }: NextPracticeCtaProp
           <BookOpen className="w-3 h-3" />
           Related teaching
         </p>
-        <h4 className="text-sm font-semibold text-gray-900 line-clamp-2 mt-0.5">
+        <h4 className="text-sm font-semibold text-[var(--color-text-primary)] line-clamp-2 mt-0.5">
           {relatedPoster.title}
         </h4>
         {relatedPoster.tagline && (

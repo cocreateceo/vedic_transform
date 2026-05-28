@@ -52,7 +52,7 @@ export function RemindersPageClient({ initialSettings }: RemindersPageClientProp
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Reminders</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Reminders</h1>
         <p className="text-sm sm:text-base text-gray-600 mt-1">
           Configure notifications to stay on track with your practice
         </p>

@@ -151,7 +151,7 @@ export function InsightsPageClient({
         <div className="flex items-center gap-4">
           <InsightGlyph />
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Insights</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Insights</h1>
             <p className="text-sm sm:text-base text-gray-600 mt-1">
               Personalized recommendations based on your journey
             </p>

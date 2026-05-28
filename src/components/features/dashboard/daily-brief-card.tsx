@@ -113,7 +113,7 @@ export function DailyBriefCard() {
                 </span>
               )}
             </div>
-            <h3 className="text-base font-semibold text-gray-900 mt-1">
+            <h3 className="text-base font-semibold text-[var(--color-text-primary)] mt-1">
               {brief.headline}
             </h3>
             <p className="text-sm text-gray-600 mt-1 leading-relaxed">
@@ -187,7 +187,7 @@ export function DailyBriefCard() {
                     <BookOpen className="w-3 h-3" />
                     Today&apos;s teaching
                   </p>
-                  <p className="text-xs font-semibold text-gray-900 line-clamp-1">
+                  <p className="text-xs font-semibold text-[var(--color-text-primary)] line-clamp-1">
                     {posterOfTheDay.title}
                   </p>
                 </div>

@@ -85,7 +85,7 @@ export function ReportsPageClient({
       <div className="max-w-4xl mx-auto">
         <div className="text-center py-12">
           <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900">No Journey Started</h2>
+          <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">No Journey Started</h2>
           <p className="text-gray-500 mt-2">
             Start your 48-day transformation journey to generate reports.
           </p>
@@ -117,7 +117,7 @@ export function ReportsPageClient({
       `}</style>
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Reports</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Reports</h1>
         <p className="text-sm sm:text-base text-gray-600 mt-1">
           Download and print your journey progress
         </p>
@@ -179,7 +179,7 @@ export function ReportsPageClient({
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">
                   Journey Completion Certificate
                 </h3>
                 <p className="text-sm text-gray-500">
@@ -210,7 +210,7 @@ export function ReportsPageClient({
         <Card className="opacity-75">
           <CardContent className="p-6">
             <div className="text-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">
                 Journey Completion Certificate
               </h3>
               <p className="text-sm text-gray-500">
