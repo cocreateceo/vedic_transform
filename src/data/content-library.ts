@@ -19,7 +19,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "morning-initiation",
     category: "body",
     duration: "12 min",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "https://www.youtube.com/@vedic-s",
     description:
       "Learn how to craft a morning routine rooted in Vedic principles. This guide walks you through waking with intention, cleansing rituals, and setting the tone for a productive, mindful day. Discover why the Brahma Muhurta — the hour before sunrise — is considered the most powerful time for personal practice.",
   },
@@ -30,7 +30,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "nutrition-fasting",
     category: "body",
     duration: "18 min",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "https://www.youtube.com/@vedic-s",
     description:
       "Explore the Ayurvedic framework of Sattvic, Rajasic, and Tamasic foods. Understand how your diet directly influences your mental clarity, emotional balance, and spiritual receptivity. Includes practical meal guidelines and a simple Sattvic recipe to get started.",
   },
@@ -41,7 +41,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "thoughts-intention",
     category: "mind",
     duration: "8 min read",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "/library/article/thought-reset-technique",
     description:
       "Negative thought loops are one of the biggest barriers to transformation. This article teaches you the Vedic-inspired thought reset method — a practical technique for observing, interrupting, and redirecting unhelpful mental patterns using awareness and breath.",
   },
@@ -52,7 +52,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "breathing-meditation",
     category: "mind",
     duration: "22 min",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "https://www.youtube.com/@vedic-s",
     description:
       "A comprehensive introduction to Pranayama — the Vedic science of breath control. Learn Nadi Shodhana (alternate nostril breathing), Kapalabhati (skull-shining breath), and Bhramari (humming bee breath). Each technique is demonstrated with proper form and timing for beginners.",
   },
@@ -63,7 +63,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "movement",
     category: "body",
     duration: "15 min",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "https://www.youtube.com/@vedic-s",
     description:
       "Discover how traditional Vedic movement practices — including Surya Namaskar (sun salutations) and mindful walking — differ from conventional exercise. This session emphasizes the union of breath, awareness, and physical motion for holistic vitality.",
   },
@@ -74,7 +74,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "healing-meditation",
     category: "mind",
     duration: "20 min",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "https://www.youtube.com/@vedic-s",
     audioUrl: "generated",
     description:
       "A gentle guided meditation designed to help you release stored emotional tension. Drawing from Yoga Nidra and Vedantic visualization practices, this session guides you through body scanning, emotional acknowledgment, and compassionate letting go.",
@@ -86,7 +86,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "sandhya-meditation",
     category: "spirit",
     duration: "16 min",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "https://www.youtube.com/@vedic-s",
     description:
       "Sandhya Vandana is the ancient practice of meditating at the junction points of the day — dawn, noon, and dusk. Learn why these transitional moments hold special spiritual significance and how to perform a simplified modern version of this timeless ritual.",
   },
@@ -97,7 +97,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "gratitude",
     category: "mind",
     duration: "10 min read",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "/library/article/gratitude-neuroscience-vedic",
     description:
       "Gratitude is both an ancient Vedic virtue and a scientifically validated practice for well-being. This article explores how regular gratitude practice rewires neural pathways, reduces cortisol, and aligns with the Vedic principle of Santosha (contentment).",
   },
@@ -108,7 +108,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "brahman-connection",
     category: "spirit",
     duration: "14 min read",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "/library/article/understanding-brahman",
     description:
       "An accessible introduction to the Vedantic concept of Brahman — the infinite, unchanging reality that underlies all existence. Learn how connecting with this universal consciousness through meditation and contemplation can bring profound peace and purpose to daily life.",
   },
@@ -119,7 +119,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "divine-manifestation",
     category: "spirit",
     duration: "13 min",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "https://www.youtube.com/@vedic-s",
     description:
       "Sankalpa is the practice of setting a heartfelt intention aligned with your highest truth. Unlike modern goal-setting, Sankalpa works at the level of identity and consciousness. Learn how to formulate, plant, and nurture your Sankalpa through the 48-day Mandala journey.",
   },
@@ -130,7 +130,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     pillarSlug: "sleep-optimization",
     category: "body",
     duration: "11 min",
-    url: "https://www.youtube.com/@10xvedic",
+    url: "https://www.youtube.com/@vedic-s",
     description:
       "Quality sleep is the foundation of transformation. This session covers Ayurvedic sleep hygiene — including optimal sleep timing, evening wind-down rituals, herbal recommendations, and a short Yoga Nidra practice to help you transition into deep, restorative rest.",
   },
@@ -352,7 +352,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "9 min",
     url: "#",
-    audioUrl: "/audio/asato-ma.mp3",
+    audioUrl: "/audio/library/mantra-pavamana.mp3",
     description:
       "From the Bṛhadāraṇyaka Upaniṣad (1.3.28), the Pavamana Mantra is a prayer for ultimate truth: 'Asato mā sadgamaya, tamaso mā jyotirgamaya, mṛtyor mā amṛtaṁ gamaya' — Lead me from the unreal to the real, from darkness to light, from death to immortality. One of the most profound expressions of the spiritual aspiration in all of Vedic literature.",
   },
@@ -376,7 +376,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "9 min",
     url: "#",
-    audioUrl: "generated",
+    audioUrl: "/audio/library/mantra-purnamadah.mp3",
     description:
       "The Shanti Mantra from the Isha Upanishad: 'Oṁ Pūrṇamadaḥ Pūrṇamidaṁ Pūrṇāt Pūrṇamudacyate, Pūrṇasya Pūrṇamādāya Pūrṇamevāvaśiṣyate' — That is whole, this is whole; from wholeness comes wholeness. When wholeness is taken from wholeness, wholeness alone remains. A profound meditation on the infinite, non-dual nature of Brahman.",
   },

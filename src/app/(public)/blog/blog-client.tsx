@@ -49,7 +49,7 @@ function ArticleCard({ post }: { post: BlogPost }) {
       <div className="rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all overflow-hidden">
         {/* Thumbnail — Pexels image, falls back to gradient placeholder */}
         <div className={`relative h-40 bg-gradient-to-br ${cat.thumbnail} flex items-center justify-center overflow-hidden`}>
-          <PexelsImage slug={pexelsSlug} fallbackSlug="blog-default" className="absolute inset-0 [&_figcaption]:hidden" />
+          <PexelsImage slug={pexelsSlug} fallbackSlug="blog-default" noAttribution className="absolute inset-0" />
           {Icon && (
             <Icon className="w-12 h-12 text-white/70 relative z-10 drop-shadow-lg" />
           )}

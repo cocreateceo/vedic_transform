@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { CONTENT_LIBRARY, type ContentItem } from "@/data/content-library";
 import { PILLARS } from "@/constants/pillars";
@@ -87,6 +88,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
   });
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
 
+  const router = useRouter();
   const { currentTrack, isPlaying, playTrack, togglePlay } = useAudioPlayer();
 
   const filteredContent = useMemo(() => {
@@ -134,8 +136,12 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
             category: item.category,
           });
         }
-      } else {
-        // Open in new tab for video/article/guide
+      } else if (item.url.startsWith("/")) {
+        // Internal article/guide route — navigate in-app rather than opening
+        // a new tab. External URLs still open in a new tab below.
+        router.push(item.url);
+      } else if (item.url && item.url !== "#") {
+        // External video / off-site reading — open in a new tab.
         window.open(item.url, "_blank", "noopener,noreferrer");
       }
 
@@ -168,7 +174,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
         });
       }
     },
-    [progressMap, currentTrack, playTrack, togglePlay]
+    [progressMap, currentTrack, playTrack, togglePlay, router]
   );
 
   const handleToggleComplete = useCallback(

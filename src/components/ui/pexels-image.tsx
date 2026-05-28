@@ -25,6 +25,13 @@ interface PexelsImageProps {
   sizes?: string;
   width?: number;
   height?: number;
+  /**
+   * Omit the attribution figcaption entirely. Use only when the image sits
+   * inside an outer <a>/Link (nested anchors are invalid HTML and break
+   * hydration) AND attribution is provided elsewhere on the page to satisfy
+   * Pexels TOS.
+   */
+  noAttribution?: boolean;
 }
 
 /**
@@ -44,6 +51,7 @@ export function PexelsImage({
   sizes = "(max-width: 768px) 100vw, 50vw",
   width,
   height,
+  noAttribution = false,
 }: PexelsImageProps) {
   const entry = KNOWN[slug] ?? (fallbackSlug ? KNOWN[fallbackSlug] : undefined);
   if (!entry) {
@@ -56,17 +64,23 @@ export function PexelsImage({
     );
   }
   const resolvedSlug = KNOWN[slug] ? slug : fallbackSlug!;
+  const img = (
+    <Image
+      src={`/images/pexels/${resolvedSlug}.jpg`}
+      alt={alt ?? entry.alt}
+      width={width ?? entry.width}
+      height={height ?? entry.height}
+      sizes={sizes}
+      priority={priority}
+      className="w-full h-full object-cover rounded-xl"
+    />
+  );
+  if (noAttribution) {
+    return <div className={className}>{img}</div>;
+  }
   return (
     <figure className={className}>
-      <Image
-        src={`/images/pexels/${resolvedSlug}.jpg`}
-        alt={alt ?? entry.alt}
-        width={width ?? entry.width}
-        height={height ?? entry.height}
-        sizes={sizes}
-        priority={priority}
-        className="w-full h-full object-cover rounded-xl"
-      />
+      {img}
       <figcaption className="text-[10px] text-gray-400 mt-1 text-right">
         Photo by{" "}
         <a href={entry.photographer_url} target="_blank" rel="noreferrer" className="underline">
