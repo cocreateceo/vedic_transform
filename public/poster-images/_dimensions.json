@@ -1,5 +1,175 @@
 [
   {
+    "slug": "ayurvedic-nutrition-fasting",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 768
+      },
+      "@2x": {
+        "width": 1254,
+        "height": 1254
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 400
+      }
+    }
+  },
+  {
+    "slug": "five-principles-of-manifestation",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 1152
+      },
+      "@2x": {
+        "width": 1024,
+        "height": 1536
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 600
+      }
+    }
+  },
+  {
+    "slug": "gratitude-way-of-life",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "kapha-balancing-yoga",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "kapha-pranayama",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 1152
+      },
+      "@2x": {
+        "width": 1024,
+        "height": 1536
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 600
+      }
+    }
+  },
+  {
+    "slug": "manifestation-10-secrets-patanjali",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "manifestation-process-patanjali",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "manifestation-secrets-patanjali",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 1152
+      },
+      "@2x": {
+        "width": 1024,
+        "height": 1536
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 600
+      }
+    }
+  },
+  {
+    "slug": "manifestation-triptych-inner-to-outer",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "mind-purification-5-step",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 1152
+      },
+      "@2x": {
+        "width": 1024,
+        "height": 1536
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 600
+      }
+    }
+  },
+  {
     "slug": "morning-routine-5-step",
     "sizes": {
       "default": {
@@ -34,6 +204,40 @@
     }
   },
   {
+    "slug": "noon-sandhya-meditation-benefits",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "nutrition-fasting-ayurvedic-guide",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 1152
+      },
+      "@2x": {
+        "width": 1024,
+        "height": 1536
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 600
+      }
+    }
+  },
+  {
     "slug": "path-of-manifestation",
     "sizes": {
       "default": {
@@ -47,125 +251,6 @@
       ".thumb": {
         "width": 400,
         "height": 600
-      }
-    }
-  },
-  {
-    "slug": "five-principles-of-manifestation",
-    "sizes": {
-      "default": {
-        "width": 768,
-        "height": 1152
-      },
-      "@2x": {
-        "width": 1024,
-        "height": 1536
-      },
-      ".thumb": {
-        "width": 400,
-        "height": 600
-      }
-    }
-  },
-  {
-    "slug": "manifestation-secrets-patanjali",
-    "sizes": {
-      "default": {
-        "width": 768,
-        "height": 1152
-      },
-      "@2x": {
-        "width": 1024,
-        "height": 1536
-      },
-      ".thumb": {
-        "width": 400,
-        "height": 600
-      }
-    }
-  },
-  {
-    "slug": "step-by-step-healing",
-    "sizes": {
-      "default": {
-        "width": 768,
-        "height": 1152
-      },
-      "@2x": {
-        "width": 1024,
-        "height": 1536
-      },
-      ".thumb": {
-        "width": 400,
-        "height": 600
-      }
-    }
-  },
-  {
-    "slug": "gratitude-way-of-life",
-    "sizes": {
-      "default": {
-        "width": 768,
-        "height": 512
-      },
-      "@2x": {
-        "width": 1536,
-        "height": 1024
-      },
-      ".thumb": {
-        "width": 400,
-        "height": 267
-      }
-    }
-  },
-  {
-    "slug": "ayurvedic-nutrition-fasting",
-    "sizes": {
-      "default": {
-        "width": 768,
-        "height": 768
-      },
-      "@2x": {
-        "width": 1254,
-        "height": 1254
-      },
-      ".thumb": {
-        "width": 400,
-        "height": 400
-      }
-    }
-  },
-  {
-    "slug": "mind-purification-5-step",
-    "sizes": {
-      "default": {
-        "width": 768,
-        "height": 1152
-      },
-      "@2x": {
-        "width": 1024,
-        "height": 1536
-      },
-      ".thumb": {
-        "width": 400,
-        "height": 600
-      }
-    }
-  },
-  {
-    "slug": "vata-balancing-yoga",
-    "sizes": {
-      "default": {
-        "width": 768,
-        "height": 512
-      },
-      "@2x": {
-        "width": 1536,
-        "height": 1024
-      },
-      ".thumb": {
-        "width": 400,
-        "height": 267
       }
     }
   },
@@ -187,7 +272,24 @@
     }
   },
   {
-    "slug": "vata-pranayama",
+    "slug": "pitta-balancing-yoga-10-asanas",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "pitta-pranayama",
     "sizes": {
       "default": {
         "width": 768,
@@ -204,7 +306,143 @@
     }
   },
   {
-    "slug": "kapha-pranayama",
+    "slug": "pranayama-meditation-6-step",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 1152
+      },
+      "@2x": {
+        "width": 1024,
+        "height": 1536
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 600
+      }
+    }
+  },
+  {
+    "slug": "sandhya-meditation-three-phase-ritual",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 915
+      },
+      "@2x": {
+        "width": 1149,
+        "height": 1369
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 477
+      }
+    }
+  },
+  {
+    "slug": "sandhya-meditation-three-sacred-times",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "step-by-step-healing",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 1152
+      },
+      "@2x": {
+        "width": 1024,
+        "height": 1536
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 600
+      }
+    }
+  },
+  {
+    "slug": "ten-manifestation-secrets-patanjali",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "three-sandhyas-daily-rhythm",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "vata-balancing-yoga",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "vata-balancing-yoga-5-themes",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "vata-pranayama",
     "sizes": {
       "default": {
         "width": 768,
