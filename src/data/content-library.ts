@@ -380,4 +380,37 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     description:
       "The Shanti Mantra from the Isha Upanishad: 'Oṁ Pūrṇamadaḥ Pūrṇamidaṁ Pūrṇāt Pūrṇamudacyate, Pūrṇasya Pūrṇamādāya Pūrṇamevāvaśiṣyate' — That is whole, this is whole; from wholeness comes wholeness. When wholeness is taken from wholeness, wholeness alone remains. A profound meditation on the infinite, non-dual nature of Brahman.",
   },
+  {
+    id: "content-morning-routine-5-step",
+    title: "The 5-Step Sankalpa Morning Routine",
+    type: "article",
+    pillarSlug: "morning-initiation",
+    category: "body",
+    duration: "8 min read",
+    url: "/library/article/the-5-step-sankalpa-morning-routine",
+    description:
+      "Five Vedic steps — early waking, breath, awareness, gratitude, and visualization — that turn the first 15 minutes of the day into the engine of transformation.",
+  },
+  {
+    id: "content-morning-sandhya-meditation",
+    title: "Sandhya: The Vedic Practice of Sacred Threshold",
+    type: "article",
+    pillarSlug: "sandhya-meditation",
+    category: "spirit",
+    duration: "9 min read",
+    url: "/library/article/sandhya-vedic-practice-of-sacred-threshold",
+    description:
+      "Sandhya means 'junction' — the meeting point where night becomes day. A practical guide to the seven-step morning sandhya the Rishis used for three thousand years.",
+  },
+  {
+    id: "content-path-of-manifestation",
+    title: "The Six-Step Patanjali Path to Manifestation",
+    type: "article",
+    pillarSlug: "divine-manifestation",
+    category: "spirit",
+    duration: "9 min read",
+    url: "/library/article/six-step-path-to-manifestation",
+    description:
+      "Manifestation in the Vedic tradition is not magic — it is a sequence. Intention, belief, alignment, action, surrender, and gratitude, each rooted in a specific sutra.",
+  },
 ];
