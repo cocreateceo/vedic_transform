@@ -132,17 +132,28 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Glassmorphism utility */
+/* Glassmorphism utility — use background-color, not the shorthand, so any
+ * Tailwind `bg-gradient-*` overlay paints on top instead of being wiped. */
 .glass {
-  background: var(--glass-bg);
+  background-color: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Vedic card style */
+/* Vedic card style.
+ *
+ * IMPORTANT: use `background-color` (not the `background` shorthand) so the
+ * solid cream/dark fill from the CSS variable does NOT also reset
+ * `background-image`. Tailwind's `bg-gradient-to-*` utilities paint a
+ * linear-gradient into `background-image`, so when callers combine
+ * `vedic-card` with `bg-gradient-*` the gradient sits on top of the card
+ * color and renders correctly. Prior to this fix the shorthand wiped
+ * `background-image` and any gradient banner ended up cream-on-cream with
+ * white text that was effectively invisible (e.g. dashboard phase banner).
+ */
 .vedic-card {
-  background: var(--card-bg);
+  background-color: var(--card-bg);
   backdrop-filter: blur(10px);
   border: 2px solid #DAA520;
   border-radius: 16px;
@@ -272,9 +283,10 @@ html {
   font-size: clamp(1.5rem, 5vw, 2rem);
 }
 
-/* Saffron/Gold Theme Utility Classes */
+/* Saffron/Gold Theme Utility Classes. background-color (not shorthand) so
+ * Tailwind gradient overlays survive — see comment on .vedic-card. */
 .glass-card {
-  background: var(--color-card-bg);
+  background-color: var(--color-card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 16px;
