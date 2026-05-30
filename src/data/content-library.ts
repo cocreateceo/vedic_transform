@@ -135,6 +135,145 @@ export const CONTENT_LIBRARY: ContentItem[] = [
       "Quality sleep is the foundation of transformation. This session covers Ayurvedic sleep hygiene — including optimal sleep timing, evening wind-down rituals, herbal recommendations, and a short Yoga Nidra practice to help you transition into deep, restorative rest.",
   },
 
+  // ── Library Shorts (60-second pillar teachings) ─────────────────
+  // Each short is a 60-second standalone teaching that also functions as
+  // a trailer for the long-form video on the same pillar. Source briefs
+  // in docs/MASTER_VIDEO_PLAN.md (Part A). Brahma Muhurta uses the v2 cut
+  // (FvreaYh00Sg); v1 alternate (ujr4R9TMP2c) is available as a backup.
+
+  {
+    id: "short-brahma-muhurta",
+    title: "Brahma Muhurta: The 96-Minute Window",
+    type: "video",
+    pillarSlug: "morning-initiation",
+    category: "body",
+    duration: "1 min",
+    url: "https://youtu.be/FvreaYh00Sg",
+    thumbnail: "https://img.youtube.com/vi/FvreaYh00Sg/maxresdefault.jpg",
+    description:
+      "The 96-minute pre-sunrise window ancient Ayurveda calls the most powerful hour. Why all three doshas balance here, what modern chronobiology says about morning cortisol, and the simplest 5 AM start: wake, warm water, three breaths.",
+  },
+  {
+    id: "short-bhramari",
+    title: "Bhramari: The 60-Second Anxiety Cure",
+    type: "video",
+    pillarSlug: "breathing-meditation",
+    category: "mind",
+    duration: "1 min",
+    url: "https://youtu.be/HR0HwIixHDY",
+    thumbnail: "https://img.youtube.com/vi/HR0HwIixHDY/maxresdefault.jpg",
+    description:
+      "The humming bee pranayama — an ancient anti-anxiety technique that works in under sixty seconds. Hand position, breath, and the vagus-nerve mechanism that quiets the mind almost immediately.",
+  },
+  {
+    id: "short-sankalpa",
+    title: "Sankalpa: Why Most Manifestation Advice Is Wrong",
+    type: "video",
+    pillarSlug: "divine-manifestation",
+    category: "spirit",
+    duration: "1 min",
+    url: "https://youtu.be/P84Ib24a3Ng",
+    thumbnail: "https://img.youtube.com/vi/P84Ib24a3Ng/maxresdefault.jpg",
+    description:
+      "The Vedic science of intention. Three rules a real Sankalpa must follow — present tense, affirmative, identity-based — and why manifestation that targets objects instead of identity reliably fails.",
+  },
+  {
+    id: "short-sattvic-eating",
+    title: "Sattvic Eating in 60 Seconds",
+    type: "video",
+    pillarSlug: "nutrition-fasting",
+    category: "body",
+    duration: "1 min",
+    url: "https://youtu.be/RRxkLdgDegM",
+    thumbnail: "https://img.youtube.com/vi/RRxkLdgDegM/maxresdefault.jpg",
+    description:
+      "The Ayurvedic three-guna food framework — Sattvic (clarity), Rajasic (stimulating), Tamasic (dulling). The 60-30-10 transition rule and the simplest principle of all: largest meal at noon when Agni is strongest.",
+  },
+  {
+    id: "short-surya-namaskar",
+    title: "Surya Namaskar: The Complete Morning Practice",
+    type: "video",
+    pillarSlug: "movement",
+    category: "body",
+    duration: "1 min",
+    url: "https://youtu.be/qFhxKp9XfVY",
+    thumbnail: "https://img.youtube.com/vi/qFhxKp9XfVY/maxresdefault.jpg",
+    description:
+      "Twelve poses, one breath cycle, the complete Vedic sun salutation. Why Ayurveda prescribes exercise to half capacity (ardha-shakti) and the smallest viable version you can start tomorrow morning.",
+  },
+  {
+    id: "short-kritajnata",
+    title: "Kritajnata: The Vedic Word for Gratitude",
+    type: "video",
+    pillarSlug: "gratitude",
+    category: "mind",
+    duration: "1 min",
+    url: "https://youtu.be/NkpWu1H904Q",
+    thumbnail: "https://img.youtube.com/vi/NkpWu1H904Q/maxresdefault.jpg",
+    description:
+      "Gratitude in Sanskrit means 'knowing what has been done for you' — a noticing word, not a thanking word. The Taittiriya Upanishad teaching plus the fMRI data on what 8 weeks of journaling does to the medial prefrontal cortex.",
+  },
+  {
+    id: "short-sandhya",
+    title: "Sandhya Vandana: The Twilight Practice",
+    type: "video",
+    pillarSlug: "sandhya-meditation",
+    category: "spirit",
+    duration: "1 min",
+    url: "https://youtu.be/sJ5BzJawHr4",
+    thumbnail: "https://img.youtube.com/vi/sJ5BzJawHr4/maxresdefault.jpg",
+    description:
+      "The Rig Veda's oldest practice happens three times daily — dawn, noon, dusk — the junctures the Rishis called Sandhi. The 2-minute simplified version: face east, three breaths, three Gayatris, sit thirty seconds.",
+  },
+  {
+    id: "short-yoga-nidra",
+    title: "Yoga Nidra: Yogic Sleep",
+    type: "video",
+    pillarSlug: "sleep-optimization",
+    category: "body",
+    duration: "1 min",
+    url: "https://youtu.be/jzbePUfDQ1o",
+    thumbnail: "https://img.youtube.com/vi/jzbePUfDQ1o/maxresdefault.jpg",
+    description:
+      "The tradition holds that one hour of Yoga Nidra equals four hours of regular sleep. Why the practice works at the theta-delta boundary, and how to use it tonight from bed in under ten minutes.",
+  },
+  {
+    id: "short-tat-tvam-asi",
+    title: "Tat Tvam Asi: That Thou Art",
+    type: "video",
+    pillarSlug: "brahman-connection",
+    category: "spirit",
+    duration: "1 min",
+    url: "https://youtu.be/29OKHUGj7dw",
+    thumbnail: "https://img.youtube.com/vi/29OKHUGj7dw/maxresdefault.jpg",
+    description:
+      "The most ambitious sentence in Vedic literature is three words long. From the Chandogya Upanishad — what you are looking for, you already are. Not a belief; an invitation to investigate.",
+  },
+  {
+    id: "short-mahamrityunjaya",
+    title: "Mahamrityunjaya: The Great Healing Mantra",
+    type: "video",
+    pillarSlug: "healing-meditation",
+    category: "spirit",
+    duration: "1 min",
+    url: "https://youtu.be/MtfAgxcgveM",
+    thumbnail: "https://img.youtube.com/vi/MtfAgxcgveM/maxresdefault.jpg",
+    description:
+      "The most powerful healing mantra in the Vedic canon, from the Rig Veda. The meaning of 'as a ripe cucumber falls from its vine' and how the practice has been used for physical healing and protection for three millennia.",
+  },
+  {
+    id: "short-vrittis",
+    title: "Vrittis: The Fluctuations of the Mind",
+    type: "video",
+    pillarSlug: "thoughts-intention",
+    category: "mind",
+    duration: "1 min",
+    url: "https://youtu.be/T4qK3HKwc7g",
+    thumbnail: "https://img.youtube.com/vi/T4qK3HKwc7g/maxresdefault.jpg",
+    description:
+      "The Yoga Sutras open with one definition: yoga is the cessation of the fluctuations of the mind. The four-step thought reset — notice, name, release, replace with a Sankalpa — applied to the worry loops you already know.",
+  },
+
   // ── In-App Audio Meditations ────────────────────────────────────
 
   {
