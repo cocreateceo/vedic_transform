@@ -552,4 +552,81 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     description:
       "Manifestation in the Vedic tradition is not magic — it is a sequence. Intention, belief, alignment, action, surrender, and gratitude, each rooted in a specific sutra.",
   },
+  {
+    id: "content-manifestation-secrets-patanjali",
+    title: "Eight Secrets of Manifestation from the Yoga Sutras",
+    type: "article",
+    pillarSlug: "divine-manifestation",
+    category: "spirit",
+    duration: "10 min read",
+    url: "/library/article/eight-secrets-of-manifestation-yoga-sutras",
+    description:
+      "Eight Patanjali principles — from chitta vritti nirodha to faith — that explain why some manifestation practices produce real change and most produce nothing at all.",
+  },
+  {
+    id: "content-step-by-step-healing",
+    title: "Step-by-Step Healing: A Vedic Self-Therapy",
+    type: "article",
+    pillarSlug: "healing-meditation",
+    category: "mind",
+    duration: "10 min read",
+    url: "/library/article/step-by-step-vedic-self-therapy",
+    description:
+      "Nine sequenced steps — from quieting the mind to surrender — that the Vedic tradition prescribes for healing the body through the mind, supported by modern psychoneuroimmunology.",
+  },
+  {
+    id: "content-ayurvedic-nutrition-fasting",
+    title: "Eating With the Sun: Ayurvedic Nutrition and Intermittent Fasting",
+    type: "article",
+    pillarSlug: "nutrition-fasting",
+    category: "body",
+    duration: "9 min read",
+    url: "/library/article/eating-with-the-sun-ayurveda-intermittent-fasting",
+    description:
+      "The Vedic tradition discovered intermittent fasting three thousand years before it became fashionable. Five practical principles for eating in rhythm with the digestive fire.",
+  },
+  {
+    id: "content-vata-balancing-yoga",
+    title: "Vata Balancing Yoga: Grounding the Wind Within",
+    type: "article",
+    pillarSlug: "movement",
+    category: "body",
+    duration: "9 min read",
+    url: "/library/article/vata-balancing-yoga-grounding-the-wind",
+    description:
+      "Vata is the dosha of air and space — light, mobile, creative, and prone to anxiety when imbalanced. Ten asanas and a daily rhythm to ground the wind within.",
+  },
+  {
+    id: "content-pitta-balancing-yoga",
+    title: "Pitta Balancing Yoga: Cooling the Inner Fire",
+    type: "article",
+    pillarSlug: "movement",
+    category: "body",
+    duration: "9 min read",
+    url: "/library/article/pitta-balancing-yoga-cooling-the-inner-fire",
+    description:
+      "Pitta is the dosha of fire and water — sharp, ambitious, intense, and prone to overheating. Five themed practices to cool the body, soften the heart, and balance the fire within.",
+  },
+  {
+    id: "content-kapha-balancing-yoga",
+    title: "Kapha Balancing Yoga: Awakening the Earth Element",
+    type: "article",
+    pillarSlug: "movement",
+    category: "body",
+    duration: "9 min read",
+    url: "/library/article/kapha-balancing-yoga-awakening-the-earth",
+    description:
+      "Kapha is the dosha of earth and water — steady, nurturing, strong, and prone to heaviness. Ten energizing asanas to awaken the inner fire and lighten the body.",
+  },
+  {
+    id: "content-pranayama-meditation-6-step",
+    title: "Pranayama and Meditation: A Six-Step Daily Practice",
+    type: "article",
+    pillarSlug: "breathing-meditation",
+    category: "mind",
+    duration: "9 min read",
+    url: "/library/article/pranayama-meditation-six-step-daily-practice",
+    description:
+      "Six sequenced steps — from quiet sitting to positive intention — that integrate Patanjali's breath and meditation practices into a 30-minute daily session.",
+  },
 ];
