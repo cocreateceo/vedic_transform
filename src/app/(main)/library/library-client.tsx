@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { CONTENT_LIBRARY, type ContentItem } from "@/data/content-library";
 import { POSTERS, type Poster } from "@/data/posters";
+import { MANTRAS, type Mantra } from "@/data/mantras";
 import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,8 @@ import { useAudioPlayer } from "@/context/audio-player-context";
 import { MantraIntroButton } from "@/components/features/library/mantra-intro-button";
 import { PosterCard } from "@/components/features/posters/poster-card";
 import { PosterModal } from "@/components/features/posters/poster-modal";
+import { MantraCard } from "@/components/features/mantras/mantra-card";
+import { MantraModal } from "@/components/features/mantras/mantra-modal";
 import {
   Search,
   CheckCircle2,
@@ -41,7 +44,7 @@ interface LibraryPageClientProps {
 }
 
 type CategoryFilter = "all" | "body" | "mind" | "spirit";
-type TypeFilter = "all" | "video" | "audio" | "article" | "guide" | "poster";
+type TypeFilter = "all" | "video" | "audio" | "article" | "guide" | "poster" | "mantra";
 
 const CATEGORY_TABS: { value: CategoryFilter; label: string; color: string }[] = [
   { value: "all", label: "All", color: "from-orange-500 to-amber-500" },
@@ -57,6 +60,7 @@ const TYPE_TABS: { value: TypeFilter; label: string; icon: string }[] = [
   { value: "article", label: "Articles", icon: "" },
   { value: "guide", label: "Guides", icon: "" },
   { value: "poster", label: "Posters", icon: "" },
+  { value: "mantra", label: "Mantras", icon: "" },
 ];
 
 const TYPE_CONFIG: Record<ContentItem["type"], { icon: typeof Video; label: string; color: string }> = {
@@ -93,12 +97,14 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
   });
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
   const [posterModalSlug, setPosterModalSlug] = useState<Poster | null>(null);
+  const [mantraModal, setMantraModal] = useState<Mantra | null>(null);
 
   const router = useRouter();
   const { currentTrack, isPlaying, playTrack, togglePlay } = useAudioPlayer();
 
-  // Are we showing posters instead of content-library items?
+  // Are we showing posters / mantras instead of content-library items?
   const isPosterMode = activeType === "poster";
+  const isMantraMode = activeType === "mantra";
 
   const filteredPosters = useMemo(() => {
     if (!isPosterMode) return [];
@@ -122,8 +128,30 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
     return items;
   }, [isPosterMode, activeCategory, searchQuery]);
 
+  const filteredMantras = useMemo(() => {
+    if (!isMantraMode) return [];
+    const q = searchQuery.trim().toLowerCase();
+    return MANTRAS.filter((m) => {
+      if (!q) return true;
+      const hay = [
+        m.title,
+        m.sanskritName,
+        m.devata,
+        m.meaningOneLine,
+        m.context,
+        m.whenToChant,
+        m.text.iast,
+        m.text.english,
+        m.category,
+      ]
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }, [isMantraMode, searchQuery]);
+
   const filteredContent = useMemo(() => {
-    if (isPosterMode) return [];
+    if (isPosterMode || isMantraMode) return [];
     let items = CONTENT_LIBRARY;
 
     if (activeCategory !== "all") {
@@ -144,7 +172,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
     }
 
     return items;
-  }, [isPosterMode, activeCategory, activeType, searchQuery]);
+  }, [isPosterMode, isMantraMode, activeCategory, activeType, searchQuery]);
 
   const stats = useMemo(() => {
     const total = CONTENT_LIBRARY.length;
@@ -346,8 +374,32 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
         </>
       )}
 
+      {/* Mantra grid — shown when the Mantras type tab is active */}
+      {isMantraMode && (
+        <>
+          {filteredMantras.length === 0 ? (
+            <Card variant="elevated" className="text-center py-12">
+              <CardContent>
+                <p className="text-[var(--color-text-secondary)]">
+                  No mantras match your search.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filteredMantras.map((m) => (
+                <MantraCard key={m.slug} mantra={m} onOpen={setMantraModal} />
+              ))}
+            </div>
+          )}
+          {mantraModal && (
+            <MantraModal mantra={mantraModal} onClose={() => setMantraModal(null)} />
+          )}
+        </>
+      )}
+
       {/* Content Grid — content-library items (audio/video/article/guide) */}
-      {!isPosterMode && filteredContent.length === 0 ? (
+      {!isPosterMode && !isMantraMode && filteredContent.length === 0 ? (
         <Card variant="elevated" className="text-center py-12">
           <CardContent>
             <p className="text-[var(--color-text-secondary)]">
@@ -355,7 +407,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
             </p>
           </CardContent>
         </Card>
-      ) : !isPosterMode ? (
+      ) : !isPosterMode && !isMantraMode ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredContent.map((item) => {
             const isCompleted = progressMap.get(item.id)?.completed || false;
