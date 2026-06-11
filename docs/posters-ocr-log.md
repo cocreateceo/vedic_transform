@@ -301,3 +301,22 @@ Dosha pranayama trio: ✅ complete (Vata · Pitta · Kapha)
 Dosha yoga trio: ✅ complete (Vata · Pitta · Kapha — each has dedicated balancing poster)
 
 Of the 74 raw WhatsApp JPEGs, 26 are unique canonical posters, ~46 are visual duplicates of the canonical set, and 2 are unreadable decorative book-cover collages.
+
+---
+
+## Addendum — 2026-06-11 (generated posters, no source scan)
+
+Two pillars had **no poster anywhere in the 74-image WhatsApp set**:
+`brahman-connection` and `sleep-optimization`. To complete 11/11 pillar
+coverage, on-brand teaching posters were **generated** (not OCR'd) from the
+existing long-form `PILLAR_CONTENT` for those two pillars.
+
+- Generator: `scripts/generate-pillar-poster.mjs` (SVG → WebP via sharp,
+  same 3-size output contract as `posters-build-webp.cjs`). Re-run it to
+  regenerate the images; edit the `POSTERS` array there to change content.
+- `connection-to-brahman` → pillar `brahman-connection` (768×1322, spirit)
+- `sleep-optimization-nidra` → pillar `sleep-optimization` (768×1297, body)
+
+These have **no entry in the source→slug audit table above** because there
+is no source JPEG — that is expected, not a gap. Pillar poster coverage is
+now 11/11.
