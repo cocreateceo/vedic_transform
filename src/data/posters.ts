@@ -2224,6 +2224,139 @@ export const POSTERS: Poster[] = [
     ],
     tagline: "Eat to Nourish. Fast to Purify. Live to Realize. This is the Yogic way of life.",
   },
+  {
+    slug: "connection-to-brahman",
+    title: "Connection to Brahman — Daily Contact with Universal Consciousness",
+    concept: "brahman-connection",
+    pillarSlug: "brahman-connection",
+    kind: "general",
+    category: "spirit",
+    image: {
+      src: "/poster-images/connection-to-brahman.webp",
+      src2x: "/poster-images/connection-to-brahman@2x.webp",
+      thumb: "/poster-images/connection-to-brahman.thumb.webp",
+      width: 768,
+      height: 1322,
+      alt: "Connection to Brahman (Brahma Sambandha) teaching poster — what the practice is, why it works (brain-wave shift from beta to delta), a seven-step daily Om meditation, and a closing reminder, anchored by the mahavakya Aham Brahmasmi.",
+    },
+    scripture: [
+      {
+        sutra: "Brihadaranyaka Upanishad 1.4.10",
+        sanskrit: "Aham Brahmāsmi",
+        translation:
+          "I am Brahman — individual consciousness is identical with the ultimate reality.",
+      },
+      {
+        sutra: "Mundaka Upanishad 2.2.4",
+        translation:
+          "Om is the bow; the atman is the arrow; Brahman is said to be the mark. It is to be struck by an undistracted mind. Then the atman becomes one with Brahman, as the arrow with the target.",
+      },
+      {
+        sutra: "Chandogya Upanishad 6.8.7",
+        sanskrit: "Tat tvam asi",
+        translation:
+          "You are That. The individual self and the universal Self are one.",
+      },
+    ],
+    sections: [
+      {
+        number: 1,
+        title: "What It Is",
+        body: "The practice of regularly entering the elevated state where the boundary between the individual self and the universal field dissolves. A practical philosophy for self-understanding — no religious affiliation, welcoming every background.",
+      },
+      {
+        number: 2,
+        title: "Why It Works",
+        body: "In deep meditation, brain-wave states shift from beta (alert thinking) to alpha to theta to delta (deep stillness). The subconscious — which holds most stored memory and pattern — becomes available for healing and transformation in these states.",
+      },
+      {
+        number: 3,
+        title: "The Daily Practice",
+        body: "A simple seven-step Om meditation you can do today.",
+        bullets: [
+          "Sit upright in a quiet place where you won't be interrupted.",
+          "Close the eyes, take 3 deep breaths, soften the body.",
+          "Repeat the syllable 'Om' silently or aloud — 7 times.",
+          "Drop into silence and observe what arises without engaging it.",
+          "When the mind wanders, gently return to 'Om' or the breath.",
+          "Hold the silence for 10 minutes — beginners: 5 is enough.",
+          "Close with 'Purnam adah, purnam idam' — That is whole, this is whole.",
+        ],
+      },
+      {
+        number: 4,
+        title: "Remember",
+        body: "Most people expect drama. The real shift is subtle and shows up off the cushion — in patience, in how you greet strangers, in what you eat. Many feel meaningful shifts within the first week of sincere practice.",
+      },
+    ],
+    tagline: "Tat tvam asi — You are That.",
+  },
+  {
+    slug: "sleep-optimization-nidra",
+    title: "Sleep Optimization — Nidra, the Third Pillar of Life",
+    concept: "sleep-optimization",
+    pillarSlug: "sleep-optimization",
+    kind: "general",
+    category: "body",
+    image: {
+      src: "/poster-images/sleep-optimization-nidra.webp",
+      src2x: "/poster-images/sleep-optimization-nidra@2x.webp",
+      thumb: "/poster-images/sleep-optimization-nidra.thumb.webp",
+      width: 768,
+      height: 1297,
+      alt: "Sleep Optimization (Nidra) teaching poster — why sleep matters, why timing beats duration, a seven-point bedtime protocol, and what to do when sleep won't come, framed as one of the three pillars of life from the Ashtanga Hridaya.",
+    },
+    scripture: [
+      {
+        sutra: "Ashtanga Hridaya, Sutra Sthana 7 (Vagbhata)",
+        sanskrit: "Āhāra · Nidrā · Brahmacharya",
+        translation:
+          "Sleep, food, and brahmacharya — these three are the pillars of life. Practiced correctly, they sustain the body; abused, they destroy it.",
+      },
+      {
+        sutra: "Bhagavad Gita 6.17",
+        translation:
+          "He who is regulated in habits of eating, sleeping, work, and recreation can mitigate all material sorrows by practicing the yoga system.",
+      },
+      {
+        sutra: "Mandukya Upanishad 5",
+        translation:
+          "When one falls asleep desiring nothing, seeing no dreams — this is deep sleep. It is non-dual, a mass of consciousness, blissful and the enjoyer of bliss.",
+      },
+    ],
+    sections: [
+      {
+        number: 1,
+        title: "Why It Matters",
+        body: "Memory consolidation, glymphatic clearance of brain waste, growth-hormone release, immune priming and emotional regulation all happen during sleep — and all degrade dramatically when sleep is short or fragmented.",
+      },
+      {
+        number: 2,
+        title: "Timing Beats Duration",
+        body: "The first four hours hold the majority of deep, delta-wave sleep — the phase responsible for physical repair. Bed at 10 PM gives far more deep sleep than the same seven hours starting at 1 AM.",
+      },
+      {
+        number: 3,
+        title: "Tonight's Protocol",
+        body: "Small changes; most people see shifts within 3–7 days.",
+        bullets: [
+          "Aim for bed by 10 PM, asleep by 10:30 PM.",
+          "No screens 60 minutes before bed — or use blue-light filters.",
+          "Dim all lights after sunset: lamps, not overhead.",
+          "Last meal 3 hours before sleep; last water 1 hour before.",
+          "Cool the room to 65–68°F (18–20°C). Cool beats warm.",
+          "5-minute wind-down: gentle yoga, warm bath, or 4:6 breathing.",
+          "Wake at 3 AM with a racing mind? Sit up, breathe slow, no screens.",
+        ],
+      },
+      {
+        number: 4,
+        title: "If Sleep Won't Come",
+        body: "Wake at 5 AM regardless of bedtime. Within 5–7 days the body will demand earlier sleep. Fixing wake-time works; trying to fix bedtime first almost never does.",
+      },
+    ],
+    tagline: "Most people see measurable shifts within 3–7 days.",
+  },
 ];
 
 export function getPostersByPillar(slug: string): Poster[] {
