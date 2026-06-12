@@ -320,3 +320,23 @@ existing long-form `PILLAR_CONTENT` for those two pillars.
 These have **no entry in the source→slug audit table above** because there
 is no source JPEG — that is expected, not a gap. Pillar poster coverage is
 now 11/11.
+
+---
+
+## Addendum — 2026-06-12 (dedup correction; 3 wrongly-merged posters added)
+
+A re-audit (hash dedup + full visual pass of the 41 unique source files)
+found the Batch-5 parallel-agent dedup was too aggressive — it merged three
+genuinely-distinct designs as "duplicates." Added them:
+
+- `gratitude-patanjali-complete` — comprehensive single-panel Gratitude
+  poster. Source: `7.39.04 AM (1).jpeg` (768×1152).
+- `gratitude-yogic-way-of-living` — second Gratitude triptych (distinct from
+  `gratitude-way-of-life`). Source: `7.39.04 AM.jpeg` (768×512).
+- `pitta-balancing-yoga-30-asanas` — 30-pose Pitta cooling sequence (distinct
+  from the 5-theme and 10-asana Pitta posters). Source: `7.39.07 AM (6).jpeg`
+  (768×512).
+
+Gratitude now has **3** posters (was 1); movement **6** (was 5). Total
+canonical posters: **31** (29 OCR'd + 2 generated). Of the 74 raw JPEGs:
+~31 distinct designs, ~40 visual/exact duplicates, **3 book-cover mockups**.
