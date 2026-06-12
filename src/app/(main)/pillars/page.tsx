@@ -20,7 +20,6 @@ import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 import { Check, Play, PenLine, BookOpen, Sparkles } from "lucide-react";
 import {
-  practiceRouteForPillar,
   practiceTypeForPillar,
   type PracticeType,
 } from "@/lib/practice-routes";
@@ -302,7 +301,7 @@ function PillarCard({
         : "border-gray-100 hover:shadow-md hover:border-gray-200";
 
   return (
-    <Link href={practiceRouteForPillar(pillar.slug)}>
+    <Link href={`/pillars/${pillar.slug}`}>
       <Card
         className={cn(
           "transition-all cursor-pointer h-full overflow-hidden",
