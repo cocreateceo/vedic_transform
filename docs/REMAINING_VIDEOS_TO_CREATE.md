@@ -242,3 +242,116 @@ Inside the 10X Vedic app, the Fasting and Nutrition pillar lets you log meals an
 
 Namaste.
 ```
+
+---
+
+# Part D — 11 Pillar Hero Atmospheric Loops
+
+> **Optional polish** — silent 10-sec background loops behind each pillar
+> detail page hero. Not blocking; pure visual upgrade.
+
+**Tool:** Veo 3.1 Fast or Pippit Seedance 2.0 · **Length:** 10 sec each ·
+**16:9 · No people · No text · Silent (ambient only).**
+
+**Where they go when made:** save each as
+`public/videos/pillar-hero-<slug>.mp4` and send them over — I wire them
+into `src/components/features/pillars/pillar-hero.tsx` (one per pillar).
+
+| # | Pillar | File |
+|---|---|---|
+| D1 | morning-initiation | `pillar-hero-morning-initiation.mp4` |
+| D2 | nutrition-fasting | `pillar-hero-nutrition-fasting.mp4` |
+| D3 | thoughts-intention | `pillar-hero-thoughts-intention.mp4` |
+| D4 | breathing-meditation | `pillar-hero-breathing-meditation.mp4` |
+| D5 | movement | `pillar-hero-movement.mp4` |
+| D6 | healing-meditation | `pillar-hero-healing-meditation.mp4` |
+| D7 | gratitude | `pillar-hero-gratitude.mp4` |
+| D8 | sandhya-meditation | `pillar-hero-sandhya-meditation.mp4` |
+| D9 | brahman-connection | `pillar-hero-brahman-connection.mp4` |
+| D10 | divine-manifestation | `pillar-hero-divine-manifestation.mp4` |
+| D11 | sleep-optimization | `pillar-hero-sleep-optimization.mp4` |
+
+### D1 — Morning Initiation
+```
+Slow-motion cinematic shot of a horizon at the exact moment of sunrise. The sun's upper edge appears above misty mountain silhouettes. Warm gold and pink hues fill the sky. Distant clouds glow. Camera holds steady, no movement. Soft, dreamlike, loopable. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+### D2 — Nutrition + Fasting
+```
+Macro shot of fresh Indian ingredients on a wooden surface — turmeric powder in a brass bowl, fresh ginger root, mung dal grains, ghee in a small brass jar, fresh cilantro leaves. Soft golden window light. Camera holds steady. Slow gentle steam from the ghee. Photographic, warm, appetizing. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+### D3 — Thoughts + Intention
+```
+Abstract cinematic shot of slowly moving smoke and golden particles drifting through warm soft light against a dark background. The particles swirl gently, suggesting thoughts arising and dissolving. Slow contemplative pace. Hypnotic, meditative. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+### D4 — Breathing + Meditation
+```
+Slow-motion close-up of a single pink lotus flower floating on still water, gently rotating. The petals catch warm golden hour light. Camera slowly orbits the lotus. Soft reflections in the water around it. Hypnotic, breathable. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+### D5 — Movement
+```
+Wide silhouette shot of a single person holding warrior 2 yoga pose on a rocky outcrop overlooking distant mountains at sunrise. Camera holds steady, the figure unmoving. Wind gently moves the person's clothing. Orange and pink sky behind. No face visible. No text. Silent. 10 seconds. 16:9.
+```
+
+### D6 — Healing Meditation
+```
+Macro shot of warm afternoon sunlight passing through a single hanging quartz crystal, creating soft rainbow refractions across a soft background. The crystal slowly rotates. Dreamlike, calming. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+### D7 — Gratitude
+```
+Slow cinematic shot of cupped weathered hands held open in soft sunlight, palms facing upward in a gesture of receiving. Golden afternoon light. Soft warm out-of-focus background of garden greenery. Camera holds steady. No face visible. No text. Silent. 10 seconds. 16:9.
+```
+
+### D8 — Sandhya Meditation
+```
+Slow cinematic shot of the moment of sunset over a calm river. Orange and purple reflections shimmer on the water. A small brass diya floats gently on the surface, lit. Camera holds steady. The flame flickers. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+### D9 — Brahman Connection
+```
+Wide cosmic shot of the night sky filled with stars and the soft band of the Milky Way. Slow camera tilt upward revealing more depth. Dreamlike scale, infinite, contemplative. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+### D10 — Divine Manifestation
+```
+Macro time-lapse of a single small green plant growing upward from rich soil, slowly unfurling new leaves toward warm sunlight. Time-lapse smooth, not stuttery. Soft natural light. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+### D11 — Sleep Optimization
+```
+Wide cinematic shot of a single bedroom window at night with sheer white curtains gently moving in a soft breeze. Moonlight casts cool blue light onto the floor. Deep silence and stillness. Camera holds steady, no movement. Calming, sleepy. No people, no text. Silent. 10 seconds. 16:9.
+```
+
+---
+
+# Part F — 3 Onboarding Intro Videos
+
+> **Optional** — 30-sec narrated videos that play at the three onboarding
+> gates for new signups.
+
+**Tool:** CapCut Script-to-Video / Pictory · **Length:** 30 sec each ·
+**16:9 · Indian English male voice · captions on** (standard settings above).
+
+**Where they go when made:** save as
+`public/videos/onboarding-welcome.mp4`, `onboarding-journey.mp4`,
+`onboarding-sankalpa.mp4` and send them over — I wire them into
+`src/components/features/onboarding/`.
+
+### F1 — Welcome  →  `onboarding-welcome.mp4`
+```
+30-second welcome video for the 10X Vedic Transform onboarding screen. Hook: in 48 days, ancient Vedic practice can transform how you think, feel, and live. Explain: 11 pillars covering body, mind, and spirit — morning rituals, breathwork, nutrition, movement, meditation, sleep. Mention 1000+ transformations have started here. CTA: pick your focus and begin. Tone: warm, inviting, confident but not hyped. Indian English male voice. 16:9 horizontal with captions.
+```
+
+### F2 — Your Journey Map  →  `onboarding-journey.mp4`
+```
+30-second video explaining the 48-day Mandala journey structure. Six phases: Foundation, Cleansing, Integration, Expansion, Manifestation, Completion. Each phase is 8 days. Each day you log one pillar. The app guides you. Built on Ayurvedic Mandala tradition — 48 days is the precise window the Rishis used for sustained spiritual practice, long enough for neural pathways to thicken. CTA: tomorrow is day 1 — open the app at 5 AM. Tone: structured, clear, motivating. Indian English male voice. 16:9 horizontal with captions.
+```
+
+### F3 — Set Your Sankalpa  →  `onboarding-sankalpa.mp4`
+```
+30-second video introducing Sankalpa intention setting at the end of onboarding. Hook: the 48-day journey begins not with a goal but with a Sankalpa — a one-line intention in present tense, identity-based. Examples: "I am steady." "I am present." "I am whole." The mind cannot act on future tense, so we phrase it as if it is already true. Write yours now. CTA: type one Sankalpa sentence and tap continue. Tone: contemplative, intimate. Indian English male voice. 16:9 horizontal with captions.
+```
