@@ -16,6 +16,7 @@ import { PosterCard } from "@/components/features/posters/poster-card";
 import { PosterModal } from "@/components/features/posters/poster-modal";
 import { MantraCard } from "@/components/features/mantras/mantra-card";
 import { MantraModal } from "@/components/features/mantras/mantra-modal";
+import { VideoModal, youtubeIdFromUrl } from "@/components/features/library/video-modal";
 import {
   Search,
   CheckCircle2,
@@ -98,6 +99,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
   const [posterModalSlug, setPosterModalSlug] = useState<Poster | null>(null);
   const [mantraModal, setMantraModal] = useState<Mantra | null>(null);
+  const [videoModal, setVideoModal] = useState<{ videoId: string; title: string } | null>(null);
 
   const router = useRouter();
   const { currentTrack, isPlaying, playTrack, togglePlay } = useAudioPlayer();
@@ -200,8 +202,11 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
         // Internal article/guide route — navigate in-app rather than opening
         // a new tab. External URLs still open in a new tab below.
         router.push(item.url);
+      } else if (item.type === "video" && youtubeIdFromUrl(item.url)) {
+        // YouTube video — play inline in a lightbox instead of a new tab.
+        setVideoModal({ videoId: youtubeIdFromUrl(item.url)!, title: item.title });
       } else if (item.url && item.url !== "#") {
-        // External video / off-site reading — open in a new tab.
+        // Other off-site reading — open in a new tab.
         window.open(item.url, "_blank", "noopener,noreferrer");
       }
 
@@ -501,8 +506,17 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
                         disabled={isLoading}
                         className="flex-1"
                       >
-                        <ExternalLink className="w-4 h-4 mr-1.5" />
-                        Open
+                        {item.type === "video" ? (
+                          <>
+                            <Play className="w-4 h-4 mr-1.5" />
+                            Play
+                          </>
+                        ) : (
+                          <>
+                            <ExternalLink className="w-4 h-4 mr-1.5" />
+                            Open
+                          </>
+                        )}
                       </Button>
                     )}
                     {item.id.startsWith("mantra-") && (
@@ -523,6 +537,14 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
           })}
         </div>
       ) : null}
+
+      {videoModal && (
+        <VideoModal
+          videoId={videoModal.videoId}
+          title={videoModal.title}
+          onClose={() => setVideoModal(null)}
+        />
+      )}
     </div>
   );
 }
