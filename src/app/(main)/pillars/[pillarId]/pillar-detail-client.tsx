@@ -47,6 +47,7 @@ import { useRouter } from "next/navigation";
 import { setStreakEvent, type StreakEventType } from "@/lib/streak-events";
 import { getPostersByPillar } from "@/data/posters";
 import { PosterSection } from "@/components/features/posters/poster-section";
+import { PillarVideo } from "@/components/features/pillars/pillar-video";
 
 export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const pillar = getPillarBySlug(pillarId);
@@ -371,6 +372,11 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
             Download offline guide (PDF)
           </a>
         </div>
+      </div>
+
+      {/* Teaching video — the pillar's ~1-min clip from the YouTube channel. */}
+      <div className="mt-2 mb-8">
+        <PillarVideo slug={pillar.slug} />
       </div>
 
       {pillarPosters.length > 0 && (
