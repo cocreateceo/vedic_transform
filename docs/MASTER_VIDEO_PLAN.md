@@ -182,10 +182,33 @@ Namaste.
 
 **Pillar:** Breathing + Meditation · **Use:** Library card `content-breathing-meditation` · **Voice:** Indian English male, 0.9x · **16:9**
 
-Full script in `docs/MASTER_VIDEO_PLAN.md` Phase C — Day 1 lookup, OR
-already delivered earlier in this conversation. To save space here, paste
-the V3 script I delivered when you asked for the Pictory version — same
-script works for CapCut Script-to-Video unchanged.
+```
+Your breath is the only function of your autonomic nervous system you can consciously control. That single fact is the foundation of Pranayama — the Vedic science of breath. In the next twenty-two minutes I will teach you five core techniques, when to use each, and the science of why they work. By the end you will have a complete breath toolkit for energy, calm, focus, and sleep.
+
+The word Pranayama is two words. Prana — the life force, the vital energy that animates all living things. Ayama — extension and regulation. Pranayama is the regulation of the life force through the breath. The Hatha Yoga Pradipika states it plainly: when the breath wanders, the mind is unsteady; when the breath is still, so is the mind. Patanjali places Pranayama as the fourth limb of yoga — the bridge between the outer practices and the inner ones.
+
+Here is the physiology the ancient texts intuited and modern science has confirmed. Your breath is wired directly to the vagus nerve, the main highway of the parasympathetic nervous system — the rest-and-digest branch. A slow exhalation stimulates the vagus nerve and slows the heart. Rapid breath activates the sympathetic, fight-or-flight branch. By choosing how you breathe, you choose which nervous-system state you are in. No drug gives you that switch as directly.
+
+Before any technique, the foundation. Breathe through the nose. Breathe from the belly. And make the exhale longer than the inhale. Nasal breathing filters and warms the air and produces nitric oxide, which improves oxygen uptake. Belly breathing engages the diaphragm fully. A longer exhale tilts the whole system toward calm.
+
+Technique one. Nadi Shodhana — alternate nostril breathing, the balancing breath. Close the right nostril with your thumb. Inhale through the left for four counts. Close the left with your ring finger, hold for four. Release the thumb, exhale through the right for four. Inhale right for four. Close, hold four. Exhale left for four. That is one round. Do five. Use it anytime you feel scattered, before meditation, or before any work that needs a clear head.
+
+Technique two. Ujjayi — the victorious breath, the ocean breath. Breathe through the nose with a gentle constriction at the back of the throat, so the breath makes a soft ocean sound. Inhale and exhale slow and even. Use it during movement and yoga to hold focus and build internal warmth.
+
+Technique three. Bhramari — the humming bee breath. Close your ears with your thumbs, rest your fingers lightly on your face. Inhale through the nose, then hum on the exhale like a bee. The vibration travels through the inner ear and stimulates the vagus nerve directly. Use it for acute anxiety, before sleep, or to quiet a racing mind in under a minute.
+
+Technique four. Kapalabhati — skull-shining breath, the energizing breath. The inhale is passive; the exhale is a sharp, active contraction of the lower belly. Begin slow — one pump per second — for twenty rounds, then rest. Use it in the morning instead of coffee, to clear fog. A caution: skip this one if you are pregnant, have high blood pressure, or have just eaten.
+
+Technique five. Four-seven-eight — the relaxing breath, the natural tranquilizer. Inhale through the nose for four counts. Hold for seven. Exhale through the mouth for eight, with a soft whoosh. Four rounds. Use it to fall asleep, or to defuse a craving or a flash of anger.
+
+Now, how to build a daily practice. Five to ten minutes, ideally in the morning after movement and before meditation. Start with three rounds of Nadi Shodhana to balance. Then add one technique for what the day needs — Kapalabhati to energize, or 4-7-8 to settle. Always finish by letting the breath return to natural and sitting in the stillness that follows. That stillness is the entire point of the practice.
+
+A word on safety. Never strain. Pranayama should feel smooth, never forced. If you feel dizzy, return to normal breathing and rest. Build duration gradually over weeks. The breath is powerful precisely because it is direct — so respect it.
+
+Inside the 10X Vedic app, the Breathing and Meditation pillar has an animated breath pacer for every technique I taught — it guides your inhale, hold, and exhale with a visual cue and optional voice. Open it tomorrow morning. Begin with three rounds of Nadi Shodhana. The mind will follow the breath, as it always has.
+
+Namaste.
+```
 
 ### V4 — Vedic Movement: Beyond Modern Exercise (15 min)
 
