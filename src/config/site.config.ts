@@ -12,7 +12,7 @@ export const siteConfig = {
   introVideo: {
     enabled: true,
     // YouTube video ID (e.g., for https://youtube.com/watch?v=ABC123, use "ABC123")
-    youtubeVideoId: "inpok4MKVLM", // Sample: "5 minute meditation" - Replace with your video
+    youtubeVideoId: "yTbJu9J5fFI", // Channel trailer: "48 Days. 11 Pillars. One Sacred Journey."
     title: "Welcome to 10X Vedic Transformation",
     // Set to true to autoplay (muted)
     autoplay: false,
@@ -38,7 +38,7 @@ export const siteConfig = {
 
   // Social Links
   social: {
-    youtube: "https://www.youtube.com/@vedic-s",
+    youtube: "https://www.youtube.com/@Vedics_Transform",
     instagram: "",
     twitter: "",
   },

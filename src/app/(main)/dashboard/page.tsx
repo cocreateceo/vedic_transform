@@ -10,6 +10,7 @@ import { PillarGrid } from "@/components/features/dashboard/pillar-grid";
 import { TodaysPractice } from "@/components/features/dashboard/todays-practice";
 import { StreakEventBanner } from "@/components/features/dashboard/streak-event-banner";
 import { DailyBriefCard } from "@/components/features/dashboard/daily-brief-card";
+import { DailyShortCard } from "@/components/features/dashboard/daily-short-card";
 import { MandalaProgress } from "@/components/features/dashboard/mandala-progress";
 import { ReflectionCard } from "@/components/features/dashboard/reflection-card";
 import { PILLARS } from "@/constants/pillars";
@@ -264,6 +265,10 @@ export default function DashboardPage() {
           Context Pack. Sits above Today's Practice because it's the "why
           today matters" framing; Today's Practice is the "what to do". */}
       <DailyBriefCard />
+
+      {/* Wisdom of the Day — the 48-day journey scripture Short matched to
+          the user's current day, from the @Vedics_Transform channel. */}
+      <DailyShortCard journeyDay={currentDay} />
 
       {/* Today's Practice — one canonical daily action (P0-2). */}
       <TodaysPractice
