@@ -34,7 +34,41 @@
     }
   },
   {
+    "slug": "gratitude-patanjali-complete",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 1152
+      },
+      "@2x": {
+        "width": 1024,
+        "height": 1536
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 600
+      }
+    }
+  },
+  {
     "slug": "gratitude-way-of-life",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "gratitude-yogic-way-of-living",
     "sizes": {
       "default": {
         "width": 768,
@@ -273,6 +307,23 @@
   },
   {
     "slug": "pitta-balancing-yoga-10-asanas",
+    "sizes": {
+      "default": {
+        "width": 768,
+        "height": 512
+      },
+      "@2x": {
+        "width": 1536,
+        "height": 1024
+      },
+      ".thumb": {
+        "width": 400,
+        "height": 267
+      }
+    }
+  },
+  {
+    "slug": "pitta-balancing-yoga-30-asanas",
     "sizes": {
       "default": {
         "width": 768,

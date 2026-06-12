@@ -2357,6 +2357,204 @@ export const POSTERS: Poster[] = [
     ],
     tagline: "Most people see measurable shifts within 3–7 days.",
   },
+  {
+    slug: "gratitude-patanjali-complete",
+    title: "Gratitude — According to Patanjali Yoga Sutras",
+    concept: "gratitude",
+    pillarSlug: "gratitude",
+    kind: "general",
+    category: "mind",
+    image: {
+      src: "/poster-images/gratitude-patanjali-complete.webp",
+      src2x: "/poster-images/gratitude-patanjali-complete@2x.webp",
+      thumb: "/poster-images/gratitude-patanjali-complete.thumb.webp",
+      width: 768,
+      height: 1152,
+      alt: "Comprehensive gratitude teaching poster — what gratitude is, its benefits, its place in the Yoga Sutras (Santosha, Ahimsa, Ishvara Pranidhana, Chitta Prasadanam), the science of gratitude and the subconscious, a six-step morning gratitude ritual, grateful vs ungrateful mind, daily habits, and a closing affirmation.",
+    },
+    scripture: [
+      {
+        sutra: "Yoga Sutra 1.3",
+        translation:
+          "When the mind is pure and content, the seer rests in his own true nature.",
+      },
+      {
+        sutra: "Yoga Sutra 2.42 (Santosha)",
+        translation: "From contentment, supreme happiness is attained.",
+      },
+    ],
+    sections: [
+      {
+        title: "What Is Gratitude?",
+        body: "Gratitude is the pure feeling of thankfulness arising from the heart. It brings peace, contentment, purity of thoughts, and spiritual growth. It is not only saying 'thank you' — it is a sacred state of consciousness.",
+      },
+      {
+        title: "Benefits of Gratitude",
+        body: "Practiced daily, gratitude reshapes mood, relationships, and health.",
+        bullets: [
+          "Creates inner peace and reduces stress and anxiety",
+          "Improves emotional balance and relationships",
+          "Creates mental clarity and deepens meditation",
+          "Improves sleep and health",
+          "Brings positive energy and increases happiness naturally",
+        ],
+      },
+      {
+        title: "Gratitude in the Yoga Sutras",
+        body: "Patanjali frames gratitude through four teachings.",
+        bullets: [
+          "Santosha (Contentment) — appreciating what already exists keeps the mind peaceful in all situations.",
+          "Ahimsa (Non-violence) — a grateful mind becomes kind and compassionate, creating harmony within and with others.",
+          "Ishvara Pranidhana (Surrender to the Divine) — gratitude strengthens trust in the higher power and removes fear and control.",
+          "Chitta Prasadanam (Mental Calmness) — positive emotions like gratitude purify the mind and calm disturbances.",
+        ],
+      },
+      {
+        title: "Science of Gratitude & the Subconscious",
+        body: "Modern research echoes the yogic view.",
+        bullets: [
+          "Reduces stress hormones and increases the relaxation response",
+          "Strengthens positive neural pathways and emotional healing",
+          "Creates mind-body balance",
+          "Repeated gratitude becomes samskaras — impressions that shape behavior and destiny",
+        ],
+      },
+      {
+        title: "Morning Gratitude Ritual",
+        body: "A simple six-step practice to start the day.",
+        bullets: [
+          "Wake early, before sunrise.",
+          "Sit calmly with the spine straight.",
+          "Take 10 slow, deep breaths.",
+          "Gratitude meditation — focus on body, breath, family, nature, opportunities, and the Divine.",
+          "Set a positive Sankalpa: 'My mind is peaceful. I live with gratitude.'",
+          "Close with silence and awareness — observe thoughts without engaging.",
+        ],
+      },
+      {
+        title: "Grateful vs Ungrateful Mind",
+        body: "The same situation lands differently depending on the mind that meets it.",
+        bullets: [
+          "Ungrateful mind: dissatisfaction, mental stress, negative thinking, comparison, lack of peace.",
+          "Grateful mind: emotional stability, better relationships, compassion, patience, faith, spiritual maturity.",
+          "As gratitude reduces ego, the mind becomes lighter, meditation deeper, and awareness higher.",
+        ],
+      },
+      {
+        title: "Daily Gratitude Habits",
+        body: "Small repeated acts that train the grateful mind.",
+        bullets: [
+          "Thank before meals",
+          "Appreciate nature",
+          "Speak kindly",
+          "Maintain a gratitude journal",
+          "Avoid unnecessary complaints",
+          "End the day with thankful thoughts",
+        ],
+      },
+      {
+        title: "Affirmation",
+        body: "I live with gratitude, peace, awareness, and divine trust. Lokah Samastah Sukhino Bhavantu — may all beings be happy and free.",
+      },
+    ],
+    tagline:
+      "A sacred state of consciousness that transforms the mind, body, emotions, and soul.",
+  },
+  {
+    slug: "gratitude-yogic-way-of-living",
+    title: "Gratitude — The Yogic Way of Living",
+    concept: "gratitude",
+    pillarSlug: "gratitude",
+    kind: "general",
+    category: "mind",
+    image: {
+      src: "/poster-images/gratitude-yogic-way-of-living.webp",
+      src2x: "/poster-images/gratitude-yogic-way-of-living@2x.webp",
+      thumb: "/poster-images/gratitude-yogic-way-of-living.thumb.webp",
+      width: 768,
+      height: 512,
+      alt: "Three-panel gratitude poster — the yogic way of living (Santosha, Ishvara Pranidhana, Ahimsa, Dhyana), gratitude as a path to inner peace with physical, mental, and spiritual benefits, and a daily morning and night gratitude practice.",
+    },
+    scripture: [
+      {
+        sutra: "Yoga Sutra 2.42 (Santosha)",
+        translation: "From contentment, supreme happiness is attained.",
+      },
+    ],
+    sections: [
+      {
+        title: "The Four Pillars of Gratitude",
+        body: "Gratitude rests on four teachings of the Yoga Sutras.",
+        bullets: [
+          "Santosha (Contentment) — gratitude brings peace, reduces jealousy, and opens the door to lasting happiness.",
+          "Ishvara Pranidhana (Surrender to the Divine) — trust life, accept the divine plan, and find inner strength.",
+          "Ahimsa (Non-violence) — a grateful heart is free from anger and hatred; it brings kindness to self, others, and nature.",
+          "Dhyana (Meditation) — gratitude deepens awareness, calms the mind, and keeps you in the present moment.",
+        ],
+      },
+      {
+        title: "Benefits of Gratitude",
+        body: "Gratitude works on body, mind, and spirit at once.",
+        bullets: [
+          "Physical — better sleep, reduced stress, improved energy, stronger immunity.",
+          "Mental — positive thinking, emotional strength, reduced anxiety, clarity of mind.",
+          "Spiritual — inner peace, divine connection, higher awareness, compassion.",
+        ],
+      },
+      {
+        title: "Daily Gratitude Practice",
+        body: "Bookend the day with gratitude.",
+        bullets: [
+          "Morning — sit quietly, observe the breath, thank the body, parents, and nature, and start the day with gratitude.",
+          "Night — write five things you are grateful for, forgive and release, and sleep with peaceful thoughts.",
+        ],
+      },
+    ],
+    tagline:
+      "A grateful mind is calm, a grateful heart is kind, and a grateful life is a blessed life.",
+  },
+  {
+    slug: "pitta-balancing-yoga-30-asanas",
+    title: "Pitta Balancing Yoga — 30 Cooling Asanas",
+    concept: "dosha-yoga",
+    pillarSlug: "movement",
+    dosha: "pitta",
+    kind: "yoga",
+    category: "body",
+    image: {
+      src: "/poster-images/pitta-balancing-yoga-30-asanas.webp",
+      src2x: "/poster-images/pitta-balancing-yoga-30-asanas@2x.webp",
+      thumb: "/poster-images/pitta-balancing-yoga-30-asanas.thumb.webp",
+      width: 768,
+      height: 512,
+      alt: "Pitta Balancing Yoga poster — a 30-pose cooling and calming asana grid from Moon Salutation to Meditation Pose, each referenced to a Yoga Sutra, for balancing the Pitta dosha.",
+    },
+    scripture: [
+      {
+        sutra: "Yoga Sutra 1.14",
+        translation:
+          "Practice becomes firmly rooted when done for a long time, without break and with devotion.",
+      },
+    ],
+    sections: [
+      {
+        title: "When Pitta Is Balanced",
+        body: "Intelligence is sharp, emotions are calm, and life flows with purpose and compassion. This cooling sequence soothes excess heat — practice slowly, breathe deeply, stay cool, stay calm.",
+      },
+      {
+        title: "The Cooling Asana Sequence (30 poses)",
+        body: "Thirty cooling and calming poses, each referenced to a Yoga Sutra.",
+        bullets: [
+          "Moon Salutation · Child's Pose · Seated Forward Fold · Cobra · Butterfly · Seated Twist",
+          "Camel · Legs Up the Wall · Forward Fold · Supine Twist · Savasana · Pigeon",
+          "Half Moon · Cat-Cow · Bridge · Wide-Legged Forward Fold · Boat · Reclined Butterfly",
+          "Rabbit · Dolphin · Gate · Garland · Sphinx · Bow",
+          "Plow · Fish · Shoulderstand · Thunderbolt · Peacock · Meditation Pose (Sukhasana)",
+        ],
+      },
+    ],
+    tagline: "Cooling. Calm. Clear. Practice regularly and breathe deeply.",
+  },
 ];
 
 export function getPostersByPillar(slug: string): Poster[] {
