@@ -144,6 +144,7 @@ export function ReportsPageClient({
           <ShareButton
             title="My Vedic Transformation Progress"
             text={`Day ${currentDay} of my 48-day Vedic transformation! ${stats.totalKarma} karma points, ${stats.currentStreak}-day streak, ${stats.completionRate}% completion rate.`}
+            url={`/share?big=${encodeURIComponent(`Day ${currentDay}`)}&label=${encodeURIComponent("of 48 complete")}&sub=${encodeURIComponent(`${stats.totalKarma} karma · ${stats.currentStreak}-day streak`)}`}
             variant="outline"
             size="md"
             label="Share Progress"
