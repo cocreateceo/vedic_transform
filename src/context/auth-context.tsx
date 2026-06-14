@@ -136,10 +136,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (email: string, password: string, name?: string) => {
     try {
+      // If the user arrived via a /refer/<code> link, the code is stashed in
+      // the `vedic-ref` cookie — pass it so the backend credits the referrer.
+      const refCode =
+        typeof document !== "undefined"
+          ? document.cookie
+              .split(";")
+              .map((c) => c.trim())
+              .find((c) => c.startsWith("vedic-ref="))
+              ?.split("=")[1]
+          : undefined;
       const res = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ email, password, name, refCode }),
       });
       const data = await res.json();
       if (data.success) {
@@ -147,6 +157,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setToken(data.token);
         localStorage.setItem("vedic-token", data.token);
         localStorage.setItem("vedic-user", JSON.stringify(data.user));
+        // Consume the referral cookie so it isn't re-applied.
+        if (refCode) document.cookie = "vedic-ref=; max-age=0; path=/";
 
         // If the user took the public dosha test before signing up, claim
         // that result and attach it to their new profile. Fire-and-forget

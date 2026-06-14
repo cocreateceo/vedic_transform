@@ -300,6 +300,13 @@ export default $config({
       },
     });
 
+    // Referral attribution — code == referrer's user id; one row per signup.
+    const referrals = new sst.aws.Dynamo("Referrals", {
+      fields: { id: "string", referrerUserId: "string" },
+      primaryIndex: { hashKey: "id" },
+      globalIndexes: { "referrerUserId-index": { hashKey: "referrerUserId" } },
+    });
+
     // ── API Gateway ─────────────────────────────────────────────────
     // Explicit CORS allowlist. Add any new deployed origin (custom domain,
     // preview deploy, etc.) here — wildcards leak the API to any site.
@@ -329,7 +336,12 @@ export default $config({
 
     api.route("POST /auth/register", {
       handler: "functions/auth/register.handler",
-      link: authLink,
+      link: [...authLink, referrals, karmaTransactions],
+    });
+
+    api.route("GET /data/referral", {
+      handler: "functions/data/referral.handler",
+      link: [referrals, jwtSecret],
     });
 
     api.route("POST /auth/login", {
