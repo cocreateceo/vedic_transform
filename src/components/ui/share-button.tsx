@@ -27,7 +27,12 @@ export function ShareButton({
   const [copied, setCopied] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
+  // Absolutize relative share targets (e.g. "/share?...") so WhatsApp/X/copy
+  // get a real link that unfurls with the OG card.
+  const shareUrl =
+    url && url.startsWith("/")
+      ? (typeof window !== "undefined" ? window.location.origin : "https://10x.vedics.net") + url
+      : url || (typeof window !== "undefined" ? window.location.href : "");
 
   // Close dropdown when clicking outside
   useEffect(() => {
