@@ -6,13 +6,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PILLARS, TOTAL_JOURNEY_DAYS } from "@/constants/pillars";
 import { Award, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  PillarRadarChart,
-  WeeklyTrendChart,
-  CalendarHeatmap,
-  ConsistencyScore,
-  InsightList,
-} from "@/components/features/analytics";
+import dynamic from "next/dynamic";
+// Light, recharts-free siblings — import directly (not via the barrel, which
+// would re-pull recharts into the initial bundle).
+import { CalendarHeatmap } from "@/components/features/analytics/calendar-heatmap";
+import { ConsistencyScore } from "@/components/features/analytics/consistency-score";
+import { InsightList } from "@/components/features/analytics/insight-card";
+
+// Recharts (~348 KB) is heavy and only needed here — load it lazily so it
+// stays out of the initial bundle until the charts actually render.
+const chartLoading = () => (
+  <div className="h-64 animate-pulse rounded-2xl bg-gray-100" />
+);
+const PillarRadarChart = dynamic(
+  () =>
+    import("@/components/features/analytics/pillar-radar-chart").then(
+      (m) => m.PillarRadarChart,
+    ),
+  { ssr: false, loading: chartLoading },
+);
+const WeeklyTrendChart = dynamic(
+  () =>
+    import("@/components/features/analytics/weekly-trend-chart").then(
+      (m) => m.WeeklyTrendChart,
+    ),
+  { ssr: false, loading: chartLoading },
+);
 
 export default function ProgressPage() {
   const [data, setData] = useState<any>(null);

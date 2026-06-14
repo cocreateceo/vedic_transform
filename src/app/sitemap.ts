@@ -40,5 +40,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...corePages, ...blogPages];
+  // Per-dosha SEO landing pages — high-intent, indexable, shareable.
+  const doshaPages = ["vata", "pitta", "kapha"].map((dosha) => ({
+    url: `${baseUrl}/dosha-test/${dosha}/`,
+    lastModified,
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  return [...corePages, ...blogPages, ...doshaPages];
 }
