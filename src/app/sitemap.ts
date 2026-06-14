@@ -8,6 +8,7 @@ const PUBLIC_PATHS = [
   "about",
   "blog",
   "contact",
+  "dosha-test",
   "faq",
   "how-it-works",
   "pillars-overview",

@@ -14,6 +14,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://10x.vedics.net",
+  ),
   title: "10X Vedic Transform - 48 Day Journey",
   description: "Transform your body, mind, and spirit with ancient Vedic wisdom in 48 days",
   manifest: "/manifest.json",
@@ -51,6 +54,33 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{
           __html: `(function(){try{var t=localStorage.getItem('vedic-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})();if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js')})}`,
         }} />
+        {/* Sitewide Organization + WebSite structured data for rich results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://10x.vedics.net/#org",
+                  name: "10X Vedic Transform",
+                  url: "https://10x.vedics.net",
+                  logo: "https://10x.vedics.net/icons/icon-192.png",
+                  description:
+                    "A 48-day Vedic transformation program for body, mind, and spirit.",
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://10x.vedics.net/#website",
+                  url: "https://10x.vedics.net",
+                  name: "10X Vedic Transform",
+                  publisher: { "@id": "https://10x.vedics.net/#org" },
+                },
+              ],
+            }),
+          }}
+        />
         <AuthProvider>
           <AudioPlayerProvider>
             {children}

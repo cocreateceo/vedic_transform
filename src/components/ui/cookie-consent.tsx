@@ -18,7 +18,8 @@ export function CookieConsent() {
     document.cookie =
       "vedic-cookie-consent=accepted; max-age=31536000; path=/";
     setVisible(false);
-    window.location.reload();
+    // Let the Analytics component mount GA reactively — no jarring full reload.
+    window.dispatchEvent(new Event("cookie-consent-changed"));
   };
 
   const handleNecessaryOnly = () => {

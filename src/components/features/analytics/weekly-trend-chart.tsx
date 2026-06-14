@@ -14,6 +14,25 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 
+// Hoisted to module scope so it isn't recreated on every render (which made
+// recharts remount the tooltip each render and triggered a React warning).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function CustomTooltip({ active, payload }: any) {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-100">
+        <p className="font-medium text-gray-900">{data.dayLabel}</p>
+        <p className="text-sm text-gray-600">
+          {data.pillarsCompleted} / {data.totalPillars} pillars
+        </p>
+        <p className="text-sm font-medium text-amber-600">{data.percentage}% complete</p>
+      </div>
+    );
+  }
+  return null;
+}
+
 interface DailyData {
   date: string;
   dayLabel: string;
@@ -44,23 +63,6 @@ export function WeeklyTrendChart({
   // Calculate trend
   const trend = currentWeekAverage - previousWeekAverage;
   const trendDirection = trend > 0 ? "up" : trend < 0 ? "down" : "stable";
-
-  // Custom tooltip
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-100">
-          <p className="font-medium text-gray-900">{data.dayLabel}</p>
-          <p className="text-sm text-gray-600">
-            {data.pillarsCompleted} / {data.totalPillars} pillars
-          </p>
-          <p className="text-sm font-medium text-amber-600">{data.percentage}% complete</p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <Card className={className}>

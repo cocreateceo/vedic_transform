@@ -8,10 +8,16 @@ export function Analytics() {
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   useEffect(() => {
-    const consent = document.cookie
-      .split(";")
-      .some((c) => c.trim().startsWith("vedic-cookie-consent=accepted"));
-    setConsented(consent);
+    const check = () =>
+      setConsented(
+        document.cookie
+          .split(";")
+          .some((c) => c.trim().startsWith("vedic-cookie-consent=accepted")),
+      );
+    check();
+    // React to "Accept All" without a full page reload.
+    window.addEventListener("cookie-consent-changed", check);
+    return () => window.removeEventListener("cookie-consent-changed", check);
   }, []);
 
   if (!consented || !gaId) return null;

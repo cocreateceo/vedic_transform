@@ -274,16 +274,20 @@ export function MoodPageClient({
         <button
           onClick={handleSubmit}
           disabled={moodScore === 0 || submitting}
-          className="w-full rounded-xl py-3 px-6 font-semibold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{
-            background: "var(--color-saffron-gradient)",
-          }}
+          className="w-full rounded-xl py-3 px-6 font-semibold transition-all disabled:cursor-not-allowed"
+          style={
+            moodScore === 0
+              ? { background: "#e5e7eb", color: "#6b7280" }
+              : { background: "var(--color-saffron-gradient)", color: "#fff" }
+          }
         >
           {submitting
             ? "Saving..."
             : submitted
               ? "Saved!"
-              : "Log Today's Mood"}
+              : moodScore === 0
+                ? "Select a mood to log"
+                : "Log Today's Mood"}
         </button>
       </div>
 
