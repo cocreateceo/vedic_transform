@@ -22,6 +22,13 @@ export function DailyWisdomPopup() {
     const key = getTodayKey();
     if (localStorage.getItem(key)) return;
 
+    // Don't stack on top of the cookie-consent banner on first run — wait
+    // until the user has resolved consent before showing the wisdom popup.
+    const consentResolved = document.cookie
+      .split(";")
+      .some((c) => c.trim().startsWith("vedic-cookie-consent="));
+    if (!consentResolved) return;
+
     // On Sundays, surface a scripture pulled from one of the teaching
     // posters (rotated by day-of-year). All other days use the standard
     // daily-wisdom rotation.
