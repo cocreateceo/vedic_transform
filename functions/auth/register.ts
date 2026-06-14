@@ -8,7 +8,7 @@ export async function handler(event: any) {
     return { statusCode: 200, headers: CORS_HEADERS, body: '' };
 
   try {
-    const { email, password, name } = parseBody(event);
+    const { email, password, name, refCode } = parseBody(event);
     if (!email || !password) return err(400, 'Email and password required');
 
     // Check existing user
@@ -43,6 +43,29 @@ export async function handler(event: any) {
 
     const token = await createToken({ id, email: email.toLowerCase(), name });
     void emit(id, EventType.AUTH_REGISTER, { email: email.toLowerCase() });
+
+    // Referral credit — the referral code IS the referrer's user id. Record
+    // the signup and award +100 karma to both sides. Best-effort: a failure
+    // here must never block account creation.
+    if (refCode && typeof refCode === 'string' && refCode !== id) {
+      try {
+        await db.send(new PutCommand({
+          TableName: Resource.Referrals.name,
+          Item: { id: generateId(), referrerUserId: refCode, refereeUserId: id, createdAt: now },
+        }));
+        await db.send(new PutCommand({
+          TableName: Resource.KarmaTransactions.name,
+          Item: { id: generateId(), userId: refCode, points: 100, type: 'referral', reason: 'Friend joined via your invite', createdAt: now },
+        }));
+        await db.send(new PutCommand({
+          TableName: Resource.KarmaTransactions.name,
+          Item: { id: generateId(), userId: id, points: 100, type: 'referral', reason: 'Welcome bonus — joined via invite', createdAt: now },
+        }));
+      } catch (refErr) {
+        console.error('Referral credit failed (non-fatal):', refErr);
+      }
+    }
+
     return ok({ success: true, token, user: { id, email: email.toLowerCase(), name, onboardingCompleted: false } });
   } catch (e: any) {
     console.error('Registration error:', e);

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Settings, User, Bell, CheckCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { InviteCard } from "@/components/features/settings/invite-card";
 
 export default function SettingsPage() {
   const { user, logout } = useAuth();
@@ -140,6 +141,9 @@ export default function SettingsPage() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Invite friends (referral) */}
+      <InviteCard />
 
       {/* Quick Links */}
       <Card>
