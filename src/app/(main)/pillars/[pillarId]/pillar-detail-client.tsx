@@ -1242,8 +1242,6 @@ function BreathingMeditationContent({
   return (
     <div className="space-y-10">
       <BreathingVisualizer
-        inhaleDuration={4}
-        exhaleDuration={6}
         totalDuration={5}
         onComplete={onAutoComplete}
       />
