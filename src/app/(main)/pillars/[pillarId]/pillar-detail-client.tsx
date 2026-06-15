@@ -49,6 +49,7 @@ import { getPostersByPillar } from "@/data/posters";
 import { PosterSection } from "@/components/features/posters/poster-section";
 import { PillarVideo } from "@/components/features/pillars/pillar-video";
 import { SunWindowsCard } from "@/components/features/solar/sun-windows-card";
+import { GuidedAudioPlayer } from "@/components/features/sessions/guided-audio-player";
 
 export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const pillar = getPillarBySlug(pillarId);
@@ -427,6 +428,17 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       {pillarId === "sandhya-meditation" && <SunWindowsCard show={["sandhya"]} />}
       {pillarId === "nutrition-fasting" && <SunWindowsCard show={["eating"]} />}
       {pillarId === "sleep-optimization" && <SunWindowsCard show={["winddown"]} />}
+      {pillarId === "healing-meditation" && (
+        <GuidedAudioPlayer
+          title="Guided body scan"
+          durationSeconds={300}
+          cues={[
+            { id: "start", atSeconds: 1, src: "/audio/meditation/start.mp3" },
+            { id: "mid", atSeconds: 150, src: "/audio/meditation/midway.mp3" },
+            { id: "close", atSeconds: 290, src: "/audio/meditation/closing.mp3" },
+          ]}
+        />
+      )}
 
       {/* Pillar-specific content */}
       <Card className="mb-6">
