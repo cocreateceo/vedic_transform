@@ -16,7 +16,14 @@ type WindowKind = "brahma" | "sandhya" | "eating" | "winddown";
 const fmt = (d: Date) =>
   d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 
-export function SunWindowsCard({ show }: { show: WindowKind[] }) {
+export function SunWindowsCard({
+  show,
+  eatingWindowHours = 10,
+}: {
+  show: WindowKind[];
+  /** Eating-window length in hours (default 10 = 14:10). Pass 8 for 16:8. */
+  eatingWindowHours?: number;
+}) {
   const { status, sunTimes, request } = useSolarTimes();
 
   if (status !== "ready" || !sunTimes) {
@@ -51,7 +58,7 @@ export function SunWindowsCard({ show }: { show: WindowKind[] }) {
     }
   }
   if (show.includes("eating")) {
-    const w = eatingWindow(sunTimes.sunrise);
+    const w = eatingWindow(sunTimes.sunrise, eatingWindowHours);
     rows.push({ icon: Sun, label: "Eating window", value: `${fmt(w.start)} – ${fmt(w.end)}` });
   }
   if (show.includes("winddown")) {

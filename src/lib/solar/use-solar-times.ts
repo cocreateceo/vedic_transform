@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getSunTimes, type SunTimes } from "./sun-times";
 
 const COORDS_KEY = "vedic-coords-v1";
@@ -62,7 +62,10 @@ export function useSolarTimes(): UseSolarTimes {
     if (coords && status === "idle") setStatus("ready");
   }, [coords, status]);
 
-  const sunTimes = coords ? getSunTimes(new Date(), coords.lat, coords.lng) : null;
+  const sunTimes = useMemo(
+    () => (coords ? getSunTimes(new Date(), coords.lat, coords.lng) : null),
+    [coords],
+  );
 
   return { status, sunTimes, request };
 }

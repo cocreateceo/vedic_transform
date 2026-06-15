@@ -115,6 +115,7 @@ export function BreathingVisualizer({
         const newTime = prev + 0.1;
         if (newTime >= totalSeconds) {
           setIsActive(false);
+          lastPhaseRef.current = "idle"; // prevent a stray cue firing at completion
           if (onCompleteRef.current) onCompleteRef.current();
           return totalSeconds;
         }

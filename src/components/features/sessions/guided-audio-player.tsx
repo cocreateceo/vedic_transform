@@ -74,6 +74,10 @@ export function GuidedAudioPlayer({
       trackRef.current.pause();
       trackRef.current.currentTime = 0;
     }
+    cueAudio.current.forEach((a) => {
+      a.pause();
+      a.currentTime = 0;
+    });
   };
 
   const toggle = () => {

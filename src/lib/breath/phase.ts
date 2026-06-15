@@ -32,7 +32,7 @@ export function phaseAt(pattern: BreathPattern, elapsedSeconds: number): BreathS
   for (const seg of segments) {
     if (seg.dur <= 0) continue;
     if (pos < seg.dur) {
-      const progress = seg.dur === 0 ? 0 : pos / seg.dur;
+      const progress = pos / seg.dur;
       const openness =
         seg.phase === "inhale"
           ? progress

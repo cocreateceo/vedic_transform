@@ -313,9 +313,8 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       </Link>
 
       <PillarHeroStyles />
-      {/* Custom animated scene for the 8 pillars that have one; the other
-          three (breathing / movement / healing meditation) fall through to
-          the existing PillarHero with its video/image backdrops. */}
+      {/* Custom animated scene for pillars in PILLARS_WITH_ANIMATION; any
+          others fall through to the existing PillarHero (video/image backdrop). */}
       {PILLARS_WITH_ANIMATION.has(pillar.slug) ? (
         <div className="mb-8">
           <PillarAnimation slug={pillar.slug} />
@@ -426,7 +425,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       {/* Sun windows — time-of-day guidance for the four solar-aligned pillars */}
       {pillarId === "morning-initiation" && <SunWindowsCard show={["brahma"]} />}
       {pillarId === "sandhya-meditation" && <SunWindowsCard show={["sandhya"]} />}
-      {pillarId === "nutrition-fasting" && <SunWindowsCard show={["eating"]} />}
+      {pillarId === "nutrition-fasting" && <SunWindowsCard show={["eating"]} eatingWindowHours={8} />}
       {pillarId === "sleep-optimization" && <SunWindowsCard show={["winddown"]} />}
       {pillarId === "healing-meditation" && (
         <GuidedAudioPlayer
