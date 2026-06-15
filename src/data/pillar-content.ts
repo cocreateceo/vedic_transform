@@ -35,19 +35,19 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
   "morning-initiation": {
     slug: "morning-initiation",
     tagline:
-      "Wake before the world wakes. Brahma Muhurta is the 96-minute window before sunrise — the hour when all three doshas rest in equilibrium and the mind is uniquely receptive.",
+      "Wake before the world wakes. Brahma Muhurta is the 48-minute window that opens about 96 minutes before sunrise — the last quarter of the night, traditionally held to be the most sattvic hour for sadhana.",
     overview: [
       "5 AM Initiation (Brahma Muhurta) is the practice of rising in the last quarter of the night — roughly 90 minutes before sunrise — and using that window for sadhana: meditation, study, or simply silence. Ayurveda calls this the most auspicious time of day, when the atmosphere itself favours sattva (clarity).",
       "The promise is simple: how you start the day is how you live the day. By winning the first 30 minutes — before phone, news, or obligation — you train the nervous system that you, not external pressure, set the tone.",
       "This is the foundation pillar. Every other practice in the 48-day journey is easier when you begin from a quiet, claimed morning.",
     ],
     whyItWorks: [
-      "Cortisol naturally peaks 30-45 minutes after waking. Use it. Light exposure within the first 15 minutes of waking anchors circadian rhythm, improves nighttime melatonin release, and stabilises mood throughout the day (Huberman, Stanford).",
-      "Vagbhata, the 7th-century Ayurvedic acharya, prescribed waking at this hour in the Dinacarya chapter of the Ashtanga Hridaya — not as ritual, but as physiology. The body's metabolic systems are primed for elimination, hydration, and movement at this hour.",
+      "Cortisol naturally peaks 30-45 minutes after waking — the Cortisol Awakening Response (Clow & Hucklebridge). Use it. Getting natural light within 30-60 minutes of waking anchors circadian rhythm, raises early-day cortisol, improves that night's melatonin timing, and stabilises mood (Figueiro & Rea, 2012; Huberman Lab).",
+      "Vagbhata, the c. 6th-7th century Ayurvedic acharya, prescribed waking at this hour in the Dinacarya chapter of the Ashtanga Hridaya — not as ritual, but as physiology. The body's metabolic systems are primed for elimination, hydration, and movement at this hour.",
     ],
     dailyPractice: [
       "Set an alarm 96 minutes before local sunrise (typically 4:30-5:00 AM).",
-      "Drink 500ml warm water immediately on waking — flushes overnight metabolic waste.",
+      "Drink 500ml water on waking (warm if you prefer) — rehydrates after the overnight fast and gently wakes digestion. Pitta/burning types: use room-temperature.",
       "Scrape the tongue, rinse the mouth, splash cold water on the face.",
       "Sit for 5 minutes of silent breath observation before opening any screen.",
       "Write one Sankalpa (intention) for the day on paper, not on a phone.",
@@ -56,8 +56,8 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
     ],
     scripture: [
       {
-        verse: "Ashtanga Hridaya, Sutra Sthana 2 (Dinacarya Adhyaya)",
-        text: "One should rise from bed 96 minutes before sunrise. This is the suitable time to study and obtain knowledge — the hour when all three doshas rest in equilibrium.",
+        verse: "Ashtanga Hridaya, Sutra Sthana 2.1 (Dinacarya Adhyaya)",
+        text: "A healthy person should rise at Brahma Muhurta — the last quarter of the night — to protect their lifespan. (Traditionally this hour is also held to be the best for study and meditation.)",
       },
       {
         verse: "Katha Upanishad 1.3.14",
@@ -65,7 +65,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       },
       {
         verse: "Rig Veda 1.35.9",
-        text: "May Savitar, the golden-handed, drive away sickness and bid the Sun approach us, spreading the bright sky through the darksome region.",
+        text: "The golden-handed Savitar, far-seeing, goes on his way between the earth and heaven, drives away sickness, bids the Sun approach, and spreads the bright sky through the darksome region.",
       },
     ],
     obstacles: [
@@ -99,8 +99,8 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "This pillar is about energy — not appearance. The goal is to wake up sharp, finish work without crashes, and end the day without sugar cravings.",
     ],
     whyItWorks: [
-      "The body's digestive fire (Agni) peaks at midday when the sun is highest, matching modern circadian research showing insulin sensitivity is best between 10 AM and 2 PM. The same meal eaten at 8 PM produces measurably higher glucose response than at 1 PM.",
-      "16:8 intermittent fasting activates autophagy — cellular self-cleaning. Sushruta described this 2,500 years ago as the body 'consuming its own ama (toxic residue)' during fasting hours. The mechanism is the same; the language has caught up.",
+      "The body's digestive fire (Agni) peaks at midday when the sun is highest, matching modern circadian research showing insulin sensitivity is best between 10 AM and 2 PM. The same meal eaten in the evening produces a measurably higher glucose response than in the morning (Scheer & Morris, PNAS 2015, found ~17% higher evening glucose).",
+      "16:8 time-restricted eating supports autophagy — the cell's self-cleaning process (Ohsumi's 2016 Nobel; Jamshed et al., 2019, found circadian-aligned eating raises autophagy markers in humans). Ayurveda's langhana (lightening) therapy in the Charaka Samhita described fasting as the way the body burns off ama (metabolic residue) — a kindred intuition, though ama is not literally autophagy.",
     ],
     dailyPractice: [
       "Skip breakfast or keep it light (fruit, warm water with lemon) — break the fast around 10-11 AM.",
@@ -121,8 +121,8 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
         text: "Yoga is not for one who eats too much, nor for one who fasts excessively; not for one who sleeps too much, nor for one who stays awake too long. Yoga arises in one who is moderate in eating, rest, work, and recreation.",
       },
       {
-        verse: "Sushruta Samhita, Sutra Sthana",
-        text: "Health and strength reside latent in the Ojah-dhatu, as butter lies latent in milk. He who guards his ojah through wholesome diet, sleep, and conduct guards life itself.",
+        verse: "Sushruta Samhita, Sutra Sthana 15.19",
+        text: "Ojas is the supreme essence and strength of all the bodily tissues (dhatus). He who guards his ojas through wholesome diet, sleep, and conduct guards life itself.",
       },
     ],
     obstacles: [
@@ -151,13 +151,13 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
     tagline:
       "You are what you think. Sankalpa is the daily practice of catching, naming, and replacing the thought patterns that drive your life.",
     overview: [
-      "Thoughts & Intention Reset (Sankalpa) is the discipline of mental hygiene. Most thoughts are recycled — modern research suggests 90% of today's thoughts are the same as yesterday's. The same negative loops, the same fears, the same self-talk.",
+      "Thoughts & Intention Reset (Sankalpa) is the discipline of mental hygiene. Most thoughts are repetitive: the same negative loops, the same fears, the same self-talk, day after day. (The widely-quoted '90% of thoughts are the same as yesterday's' stat has no scientific source — but the lived pattern of mental repetition is real.)",
       "Sankalpa is the Vedic technology for interrupting that loop. It's not positive thinking. It's a stated, written, repeated intention — a deep groove that overwrites the surface chatter.",
       "This pillar is short (5 minutes a day) but compounds faster than any other. By Day 30, most practitioners report a noticeable shift in self-talk that they couldn't engineer with effort alone.",
     ],
     whyItWorks: [
-      "Hebb's law: neurons that fire together wire together. Every repetition of a thought strengthens its neural pathway. Negative loops are not personality flaws — they are practiced grooves. They can be re-grooved.",
-      "Brihadaranyaka Upanishad 4.4.5 states the principle bluntly: 'You are what your deepest desire is. As your desire is, so is your intention. As your intention is, so is your will. As your will is, so is your deed. As your deed is, so is your destiny.'",
+      "Hebbian learning — 'neurons that fire together wire together' (Carla Shatz's phrasing, 1992, of Donald Hebb's 1949 principle). Every repetition of a thought strengthens its neural pathway. Negative loops are not personality flaws — they are practiced grooves. They can be re-grooved.",
+      "Brihadaranyaka Upanishad 4.4.5 states the principle (in Eknath Easwaran's rendering): 'You are what your deepest desire is. As your desire is, so is your intention. As your intention is, so is your will. As your will is, so is your deed. As your deed is, so is your destiny.'",
     ],
     dailyPractice: [
       "Sit for 2 minutes and observe your dominant thought patterns without judgment.",
@@ -166,7 +166,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "Repeat the Sankalpa silently 3 times with eyes closed at the start of each day.",
       "Whenever the old loop arises during the day, say the Sankalpa to yourself instead.",
       "At night, note one moment when the new pattern showed up unprompted.",
-      "Use the same Sankalpa for 21 consecutive days before changing it.",
+      "Keep the same Sankalpa for at least several weeks before changing it — habits take a median of about 66 days to form (Lally et al., 2010), not 21, and missing a single day doesn't reset your progress.",
     ],
     scripture: [
       {
@@ -186,7 +186,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       {
         obstacle: "My Sankalpa feels fake when I say it.",
         remedy:
-          "It will. Belief is the result of practice, not the prerequisite for it. Say it anyway. The brain doesn't distinguish well between rehearsal and reality.",
+          "Then scale it back to one you can half-believe. Research (Wood et al., 2009) found that repeating affirmations you don't accept can make people with low self-esteem feel worse. Choose present-tense, values-based wording you can actually accept ('I am learning to move with ease') and let belief grow with practice.",
       },
       {
         obstacle: "I keep forgetting to do it.",
@@ -209,12 +209,12 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "Where the breath goes, the mind follows. Pranayama is the most direct lever ever discovered for the nervous system.",
     overview: [
       "Breathing + Meditation (Pranayama) is the conscious control of breath to regulate prana — the life force. In modern terms: it is the only autonomic system you can intervene in directly, which makes it the only conscious lever you have on the vagus nerve.",
-      "Most stress in modern life is not psychological — it is respiratory. Shallow chest breathing keeps the body in low-grade sympathetic activation all day. Slowing the breath to 4-6 breaths per minute flips the switch to parasympathetic in under 90 seconds.",
+      "Most stress in modern life is not psychological — it is respiratory. Shallow chest breathing keeps the body in low-grade sympathetic activation all day. Slowing the breath to 5-6 breaths per minute shifts the body toward parasympathetic calm within a few minutes.",
       "This is the most practical pillar for anyone with anxiety, insomnia, or focus problems. Results are felt within one session.",
     ],
     whyItWorks: [
-      "Heart rate variability (HRV) — the gold-standard measure of nervous system flexibility — increases dramatically with 4:6 breathing (4 seconds in, 6 seconds out). This single ratio activates the vagus nerve more reliably than any drug or supplement.",
-      "Svatmarama's Hatha Yoga Pradipika 2.2 states the principle simply: 'When the breath wanders the mind is unsteady, but when the breath is still so is the mind.' Modern research has confirmed every word of that sentence.",
+      "Heart rate variability (HRV) — the gold-standard measure of nervous system flexibility — increases with slow breathing around 5-6 breaths per minute (e.g. 4:6 — 4s in, 6s out), which raises vagal tone and HRV within a single session (Balban et al., 2023, Cell Reports Medicine; Magee et al., 2021).",
+      "The Hatha Yoga Pradipika puts it simply: when the breath wanders the mind is unsteady; when the breath stills, so does the mind (the formal verse, 2.2, appears below). Modern research has confirmed the core of that link.",
     ],
     dailyPractice: [
       "Sit upright, spine straight, hands resting on the knees.",
@@ -267,10 +267,10 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
     overview: [
       "Movement Everyday (Vyayama) is the principle that the body must be challenged daily — but not destroyed. Ayurveda distinguishes vyayama (rejuvenating exercise) from ati-vyayama (depleting overexercise). The goal is not maximum output; it is consistent input.",
       "30 minutes a day, every day, beats 90 minutes three times a week. This pillar emphasises walking, yoga, mobility, and strength — in that order of priority.",
-      "Movement is also the most accessible mood regulator. A 20-minute walk produces measurably more antidepressant effect than most prescriptions, with effect onset in under an hour.",
+      "Movement is also one of the most accessible mood regulators. A short walk reliably lifts mood within the hour, and over weeks regular exercise is comparable to antidepressant medication for mild-to-moderate depression — and works best combined with it (Noetel et al., BMJ 2024), not as a guaranteed replacement.",
     ],
     whyItWorks: [
-      "Daily walking — particularly outdoor walking — produces BDNF (brain-derived neurotrophic factor), the molecule most strongly correlated with new neuron growth and resistance to depression. The effect requires only 7,000-10,000 steps daily.",
+      "Daily walking — particularly outdoor walking — boosts BDNF (brain-derived neurotrophic factor), a key molecule for new neuron growth and resilience against depression. Most of the benefit shows up by about 7,000 steps a day (Lancet Public Health, 2025); 10,000 is a stretch goal, not a requirement.",
       "The Hatha Yoga tradition (codified by Svatmarama and Gheranda) prescribes asana not for fitness but for steadiness — the body must be capable of sitting motionless for meditation. Movement is the foundation, not the goal.",
     ],
     dailyPractice: [
@@ -305,7 +305,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       {
         obstacle: "I keep getting injured.",
         remedy:
-          "You are doing ati-vyayama (overexertion). Drop intensity by half for two weeks. Yoga and walking only. The body must adapt, not survive.",
+          "You are doing ati-vyayama (overexertion). Ayurveda's rule is ardha-shakti — work to about half your capacity (Ashtanga Hridaya Su. 2.10-11). Drop intensity by half for two weeks; yoga and walking only. The body must adapt, not survive.",
       },
       {
         obstacle: "I'm bored of my routine.",
@@ -324,10 +324,11 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
     overview: [
       "Healing Meditation (Dhyana) is the deeper application of meditation: not for productivity or focus, but for the conscious processing of unresolved emotional material. It is the pillar that distinguishes 10X Vedic Transform from a habit tracker.",
       "Trauma, grief, anger — these are not 'thoughts' that meditation 'clears.' They are stored patterns that require gentle, repeated witnessing to integrate. The Vedic tradition has known this for millennia; modern trauma research has confirmed it in the last 30 years.",
-      "Approach this pillar slowly. Five minutes daily for 21 days produces deeper results than an hour once a week. Healing is rhythm, not effort.",
+      "Approach this pillar slowly. Five minutes daily over several weeks produces deeper results than an hour once a week. Healing is rhythm, not effort.",
+      "A note on safety: for some people — especially with significant trauma — intense body- or memory-focused meditation can temporarily worsen symptoms (roughly 1 in 4 meditators report some negative effect; Lindahl & Britton, 2017). If distress escalates or persists, ease off, return to simple breath awareness, and work alongside a trauma-informed professional. This pillar is an adjunct, not a substitute for therapy.",
     ],
     whyItWorks: [
-      "Bessel van der Kolk's research (The Body Keeps the Score) confirms what Patanjali wrote 2,000 years ago — emotional patterns are stored somatically, and meditation that includes body awareness (vipassana, yoga nidra) is among the most reliable interventions.",
+      "Bessel van der Kolk's research (The Body Keeps the Score) echoes what Patanjali wrote 2,000 years ago — emotional patterns are held somatically, and meditation that includes body awareness (vipassana, yoga nidra) is an evidence-supported adjunct for processing them, alongside first-line therapies like trauma-focused CBT and EMDR, not a replacement.",
       "The Yoga Sutras 2.3 names the five obstacles (kleshas): ignorance, ego, attachment, aversion, clinging to life. Healing meditation is the practical method for loosening their grip — not by force, but by light.",
     ],
     dailyPractice: [
@@ -341,8 +342,8 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
     ],
     scripture: [
       {
-        verse: "Yoga Sutras 2.3 (Patanjali)",
-        text: "The pain-bearing obstructions are five: ignorance, egoism, attachment, aversion, and clinging to life. Ignorance is the mother of all the rest.",
+        verse: "Yoga Sutras 2.3-2.4 (Patanjali)",
+        text: "The pain-bearing obstructions are five: ignorance, egoism, attachment, aversion, and clinging to life (2.3). Ignorance is the field where all the others grow (2.4).",
       },
       {
         verse: "Yoga Sutras 2.1 (Patanjali)",
@@ -384,7 +385,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "Five minutes a day. Three specific things. That is the whole protocol.",
     ],
     whyItWorks: [
-      "Dr. Robert Emmons' research at UC Davis shows that 21 days of daily gratitude journaling produces measurable changes in cortisol, sleep quality, and immune markers — comparable to several pharmacological interventions.",
+      "Dr. Robert Emmons and Michael McCullough (2003) found that people who kept a gratitude journal felt more optimistic, exercised more, and reported better sleep and fewer physical complaints than those who logged hassles. Gratitude practice has small but real benefits for well-being and mood (Cregg & Cheavens, 2021, meta-analysis) — a genuinely helpful habit, not a drug-strength treatment.",
       "The Taittiriya Upanishad opens with 'Saha nāv avatu, saha nau bhunaktu' — 'May we be protected together, may we be nourished together.' Gratitude in the Vedic tradition is relational, not individualistic. The 'I' practising gratitude is connecting to a 'we.'",
     ],
     dailyPractice: [
@@ -406,7 +407,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
         text: "O Fire, lead us by the good path to the enjoyment of the fruit of our action. You know, O god, all our deeds.",
       },
       {
-        verse: "Bhagavad Gita 9.22",
+        verse: "Bhagavad Gita 10.10",
         text: "To those who are constantly devoted and who worship Me with love, I give the understanding by which they can come to Me.",
       },
     ],
@@ -419,7 +420,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       {
         obstacle: "It feels forced.",
         remedy:
-          "It will, for 1-2 weeks. The brain takes ~21 days to re-pattern. The shift is sudden — you wake up one morning already in a different mode.",
+          "It will, for a week or two. Re-patterning takes time — usually longer than the myth-famous 21 days. Keep going; the shift tends to build gradually, then feels sudden.",
       },
       {
         obstacle: "Hard times — nothing feels worth gratitude.",
@@ -441,8 +442,8 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "Sandhya is also the pillar that anchors the others. Once you meet the sun three times a day, you begin to live in cooperation with light, not in opposition to it.",
     ],
     whyItWorks: [
-      "Circadian biology research (Satchin Panda, Salk Institute) shows that the body has approximately 30 distinct hormonal phases across the day. The three transitions Vedic tradition named are real and biologically marked — cortisol peaks around sunrise, digestive fire peaks near noon, melatonin begins its rise near sunset.",
-      "The Gayatri Mantra (Rig Veda 3.62.10) was chanted at these junctions specifically because the receptive state of the body at these transitions amplified the practice. Chanting at sunrise vs midnight is not equivalent.",
+      "Circadian biology (Satchin Panda, Salk Institute) shows that thousands of genes switch on and off on a daily clock — most genes in many tissues run on a rhythm (Mure et al., Science 2018). The three transitions Vedic tradition named are biologically marked — cortisol rises after waking, insulin sensitivity peaks near midday, and melatonin begins its rise around sunset.",
+      "The Gayatri Mantra (Rig Veda 3.62.10) was chanted at these junctions specifically because the receptive state of the body at these transitions amplified the practice. Chanting the Gayatri at roughly 6 breaths per minute also raises HRV and baroreflex sensitivity (Bernardi et al., BMJ 2001) — and chanting at sunrise is not the same as at midnight.",
     ],
     dailyPractice: [
       "Sunrise sandhya: 5 minutes — face east, breathe deeply, set the day's intention.",
@@ -459,12 +460,12 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
         text: "Om bhūr bhuvaḥ svaḥ tat savitur vareṇyaṁ bhargo devasya dhīmahi dhiyo yo naḥ pracodayāt — May we meditate on the brilliant light of the Sun; may it inspire our thoughts.",
       },
       {
-        verse: "Chandogya Upanishad 3.11.1",
+        verse: "Chandogya Upanishad 3.11.1-3",
         text: "The sun, indeed, never sets nor rises. When people think the sun is setting, it is not so; for it only changes about after reaching the end of the day and makes night below and day on the other side.",
       },
       {
         verse: "Bhagavad Gita 7.8",
-        text: "I am the light of the sun and the moon. I am the syllable Om in the Vedic mantras; I am the sound in space and the strength in human beings.",
+        text: "I am the taste in water, O son of Kunti, the light of the sun and the moon, the syllable Om in the Vedic mantras, the sound in ether, and the ability in man.",
       },
     ],
     obstacles: [
@@ -498,7 +499,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "The only requirement is openness to the idea that an intelligent universal energy flows through all things. From that openness, through guided meditation and subconscious-awareness techniques, the practitioner learns to connect to that energy, experience inner stillness and bliss, and develop a daily practice of presence.",
     ],
     whyItWorks: [
-      "Modern neuroscience has begun mapping what the Upanishads described: in deep meditation, brain wave states shift from beta (alert thinking) to alpha (relaxed awareness) to theta (subconscious access) to delta (deep stillness). The subconscious mind — which holds most stored memory and pattern — becomes available for healing and transformation in these states.",
+      "Modern neuroscience has begun mapping what the Upanishads described: in deep meditation, EEG shows increased alpha and theta activity — markers of relaxed, inwardly-focused awareness (Lee et al., 2018). Om chanting in particular quiets limbic activity, including the amygdala (Kalyani et al., 2011), and the felt dissolution of self-boundaries corresponds to reduced activity in the brain's parietal 'orientation' areas (Newberg).",
       "Mundaka Upanishad 2.2.4 gives the precise instruction: 'Om is the bow; the atman is the arrow; Brahman is said to be the mark. It is to be struck by an undistracted mind. Then the atman becomes one with Brahman, as the arrow with the target.' The technology is 3,000 years old; the experience is available today.",
     ],
     dailyPractice: [
@@ -520,7 +521,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
         text: "Aham Brahmasmi — I am Brahman. The individual consciousness is identical with the ultimate reality.",
       },
       {
-        verse: "Isha Upanishad — Shanti Mantra",
+        verse: "Isha Upanishad — Shanti Mantra (also Brihadaranyaka 5.1.1)",
         text: "Pūrṇam adaḥ, pūrṇam idam, pūrṇāt pūrṇam udacyate, pūrṇasya pūrṇam ādāya, pūrṇam evāvaśiṣyate — That is whole, this is whole. From the whole, the whole has been projected. When the whole is taken from the whole, the whole alone remains.",
       },
       {
@@ -559,7 +560,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "This is the pillar of dharma — finding and following your particular path. It works best when you stop asking 'what do I want' and start asking 'what wants to come through me.'",
     ],
     whyItWorks: [
-      "Reticular activating system (RAS) research shows that a clearly held intention literally changes what the brain filters into awareness. Once you set a Sankalpa for, say, learning a skill — you start noticing teachers, books, and conversations you would have ignored before. The world didn't change; your filter did.",
+      "Goal-directed attention research shows that a clearly held intention changes what your brain selects into awareness — your priorities steer perception through the brain's top-down attention networks (Corbetta & Shulman, 2002). Once you set a Sankalpa for, say, learning a skill, you start noticing teachers, books, and conversations you would have ignored before. The world didn't change; your filter did.",
       "Bhagavad Gita 2.47 names the deeper principle: 'You have the right to perform your duty, but you are not entitled to the fruits of your actions.' Sankalpa is set without attachment to outcome — paradoxically, this is what makes outcomes more likely.",
     ],
     dailyPractice: [
@@ -568,7 +569,7 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "Take that action before any reactive task (no email, no calls until it's done).",
       "Evening: note whether the action moved you toward or away from the Sankalpa.",
       "Once a month, review the Sankalpa — does it still feel true? Refine if not.",
-      "Never share your Sankalpa with anyone for the first 21 days — premature sharing dilutes the energy.",
+      "Keep your Sankalpa private at first — Gollwitzer's research (2009) found that announcing an identity goal can quietly reduce follow-through, because the social recognition substitutes for the real work.",
       "Pair Sankalpa with surrender: 'Let this happen, or something better.'",
     ],
     scripture: [
@@ -612,11 +613,11 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
       "Sleep is not the absence of activity. It is the most important active practice of the day — the time the body and mind do their deepest work.",
     overview: [
       "Sleep Optimization (Nidra) is the pillar most people undervalue and most people need most. Modern research from Dr. Matthew Walker and others has confirmed what Ayurveda described 2,500 years ago: sleep is not a passive recovery — it is the most metabolically active and neurologically critical phase of the 24-hour cycle.",
-      "Memory consolidation, glymphatic clearance of brain waste, growth-hormone release, immune-system priming, emotional regulation — all happen during sleep, and all degrade dramatically when sleep is short or fragmented.",
+      "Memory consolidation, glymphatic clearance of brain waste (which appears to ramp up during sleep), growth-hormone release, immune-system priming, emotional regulation — all happen during sleep, and degrade when sleep is short or fragmented.",
       "The good news: sleep responds quickly to small changes. Most people see measurable shifts within 3-7 days of correcting the basics.",
     ],
     whyItWorks: [
-      "Sleep timing matters as much as sleep duration. The first 4 hours of sleep contain the majority of deep (delta-wave) sleep — the phase responsible for physical repair. Going to bed at 10 PM gives you significantly more deep sleep than the same 7 hours starting at 1 AM, regardless of total time.",
+      "Deep (slow-wave) sleep is front-loaded — most of it comes in the first few hours of any night, driven mainly by how long you've been awake (sleep pressure), not by the clock. The real cost of a late bedtime, if you still wake at a fixed time, is losing the REM-rich sleep of the early morning. The win of an earlier, consistent bedtime is circadian alignment, not extra deep sleep.",
       "Ashtanga Hridaya, Sutra Sthana 7 categorises sleep as one of the 'three pillars of life' (along with food and brahmacharya). Sleeping at the wrong times is named as a leading cause of disease — a claim modern circadian research has confirmed in detail.",
     ],
     dailyPractice: [
@@ -630,8 +631,8 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
     ],
     scripture: [
       {
-        verse: "Ashtanga Hridaya, Sutra Sthana 7 (Vagbhata)",
-        text: "Sleep, food, and brahmacharya — these three are the pillars of life. Practiced correctly, they sustain the body; abused, they destroy it.",
+        verse: "Ashtanga Hridaya, Sutra Sthana 7.52 (Vagbhata)",
+        text: "Food, sleep, and moderation in sexual activity (abrahmacharya) — these three are the sub-pillars (upastambha) of life. Practiced correctly, they sustain the body; abused, they destroy it.",
       },
       {
         verse: "Bhagavad Gita 6.17",
