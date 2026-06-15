@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getSunTimes, type SunTimes } from "./sun-times";
 
 const COORDS_KEY = "vedic-coords-v1";
@@ -38,7 +38,7 @@ export function useSolarTimes(): UseSolarTimes {
   const [status, setStatus] = useState<SolarStatus>("idle");
   const [coords, setCoords] = useState<Coords | null>(() => readCachedCoords());
 
-  const request = () => {
+  const request = useCallback(() => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       setStatus("unsupported");
       return;
@@ -56,7 +56,7 @@ export function useSolarTimes(): UseSolarTimes {
       () => setStatus("denied"),
       { maximumAge: 1000 * 60 * 60, timeout: 10000 },
     );
-  };
+  }, []);
 
   useEffect(() => {
     if (coords && status === "idle") setStatus("ready");
