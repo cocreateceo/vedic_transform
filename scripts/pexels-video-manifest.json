@@ -8,6 +8,24 @@
     { "slug": "movement-ambient",     "query": "yoga silhouette slow",              "min_duration_sec": 8,  "max_duration_sec": 25 },
     { "slug": "nature-flow",          "query": "river flowing forest slow",         "min_duration_sec": 8,  "max_duration_sec": 25 },
     { "slug": "candle-flame",         "query": "candle flame close-up",             "min_duration_sec": 6,  "max_duration_sec": 20 },
-    { "slug": "starry-night",         "query": "night sky milky way time lapse",    "min_duration_sec": 8,  "max_duration_sec": 25 }
+    { "slug": "starry-night",         "query": "night sky milky way time lapse",    "min_duration_sec": 8,  "max_duration_sec": 25 },
+
+    { "slug": "exercise-jumping-jacks",     "query": "jumping jacks workout",        "min_duration_sec": 4, "max_duration_sec": 20 },
+    { "slug": "exercise-squats",            "query": "squat exercise fitness",       "min_duration_sec": 4, "max_duration_sec": 20 },
+    { "slug": "exercise-pushups",           "query": "push ups exercise fitness",    "min_duration_sec": 4, "max_duration_sec": 20 },
+    { "slug": "exercise-lunges",            "query": "lunges exercise workout",      "min_duration_sec": 4, "max_duration_sec": 20 },
+    { "slug": "exercise-plank",             "query": "plank exercise core",          "min_duration_sec": 4, "max_duration_sec": 20 },
+    { "slug": "exercise-high-knees",        "query": "high knees cardio workout",    "min_duration_sec": 4, "max_duration_sec": 20 },
+    { "slug": "exercise-mountain-climbers", "query": "mountain climbers exercise",   "min_duration_sec": 4, "max_duration_sec": 20 },
+    { "slug": "exercise-burpees",           "query": "burpees workout fitness",      "min_duration_sec": 4, "max_duration_sec": 20 },
+
+    { "slug": "yoga-mountain",      "query": "yoga standing pose woman",     "min_duration_sec": 4, "max_duration_sec": 25 },
+    { "slug": "yoga-forward-fold",  "query": "yoga forward bend stretch",    "min_duration_sec": 4, "max_duration_sec": 25 },
+    { "slug": "yoga-downward-dog",  "query": "yoga downward dog pose",       "min_duration_sec": 4, "max_duration_sec": 25 },
+    { "slug": "yoga-cobra",         "query": "yoga cobra pose floor",        "min_duration_sec": 4, "max_duration_sec": 25 },
+    { "slug": "yoga-child",         "query": "yoga child pose rest",         "min_duration_sec": 4, "max_duration_sec": 25 },
+    { "slug": "yoga-warrior",       "query": "yoga warrior pose",            "min_duration_sec": 4, "max_duration_sec": 25 },
+    { "slug": "yoga-tree",          "query": "yoga tree pose balance",       "min_duration_sec": 4, "max_duration_sec": 25 },
+    { "slug": "yoga-savasana",      "query": "yoga relaxation lying down",   "min_duration_sec": 4, "max_duration_sec": 25 }
   ]
 }

@@ -2,12 +2,16 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Square, Volume2, VolumeX, Sparkles } from "lucide-react";
+import { Play, Square, Volume2, VolumeX, Sparkles, Check, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { BreathingLotus } from "./breathing-lotus";
+import { BreathingFigure } from "./breathing-figure";
 import { PexelsVideo } from "@/components/ui/pexels-video";
 import { NextPracticeCta } from "./next-practice-cta";
+import { MoodCheck, moodLabel, type MoodValue } from "./mood-check";
+import { SessionIntro } from "./session-intro";
+import { SESSION_INTROS } from "./session-intros";
 
 const SESSION_PILLAR = "breathing-meditation";
 // A "real session" threshold so accidentally hitting Start then Stop doesn't
@@ -67,6 +71,11 @@ export function BreathingPatterns() {
   const [cycleCount, setCycleCount] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
+  const [started, setStarted] = useState(false);
+  const [reflecting, setReflecting] = useState(false);
+  const [sealed, setSealed] = useState(false);
+  const [moodBefore, setMoodBefore] = useState<MoodValue | null>(null);
+  const [moodAfter, setMoodAfter] = useState<MoodValue | null>(null);
   const voiceRef = useRef<HTMLAudioElement | null>(null);
   const checkinFiredRef = useRef(false);
 
@@ -127,6 +136,9 @@ export function BreathingPatterns() {
     setPhaseElapsed(0);
     setCycleCount(0);
     setKarmaAwarded(null);
+    setReflecting(false);
+    setSealed(false);
+    setMoodAfter(null);
     checkinFiredRef.current = false;
     stopVoice();
   }, [stopVoice]);
@@ -137,22 +149,23 @@ export function BreathingPatterns() {
     return () => stopVoice();
   }, [soundEnabled, stopVoice]);
 
-  // Credit a check-in when the user has practiced enough cycles. Fires once
-  // per session — repeat sessions today are deduped by the server.
-  const maybeCreditCheckin = useCallback(
-    (cycles: number) => {
-      if (checkinFiredRef.current) return;
-      if (cycles < MIN_CYCLES_FOR_CREDIT) return;
-      checkinFiredRef.current = true;
-      apiFetch("/data/checkin", {
-        method: "POST",
-        body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
-      })
-        .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
-        .catch(() => {});
-    },
-    [],
-  );
+  // Credit fires when the user finishes + seals in the Reflect step, carrying
+  // before/after mood. Server dedupes same-day re-runs.
+  const sealSession = useCallback(() => {
+    if (checkinFiredRef.current) return;
+    checkinFiredRef.current = true;
+    setSealed(true);
+    apiFetch("/data/checkin", {
+      method: "POST",
+      body: JSON.stringify({
+        pillarSlug: SESSION_PILLAR,
+        moodBefore: moodLabel(moodBefore),
+        moodAfter: moodLabel(moodAfter),
+      }),
+    })
+      .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
+      .catch(() => {});
+  }, [moodBefore, moodAfter]);
 
   useEffect(() => {
     if (!isActive) return;
@@ -170,11 +183,7 @@ export function BreathingPatterns() {
           if (soundEnabled && nextPhase) playPhaseVoice(nextPhase.name);
           if (wrapsCycle) {
             setCurrentPhaseIndex(0);
-            setCycleCount((c) => {
-              const next = c + 1;
-              maybeCreditCheckin(next);
-              return next;
-            });
+            setCycleCount((c) => c + 1);
           } else {
             setCurrentPhaseIndex(nextIndex);
           }
@@ -192,12 +201,22 @@ export function BreathingPatterns() {
     pattern.phases,
     playPhaseVoice,
     soundEnabled,
-    maybeCreditCheckin,
   ]);
+
+  const finishSession = () => {
+    setIsActive(false);
+    stopVoice();
+    if (cycleCount >= MIN_CYCLES_FOR_CREDIT) {
+      setReflecting(true);
+    } else {
+      // Not enough practice to credit — return to ready without a check-in.
+      reset();
+    }
+  };
 
   const toggleSession = () => {
     if (isActive) {
-      reset();
+      finishSession();
     } else {
       setIsActive(true);
       setCurrentPhaseIndex(0);
@@ -223,6 +242,74 @@ export function BreathingPatterns() {
   const phaseTimeRemaining = currentPhase
     ? Math.ceil(currentPhase.duration - phaseElapsed)
     : 0;
+
+  if (!started) {
+    return <SessionIntro {...SESSION_INTROS.breathing} onBegin={() => setStarted(true)} />;
+  }
+
+  // Reflect / reward screen — after a credited session is finished.
+  if (reflecting) {
+    return (
+      <div className="flex flex-col items-center gap-8 py-12">
+        <div className="relative">
+          <div className="absolute inset-0 bg-amber-400/20 blur-3xl rounded-full animate-pulse" />
+          <div className="relative w-48 h-48 rounded-full bg-gradient-to-br from-orange-400 to-amber-600 flex items-center justify-center shadow-2xl shadow-amber-500/30">
+            <div className="text-center text-white">
+              <Check className="w-10 h-10 mx-auto mb-2" />
+              <p className="text-xl font-bold">{cycleCount} cycles</p>
+            </div>
+          </div>
+        </div>
+        <div className="text-center">
+          <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">Well Done!</h3>
+          <p className="text-[var(--color-text-secondary)] mt-2">
+            Your breath is slower and your mind more settled.
+          </p>
+        </div>
+
+        {!sealed ? (
+          <div className="flex flex-col items-center gap-5">
+            <MoodCheck
+              value={moodAfter}
+              onChange={setMoodAfter}
+              prompt="How do you feel now?"
+            />
+            <Button size="lg" onClick={sealSession} className="min-w-[200px]">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Seal this session
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4">
+            {moodBefore && moodAfter && (
+              <p className="text-[var(--color-text-secondary)]">
+                You moved from{" "}
+                <span className="font-semibold text-[var(--color-text-primary)]">{moodLabel(moodBefore)}</span>{" "}
+                to{" "}
+                <span className="font-semibold text-amber-600">{moodLabel(moodAfter)}</span>.
+              </p>
+            )}
+            {karmaAwarded !== null && karmaAwarded > 0 && (
+              <p className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+                <Sparkles className="w-4 h-4" />
+                +{karmaAwarded} karma earned
+              </p>
+            )}
+            {karmaAwarded === 0 && (
+              <p className="text-xs text-gray-500">
+                Already checked in today — this session is recorded.
+              </p>
+            )}
+            <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
+            <Button variant="outline" onClick={reset}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Breathe again
+            </Button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex flex-col items-center gap-8 py-8 rounded-3xl overflow-hidden">
@@ -286,6 +373,9 @@ export function BreathingPatterns() {
         </div>
       </div>
 
+      {/* Breathing figure — belly expands on inhale, settles on exhale */}
+      <BreathingFigure openness={getOpenness()} phase={lotusPhase} className="w-28 h-24" />
+
       {/* Stats */}
       <div className="flex items-center gap-8 text-center">
         <div>
@@ -313,7 +403,7 @@ export function BreathingPatterns() {
           {isActive ? (
             <>
               <Square className="w-5 h-5 mr-2" />
-              Stop
+              Finish
             </>
           ) : (
             <>
@@ -333,25 +423,20 @@ export function BreathingPatterns() {
         </Button>
       </div>
 
-      {/* Karma feedback once a real session has been credited. */}
-      {karmaAwarded !== null && karmaAwarded > 0 && (
-        <p className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
-          <Sparkles className="w-4 h-4" />
-          +{karmaAwarded} karma earned
-        </p>
-      )}
-      {karmaAwarded === 0 && (
-        <p className="text-xs text-gray-500">
-          Already checked in today — this session is recorded.
-        </p>
+      {/* Before-mood — captured once, before the first start */}
+      {!isActive && cycleCount === 0 && (
+        <MoodCheck
+          value={moodBefore}
+          onChange={setMoodBefore}
+          prompt="Before you begin — how do you feel?"
+        />
       )}
 
-      {/* "Next practice" CTA appears once a check-in has been credited.
-          Closes the loop: breathing done → onto the next focus pillar. */}
-      {karmaAwarded !== null && (
-        <div className="mt-2">
-          <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
-        </div>
+      {/* Hint to keep going until the credit threshold */}
+      {isActive && cycleCount < MIN_CYCLES_FOR_CREDIT && (
+        <p className="text-xs text-[var(--color-text-secondary)]">
+          Practice at least {MIN_CYCLES_FOR_CREDIT} cycles, then tap Finish.
+        </p>
       )}
 
       {/* Pattern description */}

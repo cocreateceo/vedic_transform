@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { PexelsVideo } from "@/components/ui/pexels-video";
 import { NextPracticeCta } from "./next-practice-cta";
+import { SessionIntro } from "./session-intro";
+import { SESSION_INTROS } from "./session-intros";
 
 // Eating-window presets the user can pick before starting. Fasting window is
 // always 24 - eating. 16:8 stays the default because it's the most common
@@ -48,6 +50,7 @@ export function FastingTimer() {
   const [targetHit, setTargetHit] = useState(false);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const [started, setStarted] = useState(false);
   const [preset, setPreset] = useState<Preset>(DEFAULT_PRESET);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -256,6 +259,12 @@ export function FastingTimer() {
         <div className="w-[280px] h-[280px] rounded-full bg-gray-100/40 animate-pulse" />
       </div>
     );
+  }
+
+  // Show the briefing first — but never interrupt a fast already in progress
+  // (restored from localStorage on a page reload).
+  if (!started && !isRunning) {
+    return <SessionIntro {...SESSION_INTROS.fasting} onBegin={() => setStarted(true)} />;
   }
 
   return (

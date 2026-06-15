@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { NextPracticeCta } from "./next-practice-cta";
+import { SessionIntro } from "./session-intro";
+import { SESSION_INTROS } from "./session-intros";
 
 const SESSION_PILLAR = "sleep-optimization";
 
@@ -48,6 +50,7 @@ export function SleepPractice() {
   const [wakeTime, setWakeTime] = useState("05:00");
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
   const [hydrated, setHydrated] = useState(false);
+  const [started, setStarted] = useState(false);
   const checkinFiredRef = useRef(false);
 
   // Hydrate from localStorage on mount.
@@ -104,6 +107,17 @@ export function SleepPractice() {
   if (hours < 0) hours += 24;
   const hoursClass = hours >= 7 ? "text-emerald-300" : "text-rose-300";
   const allDone = done.size === SLEEP_RITUAL.length;
+
+  if (!started) {
+    return (
+      <div
+        className="relative min-h-[540px] p-8 rounded-2xl overflow-hidden flex items-center justify-center"
+        style={{ background: "linear-gradient(180deg, #1e1b4b 0%, #050514 100%)" }}
+      >
+        <SessionIntro {...SESSION_INTROS.sleep} onBegin={() => setStarted(true)} />
+      </div>
+    );
+  }
 
   return (
     <div

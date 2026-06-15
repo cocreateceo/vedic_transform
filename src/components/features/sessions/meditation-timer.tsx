@@ -8,6 +8,9 @@ import { apiFetch } from "@/lib/api";
 import { MeditationPosture } from "./meditation-posture";
 import { PexelsVideo } from "@/components/ui/pexels-video";
 import { NextPracticeCta } from "./next-practice-cta";
+import { MoodCheck, moodLabel, type MoodValue } from "./mood-check";
+import { SessionIntro } from "./session-intro";
+import { SESSION_INTROS } from "./session-intros";
 
 const SESSION_PILLAR = "healing-meditation";
 
@@ -36,6 +39,10 @@ export function MeditationTimer() {
   const [isComplete, setIsComplete] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
+  const [moodBefore, setMoodBefore] = useState<MoodValue | null>(null);
+  const [moodAfter, setMoodAfter] = useState<MoodValue | null>(null);
+  const [sealed, setSealed] = useState(false);
+  const [started, setStarted] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const droneOscillatorsRef = useRef<OscillatorNode[]>([]);
   const droneGainRef = useRef<GainNode | null>(null);
@@ -146,23 +153,32 @@ export function MeditationTimer() {
     setIsComplete(false);
     setTimeRemaining(selectedDuration * 60);
     setKarmaAwarded(null);
+    setMoodAfter(null);
+    setSealed(false);
     checkinFiredRef.current = false;
     firedCuesRef.current.clear();
     stopVoice();
   }, [selectedDuration, stopVoice]);
 
-  // Credit the user's pillar check-in when the timer naturally completes.
-  // Server-side same-day dedupe means re-running the timer is safe.
-  useEffect(() => {
-    if (!isComplete || checkinFiredRef.current) return;
+  // Credit the user's pillar check-in when they "seal" the session in the
+  // Reflect step — this carries the before/after mood with it. Server-side
+  // same-day dedupe means re-running the timer is safe.
+  const sealSession = useCallback(() => {
+    if (checkinFiredRef.current) return;
     checkinFiredRef.current = true;
+    setSealed(true);
     apiFetch("/data/checkin", {
       method: "POST",
-      body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
+      body: JSON.stringify({
+        pillarSlug: SESSION_PILLAR,
+        durationMinutes: selectedDuration,
+        moodBefore: moodLabel(moodBefore),
+        moodAfter: moodLabel(moodAfter),
+      }),
     })
       .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
       .catch(() => {});
-  }, [isComplete]);
+  }, [selectedDuration, moodBefore, moodAfter]);
 
   const selectDuration = useCallback(
     (mins: number) => {
@@ -257,28 +273,58 @@ export function MeditationTimer() {
             Well Done!
           </h3>
           <p className="text-[var(--color-text-secondary)] mt-2">
-            You meditated for {selectedDuration} minutes. Your mind is clearer
-            and more focused.
+            You meditated for {selectedDuration} minutes. Take a breath before
+            you return.
           </p>
-          {karmaAwarded !== null && karmaAwarded > 0 && (
-            <p className="inline-flex items-center gap-1 mt-3 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
-              <Sparkles className="w-4 h-4" />
-              +{karmaAwarded} karma earned
-            </p>
-          )}
-          {karmaAwarded === 0 && (
-            <p className="text-xs text-gray-500 mt-3">
-              Already checked in today — your meditation is recorded.
-            </p>
-          )}
         </div>
-        <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
-        <Button variant="outline" onClick={reset}>
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Restart meditation
-        </Button>
+
+        {/* Reflect step — capture after-mood, then seal the session */}
+        {!sealed ? (
+          <div className="flex flex-col items-center gap-5">
+            <MoodCheck
+              value={moodAfter}
+              onChange={setMoodAfter}
+              prompt="How do you feel now?"
+            />
+            <Button size="lg" onClick={sealSession} className="min-w-[200px]">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Seal this session
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4">
+            {moodBefore && moodAfter && (
+              <p className="text-[var(--color-text-secondary)]">
+                You moved from{" "}
+                <span className="font-semibold text-[var(--color-text-primary)]">{moodLabel(moodBefore)}</span>{" "}
+                to{" "}
+                <span className="font-semibold text-amber-600">{moodLabel(moodAfter)}</span>.
+              </p>
+            )}
+            {karmaAwarded !== null && karmaAwarded > 0 && (
+              <p className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+                <Sparkles className="w-4 h-4" />
+                +{karmaAwarded} karma earned
+              </p>
+            )}
+            {karmaAwarded === 0 && (
+              <p className="text-xs text-gray-500">
+                Already checked in today — your meditation is recorded.
+              </p>
+            )}
+            <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
+            <Button variant="outline" onClick={reset}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Restart meditation
+            </Button>
+          </div>
+        )}
       </div>
     );
+  }
+
+  if (!started) {
+    return <SessionIntro {...SESSION_INTROS.meditation} onBegin={() => setStarted(true)} />;
   }
 
   return (
@@ -420,6 +466,15 @@ export function MeditationTimer() {
           {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
         </Button>
       </div>
+
+      {/* Before-mood — captured once, before the first start */}
+      {elapsed === 0 && !isActive && (
+        <MoodCheck
+          value={moodBefore}
+          onChange={setMoodBefore}
+          prompt="Before you begin — how do you feel?"
+        />
+      )}
 
       {/* Guidance text */}
       <p className="text-center text-sm text-[var(--color-text-secondary)] max-w-md">

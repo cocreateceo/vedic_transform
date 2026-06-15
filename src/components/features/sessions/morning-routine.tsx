@@ -19,6 +19,8 @@ import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { SunriseIllustration } from "./sunrise-illustration";
 import { NextPracticeCta } from "./next-practice-cta";
+import { SessionIntro } from "./session-intro";
+import { SESSION_INTROS } from "./session-intros";
 
 const STEPS = [
   { name: "Wake Up",      icon: Sparkles, voice: "/audio/morning/wake.mp3" },
@@ -38,6 +40,7 @@ export function MorningRoutine() {
   const [isComplete, setIsComplete] = useState(false);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [started, setStarted] = useState(false);
 
   // Breathwork state
   const [breathworkActive, setBreathworkActive] = useState(false);
@@ -357,6 +360,10 @@ export function MorningRoutine() {
     if (!breathworkActive) return 1;
     return breathPhase === "inhale" ? 1.3 : 1;
   };
+
+  if (!started) {
+    return <SessionIntro {...SESSION_INTROS.morning} onBegin={() => setStarted(true)} />;
+  }
 
   return (
     <div className="flex flex-col gap-6 py-4">

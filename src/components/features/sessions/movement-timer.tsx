@@ -7,6 +7,10 @@ import { cn } from "@/lib/utils/cn";
 import { apiFetch } from "@/lib/api";
 import { PexelsVideo } from "@/components/ui/pexels-video";
 import { NextPracticeCta } from "./next-practice-cta";
+import { MoodCheck, moodLabel, type MoodValue } from "./mood-check";
+import { SessionIntro } from "./session-intro";
+import { SESSION_INTROS } from "./session-intros";
+import { MOVEMENT_EXERCISES, exerciseForRound } from "./movement-exercises";
 
 const SESSION_PILLAR = "movement";
 
@@ -30,6 +34,10 @@ export function MovementTimer() {
   const [isActive, setIsActive] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
+  const [moodBefore, setMoodBefore] = useState<MoodValue | null>(null);
+  const [moodAfter, setMoodAfter] = useState<MoodValue | null>(null);
+  const [sealed, setSealed] = useState(false);
+  const [started, setStarted] = useState(false);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const voiceRef = useRef<HTMLAudioElement | null>(null);
@@ -81,6 +89,11 @@ export function MovementTimer() {
 
   const phaseDuration = phase === "work" ? workTime : restTime;
 
+  // During work, demo the current round's exercise; during rest, preview the
+  // exercise coming up in the next round.
+  const demoExercise =
+    phase === "rest" ? exerciseForRound(currentRound + 1) : exerciseForRound(currentRound);
+
   // SVG parameters
   const radius = 110;
   const circumference = 2 * Math.PI * radius;
@@ -96,22 +109,37 @@ export function MovementTimer() {
     setCurrentRound(1);
     setTimeRemaining(workTime);
     setKarmaAwarded(null);
+    setMoodAfter(null);
+    setSealed(false);
     checkinFiredRef.current = false;
   }, [workTime]);
 
-  // Credit check-in once when workout actually finishes (not on idle resets).
+  // Play the celebratory finale when the workout finishes; the check-in itself
+  // is deferred to the Reflect step so it can carry the after-mood.
   useEffect(() => {
-    if (phase !== "complete" || checkinFiredRef.current) return;
-    checkinFiredRef.current = true;
+    if (phase !== "complete") return;
     playCue("finale");
     playVoice(VOICE.complete);
+  }, [phase, playCue, playVoice]);
+
+  // Credit fires when the user seals the session in Reflect, carrying mood
+  // + the actual workout duration. Server dedupes same-day.
+  const sealSession = useCallback(() => {
+    if (checkinFiredRef.current) return;
+    checkinFiredRef.current = true;
+    setSealed(true);
     apiFetch("/data/checkin", {
       method: "POST",
-      body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
+      body: JSON.stringify({
+        pillarSlug: SESSION_PILLAR,
+        durationMinutes: Math.max(1, Math.round((totalRounds * (workTime + restTime)) / 60)),
+        moodBefore: moodLabel(moodBefore),
+        moodAfter: moodLabel(moodAfter),
+      }),
     })
       .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
       .catch(() => {});
-  }, [phase, playCue, playVoice]);
+  }, [totalRounds, workTime, restTime, moodBefore, moodAfter]);
 
   useEffect(() => {
     if (!isActive || phase === "idle" || phase === "complete") return;
@@ -175,6 +203,10 @@ export function MovementTimer() {
     setter((v: number) => Math.max(min, Math.min(max, v + delta)));
   };
 
+  if (!started) {
+    return <SessionIntro {...SESSION_INTROS.movement} onBegin={() => setStarted(true)} />;
+  }
+
   if (phase === "complete") {
     return (
       <div className="flex flex-col items-center gap-8 py-12">
@@ -191,23 +223,48 @@ export function MovementTimer() {
           <p className="text-[var(--color-text-secondary)] mt-2">
             You crushed {totalRounds} rounds. Stay consistent, stay strong.
           </p>
-          {karmaAwarded !== null && karmaAwarded > 0 && (
-            <p className="inline-flex items-center gap-1 mt-3 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
-              <Sparkles className="w-4 h-4" />
-              +{karmaAwarded} karma earned
-            </p>
-          )}
-          {karmaAwarded === 0 && (
-            <p className="text-xs text-gray-500 mt-3">
-              Already checked in today — your workout is recorded.
-            </p>
-          )}
         </div>
-        <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
-        <Button variant="outline" onClick={reset}>
-          <RotateCcw className="w-4 h-4 mr-2" />
-          New workout
-        </Button>
+
+        {!sealed ? (
+          <div className="flex flex-col items-center gap-5">
+            <MoodCheck
+              value={moodAfter}
+              onChange={setMoodAfter}
+              prompt="How's your energy now?"
+            />
+            <Button size="lg" onClick={sealSession} className="min-w-[200px]">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Seal this session
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4">
+            {moodBefore && moodAfter && (
+              <p className="text-[var(--color-text-secondary)]">
+                You moved from{" "}
+                <span className="font-semibold text-[var(--color-text-primary)]">{moodLabel(moodBefore)}</span>{" "}
+                to{" "}
+                <span className="font-semibold text-amber-600">{moodLabel(moodAfter)}</span>.
+              </p>
+            )}
+            {karmaAwarded !== null && karmaAwarded > 0 && (
+              <p className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+                <Sparkles className="w-4 h-4" />
+                +{karmaAwarded} karma earned
+              </p>
+            )}
+            {karmaAwarded === 0 && (
+              <p className="text-xs text-gray-500">
+                Already checked in today — your workout is recorded.
+              </p>
+            )}
+            <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
+            <Button variant="outline" onClick={reset}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              New workout
+            </Button>
+          </div>
+        )}
       </div>
     );
   }
@@ -301,6 +358,68 @@ export function MovementTimer() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Before-mood — captured once, while idle */}
+      {phase === "idle" && (
+        <MoodCheck
+          value={moodBefore}
+          onChange={setMoodBefore}
+          prompt="Before you begin — how's your energy?"
+        />
+      )}
+
+      {/* Circuit preview — what you'll cycle through */}
+      {phase === "idle" && (
+        <div className="w-full max-w-md">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-text-secondary)] mb-2 text-center">
+            Your circuit · {totalRounds} {totalRounds === 1 ? "round" : "rounds"}
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {MOVEMENT_EXERCISES.map((ex, i) => (
+              <div
+                key={ex.name}
+                className="flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-card-bg)] p-2"
+              >
+                <span className="shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-700 text-xs font-bold flex items-center justify-center">
+                  {i + 1}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-[var(--color-text-primary)] truncate">{ex.name}</p>
+                  <p className="text-[11px] text-[var(--color-text-secondary)] truncate">{ex.target}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[11px] text-center text-[var(--color-text-secondary)] mt-2">
+            One exercise per round; the circuit repeats if you set more rounds.
+          </p>
+        </div>
+      )}
+
+      {/* Live exercise demo — current move during work, next move during rest */}
+      {(phase === "work" || phase === "rest") && (
+        <div className="w-full max-w-md">
+          <div className="relative h-44 rounded-2xl overflow-hidden">
+            <PexelsVideo slug={demoExercise.demoSlug} showAttribution={false} className="absolute inset-0 w-full h-full" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-3">
+              <span
+                className={cn(
+                  "text-[11px] font-semibold uppercase tracking-widest",
+                  phase === "rest" ? "text-green-300" : "text-orange-300",
+                )}
+              >
+                {phase === "rest" ? "Next up" : `Round ${currentRound} · now`}
+              </span>
+              <p className="text-xl font-bold text-white leading-tight">{demoExercise.name}</p>
+              <p className="text-xs text-white/80">{demoExercise.target}</p>
+            </div>
+          </div>
+          <p className="text-sm text-center text-[var(--color-text-secondary)] mt-2">
+            {demoExercise.cue}
+          </p>
         </div>
       )}
 
