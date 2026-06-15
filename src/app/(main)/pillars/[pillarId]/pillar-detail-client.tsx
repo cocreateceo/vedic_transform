@@ -48,6 +48,7 @@ import { setStreakEvent, type StreakEventType } from "@/lib/streak-events";
 import { getPostersByPillar } from "@/data/posters";
 import { PosterSection } from "@/components/features/posters/poster-section";
 import { PillarVideo } from "@/components/features/pillars/pillar-video";
+import { SunWindowsCard } from "@/components/features/solar/sun-windows-card";
 
 export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const pillar = getPillarBySlug(pillarId);
@@ -420,6 +421,12 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
           </CardContent>
         </Card>
       )}
+
+      {/* Sun windows — time-of-day guidance for the four solar-aligned pillars */}
+      {pillarId === "morning-initiation" && <SunWindowsCard show={["brahma"]} />}
+      {pillarId === "sandhya-meditation" && <SunWindowsCard show={["sandhya"]} />}
+      {pillarId === "nutrition-fasting" && <SunWindowsCard show={["eating"]} />}
+      {pillarId === "sleep-optimization" && <SunWindowsCard show={["winddown"]} />}
 
       {/* Pillar-specific content */}
       <Card className="mb-6">
