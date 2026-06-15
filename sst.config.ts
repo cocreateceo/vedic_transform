@@ -307,6 +307,17 @@ export default $config({
       globalIndexes: { "referrerUserId-index": { hashKey: "referrerUserId" } },
     });
 
+    // Cohort membership — cohortId is the YYYY-MM of the user's journey start
+    // ("New Moon cohort"). One row per member; lazily assigned on first fetch.
+    const cohortMembers = new sst.aws.Dynamo("CohortMembers", {
+      fields: { id: "string", cohortId: "string", userId: "string" },
+      primaryIndex: { hashKey: "id" },
+      globalIndexes: {
+        "cohortId-index": { hashKey: "cohortId" },
+        "userId-index": { hashKey: "userId" },
+      },
+    });
+
     // ── API Gateway ─────────────────────────────────────────────────
     // Explicit CORS allowlist. Add any new deployed origin (custom domain,
     // preview deploy, etc.) here — wildcards leak the API to any site.
@@ -342,6 +353,11 @@ export default $config({
     api.route("GET /data/referral", {
       handler: "functions/data/referral.handler",
       link: [referrals, jwtSecret],
+    });
+
+    api.route("GET /data/cohort", {
+      handler: "functions/data/cohort.handler",
+      link: [cohortMembers, journeys, jwtSecret],
     });
 
     api.route("POST /auth/login", {

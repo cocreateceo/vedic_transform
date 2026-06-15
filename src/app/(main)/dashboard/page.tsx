@@ -14,6 +14,7 @@ import { DailyShortCard } from "@/components/features/dashboard/daily-short-card
 import { MandalaProgress } from "@/components/features/dashboard/mandala-progress";
 import { ReflectionCard } from "@/components/features/dashboard/reflection-card";
 import { RecoveryRitualCard } from "@/components/features/dashboard/recovery-ritual-card";
+import { CohortBanner } from "@/components/features/dashboard/cohort-banner";
 import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -255,6 +256,9 @@ export default function DashboardPage() {
       {/* Phase-transition reflection — fires on days 8, 15, 22, 31, 41, 49
           (with a 3-day show window each). Phase-toned card with a
           narrative summary of the phase just walked. Dismissible per phase. */}
+      {/* Cohort social proof — you're not doing the 48 days alone. */}
+      <CohortBanner />
+
       {/* Compassionate re-entry after a 2+ day absence (audit P0). */}
       <RecoveryRitualCard
         checkins={allCheckins as { checkinDate?: string }[]}
