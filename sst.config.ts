@@ -634,6 +634,12 @@ export default $config({
       link: [pushSubscriptions, vapidPublicKey, vapidPrivateKey, jwtSecret],
     });
 
+    // Public, token-signed unsubscribe link embedded in every lifecycle email.
+    api.route("GET /data/email/unsubscribe", {
+      handler: "functions/data/email-unsubscribe.handler",
+      link: [reminderSettings, jwtSecret],
+    });
+
     // Cron senders — each runs every 15 min and fans out by user-local time.
     const cronLink = [
       pushSubscriptions,
@@ -668,6 +674,24 @@ export default $config({
     new sst.aws.Cron("RecoveryPush", {
       schedule: "rate(15 minutes)",
       job: { handler: "functions/crons/recovery-push.handler", link: cronLink },
+    });
+
+    // Lifecycle email (RC1). Runs hourly, scans users, sends welcome / day-N
+    // milestone / completion / win-back emails. Provider-agnostic: defaults to
+    // the "console" no-op adapter until SES (or Resend/Postmark) is wired in
+    // functions/lib/email.ts. To go live: set EMAIL_PROVIDER=ses + EMAIL_FROM
+    // and implement sendViaSes().
+    new sst.aws.Cron("LifecycleEmail", {
+      schedule: "rate(1 hour)",
+      job: {
+        handler: "functions/crons/lifecycle-email.handler",
+        link: [...cronLink, users, jwtSecret],
+        environment: {
+          EMAIL_PROVIDER: "console",
+          APP_URL: "https://10x.vedics.net",
+          API_URL: api.url,
+        },
+      },
     });
 
     // ── Next.js Site (P0-3) ─────────────────────────────────────────
