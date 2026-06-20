@@ -14,6 +14,7 @@ import { DailyShortCard } from "@/components/features/dashboard/daily-short-card
 import { MandalaProgress } from "@/components/features/dashboard/mandala-progress";
 import { ReflectionCard } from "@/components/features/dashboard/reflection-card";
 import { RecoveryRitualCard } from "@/components/features/dashboard/recovery-ritual-card";
+import { MilestoneCelebration } from "@/components/features/dashboard/milestone-celebration";
 import { CohortBanner } from "@/components/features/dashboard/cohort-banner";
 import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
@@ -186,6 +187,7 @@ export default function DashboardPage() {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <DailyWisdomPopup />
+      <MilestoneCelebration currentDay={currentDay} />
       {/* Welcome banner — left: phase + day narrative; right: mandala ring */}
       {(() => {
         const phase = getJourneyPhase(currentDay);
