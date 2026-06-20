@@ -82,7 +82,7 @@ Each row carries its origin ID(s) so you can trace back: `R#` = ROADMAP, `C#/A#`
 | **RC4** | **"Today's Practice" hero card** | 🟩 SHIPPED (`todays-practice.tsx`, wired on dashboard) | S | R-P0-2, C3 |
 | **RC5** | **Cohort start dates** ("New Moon cohorts") — `Cohorts` table + onboarding step | 🟥 OPEN | M | R-P1-4, C8 |
 | **RC6** | **Friend streaks / accountability buddy** — opt-in pairing, daily ping | 🟥 OPEN | M | R-P1-6, C5 |
-| **RC7** | **Sutra Book preview from Day 1** — 48-page accordion, pages unlock with progress | 🟥 OPEN | S | R-P1-9, C10 |
+| **RC7** | **Sutra Book preview from Day 1** | 🟩 SHIPPED 2026-06-19 — `SutraBook` 48-page grid on `/progress`, pages unlock with journey day | S | R-P1-9, C10 |
 
 ### 2.3 📈 Acquisition / SEO / Virality
 
@@ -90,7 +90,7 @@ Each row carries its origin ID(s) so you can trace back: `R#` = ROADMAP, `C#/A#`
 |----|------|--------|--------|--------|
 | **AQ1** | **JSON-LD structured data** | 🟩 SHIPPED 2026-06-19 — Article (blog/[slug]), Course (how-it-works), ItemList (pillars-overview), AboutPage, ContactPage + existing FAQPage + Organization/WebSite | M | SA-P0-6 |
 | **AQ2** | **OG images + canonicals + per-page metadata** | 🟩 SHIPPED 2026-06-19 — centralized `src/lib/seo.ts` `pageMetadata()`; OG/canonical/twitter on about, how-it-works, pillars-overview, contact, blog, blog/[slug], testimonials, faq | S–M | SA-P0-7, SA-P1 |
-| **AQ3** | **Real shareable image cards** — streak/recap/badge/weekly; auto-prompt at Day 7/21/48 | 🟧 WEAK (text only; only dosha renders an image) | M | R-P1-5, A3 |
+| **AQ3** | **Real shareable image cards** + auto-prompt at Day 7/21/48 | 🟩 SHIPPED 2026-06-19 — `share-links.ts` (+tests) → `/share` OG cards; `MilestoneCelebration` auto-prompt on dashboard | M | R-P1-5, A3 |
 | **AQ4** | **`/dosha-test/` in sitemap** + indexable `/dosha-test/[dosha]` guide pages | 🟩 SHIPPED (`sitemap.ts` + `(public)/dosha-test/[dosha]`) | — | SA quick-win + P1 |
 | **AQ5** | **Referral program** — per-user code, `/refer/[code]`, 100 karma both sides at referee Day 7 | 🟥 OPEN | S | R-P1-8, A5 |
 | **AQ6** | **Scale blog + Article schema** (currently 6 posts) — per-pillar/per-dosha/per-practice | 🟥 OPEN | L | SA-P1, A* |
@@ -117,11 +117,11 @@ Each row carries its origin ID(s) so you can trace back: `R#` = ROADMAP, `C#/A#`
 | ID | Item | Status | Effort | Origin |
 |----|------|--------|--------|--------|
 | **V1** | **Sunrise-aware Brahma Muhurta *push*** — solar engine ships client-side; still need the server cron firing push at sunrise−96min | 🟧 PARTIAL (compute done; no server push) | S | R-P1-7, infra follow-on |
-| **V2** | **Festival / vrat push calendar** — Ekadashi, Purnima, Amavasya, Pradosh, Shivaratri, Navratri, Janmashtami | 🟥 OPEN | M | R-P1-10 |
-| **V3** | **Mantra audio + 108-bead japa counter** with haptics | 🟥 OPEN | M | R-P2-12 |
-| **V4** | **AI Pandit mode** for the Vedic Guide (ritual flows, samagri lists, muhurta) | 🟥 OPEN | M | R-P2-11 |
-| **V5** | **Nakshatra-tailored daily insight** (extend onboarding to capture birth date/place) | 🟥 OPEN | M | R-P2-14 |
-| **V6** | **Manasic puja flow** (5-min mental offering) | 🟥 OPEN | S | R-P2-13 |
+| **V2** | **Festival / vrat push calendar** — Ekadashi, Purnima, Amavasya, Pradosh, Shivaratri, Navratri, Janmashtami | 🟥 OPEN — shares a **lunar/panchang engine** with V5 + AQ11; do those together (needs an ephemeris, not just suncalc). | M+ | R-P1-10 |
+| **V3** | **Mantra audio + 108-bead japa counter** with haptics | 🟩 SHIPPED (already built — `mantra-practice.tsx`: ring, 4 mantras, haptics, bead sound) | M | R-P2-12 |
+| **V4** | **AI Pandit mode** for the Vedic Guide (ritual flows, samagri, muhurta) | 🟩 SHIPPED 2026-06-19 — Pandit-mode block in chat system prompt | M | R-P2-11 |
+| **V5** | **Nakshatra-tailored daily insight** | 🟥 OPEN — needs birth-data onboarding + an ephemeris (lunar nakshatra calc). Larger than "M". | M+ | R-P2-14 |
+| **V6** | **Manasic puja flow** | 🟩 SHIPPED 2026-06-19 — `ManasicPractice` shodashopachara stepper, Sessions tab | S | R-P2-13 |
 
 ### 2.6 🎨 UX & first-run (live-site audit)
 
