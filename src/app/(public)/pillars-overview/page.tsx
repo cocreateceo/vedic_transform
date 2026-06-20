@@ -1,16 +1,35 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { PillarsGrid } from "./pillars-grid";
+import { PILLARS } from "@/constants/pillars";
+import { pageMetadata, SITE_URL } from "@/lib/seo";
 
-export const metadata = {
-  title: "The 11 Pillars of Vedic Transformation",
+export const metadata = pageMetadata({
+  title: "The 11 Pillars of Vedic Transformation — 10X Vedic Transform",
   description:
     "Explore the 11 daily practices grouped by Body, Mind, and Spirit — from Brahma Muhurta and Pranayama to Sandhya Meditation, gratitude, and sleep optimization.",
-};
+  path: "/pillars-overview",
+});
 
 export default function PillarsOverviewPage() {
   return (
     <div className="text-[#e2e8f0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "The 11 Pillars of Vedic Transformation",
+            url: `${SITE_URL}/pillars-overview`,
+            itemListElement: PILLARS.map((p, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: `${p.name} (${p.sanskritName})`,
+            })),
+          }),
+        }}
+      />
       {/* ═══ Hero Banner ═══ */}
       <section className="bg-[#0f0d08]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">

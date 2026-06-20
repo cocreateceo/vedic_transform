@@ -2,10 +2,14 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { TESTIMONIALS } from "@/data/testimonials";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Transformation Stories",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Transformation Stories — 10X Vedic Transform",
+  description:
+    "Real stories from people progressing through the 48-day Vedic transformation across body, mind, and spirit.",
+  path: "/testimonials",
+});
 
 function formatPillarName(slug: string): string {
   return slug
