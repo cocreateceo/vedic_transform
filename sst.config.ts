@@ -318,6 +318,13 @@ export default $config({
       },
     });
 
+    // Subscriptions (M1, scaffold). One row per user; absence = free tier.
+    // A future payment-gateway webhook flips plan/status/currentPeriodEnd.
+    const subscriptions = new sst.aws.Dynamo("Subscriptions", {
+      fields: { userId: "string" },
+      primaryIndex: { hashKey: "userId" },
+    });
+
     // ── API Gateway ─────────────────────────────────────────────────
     // Explicit CORS allowlist. Add any new deployed origin (custom domain,
     // preview deploy, etc.) here — wildcards leak the API to any site.
@@ -638,6 +645,17 @@ export default $config({
     api.route("GET /data/email/unsubscribe", {
       handler: "functions/data/email-unsubscribe.handler",
       link: [reminderSettings, jwtSecret],
+    });
+
+    // Subscription / entitlement (M1, scaffold). Checkout returns 501 until a
+    // payment gateway is wired (PAYMENTS_PROVIDER defaults to "none").
+    api.route("GET /data/subscription", {
+      handler: "functions/data/subscription.handler",
+      link: [subscriptions, jwtSecret],
+    });
+    api.route("POST /data/subscription/checkout", {
+      handler: "functions/data/subscription.handler",
+      link: [subscriptions, jwtSecret],
     });
 
     // Cron senders — each runs every 15 min and fans out by user-local time.
