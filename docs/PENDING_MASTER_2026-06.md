@@ -79,7 +79,7 @@ Each row carries its origin ID(s) so you can trace back: `R#` = ROADMAP, `C#/A#`
 | **RC1** | **Email lifecycle / win-back** — Day-1/3/7/14/21/30/48 + "missed 3 days" | 🟧 SCAFFOLDED 2026-06-19 — pure `decideLifecycleEmail()` (+tests), provider-agnostic `sendEmail()` (console no-op default, SES stub), templates, HMAC unsubscribe + handler, hourly cron, dedup on ReminderSettings. **Needs:** implement `sendViaSes()` + `EMAIL_PROVIDER`/`EMAIL_FROM` | M | R-P1-2, SA-P0-4 |
 | **RC2** | **In-app recovery ritual** — dashboard card when `daysAway ≥ 2`, 3-min reset CTA | 🟩 SHIPPED (`recovery-ritual-card.tsx`, wired `dashboard/page.tsx:263`) | — | R-P1-3, SA-P0-5, C6 |
 | **RC3** | **Day-gated curriculum** — `JourneyDayContent` table; "Today's Practice" required-vs-optional; Day 5 ≠ Day 45 | 🟧 PARTIAL (phasing is visual only, nothing gated) | L | R-P1-1, C2 |
-| **RC4** | **"Today's Practice" hero card** — single canonical daily action over the 11-pillar grid | 🟧 UNVERIFIED — confirm on dashboard | S | R-P0-2, C3 |
+| **RC4** | **"Today's Practice" hero card** | 🟩 SHIPPED (`todays-practice.tsx`, wired on dashboard) | S | R-P0-2, C3 |
 | **RC5** | **Cohort start dates** ("New Moon cohorts") — `Cohorts` table + onboarding step | 🟥 OPEN | M | R-P1-4, C8 |
 | **RC6** | **Friend streaks / accountability buddy** — opt-in pairing, daily ping | 🟥 OPEN | M | R-P1-6, C5 |
 | **RC7** | **Sutra Book preview from Day 1** — 48-page accordion, pages unlock with progress | 🟥 OPEN | S | R-P1-9, C10 |
@@ -95,7 +95,7 @@ Each row carries its origin ID(s) so you can trace back: `R#` = ROADMAP, `C#/A#`
 | **AQ5** | **Referral program** — per-user code, `/refer/[code]`, 100 karma both sides at referee Day 7 | 🟥 OPEN | S | R-P1-8, A5 |
 | **AQ6** | **Scale blog + Article schema** (currently 6 posts) — per-pillar/per-dosha/per-practice | 🟥 OPEN | L | SA-P1, A* |
 | **AQ7** | **Unblock + build public `/library` & `/wisdom`** (robots currently disallows rankable mantra/wisdom content) | 🟥 OPEN | M | SA-P2 |
-| **AQ8** | **RSS feed + `llms.txt`** (AI-crawler discovery; both 404 today) | 🟥 OPEN | S | SA-P2 |
+| **AQ8** | **RSS feed + `llms.txt`** | 🟩 SHIPPED 2026-06-19 — `/feed.xml` (RSS 2.0 of blog posts) + `public/llms.txt` + RSS `<link>` in root metadata | S | SA-P2 |
 | **AQ9** | **Mantra library public pages** `/mantras/[name]` (Gayatri, Mahamrityunjaya, Hanuman Chalisa…) | 🟥 OPEN | M | A11, R-P2-3 |
 | **AQ10** | **Hindi UI** (then Tamil, Telugu) | 🟥 OPEN | L | A6, R-P2-2 |
 | **AQ11** | **SEO panchang pages** (city × date) — build only if AQ1–2 show SSR driving organic | 🟥 OPEN | XL | A4, R-P2-1 |
@@ -105,9 +105,9 @@ Each row carries its origin ID(s) so you can trace back: `R#` = ROADMAP, `C#/A#`
 
 | ID | Item | Status | Effort | Origin |
 |----|------|--------|--------|--------|
-| **CT1** | **Finish the citation-integrity sweep** — residual found: **Sandhya still cites "Bhagavad Gita 7.8"** (`pillar-content.ts:467`) which drops the real verse opening. Sweep for any remaining "comparable to / better than drugs" superlatives and the 21-day-habit myth. | 🟧 PARTIAL | S | CP-§1 |
+| **CT1** | **Citation-integrity sweep** | 🟩 COMPLETE (verified 2026-06-19) — BG 7.8 now quotes the full verse (`pillar-content.ts:468`), brainwave claims cited (line 502), *abrahmacharya* correctly glossed (635); the fabricated "metabolic waste / 30 hormonal phases / RAS / delta" claims are all gone | S | CP-§1 |
 | **CT2** | **Translator labels on every verse** — quote verbatim, attribute the translator (Easwaran paraphrases are presented as literal text) | 🟥 OPEN | S | CP-§1 |
-| **CT3** | **Safety layer** — Healing Meditation adverse-effects/contraindication note + "inner resource" anchor; Nutrition avoid blood-type-diet trap; Manifestation stays action-based (WOOP/implementation intentions) | 🟥 OPEN | S | CP-§3 |
+| **CT3** | **Safety layer** | 🟩 Healing Meditation adverse-effects note SHIPPED (`pillar-content.ts:328`, Lindahl & Britton 2017). Nutrition/Manifestation framing — spot-check if pursuing further | S | CP-§3 |
 | **CT4** | **Per-pillar depth** — work each dossier's §6 prioritized table in impact×effort order (deeper verified verses + stronger studies) | 🟥 OPEN | L (ongoing) | CP-§3, all dossiers |
 | **CT5** | **Measurable self-tests** — Sitting-Rising Test (Movement), HRV (Breathing), sleep latency (Sleep) so progress is tracked, not just claimed | 🟥 OPEN | M | CP-§2 |
 | **CT6** | **Per-dosha default selections** — e.g. default breath preset by Vata/Pitta/Kapha (the new pacer makes this cheap) | 🟥 OPEN | S | infra plan follow-on |
