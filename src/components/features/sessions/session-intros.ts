@@ -18,9 +18,32 @@ export type SessionIntroKey =
   | "yoga"
   | "nidra"
   | "dinacharya"
-  | "mantra";
+  | "mantra"
+  | "manasic";
 
 export const SESSION_INTROS: Record<SessionIntroKey, SessionIntroContent> = {
+  manasic: {
+    eyebrow: "Mānasa Pūjā · मानस पूजा",
+    title: "Manasic Puja",
+    why: "Worship offered entirely in the mind. With no flowers, lamp, or samagri to arrange, the whole ritual becomes an act of focused imagination and devotion — the purest, most portable form of puja.",
+    benefits: [
+      "Cultivates one-pointed, devotional attention",
+      "Needs nothing — practicable anywhere, anytime",
+      "Softens the heart and steadies the emotions",
+      "Trains vivid visualization, a foundation for deeper meditation",
+    ],
+    feel: "a warm gathering in the chest, the mind quieting around a single loved image, and a settled gratitude after the bow.",
+    setup: [
+      "Sit comfortably, spine tall, eyes gently closed.",
+      "Bring to mind a form of the divine that is dear to you — or simply light.",
+      "Make each offering in the mind's eye, unhurried; feel it, don't just picture it.",
+      "Let the breath stay soft and natural throughout.",
+    ],
+    tradition: "Mānasa pūjā is praised across the tradition — Shankara's Mānasa-pūjā-stotram offers the entire shodashopachara in the mind, holding that inner worship surpasses outer ritual.",
+    formatLabel: "5–10 min · seated",
+    mediaSlug: "meditation-ambient",
+    beginLabel: "Begin the offering",
+  },
   meditation: {
     eyebrow: "Dhyana · ध्यान",
     title: "Healing Meditation",
