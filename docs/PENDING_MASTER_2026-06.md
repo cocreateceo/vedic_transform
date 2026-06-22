@@ -98,7 +98,7 @@ Each row carries its origin ID(s) so you can trace back: `R#` = ROADMAP, `C#/A#`
 | **AQ8** | **RSS feed + `llms.txt`** | 🟩 SHIPPED 2026-06-19 — `/feed.xml` (RSS 2.0 of blog posts) + `public/llms.txt` + RSS `<link>` in root metadata | S | SA-P2 |
 | **AQ9** | **Mantra library public pages** `/mantras/[name]` (Gayatri, Mahamrityunjaya, Hanuman Chalisa…) | 🟥 OPEN | M | A11, R-P2-3 |
 | **AQ10** | **Hindi UI** (then Tamil, Telugu) | 🟥 OPEN | L | A6, R-P2-2 |
-| **AQ11** | **SEO panchang pages** (city × date) — build only if AQ1–2 show SSR driving organic | 🟥 OPEN | XL | A4, R-P2-1 |
+| **AQ11** | **SEO panchang pages** (city × date) | 🟧 **STARTED** — engine + ISR `/panchang` page (New Delhi) shipped. Next: parameterize per city/date (`/panchang/[city]/[date]`) for the long-tail matrix. | XL | A4, R-P2-1 |
 | **AQ12** | **YouTube + podcast funnel**, **#48DayVedic challenge**, **festival-keyed campaigns** (content/marketing, not eng) | 🟥 OPEN | — | A7/A8/A9, R-P2-4..6 |
 
 ### 2.4 📚 Content depth & credibility (from the 11 dossiers)
@@ -117,10 +117,10 @@ Each row carries its origin ID(s) so you can trace back: `R#` = ROADMAP, `C#/A#`
 | ID | Item | Status | Effort | Origin |
 |----|------|--------|--------|--------|
 | **V1** | **Sunrise-aware Brahma Muhurta *push*** — solar engine ships client-side; still need the server cron firing push at sunrise−96min | 🟧 PARTIAL (compute done; no server push) | S | R-P1-7, infra follow-on |
-| **V2** | **Festival / vrat push calendar** — Ekadashi, Purnima, Amavasya, Pradosh, Shivaratri, Navratri, Janmashtami | 🟥 OPEN — shares a **lunar/panchang engine** with V5 + AQ11; do those together (needs an ephemeris, not just suncalc). | M+ | R-P1-10 |
+| **V2** | **Festival / vrat push calendar** — Ekadashi, Purnima, Amavasya, Pradosh, Shivaratri, Navratri, Janmashtami | 🟧 **UNBLOCKED** — `src/lib/panchang` engine shipped (tithi/nakshatra/yoga/karana). Next: scan dates for target tithis → festival list + push cron. | M | R-P1-10 |
 | **V3** | **Mantra audio + 108-bead japa counter** with haptics | 🟩 SHIPPED (already built — `mantra-practice.tsx`: ring, 4 mantras, haptics, bead sound) | M | R-P2-12 |
 | **V4** | **AI Pandit mode** for the Vedic Guide (ritual flows, samagri, muhurta) | 🟩 SHIPPED 2026-06-19 — Pandit-mode block in chat system prompt | M | R-P2-11 |
-| **V5** | **Nakshatra-tailored daily insight** | 🟥 OPEN — needs birth-data onboarding + an ephemeris (lunar nakshatra calc). Larger than "M". | M+ | R-P2-14 |
+| **V5** | **Nakshatra-tailored daily insight** | 🟧 **UNBLOCKED** — nakshatra calc shipped (`src/lib/panchang`). Next: capture birth date/time/place in onboarding → birth-moon nakshatra → tailor insight. | M | R-P2-14 |
 | **V6** | **Manasic puja flow** | 🟩 SHIPPED 2026-06-19 — `ManasicPractice` shodashopachara stepper, Sessions tab | S | R-P2-13 |
 
 ### 2.6 🎨 UX & first-run (live-site audit)
