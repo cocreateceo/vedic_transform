@@ -2,14 +2,40 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Mail, Clock, MessageCircle } from "lucide-react";
 import { ContactFormClient } from "./contact-form-client";
+import { pageMetadata, SITE_URL, SITE_NAME } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact Us",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Contact Us — 10X Vedic Transform",
+  description:
+    "Get in touch with the 10X Vedic Transform team — questions about the 48-day journey, the 11 pillars, doshas, or your account.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
     <div className="text-[#e2e8f0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            name: "Contact 10X Vedic Transform",
+            url: `${SITE_URL}/contact`,
+            mainEntity: {
+              "@type": "Organization",
+              name: SITE_NAME,
+              url: SITE_URL,
+              email: "support@10xvedic.com",
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "customer support",
+                email: "support@10xvedic.com",
+              },
+            },
+          }),
+        }}
+      />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-20">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />

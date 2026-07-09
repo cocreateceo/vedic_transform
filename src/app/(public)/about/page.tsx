@@ -2,12 +2,14 @@ import Link from "next/link";
 import { ArrowRight, Target, Eye, Sparkles } from "lucide-react";
 import { TEAM } from "@/data/team";
 import { PILLARS, getPillarsByCategory } from "@/constants/pillars";
+import { pageMetadata, SITE_URL, SITE_NAME } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "About Us — 10X Vedic Transform",
   description:
     "Our mission, the 11 pillars across body / mind / spirit, and the team behind the 48-day Vedic transformation program.",
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   const bodyPillars = getPillarsByCategory("body");
@@ -21,6 +23,23 @@ export default function AboutPage() {
 
   return (
     <div className="text-[#e2e8f0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: "About 10X Vedic Transform",
+            url: `${SITE_URL}/about`,
+            mainEntity: {
+              "@type": "Organization",
+              name: SITE_NAME,
+              url: SITE_URL,
+              logo: `${SITE_URL}/icons/icon-192.png`,
+            },
+          }),
+        }}
+      />
       {/* ═══ Hero ═══ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />

@@ -318,6 +318,13 @@ export default $config({
       },
     });
 
+    // Subscriptions (M1, scaffold). One row per user; absence = free tier.
+    // A future payment-gateway webhook flips plan/status/currentPeriodEnd.
+    const subscriptions = new sst.aws.Dynamo("Subscriptions", {
+      fields: { userId: "string" },
+      primaryIndex: { hashKey: "userId" },
+    });
+
     // ── API Gateway ─────────────────────────────────────────────────
     // Explicit CORS allowlist. Add any new deployed origin (custom domain,
     // preview deploy, etc.) here — wildcards leak the API to any site.
@@ -634,6 +641,23 @@ export default $config({
       link: [pushSubscriptions, vapidPublicKey, vapidPrivateKey, jwtSecret],
     });
 
+    // Public, token-signed unsubscribe link embedded in every lifecycle email.
+    api.route("GET /data/email/unsubscribe", {
+      handler: "functions/data/email-unsubscribe.handler",
+      link: [reminderSettings, jwtSecret],
+    });
+
+    // Subscription / entitlement (M1, scaffold). Checkout returns 501 until a
+    // payment gateway is wired (PAYMENTS_PROVIDER defaults to "none").
+    api.route("GET /data/subscription", {
+      handler: "functions/data/subscription.handler",
+      link: [subscriptions, jwtSecret],
+    });
+    api.route("POST /data/subscription/checkout", {
+      handler: "functions/data/subscription.handler",
+      link: [subscriptions, jwtSecret],
+    });
+
     // Cron senders — each runs every 15 min and fans out by user-local time.
     const cronLink = [
       pushSubscriptions,
@@ -668,6 +692,24 @@ export default $config({
     new sst.aws.Cron("RecoveryPush", {
       schedule: "rate(15 minutes)",
       job: { handler: "functions/crons/recovery-push.handler", link: cronLink },
+    });
+
+    // Lifecycle email (RC1). Runs hourly, scans users, sends welcome / day-N
+    // milestone / completion / win-back emails. Provider-agnostic: defaults to
+    // the "console" no-op adapter until SES (or Resend/Postmark) is wired in
+    // functions/lib/email.ts. To go live: set EMAIL_PROVIDER=ses + EMAIL_FROM
+    // and implement sendViaSes().
+    new sst.aws.Cron("LifecycleEmail", {
+      schedule: "rate(1 hour)",
+      job: {
+        handler: "functions/crons/lifecycle-email.handler",
+        link: [...cronLink, users, jwtSecret],
+        environment: {
+          EMAIL_PROVIDER: "console",
+          APP_URL: "https://10x.vedics.net",
+          API_URL: api.url,
+        },
+      },
     });
 
     // ── Next.js Site (P0-3) ─────────────────────────────────────────

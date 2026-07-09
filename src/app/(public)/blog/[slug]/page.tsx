@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Calendar, User } from "lucide-react";
 import { BLOG_POSTS } from "@/data/blog-posts";
+import { pageMetadata, articleLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({ slug: post.slug }));
@@ -34,10 +35,13 @@ export async function generateMetadata({
   if (!post) {
     return { title: "Post Not Found" };
   }
-  return {
-    title: post.title,
+  return pageMetadata({
+    title: `${post.title} — 10X Vedic Transform`,
     description: post.excerpt,
-  };
+    path: `/blog/${slug}`,
+    ogTitle: post.title,
+    ogImage: `/images/pexels/blog-${post.category}.jpg`,
+  });
 }
 
 export default async function BlogPostPage({
@@ -57,6 +61,10 @@ export default async function BlogPostPage({
 
   return (
     <div className="text-[#e2e8f0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd(post)) }}
+      />
       {/* Article Header */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-16">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />

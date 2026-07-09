@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import { CalendarHeatmap } from "@/components/features/analytics/calendar-heatmap";
 import { ConsistencyScore } from "@/components/features/analytics/consistency-score";
 import { InsightList } from "@/components/features/analytics/insight-card";
+import { SutraBook } from "@/components/features/progress/sutra-book";
 
 // Recharts (~348 KB) is heavy and only needed here — load it lazily so it
 // stays out of the initial bundle until the charts actually render.
@@ -186,6 +187,13 @@ export default function ProgressPage() {
         totalKarma={totalKarma}
         todayCompleted={todayCompleted}
         todayTotal={PILLARS.length}
+      />
+
+      {/* Sutra Book — the 48-page artifact, filling in from Day 1 (RC7). */}
+      <SutraBook
+        journeyDay={journeyDay}
+        startDate={journey?.startDate}
+        calendarData={calendarData}
       />
 
       {/* Charts Row */}

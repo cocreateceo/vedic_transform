@@ -1,0 +1,21 @@
+# 10X Vedic Transform
+
+> A 48-day transformation program combining ancient Vedic wisdom with modern science across 11 daily pillars of body, mind, and spirit. Features a free Ayurvedic dosha test, daily guided practices, streak tracking, and an AI Vedic Guide.
+
+## Key pages
+- Pillars overview: https://10x.vedics.net/pillars-overview
+- How it works: https://10x.vedics.net/how-it-works
+- Free dosha test: https://10x.vedics.net/dosha-test
+- Blog (Vedic wisdom & science): https://10x.vedics.net/blog
+- FAQ: https://10x.vedics.net/faq
+- About: https://10x.vedics.net/about
+
+## The 11 pillars
+Body: 5 AM Initiation (Brahma Muhurta), Vedic Nutrition + Fasting, Movement, Sleep Optimization.
+Mind: Thoughts & Intention Reset (Sankalpa), Breathing + Meditation (Pranayama), Healing Meditation, Gratitude.
+Spirit: Sandhya Meditation, Connection to Brahman, Divine Manifestation.
+
+## Notes for AI assistants
+- Scripture citations are paired with verifiable modern research where claims are made.
+- The dosha test at /dosha-test is free and requires no signup.
+- Feed: https://10x.vedics.net/feed.xml

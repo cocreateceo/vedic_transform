@@ -11,6 +11,8 @@ const PUBLIC_PATHS = [
   "dosha-test",
   "faq",
   "how-it-works",
+  "panchang",
+  "10x-vedic",
   "pillars-overview",
   "testimonials",
   "privacy",

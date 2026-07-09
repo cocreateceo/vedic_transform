@@ -48,6 +48,8 @@ import { setStreakEvent, type StreakEventType } from "@/lib/streak-events";
 import { getPostersByPillar } from "@/data/posters";
 import { PosterSection } from "@/components/features/posters/poster-section";
 import { PillarVideo } from "@/components/features/pillars/pillar-video";
+import { SunWindowsCard } from "@/components/features/solar/sun-windows-card";
+import { GuidedAudioPlayer } from "@/components/features/sessions/guided-audio-player";
 
 export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const pillar = getPillarBySlug(pillarId);
@@ -311,9 +313,8 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
       </Link>
 
       <PillarHeroStyles />
-      {/* Custom animated scene for the 8 pillars that have one; the other
-          three (breathing / movement / healing meditation) fall through to
-          the existing PillarHero with its video/image backdrops. */}
+      {/* Custom animated scene for pillars in PILLARS_WITH_ANIMATION; any
+          others fall through to the existing PillarHero (video/image backdrop). */}
       {PILLARS_WITH_ANIMATION.has(pillar.slug) ? (
         <div className="mb-8">
           <PillarAnimation slug={pillar.slug} />
@@ -419,6 +420,23 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* Sun windows — time-of-day guidance for the four solar-aligned pillars */}
+      {pillarId === "morning-initiation" && <SunWindowsCard show={["brahma"]} />}
+      {pillarId === "sandhya-meditation" && <SunWindowsCard show={["sandhya"]} />}
+      {pillarId === "nutrition-fasting" && <SunWindowsCard show={["eating"]} eatingWindowHours={8} />}
+      {pillarId === "sleep-optimization" && <SunWindowsCard show={["winddown"]} />}
+      {pillarId === "healing-meditation" && (
+        <GuidedAudioPlayer
+          title="Guided body scan"
+          durationSeconds={300}
+          cues={[
+            { id: "start", atSeconds: 1, src: "/audio/meditation/start.mp3" },
+            { id: "mid", atSeconds: 150, src: "/audio/meditation/midway.mp3" },
+            { id: "close", atSeconds: 290, src: "/audio/meditation/closing.mp3" },
+          ]}
+        />
       )}
 
       {/* Pillar-specific content */}
@@ -1223,8 +1241,6 @@ function BreathingMeditationContent({
   return (
     <div className="space-y-10">
       <BreathingVisualizer
-        inhaleDuration={4}
-        exhaleDuration={6}
         totalDuration={5}
         onComplete={onAutoComplete}
       />

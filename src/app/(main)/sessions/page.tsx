@@ -12,6 +12,12 @@ import {
   Infinity as InfinityIcon,
   Sparkles,
   Moon,
+  PersonStanding,
+  Waves,
+  Sunrise,
+  Music2,
+  Leaf,
+  Flame,
 } from "lucide-react";
 import { MorningRoutine } from "@/components/features/sessions/morning-routine";
 import { MeditationTimer } from "@/components/features/sessions/meditation-timer";
@@ -22,6 +28,12 @@ import { SandhyaPractice } from "@/components/features/sessions/sandhya-practice
 import { BrahmanPractice } from "@/components/features/sessions/brahman-practice";
 import { ManifestationPractice } from "@/components/features/sessions/manifestation-practice";
 import { SleepPractice } from "@/components/features/sessions/sleep-practice";
+import { YogaFlow } from "@/components/features/sessions/yoga-flow";
+import { NidraPractice } from "@/components/features/sessions/nidra-practice";
+import { DinacharyaPractice } from "@/components/features/sessions/dinacharya-practice";
+import { MantraPractice } from "@/components/features/sessions/mantra-practice";
+import { ManasicPractice } from "@/components/features/sessions/manasic-practice";
+import { DoshaQuiz } from "@/components/features/sessions/dosha-quiz";
 import { cn } from "@/lib/utils/cn";
 import { sessionKeyToTabIndex } from "@/lib/practice-routes";
 
@@ -40,6 +52,14 @@ const tabs = [
   { name: "Brahman", icon: InfinityIcon, component: BrahmanPractice },
   { name: "Manifest", icon: Sparkles, component: ManifestationPractice },
   { name: "Sleep", icon: Moon, component: SleepPractice },
+  // New activities (appended after the 9 pillar tabs — keep these last so the
+  // pillar deep-link indices in SESSION_KEYS stay valid).
+  { name: "Yoga Flow", icon: PersonStanding, component: YogaFlow },
+  { name: "Yoga Nidra", icon: Waves, component: NidraPractice },
+  { name: "Dinacharya", icon: Sunrise, component: DinacharyaPractice },
+  { name: "Mantra", icon: Music2, component: MantraPractice },
+  { name: "Manasic Puja", icon: Flame, component: ManasicPractice },
+  { name: "Dosha Quiz", icon: Leaf, component: DoshaQuiz },
 ];
 
 export default function SessionsPage() {

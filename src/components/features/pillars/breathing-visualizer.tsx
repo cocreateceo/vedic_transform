@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { BreathingLotus } from "@/components/features/sessions/breathing-lotus";
+import { type BreathPattern, BREATH_PRESETS, DEFAULT_PRESET, cycleLength } from "@/lib/breath/patterns";
+import { type BreathPhase, phaseAt } from "@/lib/breath/phase";
 
 // The full 5-minute breathing practice that sits at the top of the
 // Breathing & Meditation pillar. Visually + sonically aligned with the
@@ -15,29 +17,49 @@ import { BreathingLotus } from "@/components/features/sessions/breathing-lotus";
 // an onComplete hook for auto check-in.
 
 interface BreathingVisualizerProps {
-  inhaleDuration?: number; // seconds
-  exhaleDuration?: number; // seconds
+  initialPattern?: BreathPattern;
   totalDuration?: number; // minutes
   onComplete?: () => void;
 }
 
-type BreathPhase = "idle" | "in" | "out";
-
 const VOICE_INHALE = "/audio/breathing/inhale.mp3";
 const VOICE_EXHALE = "/audio/breathing/exhale.mp3";
 
+/** Map the 4-phase BreathPhase (or idle) → BreathingLotus phase prop. */
+function toLotusPhase(phase: BreathPhase | "idle"): "in" | "hold" | "out" | "idle" {
+  if (phase === "idle") return "idle";
+  if (phase === "inhale") return "in";
+  if (phase === "exhale") return "out";
+  return "hold"; // holdIn | holdOut
+}
+
+/** Map phase → display label. */
+function phaseLabel(phase: BreathPhase | "idle"): string | null {
+  if (phase === "idle") return null;
+  if (phase === "inhale") return "Breathe In";
+  if (phase === "exhale") return "Breathe Out";
+  return "Hold";
+}
+
 export function BreathingVisualizer({
-  inhaleDuration = 4,
-  exhaleDuration = 6,
+  initialPattern,
   totalDuration = 5,
   onComplete,
 }: BreathingVisualizerProps) {
+  const [pattern, setPattern] = useState<BreathPattern>(initialPattern ?? DEFAULT_PRESET);
   const [isActive, setIsActive] = useState(false);
-  const [phase, setPhase] = useState<BreathPhase>("idle");
-  const [cycleCount, setCycleCount] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [phaseProgress, setPhaseProgress] = useState(0);
   const [muted, setMuted] = useState(false);
+
+  // Derived breath state from the pure state machine
+  const isIdle = !isActive && elapsedTime === 0;
+  const breathState = isIdle ? null : phaseAt(pattern, elapsedTime);
+  const phase: BreathPhase | "idle" = breathState ? breathState.phase : "idle";
+  const openness = breathState ? breathState.openness : 0;
+  const cycleCount = breathState ? breathState.cycle : 0;
+
+  const totalSeconds = totalDuration * 60;
+  const totalCycles = Math.floor(totalSeconds / cycleLength(pattern));
 
   // Pre-load the CEO voice cues once so the first phase tone is instant
   // and replays don't re-fetch. Plain <audio> elements (not AudioContext)
@@ -58,22 +80,22 @@ export function BreathingVisualizer({
 
   // Only fire on phase TRANSITION, not on every re-render. Without this
   // ref guard, toggling mute mid-phase would replay the cue immediately.
-  const lastPhaseRef = useRef<BreathPhase>("idle");
+  // Holds are silent — only inhale and exhale get cues.
+  const lastPhaseRef = useRef<BreathPhase | "idle">("idle");
   useEffect(() => {
     if (phase === lastPhaseRef.current) return;
     lastPhaseRef.current = phase;
     if (muted) return;
-    const a = phase === "in" ? inhaleAudio.current : phase === "out" ? exhaleAudio.current : null;
+    const a =
+      phase === "inhale" ? inhaleAudio.current :
+      phase === "exhale" ? exhaleAudio.current :
+      null;
     if (!a) return;
     try {
       a.currentTime = 0;
       void a.play().catch(() => {});
     } catch {}
   }, [phase, muted]);
-
-  const cycleDuration = inhaleDuration + exhaleDuration;
-  const totalSeconds = totalDuration * 60;
-  const totalCycles = Math.floor(totalSeconds / cycleDuration);
 
   const onCompleteRef = useRef(onComplete);
   useEffect(() => {
@@ -82,10 +104,7 @@ export function BreathingVisualizer({
 
   const resetSession = useCallback(() => {
     setIsActive(false);
-    setPhase("idle");
-    setCycleCount(0);
     setElapsedTime(0);
-    setPhaseProgress(0);
     lastPhaseRef.current = "idle";
   }, []);
 
@@ -96,37 +115,26 @@ export function BreathingVisualizer({
         const newTime = prev + 0.1;
         if (newTime >= totalSeconds) {
           setIsActive(false);
-          setPhase("idle");
+          lastPhaseRef.current = "idle"; // prevent a stray cue firing at completion
           if (onCompleteRef.current) onCompleteRef.current();
           return totalSeconds;
         }
-        const cyclePosition = newTime % cycleDuration;
-        if (cyclePosition < inhaleDuration) {
-          setPhase("in");
-          setPhaseProgress(cyclePosition / inhaleDuration);
-        } else {
-          setPhase("out");
-          setPhaseProgress((cyclePosition - inhaleDuration) / exhaleDuration);
-        }
-        const newCycleCount = Math.floor(newTime / cycleDuration);
-        if (newCycleCount > cycleCount) setCycleCount(newCycleCount);
         return newTime;
       });
     }, 100);
     return () => clearInterval(id);
-  }, [
-    isActive,
-    inhaleDuration,
-    exhaleDuration,
-    cycleDuration,
-    totalSeconds,
-    cycleCount,
-  ]);
+  }, [isActive, totalSeconds]);
 
   const toggleSession = () => {
     if (elapsedTime >= totalSeconds) resetSession();
-    setIsActive(!isActive);
-    if (!isActive && phase === "idle") setPhase("in");
+    setIsActive((prev) => !prev);
+  };
+
+  const handlePresetChange = (preset: BreathPattern) => {
+    setPattern(preset);
+    setIsActive(false);
+    setElapsedTime(0);
+    lastPhaseRef.current = "idle";
   };
 
   const formatTime = (seconds: number) => {
@@ -135,20 +143,31 @@ export function BreathingVisualizer({
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // 0 = closed bud (fully exhaled), 1 = fully open (fully inhaled).
-  const openness =
-    phase === "idle"
-      ? 0
-      : phase === "in"
-        ? phaseProgress
-        : 1 - phaseProgress;
+  const label = phaseLabel(phase);
 
   return (
     <div className="flex flex-col items-center gap-8 py-8">
+      {/* Preset picker */}
+      <div className="flex flex-wrap justify-center gap-2">
+        {BREATH_PRESETS.map((preset) => (
+          <Button
+            key={preset.id}
+            variant={pattern.id === preset.id ? "primary" : "outline"}
+            size="sm"
+            onClick={() => handlePresetChange(preset)}
+            className={cn(
+              pattern.id === preset.id && "ring-2 ring-cyan-500 ring-offset-1",
+            )}
+          >
+            {preset.label}
+          </Button>
+        ))}
+      </div>
+
       <div className="relative w-64 h-64 flex items-center justify-center">
         <BreathingLotus
           openness={openness}
-          phase={phase}
+          phase={toLotusPhase(phase)}
           className="w-64 h-64"
         />
         {phase === "idle" && (
@@ -156,9 +175,9 @@ export function BreathingVisualizer({
             Ready
           </span>
         )}
-        {phase !== "idle" && (
+        {label && (
           <span className="absolute text-white text-2xl font-bold drop-shadow-md pointer-events-none">
-            {phase === "in" ? "Breathe In" : "Breathe Out"}
+            {label}
           </span>
         )}
       </div>
@@ -244,11 +263,7 @@ export function BreathingVisualizer({
 
       <div className="text-center text-sm text-gray-600 max-w-md">
         <p className="font-medium mb-2">Pranayama Breathing Pattern</p>
-        <p>
-          Inhale slowly for {inhaleDuration} seconds, then exhale gently for{" "}
-          {exhaleDuration} seconds. This 4:6 ratio activates your
-          parasympathetic nervous system, promoting calm and focus.
-        </p>
+        <p>{pattern.note}</p>
       </div>
     </div>
   );

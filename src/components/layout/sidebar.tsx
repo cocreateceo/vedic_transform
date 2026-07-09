@@ -21,6 +21,7 @@ import {
   Trophy,
   Leaf,
   Shield,
+  GraduationCap,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { useAuth } from "@/context/auth-context";
@@ -32,6 +33,7 @@ const navigation = [
   { name: "Goals", href: "/goals", icon: Target },
   { name: "Progress", href: "/progress", icon: TrendingUp },
   { name: "Journal", href: "/journal", icon: BookOpen },
+  { name: "Training", href: "/training", icon: GraduationCap },
 ];
 
 const secondaryNav = [

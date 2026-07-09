@@ -14,12 +14,14 @@ import {
   Sparkles,
 } from "lucide-react";
 import { getPillarsByCategory } from "@/constants/pillars";
+import { pageMetadata, SITE_URL, SITE_NAME } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "How It Works — 10X Vedic Transform",
   description:
     "See how the 48-day Vedic transformation works: account setup, dosha assessment, daily check-ins across 11 pillars, streak tracking, and your personal Vedic Guide.",
-};
+  path: "/how-it-works",
+});
 
 const timelineSteps = [
   {
@@ -74,6 +76,23 @@ export default function HowItWorksPage() {
   const spiritPillars = getPillarsByCategory("spirit");
   return (
     <div className="text-[#e2e8f0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Course",
+            name: "The 48-Day Vedic Transformation",
+            description:
+              "A 48-day guided program across 11 daily pillars of body, mind, and spirit — with dosha personalization, streak tracking, and an AI Vedic Guide.",
+            provider: {
+              "@type": "Organization",
+              name: SITE_NAME,
+              url: SITE_URL,
+            },
+          }),
+        }}
+      />
       {/* ═══ Hero ═══ */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />

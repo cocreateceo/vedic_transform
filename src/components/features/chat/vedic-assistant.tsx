@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useCookieConsentResolved } from "@/lib/use-cookie-consent";
 
 interface Message {
   role: "user" | "assistant";
@@ -16,6 +17,7 @@ const GREETING =
 
 export function VedicAssistant() {
   const [isOpen, setIsOpen] = useState(false);
+  const consentResolved = useCookieConsentResolved();
   const [messages, setMessages] = useState<Message[]>([
     { role: "assistant", content: GREETING, timestamp: new Date() },
   ]);
@@ -225,6 +227,9 @@ export function VedicAssistant() {
 
   // ── Floating button ──
   if (!isOpen) {
+    // Stay hidden until the cookie banner is resolved — otherwise the FAB
+    // floats on top of the consent text on mobile first-load (UX1).
+    if (!consentResolved) return null;
     return (
       <button
         onClick={() => setIsOpen(true)}

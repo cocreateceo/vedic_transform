@@ -4,11 +4,14 @@
 // pulsing outward through three phases (expanding · infinite · returning).
 // 5-minute total. Fires /data/checkin for brahman-connection on completion.
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Square, Sparkles } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { NextPracticeCta } from "./next-practice-cta";
+import { MoodCheck, moodLabel, type MoodValue } from "./mood-check";
+import { SessionIntro } from "./session-intro";
+import { SESSION_INTROS } from "./session-intros";
 
 const SESSION_PILLAR = "brahman-connection";
 
@@ -32,6 +35,10 @@ export function BrahmanPractice() {
   const [phase, setPhase] = useState<Phase>("idle");
   const [elapsed, setElapsed] = useState(0);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
+  const [moodBefore, setMoodBefore] = useState<MoodValue | null>(null);
+  const [moodAfter, setMoodAfter] = useState<MoodValue | null>(null);
+  const [sealed, setSealed] = useState(false);
+  const [started, setStarted] = useState(false);
   const checkinFiredRef = useRef(false);
 
   // Tick once a second while running.
@@ -54,17 +61,23 @@ export function BrahmanPractice() {
     }
   }, [elapsed]);
 
-  // Fire check-in once when complete.
-  useEffect(() => {
-    if (phase !== "complete" || checkinFiredRef.current) return;
+  // Credit fires in the Reflect step, carrying before/after mood with it.
+  const sealSession = useCallback(() => {
+    if (checkinFiredRef.current) return;
     checkinFiredRef.current = true;
+    setSealed(true);
     apiFetch("/data/checkin", {
       method: "POST",
-      body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
+      body: JSON.stringify({
+        pillarSlug: SESSION_PILLAR,
+        durationMinutes: 5,
+        moodBefore: moodLabel(moodBefore),
+        moodAfter: moodLabel(moodAfter),
+      }),
     })
       .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
       .catch(() => {});
-  }, [phase]);
+  }, [moodBefore, moodAfter]);
 
   const ringScale =
     phase === "idle"
@@ -81,13 +94,34 @@ export function BrahmanPractice() {
     setPhase("expanding");
     setElapsed(0);
     setKarmaAwarded(null);
+    setMoodAfter(null);
+    setSealed(false);
     checkinFiredRef.current = false;
   };
   const stop = () => {
     setPhase("idle");
     setElapsed(0);
   };
+  const beginAgain = () => {
+    setPhase("idle");
+    setElapsed(0);
+    setKarmaAwarded(null);
+    setMoodAfter(null);
+    setSealed(false);
+    checkinFiredRef.current = false;
+  };
   const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+
+  if (!started) {
+    return (
+      <div
+        className="relative min-h-[540px] p-8 rounded-2xl overflow-hidden flex items-center justify-center"
+        style={{ background: "radial-gradient(circle at 50% 50%, #1e1b4b, #050514)" }}
+      >
+        <SessionIntro {...SESSION_INTROS.brahman} onBegin={() => setStarted(true)} />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -138,21 +172,56 @@ export function BrahmanPractice() {
       </div>
 
       {phase === "complete" ? (
-        <div className="flex flex-col items-center gap-3">
-          {karmaAwarded !== null && karmaAwarded > 0 && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
-              <Sparkles className="w-4 h-4" />
-              +{karmaAwarded} karma earned
-            </span>
-          )}
-          <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
-          <Button variant="outline" onClick={() => { setPhase("idle"); setElapsed(0); setKarmaAwarded(null); checkinFiredRef.current = false; }}>
-            Begin again
+        !sealed ? (
+          <div className="flex flex-col items-center gap-5">
+            <MoodCheck
+              value={moodAfter}
+              onChange={setMoodAfter}
+              prompt="Coming back — how do you feel now?"
+              light
+            />
+            <Button size="lg" onClick={sealSession} className="min-w-[200px]">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Seal this session
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-3">
+            {moodBefore && moodAfter && (
+              <p className="text-sm text-white/85">
+                You moved from{" "}
+                <span className="font-semibold text-white">{moodLabel(moodBefore)}</span>{" "}
+                to{" "}
+                <span className="font-semibold" style={{ color: "#FCD34D" }}>{moodLabel(moodAfter)}</span>.
+              </p>
+            )}
+            {karmaAwarded !== null && karmaAwarded > 0 && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+                <Sparkles className="w-4 h-4" />
+                +{karmaAwarded} karma earned
+              </span>
+            )}
+            <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
+            <Button variant="outline" onClick={beginAgain}>
+              Begin again
+            </Button>
+          </div>
+        )
+      ) : phase === "idle" ? (
+        <div className="flex flex-col items-center gap-5">
+          <MoodCheck
+            value={moodBefore}
+            onChange={setMoodBefore}
+            prompt="Before you begin — how do you feel?"
+            light
+          />
+          <Button size="lg" onClick={start} className="min-w-[160px]">
+            <Play className="w-5 h-5 mr-2" /> Begin
           </Button>
         </div>
       ) : (
-        <Button size="lg" onClick={phase === "idle" ? start : stop} className="min-w-[160px]">
-          {phase === "idle" ? <><Play className="w-5 h-5 mr-2" /> Begin</> : <><Square className="w-5 h-5 mr-2" /> End</>}
+        <Button size="lg" onClick={stop} className="min-w-[160px]">
+          <Square className="w-5 h-5 mr-2" /> End
         </Button>
       )}
 

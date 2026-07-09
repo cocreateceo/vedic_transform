@@ -5,11 +5,14 @@
 // the journal (POST /data/journal type=intention) and fires a check-in for
 // divine-manifestation on completion.
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, RotateCcw } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { NextPracticeCta } from "./next-practice-cta";
+import { MoodCheck, moodLabel, type MoodValue } from "./mood-check";
+import { SessionIntro } from "./session-intro";
+import { SESSION_INTROS } from "./session-intros";
 
 const SESSION_PILLAR = "divine-manifestation";
 
@@ -20,7 +23,12 @@ export function ManifestationPractice() {
   const [step, setStep] = useState<Step>("write");
   const [seconds, setSeconds] = useState(0);
   const [karmaAwarded, setKarmaAwarded] = useState<number | null>(null);
+  const [started, setStarted] = useState(false);
+  const [moodBefore, setMoodBefore] = useState<MoodValue | null>(null);
+  const [moodAfter, setMoodAfter] = useState<MoodValue | null>(null);
+  const [sealed, setSealed] = useState(false);
   const checkinFiredRef = useRef(false);
+  const journalSavedRef = useRef(false);
 
   // Tick during visualization. At 60s, advance to seal.
   useEffect(() => {
@@ -37,34 +45,57 @@ export function ManifestationPractice() {
     return () => clearInterval(id);
   }, [step]);
 
-  // On seal, persist intention (best-effort) and fire check-in.
+  // On reaching seal, persist the intention to the journal (best-effort, once).
+  // The check-in is deferred to the Reflect step so it carries the after-mood.
   useEffect(() => {
-    if (step !== "seal" || checkinFiredRef.current) return;
-    checkinFiredRef.current = true;
-
-    // Best-effort journal save.
+    if (step !== "seal" || journalSavedRef.current) return;
+    journalSavedRef.current = true;
     if (intention.trim()) {
       void apiFetch("/data/journal", {
         method: "POST",
         body: JSON.stringify({ type: "intention", intentionText: intention.trim() }),
       }).catch(() => {});
     }
+  }, [step, intention]);
 
+  // Credit fires when the user seals the session, carrying before/after mood.
+  const sealSession = useCallback(() => {
+    if (checkinFiredRef.current) return;
+    checkinFiredRef.current = true;
+    setSealed(true);
     apiFetch("/data/checkin", {
       method: "POST",
-      body: JSON.stringify({ pillarSlug: SESSION_PILLAR }),
+      body: JSON.stringify({
+        pillarSlug: SESSION_PILLAR,
+        moodBefore: moodLabel(moodBefore),
+        moodAfter: moodLabel(moodAfter),
+      }),
     })
       .then((res) => setKarmaAwarded(res?.karmaAwarded ?? 0))
       .catch(() => {});
-  }, [step, intention]);
+  }, [moodBefore, moodAfter]);
 
   const reset = () => {
     setIntention("");
     setStep("write");
     setSeconds(0);
     setKarmaAwarded(null);
+    setMoodAfter(null);
+    setSealed(false);
     checkinFiredRef.current = false;
+    journalSavedRef.current = false;
   };
+
+  if (!started) {
+    return (
+      <div
+        className="relative min-h-[540px] p-8 rounded-2xl overflow-hidden flex items-center justify-center"
+        style={{ background: "linear-gradient(180deg, #FAF5FF 0%, #FEF3C7 100%)" }}
+      >
+        <SessionIntro {...SESSION_INTROS.manifestation} onBegin={() => setStarted(true)} />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -90,6 +121,11 @@ export function ManifestationPractice() {
               className="w-full p-4 border-2 border-purple-100 rounded-xl text-base bg-white shadow-sm outline-none focus:border-purple-300 focus:ring-2 focus:ring-purple-100 resize-none"
             />
           </div>
+          <MoodCheck
+            value={moodBefore}
+            onChange={setMoodBefore}
+            prompt="Before you set it — how do you feel?"
+          />
           <Button
             size="lg"
             onClick={() => intention.trim() && setStep("visualize")}
@@ -164,17 +200,42 @@ export function ManifestationPractice() {
           <p className="text-gray-600 max-w-sm leading-relaxed">
             Your intention has been sent. Now — release attachment to the outcome.
           </p>
-          {karmaAwarded !== null && karmaAwarded > 0 && (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
-              <Sparkles className="w-4 h-4" />
-              +{karmaAwarded} karma earned
-            </span>
+
+          {!sealed ? (
+            <div className="flex flex-col items-center gap-5 mt-1">
+              <MoodCheck
+                value={moodAfter}
+                onChange={setMoodAfter}
+                prompt="Holding your intention — how do you feel?"
+              />
+              <Button size="lg" onClick={sealSession} className="min-w-[200px]">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Complete &amp; seal
+              </Button>
+            </div>
+          ) : (
+            <>
+              {moodBefore && moodAfter && (
+                <p className="text-gray-600">
+                  You moved from{" "}
+                  <span className="font-semibold text-[var(--color-text-primary)]">{moodLabel(moodBefore)}</span>{" "}
+                  to{" "}
+                  <span className="font-semibold text-amber-600">{moodLabel(moodAfter)}</span>.
+                </p>
+              )}
+              {karmaAwarded !== null && karmaAwarded > 0 && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+                  <Sparkles className="w-4 h-4" />
+                  +{karmaAwarded} karma earned
+                </span>
+              )}
+              <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
+              <Button variant="outline" onClick={reset}>
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Set another
+              </Button>
+            </>
           )}
-          <NextPracticeCta justCompletedPillarSlug={SESSION_PILLAR} />
-          <Button variant="outline" onClick={reset}>
-            <RotateCcw className="w-4 h-4 mr-2" />
-            Set another
-          </Button>
         </div>
       )}
     </div>
