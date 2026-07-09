@@ -22,6 +22,10 @@ export function generateStaticParams() {
   return getPublishedChapters().map((c) => ({ slug: c.slug }));
 }
 
+// Slugs outside generateStaticParams (coming-soon chapters, junk) must be
+// real 404s, not on-demand-rendered fallbacks cached with a 200.
+export const dynamicParams = false;
+
 export async function generateMetadata({
   params,
 }: {
