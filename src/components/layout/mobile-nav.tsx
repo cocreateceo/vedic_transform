@@ -22,6 +22,7 @@ import {
   Trophy,
   Settings,
   Leaf,
+  GraduationCap,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -36,6 +37,7 @@ const moreNavItems = [
   { name: "Goals", href: "/goals", icon: Target },
   { name: "Journal", href: "/journal", icon: BookOpen },
   { name: "Library", href: "/library", icon: BookMarked },
+  { name: "Training", href: "/training", icon: GraduationCap },
   { name: "Posters", href: "/posters", icon: ImageIcon },
   { name: "Dosha", href: "/dosha-assessment", icon: Leaf },
   { name: "Wisdom", href: "/wisdom", icon: Quote },
