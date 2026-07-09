@@ -12,6 +12,7 @@ const PUBLIC_PATHS = [
   "faq",
   "how-it-works",
   "panchang",
+  "10x-vedic",
   "pillars-overview",
   "testimonials",
   "privacy",

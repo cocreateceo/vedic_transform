@@ -30,6 +30,7 @@ export default function robots(): MetadataRoute.Robots {
           "/achievements",
           "/wisdom",
           "/dosha-assessment",
+          "/training",
           "/login",
           "/register",
           "/onboarding",

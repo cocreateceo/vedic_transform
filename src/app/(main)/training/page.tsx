@@ -172,7 +172,7 @@ export default function TrainingPage() {
           we&apos;ll let you know when enrollment opens.
         </p>
         <a
-          href="mailto:cocreateceo@gmail.com?subject=10x%20Vedic%20Live%20Classes%20—%20Register%20Interest"
+          href="mailto:support@10xvedic.com?subject=10x%20Vedic%20Live%20Classes%20%E2%80%94%20Register%20Interest"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all"
         >
           <Mail className="w-4 h-4" />
