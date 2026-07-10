@@ -73,9 +73,9 @@ export default function TrainingPage() {
           10x Vedic
         </h1>
         <p className="relative z-10 text-base text-[var(--color-text-secondary)] leading-relaxed">
-          Ancient Wisdom. Conscious Leadership. AI-Powered Transformation. A
-          practical framework for living, leading, healing, creating, and
-          scaling life from higher awareness.
+          Ancient Wisdom. Conscious Leadership. Science-Powered Transformation.
+          A 48-day practical framework for living, leading, healing, creating,
+          and scaling life from higher awareness.
         </p>
 
         {/* Course progress */}

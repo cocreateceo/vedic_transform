@@ -7,7 +7,7 @@ import { pageMetadata, SITE_URL, SITE_NAME } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "10x Vedic Training Course — Free Online Course",
   description:
-    "Ancient Wisdom. Conscious Leadership. AI-Powered Transformation. A free 11-chapter training course on living and leading from higher awareness.",
+    "Ancient Wisdom. Conscious Leadership. Science-Powered Transformation. A free 11-chapter, 48-day training course on living and leading from higher awareness.",
   path: "/10x-vedic",
 });
 
@@ -30,7 +30,7 @@ export default function TenXVedicPage() {
             "@type": "Course",
             name: "10x Vedic Training Course",
             description:
-              "An 11-chapter training course combining timeless Vedic wisdom with modern AI-enabled transformation — consciousness, health, relationships, leadership, and wealth.",
+              "An 11-chapter, 48-day training course combining timeless Vedic wisdom with science-enabled measurable transformation — consciousness, health, relationships, leadership, and wealth.",
             isAccessibleForFree: true,
             provider: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
           }),
@@ -52,9 +52,9 @@ export default function TenXVedicPage() {
             </span>
           </h1>
           <p className="mt-4 text-lg sm:text-xl text-[#94a3b8] max-w-2xl mx-auto leading-relaxed">
-            Ancient Wisdom. Conscious Leadership. AI-Powered Transformation. A
-            practical framework for living, leading, healing, creating, and
-            scaling life from higher awareness.
+            Ancient Wisdom. Conscious Leadership. Science-Powered
+            Transformation. A 48-day practical framework for living, leading,
+            healing, creating, and scaling life from higher awareness.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
@@ -157,11 +157,11 @@ export default function TenXVedicPage() {
       <section className="py-20 bg-[#1a1508] text-center">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <p className="text-xl sm:text-2xl font-semibold leading-relaxed">
-            &ldquo;The future does not belong only to the most intelligent.{" "}
+            &ldquo;The future belongs to the{" "}
             <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
-              It belongs to the most conscious.
+              most conscious
             </span>
-            &rdquo;
+            .&rdquo;
           </p>
           <Link
             href="/register"

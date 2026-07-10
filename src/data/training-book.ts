@@ -40,10 +40,11 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
   {
     slug: "introduction",
     number: 0,
-    title: "10x Vedic",
-    subtitle: "Ancient Wisdom. Conscious Leadership. AI-Powered Transformation.",
+    title: "10x Vedic Transformation",
+    subtitle:
+      "Ancient Wisdom. Conscious Leadership. Measurable Outcomes. Science-Powered Transformation.",
     description:
-      "Why 10x Vedic exists, the five dimensions of evolution, and the journey ahead.",
+      "Why 10x Vedic exists, the five dimensions of evolution, and the 48-day journey ahead.",
     status: "published",
     image: "/training-media/hero-introduction.webp",
     sectionArt: {
@@ -55,65 +56,66 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
         paragraphs: [
           "The world is entering a profound shift. Artificial Intelligence is transforming industries. Human attention is fragmented. Stress, anxiety, loneliness, and disconnection are rising despite unprecedented technological advancement.",
           "At the same time, humanity is searching again for meaning, consciousness, healing, purpose, and inner alignment.",
-        ],
-      },
-      {
-        heading: "Where Ancient Wisdom Meets AI",
-        paragraphs: [
-          "10x Vedic was created at the intersection of these two worlds: Timeless Vedic wisdom. Modern AI-enabled transformation.",
+          "10x Vedic serves us at the intersection of these two worlds: Timeless Vedic wisdom. Science-enabled measurable transformation.",
           "This is not about escaping the modern world. It is about mastering it consciously.",
-          "This book is a practical framework for living, leading, healing, creating, and scaling life from higher awareness while embracing the opportunities of technology, AI, and global connection.",
-          "The Vedic tradition teaches that every human being carries infinite potential within. The Upanishads remind us that the same universal intelligence that governs creation also exists inside us. When we align thought, emotion, energy, action, and purpose, life begins to move with clarity, synchronicity, peace, abundance, and service.",
+          "This book is a practical framework for living, leading, healing, creating, and scaling life from higher awareness while embracing the opportunities of life and universal global connection.",
+          "The Vedic tradition teaches that every human being carries infinite potential within. It reminds us that the same universal intelligence that governs creation also exists inside us. When we align thought, emotion, energy, action, and purpose, life begins to move with clarity, synchronicity, peace, abundance, and service.",
         ],
       },
       {
         heading: "Five Dimensions of Evolution",
         paragraphs: [
           "10x Vedic is designed to help individuals evolve in five dimensions: Consciousness. Health & Energy. Relationships & Service. Leadership & Creation. Wealth & Purpose.",
-          "This journey combines: Vedic philosophy. Meditation and healing. Energy awareness. Dharma-centered leadership. AI and modern innovation. Conscious business creation. Spiritual evolution through action.",
+          "This Vedic journey combines: Energy, Gratitude, and Alignment. Meditation and healing. Energy and self awareness. Infinite mindset, dharma-centered leadership. Breath, rest, food, and exercise. Conscious co-creation. Evolution through action and awareness.",
           "The goal is not merely success. The goal is aligned expansion.",
-          "A 10x life is not about working 10 times harder. It is about operating from a higher state of awareness where intuition, clarity, purpose, systems, and energy work together harmoniously.",
+          "A Vedic life is not about intensity, it’s about alignment. It emerges when intuition, clarity, purpose, systems, and energy work together in harmony. When you operate from this elevated state of awareness, life stops feeling like a struggle and starts becoming a deliberate, meaningful creation.",
         ],
       },
       {
         heading: "Who This Book Is For",
         paragraphs: [
-          "This book is written for: Leaders. Builders. Healers. Professionals. Entrepreneurs. Creators. Seekers. Families. Communities. Anyone seeking a deeper connection with themselves and the universe.",
-          "Each chapter builds upon the next, creating a practical roadmap toward conscious living and purposeful impact.",
+          "This book is written for: Leaders. Builders. Healers. Professionals. Entrepreneurs. Creators. Seekers. Families. Communities. Anyone seeking a deeper meaningful connection with themselves and the universe.",
+          "Each chapter builds upon the next, creating a practical roadmap toward conscious living and purposeful impact. These 48 days of focus will transform your life.",
         ],
       },
       {
         heading: "The 11 Chapters of 10x Vedic",
         paragraphs: [
-          "Chapter 1: Connect to the Universe. Understanding the self, higher self, universal consciousness, Devatas, energy, vibration, frequencies, intuition, and spiritual connection.",
+          "Chapter 1: Connect to the Self and the Universe. Understanding the self, higher self, universal consciousness, energy, vibration, frequencies, intuition, and creator-spiritual connection.",
           "Chapter 2: Consciousness & Self-Awareness. Awakening awareness, observing thought patterns, ego vs higher consciousness, emotional intelligence, and inner alignment.",
-          "Chapter 3: Vedic Meditation & Healing. Meditation, breathwork, energy healing, chakra awareness, manifestation, Theta-style subconscious transformation, and spiritual practices inspired by Vedic and Upanishadic teachings.",
+          "Chapter 3: Meditation & Healing. Meditation, breathwork, energy healing, chakra awareness, manifestation, subconscious transformation, and practices inspired by Vedic science. Align physical body rhythms with nature.",
           "Chapter 4: Dharma & Purpose. Discovering life purpose, soul alignment, service to humanity, values-based living, and purposeful decision-making.",
           "Chapter 5: Health, Energy & Balance. The connection between body, mind, food, sleep, emotions, movement, energy systems, and sustainable vitality.",
           "Chapter 6: Relationships, Family & Community. Sacred relationships, emotional safety, communication, compassion, shared growth, family harmony, and conscious communities.",
-          "Chapter 7: Leadership Through Consciousness. Servant leadership, trust, integrity, wisdom-based influence, decision-making, calm leadership under pressure, and conscious organizational culture.",
-          "Chapter 8: AI, Innovation & Human Evolution. How AI can amplify human potential, ethical AI systems, responsible innovation, future-ready thinking, and building human-centered technology ecosystems.",
-          "Chapter 9: Wealth, Abundance & Conscious Business. Creating ethical wealth, abundance mindset, scalable value creation, spiritual entrepreneurship, AI-enabled business ecosystems, and financial freedom through service.",
+          "Chapter 7: Healing, Service and Leadership Through Consciousness. Servant leadership, trust, integrity, wisdom-based influence, decision-making, calm leadership under pressure, and conscious organizational culture.",
+          "Chapter 8: Nutrition and Fasting. Sattvic eating, mindful fasting, digestion as inner fire, and the food-energy connection that fuels clarity and vitality.",
+          "Chapter 9: Movement, Exercise and Sleep Optimization. Key yoga, micro-movements every 90 minutes, strength, exercise, and sleep optimization.",
           "Chapter 10: Creation, Manifestation & Transformation. Manifestation through clarity, intention, frequency, aligned action, subconscious reprogramming, visualization, gratitude, and disciplined execution.",
           "Chapter 11: Living the 10x Vedic Life. Integrating spirituality, leadership, technology, healing, family, wealth, and service into one harmonious life journey dedicated to personal evolution and collective upliftment.",
         ],
       },
+      {
+        heading: "A 48-Day Journey Into Conscious Living",
+        paragraphs: [
+          "Each chapter builds upon the next, forming a practical roadmap toward conscious living and purposeful impact. Over 48 days, you’ll shift from unconscious patterns to intentional creation, one insight, one practice, one transformation at a time.",
+          "This is your invitation to reconnect with your inner intelligence and universal energy, enable your highest potential, align with your purpose, and create impact that is authentic and sustainable.",
+          "Give yourself these 48 days of focused awareness, and realize your full potential — a more meaningful, and profoundly powerful life.",
+        ],
+      },
     ],
     summary: [
-      "The future does not belong only to the most intelligent. It belongs to the most conscious.",
-      "Technology without consciousness creates imbalance. Spirituality without action limits impact.",
-      "10x Vedic is about bringing both together.",
-      "A new generation of conscious creators, healers, leaders, and innovators is emerging.",
-      "This book is an invitation to become one of them.",
+      "The future belongs to the most conscious. Technology without consciousness creates imbalance. Spirituality without action limits impact.",
+      "10x Vedic is about bringing both together. A new generation of conscious creators, healers, leaders, and innovators is emerging.",
+      "This is an invitation to become one of them.",
     ],
   },
   {
     slug: "connect-to-the-universe",
     number: 1,
-    title: "Connect to the Universe",
+    title: "Connect to the Self and the Universe",
     subtitle: "Remembering Who You Truly Are",
     description:
-      "Understanding the self, higher self, universal consciousness, Devatas, energy, vibration, frequencies, intuition, and spiritual connection.",
+      "Understanding the self, higher self, universal consciousness, energy, vibration, frequencies, intuition, and creator-spiritual connection.",
     status: "published",
     relatedPillarSlug: "brahman-connection",
     image: "/training-media/hero-connect-to-the-universe.webp",
@@ -470,9 +472,9 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
   {
     slug: "vedic-meditation-and-healing",
     number: 3,
-    title: "Vedic Meditation & Healing",
+    title: "Meditation & Healing",
     description:
-      "Meditation, breathwork, energy healing, chakra awareness, manifestation, Theta-style subconscious transformation, and spiritual practices inspired by Vedic and Upanishadic teachings.",
+      "Meditation, breathwork, energy healing, chakra awareness, manifestation, subconscious transformation, and practices inspired by Vedic science. Align physical body rhythms with nature.",
     status: "coming-soon",
     relatedPillarSlug: "healing-meditation",
     image: "/training-media/hero-vedic-meditation-and-healing.webp",
@@ -493,7 +495,6 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "The connection between body, mind, food, sleep, emotions, movement, energy systems, and sustainable vitality.",
     status: "coming-soon",
-    relatedPillarSlug: "nutrition-fasting",
     image: "/training-media/hero-health-energy-and-balance.webp",
   },
   {
@@ -509,29 +510,31 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
   {
     slug: "leadership-through-consciousness",
     number: 7,
-    title: "Leadership Through Consciousness",
+    title: "Healing, Service and Leadership Through Consciousness",
     description:
       "Servant leadership, trust, integrity, wisdom-based influence, decision-making, calm leadership under pressure, and conscious organizational culture.",
     status: "coming-soon",
     image: "/training-media/hero-leadership-through-consciousness.webp",
   },
   {
-    slug: "ai-innovation-and-human-evolution",
+    slug: "nutrition-and-fasting",
     number: 8,
-    title: "AI, Innovation & Human Evolution",
+    title: "Nutrition and Fasting",
     description:
-      "How AI can amplify human potential, ethical AI systems, responsible innovation, future-ready thinking, and building human-centered technology ecosystems.",
+      "Sattvic eating, mindful fasting, digestion as inner fire, and the food-energy connection that fuels clarity and vitality.",
     status: "coming-soon",
-    image: "/training-media/hero-ai-innovation-and-human-evolution.webp",
+    relatedPillarSlug: "nutrition-fasting",
+    image: "/training-media/hero-nutrition-and-fasting.webp",
   },
   {
-    slug: "wealth-abundance-and-conscious-business",
+    slug: "movement-exercise-and-sleep-optimization",
     number: 9,
-    title: "Wealth, Abundance & Conscious Business",
+    title: "Movement, Exercise and Sleep Optimization",
     description:
-      "Creating ethical wealth, abundance mindset, scalable value creation, spiritual entrepreneurship, AI-enabled business ecosystems, and financial freedom through service.",
+      "Key yoga, micro-movements every 90 minutes, strength, exercise, and sleep optimization.",
     status: "coming-soon",
-    image: "/training-media/hero-wealth-abundance-and-conscious-business.webp",
+    relatedPillarSlug: "movement",
+    image: "/training-media/hero-movement-exercise-and-sleep-optimization.webp",
   },
   {
     slug: "creation-manifestation-and-transformation",
