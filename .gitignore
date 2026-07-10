@@ -73,3 +73,6 @@ scripts/migrate-data.ts
 # in public/posters/*.webp; originals stay local-only.
 /Posters/
 /Posters.zip
+
+# staging dir for media generation
+.media-stage/
