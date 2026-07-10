@@ -1,7 +1,7 @@
 // Bump CACHE_NAME any time we change the SW or want to force-invalidate
 // existing clients. The activate handler deletes every cache that
 // doesn't match the current name, which forces a clean state.
-const CACHE_NAME = "vedic-transform-v2";
+const CACHE_NAME = "vedic-transform-v3";
 const OFFLINE_URL = "/";
 
 const PRECACHE_ASSETS = [
