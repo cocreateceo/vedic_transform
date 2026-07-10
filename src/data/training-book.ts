@@ -52,6 +52,14 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     },
     sections: [
       {
+        heading: "A 48-Day Journey Into Conscious Living",
+        paragraphs: [
+          "Each chapter builds upon the next, forming a practical roadmap toward conscious living and purposeful impact. Over 48 days, you’ll shift from unconscious patterns to intentional creation, one insight, one practice, one transformation at a time.",
+          "This is your invitation to reconnect with your inner intelligence and universal energy, enable your highest potential, align with your purpose, and create impact that is authentic and sustainable.",
+          "Give yourself these 48 days of focused awareness, and realize your full potential — a more meaningful, and profoundly powerful life.",
+        ],
+      },
+      {
         heading: "A Profound Shift",
         paragraphs: [
           "The world is entering a profound shift. Artificial Intelligence is transforming industries. Human attention is fragmented. Stress, anxiety, loneliness, and disconnection are rising despite unprecedented technological advancement.",
@@ -92,14 +100,6 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
           "Chapter 9: Movement, Exercise and Sleep Optimization. Key yoga, micro-movements every 90 minutes, strength, exercise, and sleep optimization.",
           "Chapter 10: Creation, Manifestation & Transformation. Manifestation through clarity, intention, frequency, aligned action, subconscious reprogramming, visualization, gratitude, and disciplined execution.",
           "Chapter 11: Living the 10x Vedic Life. Integrating spirituality, leadership, technology, healing, family, wealth, and service into one harmonious life journey dedicated to personal evolution and collective upliftment.",
-        ],
-      },
-      {
-        heading: "A 48-Day Journey Into Conscious Living",
-        paragraphs: [
-          "Each chapter builds upon the next, forming a practical roadmap toward conscious living and purposeful impact. Over 48 days, you’ll shift from unconscious patterns to intentional creation, one insight, one practice, one transformation at a time.",
-          "This is your invitation to reconnect with your inner intelligence and universal energy, enable your highest potential, align with your purpose, and create impact that is authentic and sustainable.",
-          "Give yourself these 48 days of focused awareness, and realize your full potential — a more meaningful, and profoundly powerful life.",
         ],
       },
     ],
