@@ -60,7 +60,7 @@ export default async function TrainingChapterPage({
     chapter.number === 0 ? "Introduction" : `Chapter ${chapter.number}`;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-3xl lg:max-w-4xl mx-auto space-y-8">
       <Link
         href="/training"
         className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"

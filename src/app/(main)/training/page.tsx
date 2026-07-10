@@ -49,7 +49,7 @@ export default function TrainingPage() {
       : 0;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-3xl lg:max-w-5xl mx-auto space-y-8">
       {/* Hero */}
       <header className="vedic-card relative overflow-hidden p-6 sm:p-8 space-y-4">
         <video
