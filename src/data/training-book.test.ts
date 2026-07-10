@@ -58,4 +58,22 @@ describe("training book data", () => {
     expect(getTrainingChapterBySlug("nope")).toBeUndefined();
     expect(trainingContentId("introduction")).toBe("training-introduction");
   });
+
+  it("every chapter has a hero image", () => {
+    for (const c of TRAINING_CHAPTERS) {
+      expect(c.image).toMatch(/^\/training-media\/hero-.+\.webp$/);
+    }
+  });
+
+  it("published chapters have section art matching their content", () => {
+    for (const c of getPublishedChapters()) {
+      expect(c.sectionArt?.summary).toBeTruthy();
+      expect(Boolean(c.sectionArt?.exercises)).toBe(
+        Boolean(c.exercises && c.exercises.length)
+      );
+      expect(Boolean(c.sectionArt?.reflections)).toBe(
+        Boolean(c.reflectionQuestions && c.reflectionQuestions.length)
+      );
+    }
+  });
 });

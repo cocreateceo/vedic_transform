@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, GraduationCap, Lock, Sparkles } from "lucide-react";
 import { TRAINING_CHAPTERS } from "@/data/training-book";
@@ -118,9 +119,18 @@ export default function TenXVedicPage() {
                 className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5"
               >
                 <div className="flex items-start gap-4">
-                  <span className="shrink-0 w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-bold flex items-center justify-center">
-                    {chapter.number === 0 ? "In" : chapter.number}
-                  </span>
+                  <div className="relative shrink-0 w-20 h-[45px] rounded-lg overflow-hidden opacity-90">
+                    <Image
+                      src={chapter.image}
+                      alt=""
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                    <span className="absolute bottom-1 left-1 w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-500/30 text-amber-200 text-xs font-bold flex items-center justify-center backdrop-blur-sm">
+                      {chapter.number === 0 ? "In" : chapter.number}
+                    </span>
+                  </div>
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-sm sm:text-base font-semibold text-[#e2e8f0]">

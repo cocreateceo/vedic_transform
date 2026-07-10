@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   BookOpen,
@@ -49,24 +50,35 @@ export default function TrainingPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-8">
       {/* Hero */}
-      <header className="vedic-card p-6 sm:p-8 space-y-4 bg-gradient-to-br from-[#FFF9F0] to-white">
-        <div className="flex items-center gap-2">
+      <header className="vedic-card relative overflow-hidden p-6 sm:p-8 space-y-4">
+        <video
+          src="/training-media/ambient-copper-1.mp4"
+          poster="/training-media/hero-introduction.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FFF9F0]/85 to-white/90" />
+        <div className="relative z-10 flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium border bg-amber-100 text-amber-700 border-amber-200">
             <GraduationCap className="w-3 h-3" />
             Training Course
           </span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-[var(--color-text-primary)] leading-tight">
+        <h1 className="relative z-10 text-3xl sm:text-4xl font-bold text-[var(--color-text-primary)] leading-tight">
           10x Vedic
         </h1>
-        <p className="text-base text-[var(--color-text-secondary)] leading-relaxed">
+        <p className="relative z-10 text-base text-[var(--color-text-secondary)] leading-relaxed">
           Ancient Wisdom. Conscious Leadership. AI-Powered Transformation. A
           practical framework for living, leading, healing, creating, and
           scaling life from higher awareness.
         </p>
 
         {/* Course progress */}
-        <div className="space-y-1.5">
+        <div className="relative z-10 space-y-1.5">
           <div className="flex items-center justify-between text-xs text-[var(--color-text-muted)]">
             <span>
               {completedCount} of {published.length} available chapters
@@ -102,9 +114,18 @@ export default function TrainingPage() {
                 className="vedic-card p-4 sm:p-5 opacity-60"
               >
                 <div className="flex items-start gap-4">
-                  <span className="shrink-0 w-9 h-9 rounded-xl bg-[var(--color-card-bg)] text-[var(--color-text-muted)] flex items-center justify-center">
-                    <Lock className="w-4 h-4" />
-                  </span>
+                  <div className="relative shrink-0 w-24 h-[54px] rounded-lg overflow-hidden opacity-50 grayscale-[30%]">
+                    <Image
+                      src={chapter.image}
+                      alt=""
+                      fill
+                      sizes="96px"
+                      className="object-cover"
+                    />
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/20">
+                      <Lock className="w-4 h-4 text-white" />
+                    </span>
+                  </div>
                   <div className="min-w-0">
                     <p className="text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
                       {label} · Coming soon
@@ -128,20 +149,29 @@ export default function TrainingPage() {
               className="vedic-card p-4 sm:p-5 block hover:border-[#DAA520] transition-colors group"
             >
               <div className="flex items-start gap-4">
-                <span
-                  className={cn(
-                    "shrink-0 w-9 h-9 rounded-xl flex items-center justify-center",
-                    isComplete
-                      ? "bg-green-50 text-green-600"
-                      : "bg-gradient-to-br from-orange-500 to-amber-500 text-white"
-                  )}
-                >
-                  {isComplete ? (
-                    <CheckCircle2 className="w-5 h-5" />
-                  ) : (
-                    <BookOpen className="w-4 h-4" />
-                  )}
-                </span>
+                <div className="relative shrink-0 w-24 h-[54px] rounded-lg overflow-hidden">
+                  <Image
+                    src={chapter.image}
+                    alt=""
+                    fill
+                    sizes="96px"
+                    className="object-cover"
+                  />
+                  <span
+                    className={cn(
+                      "absolute bottom-1 right-1 w-6 h-6 rounded-lg flex items-center justify-center shadow",
+                      isComplete
+                        ? "bg-green-50 text-green-600"
+                        : "bg-gradient-to-br from-orange-500 to-amber-500 text-white"
+                    )}
+                  >
+                    {isComplete ? (
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    ) : (
+                      <BookOpen className="w-3 h-3" />
+                    )}
+                  </span>
+                </div>
                 <div className="min-w-0">
                   <p className="text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
                     {label}

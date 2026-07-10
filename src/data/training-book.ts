@@ -24,6 +24,12 @@ export interface TrainingChapter {
   description: string; // one-liner for cards / coming-soon entries
   status: "published" | "coming-soon";
   relatedPillarSlug?: string; // joins src/constants/pillars.ts
+  image: string; // hero image, /training-media/hero-<slug>.webp, 1600x900
+  sectionArt?: {
+    exercises?: string;
+    reflections?: string;
+    summary?: string;
+  }; // 800x500 card art, /training-media/<slug>-<section>.webp
   sections?: TrainingChapterSection[];
   exercises?: TrainingExercise[];
   reflectionQuestions?: string[];
@@ -39,6 +45,10 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Why 10x Vedic exists, the five dimensions of evolution, and the journey ahead.",
     status: "published",
+    image: "/training-media/hero-introduction.webp",
+    sectionArt: {
+      summary: "/training-media/introduction-summary.webp",
+    },
     sections: [
       {
         heading: "A Profound Shift",
@@ -106,6 +116,12 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "Understanding the self, higher self, universal consciousness, Devatas, energy, vibration, frequencies, intuition, and spiritual connection.",
     status: "published",
     relatedPillarSlug: "brahman-connection",
+    image: "/training-media/hero-connect-to-the-universe.webp",
+    sectionArt: {
+      exercises: "/training-media/connect-to-the-universe-exercises.webp",
+      reflections: "/training-media/connect-to-the-universe-reflections.webp",
+      summary: "/training-media/connect-to-the-universe-summary.webp",
+    },
     sections: [
       {
         heading: "The Forgotten Power Within",
@@ -276,6 +292,15 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "Awakening awareness, observing thought patterns, ego vs higher consciousness, emotional intelligence, and inner alignment.",
     status: "published",
     relatedPillarSlug: "thoughts-intention",
+    image: "/training-media/hero-consciousness-and-self-awareness.webp",
+    sectionArt: {
+      exercises:
+        "/training-media/consciousness-and-self-awareness-exercises.webp",
+      reflections:
+        "/training-media/consciousness-and-self-awareness-reflections.webp",
+      summary:
+        "/training-media/consciousness-and-self-awareness-summary.webp",
+    },
     sections: [
       {
         heading: "The Warrior Who Could Not Fight",
@@ -450,6 +475,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "Meditation, breathwork, energy healing, chakra awareness, manifestation, Theta-style subconscious transformation, and spiritual practices inspired by Vedic and Upanishadic teachings.",
     status: "coming-soon",
     relatedPillarSlug: "healing-meditation",
+    image: "/training-media/hero-vedic-meditation-and-healing.webp",
   },
   {
     slug: "dharma-and-purpose",
@@ -458,6 +484,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Discovering life purpose, soul alignment, service to humanity, values-based living, and purposeful decision-making.",
     status: "coming-soon",
+    image: "/training-media/hero-dharma-and-purpose.webp",
   },
   {
     slug: "health-energy-and-balance",
@@ -467,6 +494,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "The connection between body, mind, food, sleep, emotions, movement, energy systems, and sustainable vitality.",
     status: "coming-soon",
     relatedPillarSlug: "nutrition-fasting",
+    image: "/training-media/hero-health-energy-and-balance.webp",
   },
   {
     slug: "relationships-family-and-community",
@@ -476,6 +504,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "Sacred relationships, emotional safety, communication, compassion, shared growth, family harmony, and conscious communities.",
     status: "coming-soon",
     relatedPillarSlug: "gratitude",
+    image: "/training-media/hero-relationships-family-and-community.webp",
   },
   {
     slug: "leadership-through-consciousness",
@@ -484,6 +513,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Servant leadership, trust, integrity, wisdom-based influence, decision-making, calm leadership under pressure, and conscious organizational culture.",
     status: "coming-soon",
+    image: "/training-media/hero-leadership-through-consciousness.webp",
   },
   {
     slug: "ai-innovation-and-human-evolution",
@@ -492,6 +522,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "How AI can amplify human potential, ethical AI systems, responsible innovation, future-ready thinking, and building human-centered technology ecosystems.",
     status: "coming-soon",
+    image: "/training-media/hero-ai-innovation-and-human-evolution.webp",
   },
   {
     slug: "wealth-abundance-and-conscious-business",
@@ -500,6 +531,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Creating ethical wealth, abundance mindset, scalable value creation, spiritual entrepreneurship, AI-enabled business ecosystems, and financial freedom through service.",
     status: "coming-soon",
+    image: "/training-media/hero-wealth-abundance-and-conscious-business.webp",
   },
   {
     slug: "creation-manifestation-and-transformation",
@@ -509,6 +541,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "Manifestation through clarity, intention, frequency, aligned action, subconscious reprogramming, visualization, gratitude, and disciplined execution.",
     status: "coming-soon",
     relatedPillarSlug: "divine-manifestation",
+    image: "/training-media/hero-creation-manifestation-and-transformation.webp",
   },
   {
     slug: "living-the-10x-vedic-life",
@@ -517,6 +550,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Integrating spirituality, leadership, technology, healing, family, wealth, and service into one harmonious life journey dedicated to personal evolution and collective upliftment.",
     status: "coming-soon",
+    image: "/training-media/hero-living-the-10x-vedic-life.webp",
   },
 ];
 

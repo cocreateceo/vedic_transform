@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -90,6 +91,31 @@ export default async function TrainingChapterPage({
         )}
       </header>
 
+      <div className="relative rounded-2xl overflow-hidden aspect-[16/9]">
+        {chapter.slug === "introduction" ? (
+          <video
+            src="/training-media/ambient-diya.mp4"
+            poster={chapter.image}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <Image
+            src={chapter.image}
+            alt={chapter.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 768px"
+            priority
+            className="object-cover"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A0F08]/50 to-transparent" />
+      </div>
+
       <article className="text-[17px] leading-[1.75] text-[var(--color-text-primary)] space-y-10">
         {chapter.sections?.map((section) => (
           <section key={section.heading}>
@@ -107,6 +133,15 @@ export default async function TrainingChapterPage({
 
       {chapter.exercises && chapter.exercises.length > 0 && (
         <section className="vedic-card p-6 sm:p-8 space-y-6 bg-gradient-to-br from-orange-50 to-amber-50">
+          {chapter.sectionArt?.exercises && (
+            <Image
+              src={chapter.sectionArt.exercises}
+              alt=""
+              width={800}
+              height={500}
+              className="h-32 w-full object-cover rounded-xl"
+            />
+          )}
           <h2 className="flex items-center gap-2 text-xl font-bold text-[var(--color-text-primary)]">
             <ListChecks className="w-5 h-5 text-[var(--color-primary)]" />
             Practical Exercises
@@ -134,6 +169,15 @@ export default async function TrainingChapterPage({
 
       {chapter.reflectionQuestions && chapter.reflectionQuestions.length > 0 && (
         <section className="vedic-card p-6 sm:p-8 space-y-4">
+          {chapter.sectionArt?.reflections && (
+            <Image
+              src={chapter.sectionArt.reflections}
+              alt=""
+              width={800}
+              height={500}
+              className="h-32 w-full object-cover rounded-xl"
+            />
+          )}
           <h2 className="flex items-center gap-2 text-xl font-bold text-[var(--color-text-primary)]">
             <MessageCircleQuestion className="w-5 h-5 text-[var(--color-primary)]" />
             Reflection Questions
@@ -162,6 +206,15 @@ export default async function TrainingChapterPage({
 
       {chapter.summary && chapter.summary.length > 0 && (
         <section className="vedic-card p-6 sm:p-8 space-y-4 border-l-4 border-l-[#DAA520]">
+          {chapter.sectionArt?.summary && (
+            <Image
+              src={chapter.sectionArt.summary}
+              alt=""
+              width={800}
+              height={500}
+              className="h-32 w-full object-cover rounded-xl"
+            />
+          )}
           <h2 className="flex items-center gap-2 text-xl font-bold text-[var(--color-text-primary)]">
             <ScrollText className="w-5 h-5 text-[var(--color-primary)]" />
             Chapter Summary
