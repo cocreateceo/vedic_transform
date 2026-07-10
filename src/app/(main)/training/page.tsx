@@ -14,6 +14,7 @@ import {
 import {
   TRAINING_CHAPTERS,
   getPublishedChapters,
+  getTrainingChapterBySlug,
   trainingContentId,
 } from "@/data/training-book";
 import { apiFetch } from "@/lib/api";
@@ -53,7 +54,7 @@ export default function TrainingPage() {
       <header className="vedic-card relative overflow-hidden p-6 sm:p-8 space-y-4">
         <video
           src="/training-media/ambient-copper-1.mp4"
-          poster="/training-media/hero-introduction.webp"
+          poster={getTrainingChapterBySlug("introduction")?.image}
           autoPlay
           muted
           loop

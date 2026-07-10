@@ -113,7 +113,7 @@ export default async function TrainingChapterPage({
             className="object-cover"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1A0F08]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
       </div>
 
       <article className="text-[17px] leading-[1.75] text-[var(--color-text-primary)] space-y-10">
