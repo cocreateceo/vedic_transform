@@ -5,6 +5,7 @@
 // chapter reader writes, so finished chapters light up here automatically.
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check, Lock } from "lucide-react";
 import { apiFetch } from "@/lib/api";
@@ -19,6 +20,8 @@ export interface Gate {
   /** Verbatim description text from the Introduction's chapter list. */
   body: string;
   published: boolean;
+  /** Chapter hero image, reused as gate art for a cohesive visual language. */
+  image?: string;
 }
 
 export function ElevenGates({ gates }: { gates: Gate[] }) {
@@ -66,6 +69,20 @@ export function ElevenGates({ gates }: { gates: Gate[] }) {
                 !gate.published && "border-[var(--color-border)] bg-transparent opacity-70"
               )}
             >
+              {gate.image && (
+                <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-xl">
+                  <Image
+                    src={gate.image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 100vw, 480px"
+                    className={cn(
+                      "object-cover",
+                      !gate.published && "opacity-60 saturate-50"
+                    )}
+                  />
+                </div>
+              )}
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B8860B]">
                 Chapter {gate.number}
                 {done && " · Completed"}

@@ -6,6 +6,7 @@
 // src/data/training-book.ts; this file only adds presentation and short
 // structural labels. Chapters keep the standard reader in [slug]/page.tsx.
 
+import Image from "next/image";
 import Link from "next/link";
 import { Cormorant_Garamond } from "next/font/google";
 import {
@@ -79,11 +80,11 @@ const VEDIC_RESPONSE = [
 ];
 
 const DIMENSIONS = [
-  { icon: Eye, title: "Consciousness", note: "Awaken awareness and observe the mind." },
-  { icon: HeartPulse, title: "Health & Energy", note: "Build vitality through body, breath, and rest." },
-  { icon: HeartHandshake, title: "Relationships & Service", note: "Grow through connection and giving." },
-  { icon: Flame, title: "Leadership & Creation", note: "Lead and build from higher awareness." },
-  { icon: Sunrise, title: "Wealth & Purpose", note: "Create abundance aligned with dharma." },
+  { icon: Eye, title: "Consciousness", note: "Awaken awareness and observe the mind.", art: "/training-media/intro-dim-consciousness.webp" },
+  { icon: HeartPulse, title: "Health & Energy", note: "Build vitality through body, breath, and rest.", art: "/training-media/intro-dim-health-energy.webp" },
+  { icon: HeartHandshake, title: "Relationships & Service", note: "Grow through connection and giving.", art: "/training-media/intro-dim-relationships.webp" },
+  { icon: Flame, title: "Leadership & Creation", note: "Lead and build from higher awareness.", art: "/training-media/intro-dim-leadership.webp" },
+  { icon: Sunrise, title: "Wealth & Purpose", note: "Create abundance aligned with dharma.", art: "/training-media/intro-dim-wealth-purpose.webp" },
 ];
 
 const JOURNEY_ELEMENTS = [
@@ -148,6 +149,7 @@ export function IntroductionExperience({
       title: meta?.title ?? (firstStop > 0 ? p.slice(0, firstStop) : p),
       body: firstStop > 0 ? p.slice(firstStop + 2) : p,
       published: meta?.status === "published",
+      image: meta?.image,
     };
   });
 
@@ -440,18 +442,29 @@ export function IntroductionExperience({
               </FadeUp>
 
               <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-                {DIMENSIONS.map(({ icon: Icon, title, note }) => (
+                {DIMENSIONS.map(({ icon: Icon, title, note, art }) => (
                   <StaggerItem key={title}>
-                    <div className="group h-full rounded-3xl border border-[var(--color-border)] bg-[var(--color-bg-surface)] p-6 text-center transition-all hover:-translate-y-1 hover:border-[#DAA520] hover:shadow-[0_8px_30px_rgba(218,165,32,0.15)]">
-                      <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-amber-100 to-orange-100 text-[#B8860B] transition-transform group-hover:scale-110">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <h3 className={`${SERIF} mt-4 text-lg font-semibold leading-tight text-[var(--color-text-primary)]`}>
-                        {title}
-                      </h3>
-                      <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
-                        {note}
-                      </p>
+                    <div className="group h-full overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-bg-surface)] text-center transition-all hover:-translate-y-1 hover:border-[#DAA520] hover:shadow-[0_8px_30px_rgba(218,165,32,0.15)]">
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        <Image
+                          src={art}
+                          alt=""
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-5 pt-0">
+                        <span className="relative mx-auto -mt-6 flex h-12 w-12 items-center justify-center rounded-full border border-[#DAA520]/40 bg-gradient-to-br from-amber-100 to-orange-100 text-[#B8860B] shadow-md transition-transform group-hover:scale-110">
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <h3 className={`${SERIF} mt-3 text-lg font-semibold leading-tight text-[var(--color-text-primary)]`}>
+                          {title}
+                        </h3>
+                        <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
+                          {note}
+                        </p>
+                      </div>
                     </div>
                   </StaggerItem>
                 ))}
@@ -489,14 +502,25 @@ export function IntroductionExperience({
               {/* Alignment feature card */}
               {dimensions.paragraphs[3] && (
                 <FadeUp className="mt-16">
-                  <div className="relative overflow-hidden rounded-3xl border border-[#DAA520]/50 bg-gradient-to-br from-[#FFF9F0] via-amber-50/60 to-orange-50/40 p-8 sm:p-12">
-                    <Mandala className="absolute -right-24 -top-24 h-96 w-96 text-[#DAA520] opacity-[0.1]" />
-                    <p className="relative text-[11px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">
-                      The way of alignment
-                    </p>
-                    <p className="relative mt-4 max-w-[42rem] text-xl leading-[1.7] text-[#3d3223] sm:text-2xl">
-                      {dimensions.paragraphs[3]}
-                    </p>
+                  <div className="grid overflow-hidden rounded-3xl border border-[#DAA520]/50 bg-gradient-to-br from-[#FFF9F0] via-amber-50/60 to-orange-50/40 md:grid-cols-[2fr_3fr]">
+                    <div className="relative min-h-64 md:min-h-full">
+                      <Image
+                        src="/training-media/intro-alignment.webp"
+                        alt=""
+                        fill
+                        sizes="(max-width: 768px) 100vw, 40vw"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="relative overflow-hidden p-8 sm:p-12">
+                      <Mandala className="absolute -right-24 -top-24 h-96 w-96 text-[#DAA520] opacity-[0.1]" />
+                      <p className="relative text-[11px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">
+                        The way of alignment
+                      </p>
+                      <p className="relative mt-4 max-w-[42rem] text-xl leading-[1.7] text-[#3d3223] sm:text-2xl">
+                        {dimensions.paragraphs[3]}
+                      </p>
+                    </div>
                   </div>
                 </FadeUp>
               )}
@@ -598,7 +622,15 @@ export function IntroductionExperience({
       </div>
 
       {/* ————— Sunrise closing ————— */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[var(--color-bg-primary)] via-[#FDEBC8] to-[#F5C063] px-6 py-24 text-center sm:py-32">
+      <section className="relative overflow-hidden px-6 py-24 text-center sm:py-32">
+        <Image
+          src="/training-media/intro-closing-sunrise.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-primary)] via-[#FDEBC8]/80 to-[#F5C063]/55" />
         <div className="absolute inset-x-0 bottom-0 h-72 bg-[radial-gradient(ellipse_at_bottom,rgba(255,153,51,0.4),transparent_70%)]" />
         <Mandala className="absolute left-1/2 bottom-[-40vmin] h-[100vmin] w-[100vmin] -translate-x-1/2 text-[#8B6914] opacity-[0.1]" />
         <FadeUp className="relative z-10 mx-auto max-w-2xl space-y-8">
