@@ -17,6 +17,7 @@ import {
 } from "@/data/training-book";
 import { PILLARS } from "@/constants/pillars";
 import { ChapterActions } from "./chapter-actions";
+import { IntroductionExperience } from "@/components/features/training/intro/introduction-experience";
 
 // Only published chapters are routable; coming-soon slugs 404.
 export function generateStaticParams() {
@@ -55,6 +56,18 @@ export default async function TrainingChapterPage({
   const idx = published.findIndex((c) => c.slug === chapter.slug);
   const prev = idx > 0 ? published[idx - 1] : undefined;
   const next = idx < published.length - 1 ? published[idx + 1] : undefined;
+
+  // The Introduction is the ceremonial opening of the journey and gets its
+  // own cinematic experience; numbered chapters use the reader below.
+  if (chapter.slug === "introduction") {
+    return (
+      <IntroductionExperience
+        chapter={chapter}
+        nextSlug={next?.slug}
+        nextTitle={next?.title}
+      />
+    );
+  }
   const pillar = PILLARS.find((p) => p.slug === chapter.relatedPillarSlug);
   const chapterLabel =
     chapter.number === 0 ? "Introduction" : `Chapter ${chapter.number}`;
@@ -92,27 +105,14 @@ export default async function TrainingChapterPage({
       </header>
 
       <div className="relative rounded-2xl overflow-hidden aspect-[16/9]">
-        {chapter.slug === "introduction" ? (
-          <video
-            src="/training-media/ambient-diya.mp4"
-            poster={chapter.image}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        ) : (
-          <Image
-            src={chapter.image}
-            alt={chapter.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 768px"
-            priority
-            className="object-cover"
-          />
-        )}
+        <Image
+          src={chapter.image}
+          alt={chapter.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 768px"
+          priority
+          className="object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
       </div>
 
