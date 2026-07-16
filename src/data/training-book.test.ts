@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   TRAINING_CHAPTERS,
+  chapterReadMinutes,
   getTrainingChapterBySlug,
   getPublishedChapters,
   trainingContentId,
@@ -57,6 +58,17 @@ describe("training book data", () => {
     expect(getTrainingChapterBySlug("introduction")?.number).toBe(0);
     expect(getTrainingChapterBySlug("nope")).toBeUndefined();
     expect(trainingContentId("introduction")).toBe("training-introduction");
+  });
+
+  it("derives sensible reading minutes from authored content", () => {
+    // Published chapters carry thousands of words → several minutes each.
+    for (const c of getPublishedChapters()) {
+      expect(chapterReadMinutes(c)).toBeGreaterThanOrEqual(2);
+    }
+    // Coming-soon chapters have no content and clamp to the 1-minute floor.
+    expect(
+      chapterReadMinutes(getTrainingChapterBySlug("dharma-and-purpose")!)
+    ).toBe(1);
   });
 
   it("every chapter has a hero image", () => {

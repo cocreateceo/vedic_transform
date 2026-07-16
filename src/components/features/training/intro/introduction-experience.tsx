@@ -8,7 +8,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Cormorant_Garamond } from "next/font/google";
+import { introSerif, SERIF_CLASS } from "@/lib/fonts";
 import {
   ArrowLeft,
   ArrowRight,
@@ -35,6 +35,7 @@ import {
 import {
   TRAINING_CHAPTERS,
   TrainingChapter,
+  chapterReadMinutes,
   trainingContentId,
 } from "@/data/training-book";
 import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
@@ -42,16 +43,8 @@ import { Mandala, LotusDivider } from "./mandala";
 import { FadeUp, Stagger, StaggerItem, GrowLine } from "./reveal";
 import { ElevenGates, type Gate } from "./eleven-gates";
 
-const serif = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-intro-serif",
-  display: "swap",
-});
-
-// Tailwind arbitrary-property class so headings pick up the ceremonial serif.
-const SERIF = "[font-family:var(--font-intro-serif),Georgia,serif]";
+const serif = introSerif;
+const SERIF = SERIF_CLASS;
 
 const MILESTONES = [
   { icon: Sunrise, label: "Day 1", note: "The journey begins" },
@@ -153,13 +146,7 @@ export function IntroductionExperience({
     };
   });
 
-  const words = [
-    ...(chapter.sections?.flatMap((s) => s.paragraphs) ?? []),
-    ...(chapter.summary ?? []),
-  ]
-    .join(" ")
-    .split(/\s+/).length;
-  const readMinutes = Math.max(1, Math.round(words / 200));
+  const readMinutes = chapterReadMinutes(chapter);
 
   const subtitleLines = (chapter.subtitle ?? "")
     .split(". ")

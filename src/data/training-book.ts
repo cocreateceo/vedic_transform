@@ -564,3 +564,16 @@ export const getPublishedChapters = () =>
   TRAINING_CHAPTERS.filter((c) => c.status === "published");
 
 export const trainingContentId = (slug: string) => `training-${slug}`;
+
+// Reading time derived from authored content (~200 wpm). Coming-soon
+// chapters have no content yet and clamp to 1 — never display it for them.
+export const chapterReadMinutes = (c: TrainingChapter) => {
+  const words = [
+    ...(c.sections?.flatMap((s) => s.paragraphs) ?? []),
+    ...(c.summary ?? []),
+  ]
+    .join(" ")
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+};
