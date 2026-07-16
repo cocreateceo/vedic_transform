@@ -293,6 +293,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "10 min",
     url: "#",
     audioUrl: "/audio/om-chanting.mp3",
+    thumbnail: "/library-media/poster-audio-om-chanting.webp",
     description:
       "Sacred Om chanting meditation to align your energy centers. The primordial sound of Om resonates with the frequency of the universe, calming the nervous system and deepening your connection to universal consciousness.",
   },
@@ -305,6 +306,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "8 min",
     url: "#",
     audioUrl: "generated",
+    thumbnail: "/library-media/poster-audio-morning-mantra.webp",
     description:
       "Start your day with powerful Vedic mantras and guided intention setting. This short audio practice combines the Gayatri Mantra with a visualization exercise to set your daily Sankalpa.",
   },
@@ -317,6 +319,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "15 min",
     url: "#",
     audioUrl: "generated",
+    thumbnail: "/library-media/poster-audio-pranayama-guided.webp",
     description:
       "Follow along with this guided alternate nostril breathing (Nadi Shodhana) session. Perfect for balancing the left and right hemispheres of the brain, reducing anxiety, and preparing for deeper meditation.",
   },
@@ -329,6 +332,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "25 min",
     url: "#",
     audioUrl: "generated",
+    thumbnail: "/library-media/poster-audio-yoga-nidra.webp",
     description:
       "A complete Yoga Nidra (yogic sleep) session that guides you through progressive relaxation, body scanning, and visualization. One hour of Yoga Nidra is said to equal 4 hours of regular sleep.",
   },
@@ -341,6 +345,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "12 min",
     url: "#",
     audioUrl: "generated",
+    thumbnail: "/library-media/poster-audio-gratitude-meditation.webp",
     description:
       "A gentle heart-centered meditation that cultivates deep gratitude. Using Vedic visualization of the heart chakra (Anahata), this practice opens you to appreciation, love, and contentment.",
   },
@@ -353,6 +358,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "10 min",
     url: "#",
     audioUrl: "generated",
+    thumbnail: "/library-media/poster-audio-sandhya-evening.webp",
     description:
       "A calming evening meditation performed at the sacred twilight hour. This practice helps you release the day, process experiences, and prepare your consciousness for restful sleep.",
   },
@@ -365,6 +371,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "20 min",
     url: "#",
     audioUrl: "generated",
+    thumbnail: "/library-media/poster-audio-chakra-healing.webp",
     description:
       "An immersive sound healing experience using frequencies aligned to each of the 7 chakras. Tibetan singing bowls, crystal bowls, and binaural beats guide energy through your subtle body for deep healing.",
   },
@@ -377,6 +384,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "15 min",
     url: "#",
     audioUrl: "generated",
+    thumbnail: "/library-media/poster-audio-manifestation-visualization.webp",
     description:
       "A powerful guided visualization for manifesting your deepest intentions. Using the Vedic practice of Sankalpa combined with modern visualization techniques, this session helps you plant seeds of transformation in your subconscious.",
   },
@@ -392,6 +400,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "11 min",
     url: "#",
     audioUrl: "/audio/gayatri-mantra.mp3",
+    thumbnail: "/library-media/poster-mantra-gayatri.webp",
     description:
       "The most sacred mantra in the Vedic tradition, the Gayatri Mantra is a universal prayer for illumination from the Rig Veda (3.62.10). Chanting 'Oṁ Bhūr Bhuvaḥ Svaḥ, Tat Savitur Vareṇyaṁ, Bhargo Devasya Dhīmahi, Dhiyo Yo Naḥ Pracodayāt' invokes the divine light of the Sun to awaken and guide the intellect. Traditionally chanted 108 times at sunrise.",
   },
@@ -404,6 +413,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "10 min",
     url: "#",
     audioUrl: "/audio/om-namah-shivaya.mp3",
+    thumbnail: "/library-media/poster-mantra-om-namah-shivaya.webp",
     description:
       "One of the most powerful mantras in Shaivism, Om Namah Shivaya ('I bow to Shiva') honors the transformative aspect of the divine. Each syllable — Na, Ma, Shi, Va, Ya — corresponds to one of the five elements: earth, water, fire, air, and ether. This chant dissolves the ego and reveals the inner Self.",
   },
@@ -416,6 +426,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "10 min",
     url: "#",
     audioUrl: "/audio/om-mani-padme-hum.mp3",
+    thumbnail: "/library-media/poster-mantra-om-mani-padme-hum.webp",
     description:
       "The six-syllable mantra of Avalokiteshvara, the bodhisattva of compassion. Each syllable purifies a different realm of suffering and cultivates generosity, ethics, patience, diligence, concentration, and wisdom. Chanting this mantra opens the heart to boundless compassion for all sentient beings.",
   },
@@ -428,6 +439,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "12 min",
     url: "#",
     audioUrl: "/audio/mahamrityunjaya.mp3",
+    thumbnail: "/library-media/poster-mantra-mahamrityunjaya.webp",
     description:
       "From the Rig Veda (7.59.12), the Mahamrityunjaya Mantra is the most potent healing mantra in the Vedic canon. Addressed to Lord Tryambaka (Shiva), it beseeches liberation from death and disease: 'Oṁ Tryambakaṁ Yajāmahe, Sugandhiṁ Puṣṭivardhanam, Urvārukamiva Bandhanān, Mṛtyor Mukṣīya Māmṛtāt.' Used for physical healing, protection, and spiritual liberation.",
   },
@@ -440,6 +452,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "8 min",
     url: "#",
     audioUrl: "/audio/shanti-mantra.mp3",
+    thumbnail: "/library-media/poster-mantra-shanti.webp",
     description:
       "The peace invocation chanted at the beginning and end of Vedic teachings. The three repetitions of Shāntiḥ address the three sources of suffering: Ādhibhautika (physical), Ādhidaivika (divine/natural), and Ādhyātmika (spiritual/internal). This mantra calms the mind, stills the emotions, and brings deep peace to the entire being.",
   },
@@ -452,6 +465,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "9 min",
     url: "#",
     audioUrl: "/audio/guru-mantra.mp3",
+    thumbnail: "/library-media/poster-mantra-guru.webp",
     description:
       "The Guru Stotram honors the teacher as the embodied form of the divine trinity: 'Gurur Brahmā Gurur Viṣṇuḥ Gurur Devo Maheśvaraḥ, Gurur Sākṣāt Paraṁ Brahma Tasmai Śrī Gurave Namaḥ.' In the Vedic tradition, the Guru dispels the darkness of ignorance (gu = darkness, ru = remover). Chanting cultivates humility, devotion, and gratitude.",
   },
@@ -464,6 +478,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "10 min",
     url: "#",
     audioUrl: "/audio/lakshmi-mantra.mp3",
+    thumbnail: "/library-media/poster-mantra-lakshmi.webp",
     description:
       "The bija (seed) mantra of Goddess Lakshmi, the divine embodiment of abundance, prosperity, and grace. 'Śrīṁ' is the seed sound of Lakshmi energy. Regular chanting removes financial obstacles, attracts material and spiritual prosperity, and cultivates the inner richness of contentment. Traditionally chanted on Fridays and during Diwali.",
   },
@@ -476,6 +491,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "10 min",
     url: "#",
     audioUrl: "/audio/saraswati-mantra.mp3",
+    thumbnail: "/library-media/poster-mantra-saraswati.webp",
     description:
       "The mantra of Goddess Saraswati, the divine patron of wisdom, knowledge, music, and the arts. 'Aiṁ' is the bija (seed) syllable that activates the faculty of higher learning. Chanting sharpens the intellect, enhances memory and concentration, removes creative blocks, and awakens the flow of inspired knowledge.",
   },
@@ -488,6 +504,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "11 min",
     url: "#",
     audioUrl: "/audio/hanuman-chalisa.mp3",
+    thumbnail: "/library-media/poster-mantra-hanuman-chalisa.webp",
     description:
       "The opening doha of the 40-verse Hanuman Chalisa, composed by Tulsidas in Awadhi: 'Śrī Guru caraṇa saroja raja, nija mana mukuru sudhāri, baranauṁ Raghubara bimala jasu, jo dāyaku phala chāri' — After cleansing the mirror of my mind with the pollen-dust of the Guru's lotus feet, I profess the pure glory of Sri Raghuvar, which bestows the fourfold fruits of life: dharma, artha, kāma, and mokṣa. The chalisa then invokes Hanuman as the ocean of wisdom and the embodiment of supreme devotion (bhakti), selfless service (seva), and indomitable courage. Traditionally chanted to overcome fear, obstacles, and negative energies — and to build physical and mental fortitude.",
   },
@@ -500,6 +517,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "9 min",
     url: "#",
     audioUrl: "/audio/library/mantra-pavamana.mp3",
+    thumbnail: "/library-media/poster-mantra-pavamana.webp",
     description:
       "From the Bṛhadāraṇyaka Upaniṣad (1.3.28), the Pavamana Mantra is a prayer for ultimate truth: 'Asato mā sadgamaya, tamaso mā jyotirgamaya, mṛtyor mā amṛtaṁ gamaya' — Lead me from the unreal to the real, from darkness to light, from death to immortality. One of the most profound expressions of the spiritual aspiration in all of Vedic literature.",
   },
@@ -512,6 +530,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "10 min",
     url: "#",
     audioUrl: "/audio/asato-ma.mp3",
+    thumbnail: "/library-media/poster-mantra-asato-ma.webp",
     description:
       "An extended chanting meditation on the three lines of the Asato Ma prayer. Each line is a complete spiritual journey: from unreality to reality (the path of knowledge), from darkness to light (the path of awakening), and from death to immortality (the path of liberation). This session guides you through slow, contemplative repetitions with pauses for inner reflection.",
   },
@@ -524,6 +543,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     duration: "9 min",
     url: "#",
     audioUrl: "/audio/library/mantra-purnamadah.mp3",
+    thumbnail: "/library-media/poster-mantra-purnamadah.webp",
     description:
       "The Shanti Mantra from the Isha Upanishad: 'Oṁ Pūrṇamadaḥ Pūrṇamidaṁ Pūrṇāt Pūrṇamudacyate, Pūrṇasya Pūrṇamādāya Pūrṇamevāvaśiṣyate' — That is whole, this is whole; from wholeness comes wholeness. When wholeness is taken from wholeness, wholeness alone remains. A profound meditation on the infinite, non-dual nature of Brahman.",
   },
