@@ -66,9 +66,10 @@ export function Sidebar() {
           className="rounded-xl"
         />
         <div>
-          <h1 className="font-bold text-lg bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+          {/* Not an h1 — the page content owns the document heading. */}
+          <p className="font-bold text-lg bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
             10X Vedic
-          </h1>
+          </p>
           <p className="text-xs text-gray-500">48-Day Transformation</p>
         </div>
       </div>

@@ -356,8 +356,8 @@ export default function DashboardPage() {
           <Link href="/journal">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="flex items-center gap-4 p-4">
-                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                  <Calendar className="w-6 h-6 text-green-600" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 border border-[#DAA520]/30 flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-[#B8860B]" />
                 </div>
                 <div>
                   <h4 className="font-medium text-[var(--color-text-primary)]">Journal</h4>
@@ -376,8 +376,8 @@ export default function DashboardPage() {
           <Link href="/dosha-assessment">
             <Card variant="golden" className="hover:shadow-lg transition-all cursor-pointer group">
               <CardContent className="flex items-center gap-4 p-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-md shadow-green-500/20 group-hover:scale-105 transition-transform">
-                  <Leaf className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 border border-[#DAA520]/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <Leaf className="w-6 h-6 text-[#B8860B]" />
                 </div>
                 <div>
                   <h4 className="font-medium text-[var(--color-text-primary)]">Dosha Assessment</h4>
@@ -390,8 +390,8 @@ export default function DashboardPage() {
           <Link href="/library">
             <Card variant="golden" className="hover:shadow-lg transition-all cursor-pointer group">
               <CardContent className="flex items-center gap-4 p-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                  <Headphones className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 border border-[#DAA520]/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <Headphones className="w-6 h-6 text-[#B8860B]" />
                 </div>
                 <div>
                   <h4 className="font-medium text-[var(--color-text-primary)]">Audio Meditations</h4>
@@ -404,8 +404,8 @@ export default function DashboardPage() {
           <Link href="/insights">
             <Card variant="golden" className="hover:shadow-lg transition-all cursor-pointer group">
               <CardContent className="flex items-center gap-4 p-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center shadow-md shadow-purple-500/20 group-hover:scale-105 transition-transform">
-                  <Sparkles className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 border border-[#DAA520]/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <Sparkles className="w-6 h-6 text-[#B8860B]" />
                 </div>
                 <div>
                   <h4 className="font-medium text-[var(--color-text-primary)]">AI Insights</h4>

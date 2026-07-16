@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { SERIF_CLASS } from "@/lib/fonts";
+import { Mandala, LotusDivider } from "@/components/features/training/intro/mandala";
 import { apiFetch } from "@/lib/api";
 import { CONTENT_LIBRARY, type ContentItem } from "@/data/content-library";
 import { POSTERS, type Poster } from "@/data/posters";
@@ -25,8 +28,6 @@ import {
   FileText,
   BookOpen,
   ExternalLink,
-  Image as ImageIcon,
-  Library,
   Play,
   Pause,
 } from "lucide-react";
@@ -47,11 +48,11 @@ interface LibraryPageClientProps {
 type CategoryFilter = "all" | "body" | "mind" | "spirit";
 type TypeFilter = "all" | "video" | "audio" | "article" | "guide" | "poster" | "mantra";
 
-const CATEGORY_TABS: { value: CategoryFilter; label: string; color: string }[] = [
-  { value: "all", label: "All", color: "from-orange-500 to-amber-500" },
-  { value: "body", label: "Body", color: "from-orange-500 to-red-500" },
-  { value: "mind", label: "Mind", color: "from-cyan-500 to-blue-500" },
-  { value: "spirit", label: "Spirit", color: "from-amber-500 to-yellow-500" },
+const CATEGORY_TABS: { value: CategoryFilter; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "body", label: "Body" },
+  { value: "mind", label: "Mind" },
+  { value: "spirit", label: "Spirit" },
 ];
 
 const TYPE_TABS: { value: TypeFilter; label: string; icon: string }[] = [
@@ -64,17 +65,13 @@ const TYPE_TABS: { value: TypeFilter; label: string; icon: string }[] = [
   { value: "mantra", label: "Mantras", icon: "" },
 ];
 
-const TYPE_CONFIG: Record<ContentItem["type"], { icon: typeof Video; label: string; color: string }> = {
-  video: { icon: Video, label: "Video", color: "bg-red-100 text-red-700" },
-  audio: { icon: Headphones, label: "Audio", color: "bg-blue-100 text-blue-700" },
-  article: { icon: FileText, label: "Article", color: "bg-green-100 text-green-700" },
-  guide: { icon: BookOpen, label: "Guide", color: "bg-amber-100 text-amber-700" },
-};
-
-const CATEGORY_BORDER_COLORS: Record<string, string> = {
-  body: "border-t-orange-500",
-  mind: "border-t-cyan-500",
-  spirit: "border-t-amber-500",
+// One calm chip style for every content type — identity comes from the icon
+// and label, not from a rainbow of badge colors.
+const TYPE_CONFIG: Record<ContentItem["type"], { icon: typeof Video; label: string }> = {
+  video: { icon: Video, label: "Video" },
+  audio: { icon: Headphones, label: "Audio" },
+  article: { icon: FileText, label: "Article" },
+  guide: { icon: BookOpen, label: "Guide" },
 };
 
 function getPillarName(item: ContentItem): string {
@@ -279,34 +276,23 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="vedic-card p-6 bg-gradient-to-r from-orange-500 to-amber-500 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-                <Library className="w-5 h-5" />
-              </div>
-              <h1 className="text-2xl font-bold">Content Library</h1>
-            </div>
-            <p className="text-orange-100">
-              Explore guided content for your transformation journey
-            </p>
-          </div>
-          <div className="hidden sm:flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2">
-              <Headphones className="w-4 h-4" />
-              <span className="font-medium text-sm">{stats.audioCount} Audio</span>
-            </div>
-            <div className="flex items-center gap-2 bg-white/20 rounded-xl px-4 py-2">
-              <CheckCircle2 className="w-5 h-5" />
-              <span className="font-medium">
-                {stats.completed}/{stats.total}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Masthead */}
+      <header className="pt-4 pb-2 text-center space-y-3">
+        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#DAA520]/40 bg-[var(--color-bg-surface)]">
+          <Mandala className="h-12 w-12 text-[#B8860B] opacity-80" />
+        </span>
+        <h1 className="text-4xl sm:text-5xl text-[var(--color-text-primary)]">
+          The 10x Vedic Library
+        </h1>
+        <p className="text-sm sm:text-base text-[var(--color-text-secondary)]">
+          Guided wisdom for body, mind, and spirit.
+        </p>
+        <p className="text-xs text-[var(--color-text-muted)]">
+          {stats.total} pieces · {stats.audioCount} with in-app audio ·{" "}
+          {stats.completed} completed by you
+        </p>
+        <LotusDivider className="pt-2" />
+      </header>
 
       {/* Search and Filters */}
       <div className="flex flex-col gap-4">
@@ -314,7 +300,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
             <Input
-              placeholder="Search content..."
+              placeholder="What do you need today: calm, energy, clarity…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -325,10 +311,10 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
               <button
                 key={tab.value}
                 onClick={() => setActiveCategory(tab.value)}
-                className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
                   activeCategory === tab.value
-                    ? `bg-gradient-to-r ${tab.color} text-white shadow-lg`
-                    : "bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-elevated)] border border-[var(--color-border)]"
+                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/20"
+                    : "bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] hover:border-[#DAA520]/60 border border-[var(--color-border)]"
                 }`}
               >
                 {tab.label}
@@ -343,10 +329,10 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
             <button
               key={tab.value}
               onClick={() => setActiveType(tab.value)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
                 activeType === tab.value
                   ? "bg-amber-100 text-amber-800 border border-amber-300"
-                  : "bg-gray-50 text-gray-500 hover:bg-gray-100 border border-transparent"
+                  : "bg-[var(--color-bg-surface)] text-[var(--color-text-muted)] hover:border-[#DAA520]/50 border border-[var(--color-border)]"
               }`}
             >
               {tab.label}
@@ -419,7 +405,6 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
             const isLoading = loadingIds.has(item.id);
             const typeConfig = TYPE_CONFIG[item.type];
             const TypeIcon = typeConfig.icon;
-            const borderColor = CATEGORY_BORDER_COLORS[item.category] || "border-t-gray-500";
             const isCurrentlyPlaying = currentTrack?.id === item.id && isPlaying;
             const isCurrentTrack = currentTrack?.id === item.id;
             const hasAudio = !!item.audioUrl;
@@ -428,18 +413,36 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
               <Card
                 key={item.id}
                 variant="elevated"
-                className={`relative overflow-hidden border-t-4 ${borderColor} p-0 flex flex-col ${
+                className={`relative overflow-hidden p-0 flex flex-col ${
                   isCurrentTrack ? "ring-2 ring-amber-400/50" : ""
                 }`}
               >
+                {/* Editorial image header — category pill rides the image */}
+                {item.thumbnail && (
+                  <div className="relative aspect-video overflow-hidden">
+                    <Image
+                      src={item.thumbnail}
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover"
+                    />
+                    <span className="absolute left-3 top-3 rounded-full bg-[#FFF9F0]/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-[#8B6914]">
+                      {item.category}
+                    </span>
+                  </div>
+                )}
                 <div className="p-5 flex-1 flex flex-col">
-                  {/* Type badge and completion indicator */}
+                  {/* Type chip and completion indicator */}
                   <div className="flex items-center justify-between mb-3">
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium ${typeConfig.color}`}
-                    >
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border border-[#DAA520]/40 bg-[var(--color-card-bg)] text-[#8B6914]">
                       <TypeIcon className="w-3.5 h-3.5" />
                       {typeConfig.label}
+                      {!item.thumbnail && (
+                        <span className="capitalize text-[var(--color-text-muted)]">
+                          · {item.category}
+                        </span>
+                      )}
                     </span>
                     <div className="flex items-center gap-1.5">
                       {hasAudio && (
@@ -455,7 +458,9 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-1">
+                  <h3
+                    className={`${SERIF_CLASS} text-xl font-semibold leading-snug text-[var(--color-text-primary)] mb-1`}
+                  >
                     {item.title}
                   </h3>
 

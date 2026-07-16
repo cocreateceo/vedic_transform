@@ -8,7 +8,9 @@ const nextConfig: NextConfig = {
   images: {
     // next/image optimization runs as a Lambda. Keep external sources
     // explicit so they don't get blocked.
-    remotePatterns: [],
+    remotePatterns: [
+      { protocol: "https", hostname: "img.youtube.com" }, // library video thumbnails
+    ],
   },
   // Preserve the existing URL shape so inbound links / external citations
   // don't 301-flip.

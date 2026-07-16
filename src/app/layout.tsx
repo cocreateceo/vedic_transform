@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { introSerif } from "@/lib/fonts";
 import { ClientOnlyProviders } from "@/components/ui/client-only-providers";
 import { AuthProvider } from "@/context/auth-context";
 import { AudioPlayerProvider } from "@/context/audio-player-context";
@@ -50,7 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className="antialiased"
+        className={`${introSerif.variable} antialiased`}
         style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
         suppressHydrationWarning
       >

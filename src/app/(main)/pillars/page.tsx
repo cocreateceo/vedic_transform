@@ -253,7 +253,7 @@ function TierSection({
     accent === "active"
       ? "text-amber-700"
       : accent === "recommended"
-        ? "text-indigo-700"
+        ? "text-[#B8860B]"
         : "text-gray-500";
   const accentIcon =
     accent === "active" ? (
