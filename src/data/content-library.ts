@@ -44,6 +44,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "8 min read",
     url: "/library/article/thought-reset-technique",
+    thumbnail: "/library-media/poster-content-thought-reset.webp",
     description:
       "Negative thought loops are one of the biggest barriers to transformation. This article teaches you the Vedic-inspired thought reset method — a practical technique for observing, interrupting, and redirecting unhelpful mental patterns using awareness and breath.",
   },
@@ -104,6 +105,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "10 min read",
     url: "/library/article/gratitude-neuroscience-vedic",
+    thumbnail: "/library-media/poster-content-gratitude.webp",
     description:
       "Gratitude is both an ancient Vedic virtue and a scientifically validated practice for well-being. This article explores how regular gratitude practice rewires neural pathways, reduces cortisol, and aligns with the Vedic principle of Santosha (contentment).",
   },
@@ -115,6 +117,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "14 min read",
     url: "/library/article/understanding-brahman",
+    thumbnail: "/library-media/poster-content-brahman-connection.webp",
     description:
       "An accessible introduction to the Vedantic concept of Brahman — the infinite, unchanging reality that underlies all existence. Learn how connecting with this universal consciousness through meditation and contemplation can bring profound peace and purpose to daily life.",
   },
@@ -555,6 +558,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "body",
     duration: "8 min read",
     url: "/library/article/the-5-step-sankalpa-morning-routine",
+    thumbnail: "/library-media/poster-content-morning-routine-5-step.webp",
     description:
       "Five Vedic steps — early waking, breath, awareness, gratitude, and visualization — that turn the first 15 minutes of the day into the engine of transformation.",
   },
@@ -566,6 +570,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "9 min read",
     url: "/library/article/sandhya-vedic-practice-of-sacred-threshold",
+    thumbnail: "/library-media/poster-content-morning-sandhya-meditation.webp",
     description:
       "Sandhya means 'junction' — the meeting point where night becomes day. A practical guide to the seven-step morning sandhya the Rishis used for three thousand years.",
   },
@@ -577,6 +582,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "9 min read",
     url: "/library/article/six-step-path-to-manifestation",
+    thumbnail: "/library-media/poster-content-path-of-manifestation.webp",
     description:
       "Manifestation in the Vedic tradition is not magic — it is a sequence. Intention, belief, alignment, action, surrender, and gratitude, each rooted in a specific sutra.",
   },
@@ -588,6 +594,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "spirit",
     duration: "10 min read",
     url: "/library/article/eight-secrets-of-manifestation-yoga-sutras",
+    thumbnail: "/library-media/poster-content-manifestation-secrets-patanjali.webp",
     description:
       "Eight Patanjali principles — from chitta vritti nirodha to faith — that explain why some manifestation practices produce real change and most produce nothing at all.",
   },
@@ -599,6 +606,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "10 min read",
     url: "/library/article/step-by-step-vedic-self-therapy",
+    thumbnail: "/library-media/poster-content-step-by-step-healing.webp",
     description:
       "Nine sequenced steps — from quieting the mind to surrender — that the Vedic tradition prescribes for healing the body through the mind, supported by modern psychoneuroimmunology.",
   },
@@ -610,6 +618,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "body",
     duration: "9 min read",
     url: "/library/article/eating-with-the-sun-ayurveda-intermittent-fasting",
+    thumbnail: "/library-media/poster-content-ayurvedic-nutrition-fasting.webp",
     description:
       "The Vedic tradition discovered intermittent fasting three thousand years before it became fashionable. Five practical principles for eating in rhythm with the digestive fire.",
   },
@@ -621,6 +630,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "body",
     duration: "9 min read",
     url: "/library/article/vata-balancing-yoga-grounding-the-wind",
+    thumbnail: "/library-media/poster-content-vata-balancing-yoga.webp",
     description:
       "Vata is the dosha of air and space — light, mobile, creative, and prone to anxiety when imbalanced. Ten asanas and a daily rhythm to ground the wind within.",
   },
@@ -632,6 +642,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "body",
     duration: "9 min read",
     url: "/library/article/pitta-balancing-yoga-cooling-the-inner-fire",
+    thumbnail: "/library-media/poster-content-pitta-balancing-yoga.webp",
     description:
       "Pitta is the dosha of fire and water — sharp, ambitious, intense, and prone to overheating. Five themed practices to cool the body, soften the heart, and balance the fire within.",
   },
@@ -643,6 +654,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "body",
     duration: "9 min read",
     url: "/library/article/kapha-balancing-yoga-awakening-the-earth",
+    thumbnail: "/library-media/poster-content-kapha-balancing-yoga.webp",
     description:
       "Kapha is the dosha of earth and water — steady, nurturing, strong, and prone to heaviness. Ten energizing asanas to awaken the inner fire and lighten the body.",
   },
@@ -654,6 +666,7 @@ export const CONTENT_LIBRARY: ContentItem[] = [
     category: "mind",
     duration: "9 min read",
     url: "/library/article/pranayama-meditation-six-step-daily-practice",
+    thumbnail: "/library-media/poster-content-pranayama-meditation-6-step.webp",
     description:
       "Six sequenced steps — from quiet sitting to positive intention — that integrate Patanjali's breath and meditation practices into a 30-minute daily session.",
   },

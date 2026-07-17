@@ -61,7 +61,28 @@ AUDIO_ART = {
     "mantra-purnamadah": f"full moon reflected whole in a still dark bowl of water, {BRAND}",
 }
 
+# Article & guide covers keyed by content-library item id.
+ARTICLE_ART = {
+    "content-thought-reset": f"tangled dark threads unraveling and dissolving into one straight golden thread of light, {BRAND}",
+    "content-gratitude": f"an open journal with marigold petals pressed on its pages, warm light spilling across a dark desk, {BRAND}",
+    "content-morning-routine-5-step": f"five small diya lamps in a row by a dawn window, the first ones already lit, {BRAND}",
+    "content-morning-sandhya-meditation": f"a temple doorway at exact twilight, day sky on one side and night stars on the other, {BRAND}",
+    "content-path-of-manifestation": f"stepping stones of soft light crossing dark still water toward a glowing horizon, {BRAND}",
+    "content-manifestation-secrets-patanjali": f"an ancient palm-leaf manuscript tied with red thread beside a glowing rock crystal, dark scholarly light, {BRAND}",
+    "content-step-by-step-healing": f"a cracked clay bowl being mended with veins of glowing gold, kintsugi style, dark background, {BRAND}",
+    "content-ayurvedic-nutrition-fasting": f"a sattvic thali of fruits, grains and herbs in a single arc of sunlight through a window, {BRAND}",
+    "content-vata-balancing-yoga": f"seated meditation silhouette rooted like a tree on warm earth, leaves drifting in gentle wind, {BRAND}",
+    "content-pitta-balancing-yoga": f"a cooling forward-fold yoga silhouette beside moonlit still water, silver-blue with soft gold, {BRAND}",
+    "content-kapha-balancing-yoga": f"an energizing sun-salutation silhouette rising toward a vigorous golden sunrise, upward motion, {BRAND}",
+    "content-pranayama-meditation-6-step": f"six thin streams of incense smoke merging into one rising column of golden light, dark room, {BRAND}",
+    "content-brahman-connection": f"a vast starry cosmos mirrored in the still silhouette of a meditator, one golden thread connecting them, {BRAND}",
+}
+
 def gen(name, prompt, w, h):
+    webp_path = os.path.join(OUT, f"{name}.webp")
+    if os.path.exists(webp_path):
+        print(f"[skip] {name}.webp exists", flush=True)
+        return
     png = os.path.join(STAGE, f"{name}.png")
     r = get_visual(prompt, png, kind="image", width=1920, height=1080, style="cinematic")
     print(f"[gen] {name}: source={r.source}", flush=True)
@@ -83,6 +104,9 @@ for cat, prompt in MANTRA_CATEGORY_ART.items():
     gen(f"mantra-cat-{cat}", prompt, 800, 800)
 
 for item_id, prompt in AUDIO_ART.items():
+    gen(f"poster-{item_id}", prompt, 1280, 720)
+
+for item_id, prompt in ARTICLE_ART.items():
     gen(f"poster-{item_id}", prompt, 1280, 720)
 
 print("ALL DONE", flush=True)
