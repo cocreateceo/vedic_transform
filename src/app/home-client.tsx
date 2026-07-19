@@ -16,6 +16,12 @@ import {
   CalendarCheck,
   BarChart3,
   Sparkles,
+  Waves,
+  Moon,
+  Target,
+  Sunrise,
+  HeartHandshake,
+  Gift,
 } from "lucide-react";
 import { PublicNavbar } from "@/components/layout/public-navbar";
 import { PublicFooter } from "@/components/layout/public-footer";
@@ -24,6 +30,7 @@ import { PILLARS } from "@/constants/pillars";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { FAQ_DATA } from "@/data/faq";
 import { TransformationFlow } from "@/components/features/landing/transformation-flow";
+import { INTENTIONS } from "@/data/intentions";
 import { MandalaBackdrop } from "@/components/features/onboarding/mandala-backdrop";
 import { PexelsVideo } from "@/components/ui/pexels-video";
 
@@ -44,6 +51,16 @@ const benefits = [
   { icon: Zap, title: "Success Energy", desc: "Activate manifestation power and abundance mindset" },
 ];
 
+/* ─── Intention card icons (keyed by intention.key) ─── */
+const intentionIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  calm: Waves,
+  sleep: Moon,
+  focus: Target,
+  energy: Sunrise,
+  healing: HeartHandshake,
+  abundance: Gift,
+};
+
 /* ─── How It Works steps ─── */
 const steps = [
   { num: 1, icon: UserPlus, title: "Sign Up", desc: "Create your free account and set your transformation intention" },
@@ -55,7 +72,9 @@ const steps = [
 export function HomePageClient() {
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const faqPreview = FAQ_DATA.slice(0, 4);
-  const testimonialPreview = TESTIMONIALS.slice(0, 3);
+  const avgRating =
+    TESTIMONIALS.reduce((sum, t) => sum + t.rating, 0) / TESTIMONIALS.length;
+  const completers = TESTIMONIALS.filter((t) => t.dayCompleted >= 48).length;
 
   return (
     <div className="min-h-screen bg-[#0f0d08] text-[#e2e8f0]">
@@ -267,6 +286,57 @@ export function HomePageClient() {
         </div>
       </section>
 
+      {/* ═══ 5.5 Begin with an Intention ═══ */}
+      <section className="py-20 bg-gradient-to-b from-[#1a1508] to-[#0f0d08]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
+            Begin with an <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Intention</span>
+          </h2>
+          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+            Not sure where to start? Start with what you need. Each intention
+            maps to the pillars and wisdom that serve it.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {INTENTIONS.map((intention) => {
+              const Icon = intentionIcons[intention.key];
+              return (
+                <Link
+                  key={intention.key}
+                  href={`/blog?tag=${encodeURIComponent(intention.blogTag)}`}
+                  className="group p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20">
+                      {Icon && <Icon className="w-5 h-5 text-orange-400" />}
+                    </span>
+                    <h3 className="text-white font-semibold group-hover:text-orange-300 transition-colors">
+                      {intention.label}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-[#94a3b8] leading-relaxed mb-4">
+                    {intention.tagline}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {intention.pillars.map((pillar) => (
+                      <span
+                        key={pillar}
+                        className="text-[11px] px-2 py-0.5 rounded-full bg-white/[0.05] text-[#94a3b8] border border-white/[0.06]"
+                      >
+                        {pillar}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="text-xs text-orange-400 group-hover:text-orange-300 font-medium flex items-center gap-1 transition-colors">
+                    Explore this path <ArrowRight className="w-3 h-3" />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* ═══ 6. Benefits Grid ═══ */}
       <section className="py-20 bg-[#0f0d08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -364,15 +434,31 @@ export function HomePageClient() {
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
             Voices of <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Transformation</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#94a3b8] mb-6 max-w-xl mx-auto">
             Hear from those who completed the 48-day Mandala
           </p>
 
+          {/* Aggregate rating — computed from the stories below, not a claim */}
+          <div className="flex items-center justify-center gap-2 mb-14 text-sm text-[#94a3b8]">
+            <span className="flex gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-4 h-4 ${i < Math.round(avgRating) ? "text-amber-400 fill-amber-400" : "text-gray-600"}`}
+                />
+              ))}
+            </span>
+            <span className="text-white font-semibold">{avgRating.toFixed(1)}</span>
+            <span>
+              average from featured stories &middot; {completers} of {TESTIMONIALS.length} completed all 48 days
+            </span>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonialPreview.map((t) => (
+            {TESTIMONIALS.map((t) => (
               <div
                 key={t.id}
-                className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]"
+                className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] flex flex-col"
               >
                 {/* Stars */}
                 <div className="flex gap-1 mb-4">
@@ -383,10 +469,23 @@ export function HomePageClient() {
                     />
                   ))}
                 </div>
-                <p className="text-[#94a3b8] text-sm leading-relaxed mb-6 line-clamp-5">
+                <p className="text-[#94a3b8] text-sm leading-relaxed mb-4 line-clamp-5">
                   &ldquo;{t.quote}&rdquo;
                 </p>
-                <div className="flex items-center gap-3">
+
+                {/* Pillars this practitioner leaned on */}
+                <div className="flex flex-wrap gap-1.5 mb-5">
+                  {t.topPillars.slice(0, 2).map((slug) => (
+                    <span
+                      key={slug}
+                      className="text-[11px] px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-300/90 border border-orange-500/20 capitalize"
+                    >
+                      {slug.replace(/-/g, " ")}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3 mt-auto">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
                     {t.name.charAt(0)}
                   </div>
@@ -397,6 +496,15 @@ export function HomePageClient() {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/testimonials"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white bg-white/[0.05] border border-white/[0.1] hover:bg-white/[0.1] hover:border-orange-500/30 transition-all"
+            >
+              Read all transformation stories <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>

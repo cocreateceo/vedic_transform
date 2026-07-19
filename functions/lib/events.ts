@@ -25,6 +25,7 @@ export const EventType = {
   BRIEF_VIEWED: 'brief.viewed',
   DOSHA_COMPLETED_ANON: 'dosha.completed_anonymous',
   ADMIN_USER_VIEWED: 'admin.user_viewed',
+  NEWSLETTER_SUBSCRIBED: 'newsletter.subscribed',
 } as const;
 
 export type EventTypeLiteral = typeof EventType[keyof typeof EventType];

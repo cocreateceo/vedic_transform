@@ -318,6 +318,14 @@ export default $config({
       },
     });
 
+    // Newsletter signups — public email capture from footer/blog/landing.
+    // Email is the partition key (idempotent re-subscribe). Consumed later
+    // by whatever sends the actual letters (SES campaign, Resend, etc.).
+    const newsletterSubscribers = new sst.aws.Dynamo("NewsletterSubscribers", {
+      fields: { email: "string" },
+      primaryIndex: { hashKey: "email" },
+    });
+
     // Subscriptions (M1, scaffold). One row per user; absence = free tier.
     // A future payment-gateway webhook flips plan/status/currentPeriodEnd.
     const subscriptions = new sst.aws.Dynamo("Subscriptions", {
@@ -624,6 +632,12 @@ export default $config({
     api.route("GET /data/dosha-test/anonymous", {
       handler: "functions/data/dosha-test-anonymous.handler",
       link: [anonymousDoshaResults, events],
+    });
+
+    // ── Newsletter (public, no auth) ────────────────────────────
+    api.route("POST /newsletter/subscribe", {
+      handler: "functions/data/newsletter.handler",
+      link: [newsletterSubscribers, events],
     });
 
     // ── Web Push (P0-1) ─────────────────────────────────────────

@@ -22,6 +22,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "CohortMembers": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "ContentProgress": {
       "name": string
       "type": "sst.aws.Dynamo"
@@ -74,6 +78,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "NewsletterSubscribers": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "Notifications": {
       "name": string
       "type": "sst.aws.Dynamo"
@@ -86,6 +94,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "Referrals": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "ReminderSettings": {
       "name": string
       "type": "sst.aws.Dynamo"
@@ -95,6 +107,10 @@ declare module "sst" {
       "type": "sst.aws.Dynamo"
     }
     "Streaks": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "Subscriptions": {
       "name": string
       "type": "sst.aws.Dynamo"
     }

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Clock, Calendar, BookOpen, Brain, Sparkles, Dumbbell, FlaskConical, Leaf } from "lucide-react";
+import { Clock, Calendar, BookOpen, Brain, Sparkles, Dumbbell, FlaskConical, Leaf, Search, Tag } from "lucide-react";
 import { BLOG_POSTS, type BlogPost } from "@/data/blog-posts";
 import { PexelsImage } from "@/components/ui/pexels-image";
+import { NewsletterSignup } from "@/components/features/newsletter-signup";
 
 const categories = [
   { key: "all", label: "All" },
@@ -79,22 +81,73 @@ function ArticleCard({ post }: { post: BlogPost }) {
               {formatDate(post.date)}
             </span>
           </div>
+
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[11px] px-2 py-0.5 rounded-full bg-white/[0.05] text-[#94a3b8] border border-white/[0.06]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </Link>
   );
 }
 
+const PAGE_SIZE = 9;
+
 export function BlogPageClient() {
+  const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  const filtered =
-    activeCategory === "all"
-      ? BLOG_POSTS
-      : BLOG_POSTS.filter((p) => p.category === activeCategory);
+  // Deep-link support: /blog?tag=sleep, ?category=spirit, ?q=mantra.
+  // Applied on mount (not render) — the page is statically prerendered, so
+  // params only exist client-side.
+  useEffect(() => {
+    const tag = searchParams.get("tag");
+    const category = searchParams.get("category");
+    const q = searchParams.get("q");
+    if (tag) setActiveTag(tag);
+    if (category) setActiveCategory(category);
+    if (q) setQuery(q);
+  }, [searchParams]);
 
-  const featured = filtered[0];
-  const rest = filtered.slice(1);
+  // Newest first — the featured slot should always show the latest story.
+  const sorted = useMemo(
+    () => [...BLOG_POSTS].sort((a, b) => b.date.localeCompare(a.date)),
+    [],
+  );
+
+  const allTags = useMemo(
+    () => Array.from(new Set(sorted.flatMap((p) => p.tags))).sort(),
+    [sorted],
+  );
+
+  const q = query.trim().toLowerCase();
+  const filtered = sorted.filter((p) => {
+    if (activeCategory !== "all" && p.category !== activeCategory) return false;
+    if (activeTag && !p.tags.includes(activeTag)) return false;
+    if (q) {
+      const haystack = `${p.title} ${p.excerpt} ${p.tags.join(" ")}`.toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const resetPaging = () => setVisibleCount(PAGE_SIZE);
+
+  const visible = filtered.slice(0, visibleCount);
+  const featured = visible[0];
+  const rest = visible.slice(1);
   const featuredCat = featured ? categoryColors[featured.category] : null;
   const FeaturedIcon = featured ? categoryIcons[featured.category] : null;
 
@@ -119,14 +172,34 @@ export function BlogPageClient() {
         </div>
       </section>
 
-      {/* Category Filters */}
+      {/* Search + Filters */}
       <section className="bg-[#0f0d08] border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
+          {/* Search */}
+          <div className="relative max-w-md mx-auto">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748b]" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                resetPaging();
+              }}
+              placeholder="Search articles — mantra, dosha, sleep..."
+              aria-label="Search articles"
+              className="w-full pl-11 pr-4 py-2.5 rounded-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-[#64748b] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
+            />
+          </div>
+
+          {/* Category filters */}
           <div className="flex flex-wrap gap-2 justify-center">
             {categories.map((cat) => (
               <button
                 key={cat.key}
-                onClick={() => setActiveCategory(cat.key)}
+                onClick={() => {
+                  setActiveCategory(cat.key);
+                  resetPaging();
+                }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
                   activeCategory === cat.key
                     ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
@@ -134,6 +207,27 @@ export function BlogPageClient() {
                 }`}
               >
                 {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Tag filters */}
+          <div className="flex flex-wrap gap-1.5 justify-center items-center">
+            <Tag className="w-3.5 h-3.5 text-[#64748b]" />
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => {
+                  setActiveTag(activeTag === tag ? null : tag);
+                  resetPaging();
+                }}
+                className={`text-xs px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
+                  activeTag === tag
+                    ? "bg-orange-500/20 text-orange-300 border-orange-500/40"
+                    : "bg-white/[0.03] text-[#94a3b8] border-white/[0.06] hover:text-white hover:bg-white/[0.08]"
+                }`}
+              >
+                {tag}
               </button>
             ))}
           </div>
@@ -145,7 +239,7 @@ export function BlogPageClient() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
             <p className="text-center text-[#94a3b8] py-20">
-              No articles found in this category yet. Check back soon.
+              No articles match your search. Try a different term or clear the filters.
             </p>
           ) : (
             <>
@@ -194,8 +288,34 @@ export function BlogPageClient() {
                   ))}
                 </div>
               )}
+
+              {/* Show more */}
+              {filtered.length > visibleCount && (
+                <div className="text-center mt-10">
+                  <button
+                    onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                    className="px-6 py-3 rounded-full text-sm font-semibold text-white bg-white/[0.05] border border-white/[0.1] hover:bg-white/[0.1] hover:border-orange-500/30 transition-all cursor-pointer"
+                  >
+                    Show more articles ({filtered.length - visibleCount} remaining)
+                  </button>
+                </div>
+              )}
             </>
           )}
+
+          {/* Newsletter */}
+          <div className="mt-16 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] p-8 sm:p-10 text-center">
+            <h2 className="text-2xl font-bold text-white mb-2">
+              Keep the wisdom coming
+            </h2>
+            <p className="text-[#94a3b8] mb-6 max-w-xl mx-auto">
+              One quiet letter a week — a practice to try, a verse to sit with,
+              and the science behind it. No noise, unsubscribe anytime.
+            </p>
+            <div className="flex justify-center">
+              <NewsletterSignup source="blog" compact />
+            </div>
+          </div>
         </div>
       </section>
     </div>

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { BlogPageClient } from "./blog-client";
 import { pageMetadata } from "@/lib/seo";
 
@@ -9,5 +10,11 @@ export const metadata = pageMetadata({
 });
 
 export default function BlogPage() {
-  return <BlogPageClient />;
+  // Suspense boundary required: BlogPageClient reads useSearchParams()
+  // for /blog?tag=... deep links from the intention cards.
+  return (
+    <Suspense>
+      <BlogPageClient />
+    </Suspense>
+  );
 }
