@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -6,34 +7,34 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="text-[#e2e8f0]">
+    <div className="bg-[#FFFEF5] text-[#1a1a1a]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-16">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#1E293B] py-16">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
-              Terms
-            </span>{" "}
-            of Service
+          <p className="text-[#FF9933] text-xs font-bold uppercase tracking-[0.2em] mb-4">
+            Legal
+          </p>
+          <h1 className={`text-4xl sm:text-5xl font-semibold text-white mb-4 ${SERIF_CLASS}`}>
+            Terms of Service
           </h1>
           <p className="text-[#94a3b8]">Last updated: March 2026</p>
         </div>
       </section>
 
       {/* Content */}
-      <section className="py-16 bg-[#0f0d08]">
+      <section className="py-16 bg-[#FFFEF5]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-10">
-            <div className="p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
-              <p className="text-[#94a3b8] leading-relaxed">
+            <div className="p-8 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm">
+              <p className="text-[#64748b] leading-relaxed">
                 Welcome to 10X Vedic. By accessing or using our platform, you agree to be bound by these Terms of Service. Please read them carefully before using our services.
               </p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Acceptance of Terms</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Acceptance of Terms</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>
                   By creating an account or using any part of the 10X Vedic platform, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree with any part of these terms, you must not use our services.
                 </p>
@@ -44,8 +45,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Account Registration</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Account Registration</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>
                   To access certain features of the platform, you must create an account. You agree to provide accurate, current, and complete information during registration and to update such information to keep it accurate and complete.
                 </p>
@@ -56,8 +57,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">User Responsibilities</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>User Responsibilities</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>As a user of the 10X Vedic platform, you agree to:</p>
                 <ul className="list-disc list-inside space-y-2 ml-2">
                   <li>Use the platform only for lawful purposes and in accordance with these terms</li>
@@ -71,8 +72,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Intellectual Property</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Intellectual Property</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>
                   All content on the 10X Vedic platform, including but not limited to text, graphics, logos, icons, images, audio clips, digital downloads, and software, is the property of 10X Vedic or its content providers and is protected by international copyright, trademark, and other intellectual property laws.
                 </p>
@@ -83,8 +84,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Acceptable Use</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Acceptable Use</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>You agree not to:</p>
                 <ul className="list-disc list-inside space-y-2 ml-2">
                   <li>Use the platform in any way that violates applicable laws or regulations</li>
@@ -99,8 +100,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Disclaimer</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Disclaimer</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>
                   The 10X Vedic platform and its content are provided for educational and informational purposes only. The practices, techniques, and information shared through the 48-day Mandala program are rooted in Vedic traditions and are not intended as a substitute for professional medical, psychological, or psychiatric advice, diagnosis, or treatment.
                 </p>
@@ -114,8 +115,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Limitation of Liability</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Limitation of Liability</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>
                   To the fullest extent permitted by applicable law, 10X Vedic and its affiliates, officers, directors, employees, and agents shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits, data, or goodwill, arising out of or in connection with your use of the platform.
                 </p>
@@ -126,8 +127,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Account Termination</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Account Termination</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>
                   We reserve the right to suspend or terminate your account at any time if we reasonably believe you have violated these Terms of Service. You may also delete your account at any time through your account settings.
                 </p>
@@ -138,8 +139,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Changes to Terms</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Changes to Terms</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>
                   We reserve the right to modify these Terms of Service at any time. We will provide notice of material changes by posting the updated terms on our website and updating the &quot;Last updated&quot; date. Your continued use of the platform after changes are posted constitutes acceptance of the revised terms.
                 </p>
@@ -150,8 +151,8 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Governing Law</h2>
-              <div className="space-y-4 text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Governing Law</h2>
+              <div className="space-y-4 text-[#64748b] leading-relaxed">
                 <p>
                   These Terms of Service shall be governed by and construed in accordance with applicable laws. Any disputes arising from or relating to these terms or your use of the platform shall be resolved through good-faith negotiation. If resolution cannot be reached, disputes shall be submitted to binding arbitration in accordance with applicable rules.
                 </p>
@@ -159,13 +160,13 @@ export default function TermsPage() {
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">Contact</h2>
-              <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
-                <p className="text-[#94a3b8] leading-relaxed">
+              <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-4 ${SERIF_CLASS}`}>Contact</h2>
+              <div className="p-6 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm">
+                <p className="text-[#64748b] leading-relaxed">
                   If you have any questions about these Terms of Service, please contact us at:
                 </p>
-                <p className="mt-3 text-white">
-                  <a href="mailto:support@10xvedic.com" className="text-orange-400 hover:text-orange-300 transition-colors">
+                <p className="mt-3">
+                  <a href="mailto:support@10xvedic.com" className="text-[#E8860D] hover:text-[#FF9933] transition-colors">
                     support@10xvedic.com
                   </a>
                 </p>

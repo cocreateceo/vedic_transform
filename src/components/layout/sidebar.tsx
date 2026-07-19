@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { useAuth } from "@/context/auth-context";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -55,9 +56,9 @@ export function Sidebar() {
   const isAdmin = (user as { role?: string } | null)?.role === "admin";
 
   return (
-    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[var(--color-bg-surface)] border-r-2 border-[#DAA520]/50">
+    <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[#0F172A] border-r border-[#FF9933]/20">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-[var(--color-border)]">
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
         <Image
           src="/images/logo.jpg"
           alt="10X Vedic Logo"
@@ -67,10 +68,10 @@ export function Sidebar() {
         />
         <div>
           {/* Not an h1 — the page content owns the document heading. */}
-          <p className="font-bold text-lg bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+          <p className={cn("font-bold text-xl text-white", SERIF_CLASS)}>
             10X Vedic
           </p>
-          <p className="text-xs text-gray-500">48-Day Transformation</p>
+          <p className="text-xs text-[#94a3b8]">48-Day Transformation</p>
         </div>
       </div>
 
@@ -88,8 +89,8 @@ export function Sidebar() {
                 className={cn(
                   "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all",
                   isActive
-                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25"
-                    : "text-gray-600 hover:bg-[var(--color-card-bg)] hover:text-[var(--color-primary)]"
+                    ? "bg-[#FF9933] text-white shadow-lg shadow-orange-500/25"
+                    : "text-[#94a3b8] hover:bg-white/[0.06] hover:text-white"
                 )}
               >
                 <item.icon className="w-5 h-5" />
@@ -101,12 +102,12 @@ export function Sidebar() {
 
         {/* Divider */}
         <div className="py-3">
-          <div className="border-t border-[var(--color-border)]"></div>
+          <div className="border-t border-white/10"></div>
         </div>
 
         {/* Secondary Nav */}
         <div className="space-y-1">
-          <p className="px-4 text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wider mb-2">
+          <p className="px-4 text-xs font-bold text-[#FFD700]/80 uppercase tracking-[0.15em] mb-2">
             Tools
           </p>
           {secondaryNav.map((item) => {
@@ -119,8 +120,8 @@ export function Sidebar() {
                 className={cn(
                   "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all",
                   isActive
-                    ? "bg-[var(--color-card-bg)] text-[var(--color-primary)]"
-                    : "text-gray-500 hover:bg-[var(--color-card-bg)] hover:text-[var(--color-primary)]"
+                    ? "bg-white/[0.08] text-[#FFB366]"
+                    : "text-[#94a3b8] hover:bg-white/[0.06] hover:text-white"
                 )}
               >
                 <item.icon className="w-4 h-4" />
@@ -138,8 +139,8 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all mt-2",
                 pathname === "/admin" || pathname.startsWith("/admin/")
-                  ? "bg-slate-900 text-white"
-                  : "text-gray-500 hover:bg-[var(--color-card-bg)] hover:text-[var(--color-primary)]"
+                  ? "bg-white/[0.1] text-white"
+                  : "text-[#94a3b8] hover:bg-white/[0.06] hover:text-white"
               )}
             >
               <Shield className="w-4 h-4" />
@@ -150,13 +151,13 @@ export function Sidebar() {
       </nav>
 
       {/* Bottom section */}
-      <div className="p-4 border-t border-[var(--color-border)]">
-        <div className="vedic-card p-4 bg-gradient-to-br from-orange-50 to-amber-50">
-          <p className="text-xs text-orange-800 font-medium">Daily Wisdom</p>
-          <p className="text-sm text-orange-900 mt-2 italic">
+      <div className="p-4 border-t border-white/10">
+        <div className="p-4 rounded-2xl bg-white/[0.05] border border-[#FFD700]/20">
+          <p className="text-xs text-[#FFD700]/90 font-bold uppercase tracking-[0.15em]">Daily Wisdom</p>
+          <p className="text-sm text-[#e2e8f0] mt-2 italic">
             &quot;The mind is everything. What you think you become.&quot;
           </p>
-          <p className="text-xs text-orange-600 mt-1">— Buddha</p>
+          <p className="text-xs text-[#94a3b8] mt-1">— Buddha</p>
         </div>
       </div>
     </aside>

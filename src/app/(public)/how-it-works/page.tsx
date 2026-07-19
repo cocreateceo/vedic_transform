@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { getPillarsByCategory } from "@/constants/pillars";
 import { pageMetadata, SITE_URL, SITE_NAME } from "@/lib/seo";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 export const metadata = pageMetadata({
   title: "How It Works — 10X Vedic Transform",
@@ -75,7 +76,7 @@ export default function HowItWorksPage() {
   const mindPillars = getPillarsByCategory("mind");
   const spiritPillars = getPillarsByCategory("spirit");
   return (
-    <div className="text-[#e2e8f0]">
+    <div className="bg-[#FFFEF5] text-[#1a1a1a]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -94,14 +95,15 @@ export default function HowItWorksPage() {
         }}
       />
       {/* ═══ Hero ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#1E293B]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-            <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
-              Your Transformation Path
-            </span>
+          <p className="text-[#FF9933] text-xs font-bold uppercase tracking-[0.2em] mb-4">
+            The Method
+          </p>
+          <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight text-white ${SERIF_CLASS}`}>
+            Your Transformation Path
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-[#94a3b8] max-w-2xl mx-auto leading-relaxed">
             A clear, step-by-step guide to your 48-day Mandala journey — from
@@ -111,15 +113,12 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ 5-Step Timeline ═══ */}
-      <section className="py-20 bg-[#0f0d08]">
+      <section className="py-20 bg-[#FFFEF5]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            The{" "}
-            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">
-              5 Steps
-            </span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            The <span className="text-[#E8860D]">5 Steps</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             Your roadmap from day one to transformation complete
           </p>
 
@@ -137,14 +136,14 @@ export default function HowItWorksPage() {
                       {step.num}
                     </div>
                     {/* Content */}
-                    <div className="flex-1 p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
+                    <div className="flex-1 p-6 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm">
                       <div className="flex items-center gap-3 mb-3">
                         <IconComp className="w-5 h-5 text-orange-400" />
-                        <h3 className="text-lg font-semibold text-white">
+                        <h3 className="text-lg font-semibold text-[#1a1a1a]">
                           {step.title}
                         </h3>
                       </div>
-                      <p className="text-sm text-[#94a3b8] leading-relaxed">
+                      <p className="text-sm text-[#64748b] leading-relaxed">
                         {step.description}
                       </p>
                     </div>
@@ -157,15 +156,12 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ Daily Routine ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="py-20 bg-[#FFF9F0]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            A Day in Your{" "}
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
-              Journey
-            </span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            A Day in Your <span className="text-[#E8860D]">Journey</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             A typical day of Vedic transformation practice
           </p>
 
@@ -175,20 +171,20 @@ export default function HowItWorksPage() {
               return (
                 <div
                   key={item.activity}
-                  className="p-5 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-colors"
+                  className="p-5 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm hover:border-orange-500/30 transition-colors"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-10 rounded-xl bg-orange-500/15 flex items-center justify-center">
                       <IconComp className="w-5 h-5 text-orange-400" />
                     </div>
                     <div>
-                      <p className="text-amber-400 text-sm font-medium">
+                      <p className="text-[#E8860D] text-sm font-medium">
                         {item.time}
                       </p>
-                      <p className="text-white font-semibold">{item.activity}</p>
+                      <p className="text-[#1a1a1a] font-semibold">{item.activity}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-[#94a3b8]">{item.desc}</p>
+                  <p className="text-sm text-[#64748b]">{item.desc}</p>
                 </div>
               );
             })}
@@ -197,15 +193,12 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ Pillar Categories ═══ */}
-      <section className="py-20 bg-[#0f0d08]">
+      <section className="py-20 bg-[#FFFEF5]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            The{" "}
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
-              Three Dimensions
-            </span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            The <span className="text-[#E8860D]">Three Dimensions</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             Body, Mind, and Spirit — the pillars of holistic transformation
           </p>
 
@@ -214,28 +207,28 @@ export default function HowItWorksPage() {
               {
                 title: "Body",
                 pillars: bodyPillars,
-                color: "text-red-400",
+                color: "text-red-600",
                 border: "border-red-500/20",
                 iconBg: "bg-red-500/15",
               },
               {
                 title: "Mind",
                 pillars: mindPillars,
-                color: "text-orange-400",
+                color: "text-[#E8860D]",
                 border: "border-orange-500/20",
                 iconBg: "bg-orange-500/15",
               },
               {
                 title: "Spirit",
                 pillars: spiritPillars,
-                color: "text-amber-400",
+                color: "text-amber-600",
                 border: "border-amber-500/20",
                 iconBg: "bg-amber-500/15",
               },
             ].map((cat) => (
               <div
                 key={cat.title}
-                className={`p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border ${cat.border}`}
+                className={`p-6 rounded-2xl bg-white shadow-sm border ${cat.border}`}
               >
                 <h3 className={`text-xl font-bold ${cat.color} mb-4`}>
                   {cat.title}
@@ -255,10 +248,10 @@ export default function HowItWorksPage() {
                           />
                         </div>
                         <div>
-                          <p className="text-white text-sm font-medium">
+                          <p className="text-[#1a1a1a] text-sm font-medium">
                             {p.name}
                           </p>
-                          <p className="text-xs text-[#94a3b8]">
+                          <p className="text-xs text-[#64748b]">
                             {p.sanskritName}
                           </p>
                         </div>
@@ -273,29 +266,26 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ Requirements ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="py-20 bg-[#FFF9F0]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            What You{" "}
-            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">
-              Need
-            </span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            What You <span className="text-[#E8860D]">Need</span>
           </h2>
-          <p className="text-[#94a3b8] mb-10 max-w-xl mx-auto">
+          <p className="text-[#64748b] mb-10 max-w-xl mx-auto">
             The journey is simple. The commitment is what matters.
           </p>
 
-          <div className="inline-flex flex-col sm:flex-row items-center gap-6 sm:gap-10 p-8 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06]">
+          <div className="inline-flex flex-col sm:flex-row items-center gap-6 sm:gap-10 p-8 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm">
             {[
               { value: "60 min/day", label: "Daily Time" },
               { value: "Open Mind", label: "Mindset" },
               { value: "Consistency", label: "Commitment" },
             ].map((req) => (
               <div key={req.label} className="text-center">
-                <p className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
+                <p className="text-2xl font-bold text-[#E8860D]">
                   {req.value}
                 </p>
-                <p className="text-sm text-[#94a3b8] mt-1">{req.label}</p>
+                <p className="text-sm text-[#64748b] mt-1">{req.label}</p>
               </div>
             ))}
           </div>
@@ -303,13 +293,11 @@ export default function HowItWorksPage() {
       </section>
 
       {/* ═══ CTA ═══ */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1508] to-amber-900/40" />
-        <div className="absolute inset-0 bg-[#0f0d08]/40" />
+      <section className="relative py-24 overflow-hidden bg-gradient-to-br from-[#0F172A] to-[#1E293B]">
         <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
+          <h2 className={`text-3xl sm:text-5xl font-semibold text-white mb-6 ${SERIF_CLASS}`}>
             Ready to{" "}
             <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
               Begin?

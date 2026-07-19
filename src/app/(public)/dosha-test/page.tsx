@@ -7,6 +7,7 @@ import {
   PittaGlyph,
   KaphaGlyph,
 } from "@/components/features/dosha/dosha-visuals";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "Free Dosha Test — Discover Your Ayurvedic Constitution",
@@ -49,14 +50,15 @@ const doshas = [
 
 export default function DoshaTestLandingPage() {
   return (
-    <div className="text-[#e2e8f0]">
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-16 sm:py-24">
+    <div className="text-[#1a1a1a]">
+      {/* Hero — navy band */}
+      <section className="relative overflow-hidden bg-[#0F172A] py-16 sm:py-24">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block text-xs uppercase tracking-wider text-orange-300 mb-4">
+          <span className="inline-block text-[#FF9933] text-xs font-bold uppercase tracking-[0.2em] mb-4">
             Free · 2 minutes · No signup
           </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-semibold text-white mb-6 leading-tight ${SERIF_CLASS}`}>
             What is your{" "}
             <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
               Vedic Dosha?
@@ -79,12 +81,12 @@ export default function DoshaTestLandingPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-[#0f0d08]">
+      <section className="py-16 bg-[#FFFEF5]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 text-center">
+          <h2 className={`text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-2 text-center ${SERIF_CLASS}`}>
             The three Doshas
           </h2>
-          <p className="text-center text-[#94a3b8] mb-10 max-w-2xl mx-auto">
+          <p className="text-center text-[#64748b] mb-10 max-w-2xl mx-auto">
             Ayurveda holds that every person is a unique combination of three doshas. Knowing yours
             shapes what you eat, when you sleep, and how you practice.
           </p>
@@ -95,17 +97,17 @@ export default function DoshaTestLandingPage() {
               return (
                 <div
                   key={d.name}
-                  className="p-6 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-orange-500/30 transition-all"
+                  className="p-6 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm hover:border-orange-500/30 transition-all"
                 >
                   <div className="w-16 h-16 mb-4">
                     <Glyph />
                   </div>
-                  <div className="text-xs text-orange-300 mb-1">{d.element}</div>
+                  <div className="text-xs text-[#E8860D] mb-1">{d.element}</div>
                   <div className="flex items-baseline gap-2 mb-2">
-                    <h3 className="text-xl font-bold text-white">{d.name}</h3>
-                    <span className="text-amber-300 text-lg">{d.sanskrit}</span>
+                    <h3 className="text-xl font-bold text-[#1a1a1a]">{d.name}</h3>
+                    <span className="text-[#E8860D] text-lg">{d.sanskrit}</span>
                   </div>
-                  <p className="text-sm text-[#94a3b8]">{d.trait}</p>
+                  <p className="text-sm text-[#64748b]">{d.trait}</p>
                 </div>
               );
             })}
@@ -113,13 +115,13 @@ export default function DoshaTestLandingPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="py-16 bg-[#FFF9F0]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Sparkles className="w-10 h-10 text-amber-400 mx-auto mb-4" />
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+          <Sparkles className="w-10 h-10 text-[#E8860D] mx-auto mb-4" />
+          <h2 className={`text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-3 ${SERIF_CLASS}`}>
             After the test
           </h2>
-          <p className="text-[#94a3b8] mb-6 max-w-xl mx-auto">
+          <p className="text-[#64748b] mb-6 max-w-xl mx-auto">
             You&apos;ll get a shareable result with personalized recommendations and the option to
             start the full 48-day Vedic transformation.
           </p>

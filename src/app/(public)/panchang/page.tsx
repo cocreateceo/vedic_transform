@@ -2,6 +2,7 @@ import { Sunrise, Moon, Star, Link2, Clock, CalendarDays } from "lucide-react";
 import { getSunTimes } from "@/lib/solar/sun-times";
 import { getPanchang } from "@/lib/panchang";
 import { pageMetadata } from "@/lib/seo";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 // Recompute hourly so "today" stays current without a full rebuild.
 export const revalidate = 3600;
@@ -46,33 +47,33 @@ export default function PanchangPage() {
   ];
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-12 text-[#e2e8f0]">
-      <div className="text-xs font-semibold tracking-widest text-amber-500">
+    <main className="mx-auto max-w-2xl px-4 py-12 text-[#1a1a1a]">
+      <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#E8860D]">
         PANCHANG · पञ्चाङ्ग
       </div>
-      <h1 className="mt-2 text-3xl font-bold">Today&apos;s Panchang</h1>
-      <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#94a3b8]">
+      <h1 className={`mt-2 text-3xl font-semibold text-[#1a1a1a] ${SERIF_CLASS}`}>Today&apos;s Panchang</h1>
+      <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#64748b]">
         <span>{DELHI.name}</span>
         <span>·</span>
         <span>{dateLabel}</span>
         <span className="inline-flex items-center gap-1">
-          <Sunrise className="h-4 w-4 text-amber-400" /> {sunriseLabel}
+          <Sunrise className="h-4 w-4 text-[#E8860D]" /> {sunriseLabel}
         </span>
       </p>
 
-      <div className="mt-8 divide-y divide-white/10 rounded-2xl border border-amber-500/20 bg-black/20">
+      <div className="mt-8 divide-y divide-[#1a1a1a]/8 rounded-2xl border border-[#FF9933]/20 bg-white shadow-sm">
         {rows.map((r) => {
           const Icon = r.icon;
           return (
             <div key={r.label} className="flex items-center justify-between px-5 py-4">
-              <span className="flex items-center gap-3 text-sm text-[#94a3b8]">
-                <Icon className="h-4 w-4 text-amber-400" />
+              <span className="flex items-center gap-3 text-sm text-[#64748b]">
+                <Icon className="h-4 w-4 text-[#E8860D]" />
                 {r.label}
               </span>
               <span className="text-right">
-                <span className="font-semibold text-white">{r.value}</span>
+                <span className="font-semibold text-[#1a1a1a]">{r.value}</span>
                 {r.sub && (
-                  <span className="block text-xs text-[#94a3b8]">{r.sub}</span>
+                  <span className="block text-xs text-[#64748b]">{r.sub}</span>
                 )}
               </span>
             </div>

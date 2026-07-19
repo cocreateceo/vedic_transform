@@ -83,7 +83,7 @@ export default async function DoshaResultPage({
   const secondary = DOSHA_INFO[result.secondary];
 
   return (
-    <div className="min-h-screen text-[#e2e8f0] bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+    <div className="min-h-screen text-[#e2e8f0] bg-gradient-to-b from-[#0F172A] to-[#1E293B]">
       <section className="relative overflow-hidden py-12 sm:py-16">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

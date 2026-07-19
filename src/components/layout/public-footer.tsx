@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/config/site.config";
 import { NewsletterSignup } from "@/components/features/newsletter-signup";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 const footerLinks = {
   company: {
@@ -40,69 +41,71 @@ const footerLinks = {
 
 export function PublicFooter() {
   return (
-    <footer className="bg-[var(--color-bg-surface)] border-t border-[var(--color-border)]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        {/* Logo and name */}
-        <div className="mb-8">
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/images/logo.jpg"
-              alt="10X Vedic"
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
-            <span className="text-lg font-bold text-[var(--color-text-primary)]">
-              10X Vedic
-            </span>
-          </Link>
-          <p className="mt-2 text-sm text-[var(--color-text-secondary)] max-w-md">
-            {siteConfig.description}
-          </p>
-        </div>
-
-        {/* Link columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {Object.values(footerLinks).map((section) => (
-            <div key={section.title}>
-              <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-3">
-                {section.title}
-              </h3>
-              <ul className="space-y-2">
-                {section.links.map((link) => (
-                  <li key={link.label}>
-                    {"external" in link && link.external ? (
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
+    <footer className="bg-[#0F172A] text-[#94a3b8]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12">
+          {/* Brand */}
+          <div>
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src="/images/logo.jpg"
+                alt="10X Vedic"
+                width={36}
+                height={36}
+                className="rounded-full"
+              />
+              <span
+                className={`text-2xl font-bold text-white ${SERIF_CLASS}`}
+              >
+                10X Vedic
+              </span>
+            </Link>
+            <p className="mt-3 text-sm leading-relaxed max-w-xs">
+              {siteConfig.description}
+            </p>
+            <div className="mt-6">
+              <NewsletterSignup source="footer" />
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Newsletter */}
-        <div className="mt-12 pt-8 border-t border-[var(--color-border)]">
-          <NewsletterSignup source="footer" />
+          {/* Link columns */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {Object.values(footerLinks).map((section) => (
+              <div key={section.title}>
+                <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-[#FFD700] mb-4">
+                  {section.title}
+                </h3>
+                <ul className="space-y-2.5">
+                  {section.links.map((link) => (
+                    <li key={link.label}>
+                      {"external" in link && link.external ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm hover:text-white transition-colors"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.href}
+                          className="text-sm hover:text-white transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-12 pt-8 border-t border-[var(--color-border)]">
-          <p className="text-sm text-[var(--color-text-secondary)] text-center">
+        <div className="mt-14 pt-6 border-t border-white/10">
+          <p className="text-sm text-[#64748b]">
             &copy; 2026 10X Vedic. All rights reserved. | Vedic Transform
           </p>
         </div>

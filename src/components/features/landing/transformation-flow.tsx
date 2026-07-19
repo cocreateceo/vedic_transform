@@ -103,7 +103,7 @@ export function TransformationFlow() {
                     <div
                       className="px-6 py-5 rounded-2xl border"
                       style={{
-                        background: "rgba(255,255,255,0.03)",
+                        background: "#ffffff",
                         backdropFilter: "blur(12px)",
                         borderColor: `${step.color}30`,
                         boxShadow: isVisible ? `0 4px 30px ${step.color}10, inset 0 1px 0 ${step.color}15` : "none",
@@ -118,8 +118,8 @@ export function TransformationFlow() {
                           Step {i + 1}
                         </span>
                       </div>
-                      <h4 className="font-bold text-white text-lg">{step.name}</h4>
-                      <p className="text-sm text-[#94a3b8] mt-1 leading-relaxed">{step.desc}</p>
+                      <h4 className="font-bold text-[#1a1a1a] text-lg">{step.name}</h4>
+                      <p className="text-sm text-[#64748b] mt-1 leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
 
@@ -196,7 +196,7 @@ export function TransformationFlow() {
                   <div
                     className="flex-1 px-4 py-3 rounded-xl border"
                     style={{
-                      background: "rgba(255,255,255,0.03)",
+                      background: "#ffffff",
                       borderColor: `${step.color}25`,
                     }}
                   >
@@ -206,8 +206,8 @@ export function TransformationFlow() {
                     >
                       Step {i + 1}
                     </span>
-                    <h4 className="font-bold text-white text-sm">{step.name}</h4>
-                    <p className="text-xs text-[#94a3b8] mt-0.5">{step.desc}</p>
+                    <h4 className="font-bold text-[#1a1a1a] text-sm">{step.name}</h4>
+                    <p className="text-xs text-[#64748b] mt-0.5">{step.desc}</p>
                   </div>
                 </div>
               </div>

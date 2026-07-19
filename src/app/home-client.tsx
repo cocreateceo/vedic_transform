@@ -33,12 +33,13 @@ import { TransformationFlow } from "@/components/features/landing/transformation
 import { INTENTIONS } from "@/data/intentions";
 import { MandalaBackdrop } from "@/components/features/onboarding/mandala-backdrop";
 import { PexelsVideo } from "@/components/ui/pexels-video";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 /* ─── Category colors for pillar badges ─── */
 const categoryStyles: Record<string, { label: string; bg: string; text: string }> = {
-  body: { label: "Body", bg: "bg-red-500/20", text: "text-red-300" },
-  mind: { label: "Mind", bg: "bg-purple-500/20", text: "text-purple-300" },
-  spirit: { label: "Spirit", bg: "bg-amber-500/20", text: "text-amber-300" },
+  body: { label: "Body", bg: "bg-red-500/10", text: "text-red-600" },
+  mind: { label: "Mind", bg: "bg-purple-500/10", text: "text-purple-600" },
+  spirit: { label: "Spirit", bg: "bg-amber-500/10", text: "text-amber-600" },
 };
 
 /* ─── Benefits data ─── */
@@ -77,18 +78,18 @@ export function HomePageClient() {
   const completers = TESTIMONIALS.filter((t) => t.dayCompleted >= 48).length;
 
   return (
-    <div className="min-h-screen bg-[#0f0d08] text-[#e2e8f0]">
+    <div className="min-h-screen bg-[#FFFEF5] text-[#1a1a1a]">
       {/* ═══ 1. Navbar ═══ */}
       <PublicNavbar />
 
       {/* ═══ 2. Hero Section ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#1E293B]">
         {/* Looping ambient hero video — kept very dim so text stays legible */}
         <div className="absolute inset-0 opacity-30 pointer-events-none">
           <PexelsVideo slug="home-hero" showAttribution={false} className="w-full h-full" />
         </div>
         {/* Dark gradient overlay on top of the video for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0f0d08]/70 via-[#0f0d08]/50 to-[#1a1508]/85 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/70 via-[#0F172A]/50 to-[#1E293B]/85 pointer-events-none" />
         {/* Ambient glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
@@ -101,7 +102,7 @@ export function HomePageClient() {
             48-Day Vedic Transformation Program
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight">
+          <h1 className={`text-4xl sm:text-5xl lg:text-7xl font-semibold leading-tight ${SERIF_CLASS}`}>
             <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
               Transform Yourself
             </span>
@@ -139,7 +140,7 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 3. Stats Bar ═══ */}
-      <section className="bg-[#1a1510]/80 border-y border-orange-500/10">
+      <section className="bg-[#0F172A] border-y border-amber-500/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
@@ -160,12 +161,12 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 4. How It Works ═══ */}
-      <section className="py-20 bg-[#0f0d08]">
+      <section className="py-20 bg-[#FFF9F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            How It <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">Works</span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            How It <span className="text-[#E8860D]">Works</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             Four simple steps to begin your transformation journey
           </p>
 
@@ -173,15 +174,15 @@ export function HomePageClient() {
             {steps.map((step) => (
               <div
                 key={step.num}
-                className="relative p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-colors group"
+                className="relative p-6 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm hover:border-orange-500/30 transition-colors group"
               >
                 {/* Number circle */}
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm mb-4 shadow-lg shadow-orange-500/20">
                   {step.num}
                 </div>
-                <step.icon className="w-8 h-8 text-orange-400 mb-3" />
-                <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
-                <p className="text-sm text-[#94a3b8] leading-relaxed">{step.desc}</p>
+                <step.icon className="w-8 h-8 text-orange-500 mb-3" />
+                <h3 className="text-lg font-semibold text-[#1a1a1a] mb-2">{step.title}</h3>
+                <p className="text-sm text-[#64748b] leading-relaxed">{step.desc}</p>
                 {/* Connector arrow (not on last) */}
                 {step.num < 4 && (
                   <div className="hidden lg:block absolute top-1/2 -right-3 transform -translate-y-1/2 text-orange-500/40">
@@ -195,15 +196,15 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 4.5 Transformation Flow ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="py-20 bg-[#FFFEF5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
             The{" "}
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
+            <span className="text-[#E8860D]">
               48-Day Path
             </span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             Your daily transformation journey through 11 pillars
           </p>
           <TransformationFlow />
@@ -211,12 +212,12 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 5. 11 Pillars Grid ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="py-20 bg-[#FFF9F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            The <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">11 Pillars</span> of Transformation
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            The <span className="text-[#E8860D]">11 Pillars</span> of Transformation
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             A comprehensive system addressing body, mind, and spirit
           </p>
 
@@ -231,7 +232,7 @@ export function HomePageClient() {
                   className="group block"
                 >
                   <div
-                    className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border transition-all hover:-translate-y-1 hover:shadow-lg h-full"
+                    className="p-6 rounded-2xl bg-white border shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg h-full"
                     style={{
                       borderColor: `${pillar.color}20`,
                       boxShadow: "none",
@@ -254,10 +255,10 @@ export function HomePageClient() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-white font-bold text-base">{pillar.name}</h3>
+                          <h3 className="text-[#1a1a1a] font-bold text-base">{pillar.name}</h3>
                         </div>
                         <p className="text-xs font-medium mb-2" style={{ color: pillar.color }}>{pillar.sanskritName}</p>
-                        <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">{pillar.description}</p>
+                        <p className="text-sm text-[#64748b] leading-relaxed mb-3">{pillar.description}</p>
                         <div className="flex items-center gap-3">
                           <span className={`inline-block text-xs px-2.5 py-0.5 rounded-full ${cat.bg} ${cat.text} font-medium`}>
                             {cat.label}
@@ -267,14 +268,14 @@ export function HomePageClient() {
                               {pillar.defaultDurationMinutes} min
                             </span>
                           )}
-                          <span className="text-xs text-amber-500/70">
+                          <span className="text-xs text-amber-600/80">
                             +{pillar.karmaPointsBase} karma
                           </span>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-end">
-                      <span className="text-xs text-orange-400 group-hover:text-orange-300 font-medium flex items-center gap-1 transition-colors">
+                    <div className="mt-3 pt-3 border-t border-[#1a1a1a]/8 flex items-center justify-end">
+                      <span className="text-xs text-[#E8860D] group-hover:text-[#FF9933] font-medium flex items-center gap-1 transition-colors">
                         Learn more <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -287,12 +288,12 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 5.5 Begin with an Intention ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#1a1508] to-[#0f0d08]">
+      <section className="py-20 bg-[#FFFEF5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            Begin with an <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Intention</span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            Begin with an <span className="text-[#E8860D]">Intention</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             Not sure where to start? Start with what you need. Each intention
             maps to the pillars and wisdom that serve it.
           </p>
@@ -304,30 +305,30 @@ export function HomePageClient() {
                 <Link
                   key={intention.key}
                   href={`/blog?tag=${encodeURIComponent(intention.blogTag)}`}
-                  className="group p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all"
+                  className="group p-6 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm hover:border-orange-500/30 transition-all"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20">
                       {Icon && <Icon className="w-5 h-5 text-orange-400" />}
                     </span>
-                    <h3 className="text-white font-semibold group-hover:text-orange-300 transition-colors">
+                    <h3 className="text-[#1a1a1a] font-semibold group-hover:text-[#E8860D] transition-colors">
                       {intention.label}
                     </h3>
                   </div>
-                  <p className="text-sm text-[#94a3b8] leading-relaxed mb-4">
+                  <p className="text-sm text-[#64748b] leading-relaxed mb-4">
                     {intention.tagline}
                   </p>
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {intention.pillars.map((pillar) => (
                       <span
                         key={pillar}
-                        className="text-[11px] px-2 py-0.5 rounded-full bg-white/[0.05] text-[#94a3b8] border border-white/[0.06]"
+                        className="text-[11px] px-2 py-0.5 rounded-full bg-[#FFF9F0] text-[#64748b] border border-[#FF9933]/15"
                       >
                         {pillar}
                       </span>
                     ))}
                   </div>
-                  <span className="text-xs text-orange-400 group-hover:text-orange-300 font-medium flex items-center gap-1 transition-colors">
+                  <span className="text-xs text-[#E8860D] group-hover:text-[#FF9933] font-medium flex items-center gap-1 transition-colors">
                     Explore this path <ArrowRight className="w-3 h-3" />
                   </span>
                 </Link>
@@ -338,12 +339,12 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 6. Benefits Grid ═══ */}
-      <section className="py-20 bg-[#0f0d08]">
+      <section className="py-20 bg-[#FFF9F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            What You&apos;ll <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Gain</span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            What You&apos;ll <span className="text-[#E8860D]">Gain</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             Real outcomes from consistent daily practice
           </p>
 
@@ -351,14 +352,14 @@ export function HomePageClient() {
             {benefits.map((b) => (
               <div
                 key={b.title}
-                className="flex gap-4 p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/20 transition-colors"
+                className="flex gap-4 p-6 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm hover:border-orange-500/20 transition-colors"
               >
                 <div className="w-12 h-12 shrink-0 rounded-xl bg-orange-500/15 flex items-center justify-center">
                   <b.icon className="w-6 h-6 text-orange-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-1">{b.title}</h3>
-                  <p className="text-sm text-[#94a3b8] leading-relaxed">{b.desc}</p>
+                  <h3 className="font-semibold text-[#1a1a1a] mb-1">{b.title}</h3>
+                  <p className="text-sm text-[#64748b] leading-relaxed">{b.desc}</p>
                 </div>
               </div>
             ))}
@@ -367,27 +368,27 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 6b. Tools & Features ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#0f0d08]">
+      <section className="py-20 bg-[#FFFEF5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            Powerful <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Tools</span> Inside
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            Powerful <span className="text-[#E8860D]">Tools</span> Inside
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             Everything you need for a complete transformation journey
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Dosha Assessment */}
             <Link href="/login?tab=signup" className="group">
-              <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border-2 border-[#DAA520]/30 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
+              <div className="p-6 rounded-2xl bg-white border-2 border-[#DAA520]/40 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mb-4 shadow-lg shadow-green-500/20 group-hover:scale-105 transition-transform">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 17 3.5s1.5 0 2.8 1.3c1 1 1 2.5 1 2.5s-1.5 1.5-3.5 7.2A7 7 0 0 1 11 20"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
                 </div>
-                <h3 className="font-semibold text-white text-lg mb-2">Dosha Assessment</h3>
-                <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">
+                <h3 className="font-semibold text-[#1a1a1a] text-lg mb-2">Dosha Assessment</h3>
+                <p className="text-sm text-[#64748b] leading-relaxed mb-3">
                   Discover your Ayurvedic constitution — Vata, Pitta, or Kapha. Get personalized diet, exercise, and pillar recommendations based on your body type.
                 </p>
-                <span className="text-xs text-orange-400 font-medium flex items-center gap-1">
+                <span className="text-xs text-[#E8860D] font-medium flex items-center gap-1">
                   Take the quiz <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
@@ -395,15 +396,15 @@ export function HomePageClient() {
 
             {/* Audio Meditations */}
             <Link href="/login?tab=signup" className="group">
-              <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border-2 border-[#DAA520]/30 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
+              <div className="p-6 rounded-2xl bg-white border-2 border-[#DAA520]/40 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
                 </div>
-                <h3 className="font-semibold text-white text-lg mb-2">Audio Meditations</h3>
-                <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">
+                <h3 className="font-semibold text-[#1a1a1a] text-lg mb-2">Audio Meditations</h3>
+                <p className="text-sm text-[#64748b] leading-relaxed mb-3">
                   9 in-app guided audio sessions — Om chanting, Pranayama, Yoga Nidra, chakra healing, and more. Play directly in your browser with a persistent mini-player.
                 </p>
-                <span className="text-xs text-orange-400 font-medium flex items-center gap-1">
+                <span className="text-xs text-[#E8860D] font-medium flex items-center gap-1">
                   Listen now <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
@@ -411,15 +412,15 @@ export function HomePageClient() {
 
             {/* Personalized Onboarding */}
             <Link href="/login?tab=signup" className="group">
-              <div className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border-2 border-[#DAA520]/30 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
+              <div className="p-6 rounded-2xl bg-white border-2 border-[#DAA520]/40 hover:border-[#DAA520]/60 transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.1)]">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center mb-4 shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l1.9 5.8h6.1l-4.9 3.6 1.9 5.8L12 14.6l-4.9 3.6 1.9-5.8L4 8.8h6.1z"/></svg>
                 </div>
-                <h3 className="font-semibold text-white text-lg mb-2">Personalized Journey</h3>
-                <p className="text-sm text-[#94a3b8] leading-relaxed mb-3">
+                <h3 className="font-semibold text-[#1a1a1a] text-lg mb-2">Personalized Journey</h3>
+                <p className="text-sm text-[#64748b] leading-relaxed mb-3">
                   Take a quick quiz to customize your 48-day plan. We match your goals, experience level, and available time to the perfect pillar combination.
                 </p>
-                <span className="text-xs text-orange-400 font-medium flex items-center gap-1">
+                <span className="text-xs text-[#E8860D] font-medium flex items-center gap-1">
                   Get started <ArrowRight className="w-3 h-3" />
                 </span>
               </div>
@@ -429,26 +430,26 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 7. Testimonials ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="py-20 bg-[#FFF9F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            Voices of <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">Transformation</span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            Voices of <span className="text-[#E8860D]">Transformation</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-6 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-6 max-w-xl mx-auto">
             Hear from those who completed the 48-day Mandala
           </p>
 
           {/* Aggregate rating — computed from the stories below, not a claim */}
-          <div className="flex items-center justify-center gap-2 mb-14 text-sm text-[#94a3b8]">
+          <div className="flex items-center justify-center gap-2 mb-14 text-sm text-[#64748b]">
             <span className="flex gap-0.5">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${i < Math.round(avgRating) ? "text-amber-400 fill-amber-400" : "text-gray-600"}`}
+                  className={`w-4 h-4 ${i < Math.round(avgRating) ? "text-amber-400 fill-amber-400" : "text-[#e5dcc8]"}`}
                 />
               ))}
             </span>
-            <span className="text-white font-semibold">{avgRating.toFixed(1)}</span>
+            <span className="text-[#1a1a1a] font-semibold">{avgRating.toFixed(1)}</span>
             <span>
               average from featured stories &middot; {completers} of {TESTIMONIALS.length} completed all 48 days
             </span>
@@ -458,18 +459,18 @@ export function HomePageClient() {
             {TESTIMONIALS.map((t) => (
               <div
                 key={t.id}
-                className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] flex flex-col"
+                className="p-6 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm flex flex-col"
               >
                 {/* Stars */}
                 <div className="flex gap-1 mb-4">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-4 h-4 ${i < t.rating ? "text-amber-400 fill-amber-400" : "text-gray-600"}`}
+                      className={`w-4 h-4 ${i < t.rating ? "text-amber-400 fill-amber-400" : "text-[#e5dcc8]"}`}
                     />
                   ))}
                 </div>
-                <p className="text-[#94a3b8] text-sm leading-relaxed mb-4 line-clamp-5">
+                <p className="text-[#64748b] text-sm leading-relaxed mb-4 line-clamp-5">
                   &ldquo;{t.quote}&rdquo;
                 </p>
 
@@ -478,7 +479,7 @@ export function HomePageClient() {
                   {t.topPillars.slice(0, 2).map((slug) => (
                     <span
                       key={slug}
-                      className="text-[11px] px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-300/90 border border-orange-500/20 capitalize"
+                      className="text-[11px] px-2 py-0.5 rounded-full bg-orange-500/10 text-[#E8860D] border border-orange-500/20 capitalize"
                     >
                       {slug.replace(/-/g, " ")}
                     </span>
@@ -490,8 +491,8 @@ export function HomePageClient() {
                     {t.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">{t.name}</p>
-                    <p className="text-xs text-[#94a3b8]">Day {t.dayCompleted} completed</p>
+                    <p className="text-[#1a1a1a] font-medium text-sm">{t.name}</p>
+                    <p className="text-xs text-[#64748b]">Day {t.dayCompleted} completed</p>
                   </div>
                 </div>
               </div>
@@ -501,7 +502,7 @@ export function HomePageClient() {
           <div className="text-center mt-10">
             <Link
               href="/testimonials"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white bg-white/[0.05] border border-white/[0.1] hover:bg-white/[0.1] hover:border-orange-500/30 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-[#1a1a1a] bg-white border border-[#FF9933]/30 hover:bg-[#FFF9F0] hover:border-[#FF9933]/60 transition-all"
             >
               Read all transformation stories <ArrowRight className="w-4 h-4" />
             </Link>
@@ -510,12 +511,12 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 8. FAQ Preview ═══ */}
-      <section className="py-20 bg-[#0f0d08]">
+      <section className="py-20 bg-[#FFFEF5]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
-            Frequently Asked <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">Questions</span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            Frequently Asked <span className="text-[#E8860D]">Questions</span>
           </h2>
-          <p className="text-center text-[#94a3b8] mb-14 max-w-xl mx-auto">
+          <p className="text-center text-[#64748b] mb-14 max-w-xl mx-auto">
             Everything you need to know before starting
           </p>
 
@@ -525,19 +526,19 @@ export function HomePageClient() {
               return (
                 <div
                   key={faq.id}
-                  className="rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-hidden"
+                  className="rounded-xl bg-white border border-[#FF9933]/20 overflow-hidden"
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : faq.id)}
                     className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left cursor-pointer"
                   >
-                    <span className="font-medium text-white">{faq.question}</span>
+                    <span className="font-medium text-[#1a1a1a]">{faq.question}</span>
                     <ChevronDown
-                      className={`w-5 h-5 text-[#94a3b8] shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                      className={`w-5 h-5 text-[#64748b] shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                     />
                   </button>
                   {isOpen && (
-                    <div className="px-6 pb-5 text-sm text-[#94a3b8] leading-relaxed">
+                    <div className="px-6 pb-5 text-sm text-[#64748b] leading-relaxed">
                       {faq.answer}
                     </div>
                   )}
@@ -549,7 +550,7 @@ export function HomePageClient() {
           <div className="text-center mt-8">
             <Link
               href="/faq"
-              className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 font-medium transition-colors"
+              className="inline-flex items-center gap-2 text-[#E8860D] hover:text-[#FF9933] font-medium transition-colors"
             >
               View All FAQs
               <ArrowRight className="w-4 h-4" />
@@ -559,27 +560,21 @@ export function HomePageClient() {
       </section>
 
       {/* ═══ 9. CTA Section ═══ */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1508] to-amber-900/40" />
-        <div className="absolute inset-0 bg-[#0f0d08]/40" />
+      <section className="relative py-24 overflow-hidden bg-gradient-to-br from-[#FF9933] to-[#F59E0B]">
         {/* Ambient glow */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] bg-amber-500/15 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute -top-20 right-1/4 w-[500px] h-[300px] bg-[#FFD700]/25 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
-            Ready to{" "}
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
-              Transform?
-            </span>
+          <h2 className={`text-3xl sm:text-5xl font-semibold text-white mb-6 ${SERIF_CLASS}`}>
+            Ready to Transform?
           </h2>
-          <p className="text-lg text-[#94a3b8] mb-10 max-w-xl mx-auto">
+          <p className="text-lg text-[#FFF9F0] mb-10 max-w-xl mx-auto">
             Start your 48-day Mandala journey today. Show up daily, stay consistent,
             and unlock your highest potential.
           </p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-xl text-white font-semibold text-lg bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-xl shadow-orange-500/25 transition-all"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-full text-white font-semibold text-lg bg-[#0F172A] hover:bg-[#1E293B] shadow-xl shadow-black/20 transition-colors"
           >
             Begin Your Journey
             <ArrowRight className="w-5 h-5" />

@@ -7,6 +7,7 @@ import { Clock, Calendar, BookOpen, Brain, Sparkles, Dumbbell, FlaskConical, Lea
 import { BLOG_POSTS, type BlogPost } from "@/data/blog-posts";
 import { PexelsImage } from "@/components/ui/pexels-image";
 import { NewsletterSignup } from "@/components/features/newsletter-signup";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 const categories = [
   { key: "all", label: "All" },
@@ -18,11 +19,11 @@ const categories = [
 ] as const;
 
 const categoryColors: Record<string, { bg: string; text: string; thumbnail: string }> = {
-  body: { bg: "bg-red-500/20", text: "text-red-300", thumbnail: "from-red-900/60 to-red-800/30" },
-  mind: { bg: "bg-purple-500/20", text: "text-purple-300", thumbnail: "from-purple-900/60 to-purple-800/30" },
-  spirit: { bg: "bg-amber-500/20", text: "text-amber-300", thumbnail: "from-amber-900/60 to-amber-800/30" },
-  science: { bg: "bg-blue-500/20", text: "text-blue-300", thumbnail: "from-blue-900/60 to-blue-800/30" },
-  lifestyle: { bg: "bg-green-500/20", text: "text-green-300", thumbnail: "from-green-900/60 to-green-800/30" },
+  body: { bg: "bg-red-500/10", text: "text-red-600", thumbnail: "from-red-900/60 to-red-800/30" },
+  mind: { bg: "bg-purple-500/10", text: "text-purple-600", thumbnail: "from-purple-900/60 to-purple-800/30" },
+  spirit: { bg: "bg-amber-500/10", text: "text-amber-600", thumbnail: "from-amber-900/60 to-amber-800/30" },
+  science: { bg: "bg-blue-500/10", text: "text-blue-600", thumbnail: "from-blue-900/60 to-blue-800/30" },
+  lifestyle: { bg: "bg-green-500/10", text: "text-green-600", thumbnail: "from-green-900/60 to-green-800/30" },
 };
 
 const categoryIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -48,7 +49,7 @@ function ArticleCard({ post }: { post: BlogPost }) {
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
-      <div className="rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all overflow-hidden">
+      <div className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm hover:border-orange-500/30 hover:shadow-lg transition-all overflow-hidden">
         {/* Thumbnail — Pexels image, falls back to gradient placeholder */}
         <div className={`relative h-40 bg-gradient-to-br ${cat.thumbnail} flex items-center justify-center overflow-hidden`}>
           <PexelsImage slug={pexelsSlug} fallbackSlug="blog-default" noAttribution className="absolute inset-0" />
@@ -63,11 +64,11 @@ function ArticleCard({ post }: { post: BlogPost }) {
             {post.category.charAt(0).toUpperCase() + post.category.slice(1)}
           </span>
 
-          <h3 className="text-white font-semibold mb-2 group-hover:text-orange-300 transition-colors line-clamp-2">
+          <h3 className="text-[#1a1a1a] font-semibold mb-2 group-hover:text-[#E8860D] transition-colors line-clamp-2">
             {post.title}
           </h3>
 
-          <p className="text-sm text-[#94a3b8] leading-relaxed line-clamp-2 mb-4">
+          <p className="text-sm text-[#64748b] leading-relaxed line-clamp-2 mb-4">
             {post.excerpt}
           </p>
 
@@ -87,7 +88,7 @@ function ArticleCard({ post }: { post: BlogPost }) {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-[11px] px-2 py-0.5 rounded-full bg-white/[0.05] text-[#94a3b8] border border-white/[0.06]"
+                  className="text-[11px] px-2 py-0.5 rounded-full bg-[#FFF9F0] text-[#64748b] border border-[#FF9933]/15"
                 >
                   {tag}
                 </span>
@@ -152,19 +153,17 @@ export function BlogPageClient() {
   const FeaturedIcon = featured ? categoryIcons[featured.category] : null;
 
   return (
-    <div className="text-[#e2e8f0]">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-20">
+    <div className="text-[#1a1a1a]">
+      {/* Hero — navy band */}
+      <section className="relative overflow-hidden bg-[#0F172A] py-20">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/15 border border-orange-500/20 text-orange-300 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 text-[#FF9933] text-xs font-bold uppercase tracking-[0.2em] mb-6">
             <BookOpen className="w-4 h-4" />
             Vedic Wisdom &amp; Insights
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
-              Blog
-            </span>
+          <h1 className={`text-4xl sm:text-5xl font-semibold text-white mb-4 ${SERIF_CLASS}`}>
+            Blog
           </h1>
           <p className="text-lg text-[#94a3b8] max-w-2xl mx-auto">
             Explore the intersection of ancient Vedic wisdom and modern science
@@ -173,7 +172,7 @@ export function BlogPageClient() {
       </section>
 
       {/* Search + Filters */}
-      <section className="bg-[#0f0d08] border-b border-white/[0.06]">
+      <section className="bg-[#FFFEF5] border-b border-[#1a1a1a]/8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
           {/* Search */}
           <div className="relative max-w-md mx-auto">
@@ -187,7 +186,7 @@ export function BlogPageClient() {
               }}
               placeholder="Search articles — mantra, dosha, sleep..."
               aria-label="Search articles"
-              className="w-full pl-11 pr-4 py-2.5 rounded-full bg-white/[0.05] border border-white/[0.1] text-white text-sm placeholder-[#64748b] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
+              className="w-full pl-11 pr-4 py-2.5 rounded-full bg-white border border-[#FF9933]/25 text-[#1a1a1a] text-sm placeholder-[#94a3b8] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
             />
           </div>
 
@@ -203,7 +202,7 @@ export function BlogPageClient() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer ${
                   activeCategory === cat.key
                     ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
-                    : "bg-white/[0.05] text-[#94a3b8] hover:bg-white/[0.1] hover:text-white"
+                    : "bg-[#FFF9F0] text-[#64748b] border border-[#FF9933]/15 hover:text-[#1a1a1a] hover:border-[#FF9933]/40"
                 }`}
               >
                 {cat.label}
@@ -223,8 +222,8 @@ export function BlogPageClient() {
                 }}
                 className={`text-xs px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
                   activeTag === tag
-                    ? "bg-orange-500/20 text-orange-300 border-orange-500/40"
-                    : "bg-white/[0.03] text-[#94a3b8] border-white/[0.06] hover:text-white hover:bg-white/[0.08]"
+                    ? "bg-orange-500/10 text-[#E8860D] border-orange-500/40"
+                    : "bg-white text-[#64748b] border-[#FF9933]/15 hover:text-[#1a1a1a] hover:border-[#FF9933]/40"
                 }`}
               >
                 {tag}
@@ -235,10 +234,10 @@ export function BlogPageClient() {
       </section>
 
       {/* Content */}
-      <section className="py-16 bg-[#0f0d08]">
+      <section className="py-16 bg-[#FFF9F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filtered.length === 0 ? (
-            <p className="text-center text-[#94a3b8] py-20">
+            <p className="text-center text-[#64748b] py-20">
               No articles match your search. Try a different term or clear the filters.
             </p>
           ) : (
@@ -246,7 +245,7 @@ export function BlogPageClient() {
               {/* Featured Article */}
               {featured && featuredCat && (
                 <Link href={`/blog/${featured.slug}`} className="group block mb-12">
-                  <div className="rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/30 transition-all overflow-hidden md:flex">
+                  <div className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm hover:border-orange-500/30 hover:shadow-lg transition-all overflow-hidden md:flex">
                     <div
                       className={`md:w-2/5 h-56 md:h-auto bg-gradient-to-br ${featuredCat.thumbnail} flex items-center justify-center`}
                     >
@@ -258,10 +257,10 @@ export function BlogPageClient() {
                       >
                         {featured.category.charAt(0).toUpperCase() + featured.category.slice(1)}
                       </span>
-                      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 group-hover:text-orange-300 transition-colors">
+                      <h2 className={`text-2xl sm:text-3xl font-semibold text-[#1a1a1a] mb-3 group-hover:text-[#E8860D] transition-colors ${SERIF_CLASS}`}>
                         {featured.title}
                       </h2>
-                      <p className="text-[#94a3b8] leading-relaxed mb-4">
+                      <p className="text-[#64748b] leading-relaxed mb-4">
                         {featured.excerpt}
                       </p>
                       <div className="flex items-center gap-4 text-sm text-[#64748b]">
@@ -273,7 +272,7 @@ export function BlogPageClient() {
                           <Calendar className="w-4 h-4" />
                           {formatDate(featured.date)}
                         </span>
-                        <span className="text-[#94a3b8]">by {featured.author}</span>
+                        <span className="text-[#64748b]">by {featured.author}</span>
                       </div>
                     </div>
                   </div>
@@ -294,7 +293,7 @@ export function BlogPageClient() {
                 <div className="text-center mt-10">
                   <button
                     onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                    className="px-6 py-3 rounded-full text-sm font-semibold text-white bg-white/[0.05] border border-white/[0.1] hover:bg-white/[0.1] hover:border-orange-500/30 transition-all cursor-pointer"
+                    className="px-6 py-3 rounded-full text-sm font-semibold text-[#1a1a1a] bg-white border border-[#FF9933]/30 hover:bg-[#FFF9F0] hover:border-[#FF9933]/60 transition-all cursor-pointer"
                   >
                     Show more articles ({filtered.length - visibleCount} remaining)
                   </button>
@@ -304,16 +303,16 @@ export function BlogPageClient() {
           )}
 
           {/* Newsletter */}
-          <div className="mt-16 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] p-8 sm:p-10 text-center">
-            <h2 className="text-2xl font-bold text-white mb-2">
+          <div className="mt-16 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-8 sm:p-10 text-center">
+            <h2 className={`text-2xl font-semibold text-[#1a1a1a] mb-2 ${SERIF_CLASS}`}>
               Keep the wisdom coming
             </h2>
-            <p className="text-[#94a3b8] mb-6 max-w-xl mx-auto">
+            <p className="text-[#64748b] mb-6 max-w-xl mx-auto">
               One quiet letter a week — a practice to try, a verse to sit with,
               and the science behind it. No noise, unsubscribe anytime.
             </p>
             <div className="flex justify-center">
-              <NewsletterSignup source="blog" compact />
+              <NewsletterSignup source="blog" compact variant="light" />
             </div>
           </div>
         </div>

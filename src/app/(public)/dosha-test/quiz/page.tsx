@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function DoshaTestQuizPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-12">
+    <div className="min-h-screen bg-gradient-to-b from-[#0F172A] to-[#1E293B] py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <DoshaAssessment mode="anonymous" />
       </div>

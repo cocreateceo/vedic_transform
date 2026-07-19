@@ -50,7 +50,7 @@ export function Header({ user }: HeaderProps) {
               height={40}
               className="rounded-xl"
             />
-            <span className="text-xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+            <span className="text-xl font-bold text-[#1a1a1a] [font-family:var(--font-intro-serif),Georgia,serif]">
               10X Vedic
             </span>
           </Link>

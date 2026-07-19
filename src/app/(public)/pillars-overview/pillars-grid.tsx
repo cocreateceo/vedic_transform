@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Clock, Award, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 import { PILLARS, type PillarCategory } from "@/constants/pillars";
 import Link from "next/link";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 type Filter = "all" | PillarCategory;
 
@@ -15,9 +16,9 @@ const filterTabs: { key: Filter; label: string; icon: string }[] = [
 ];
 
 const categoryStyles: Record<string, { label: string; bg: string; text: string; glow: string }> = {
-  body: { label: "Body", bg: "bg-red-500/20", text: "text-red-300", glow: "rgba(239,68,68,0.08)" },
-  mind: { label: "Mind", bg: "bg-purple-500/20", text: "text-purple-300", glow: "rgba(168,85,247,0.08)" },
-  spirit: { label: "Spirit", bg: "bg-amber-500/20", text: "text-amber-300", glow: "rgba(245,158,11,0.08)" },
+  body: { label: "Body", bg: "bg-red-500/10", text: "text-red-600", glow: "rgba(239,68,68,0.08)" },
+  mind: { label: "Mind", bg: "bg-purple-500/10", text: "text-purple-600", glow: "rgba(168,85,247,0.08)" },
+  spirit: { label: "Spirit", bg: "bg-amber-500/10", text: "text-amber-600", glow: "rgba(245,158,11,0.08)" },
 };
 
 const pillarDetails: Record<string, { fullDescription: string; benefits: string[]; practice: string; scienceBehind: string }> = {
@@ -126,7 +127,7 @@ export function PillarsGrid() {
             className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
               activeFilter === tab.key
                 ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 scale-105"
-                : "bg-white/[0.03] border border-white/[0.08] text-[#94a3b8] hover:border-orange-500/30 hover:text-white hover:bg-white/[0.06]"
+                : "bg-white border border-[#FF9933]/20 text-[#64748b] hover:border-orange-500/40 hover:text-[#1a1a1a] hover:bg-[#FFF9F0]"
             }`}
           >
             <span>{tab.icon}</span>
@@ -156,9 +157,9 @@ export function PillarsGrid() {
                 display: "flex",
                 alignItems: "center",
                 gap: "6px",
-                background: isActive ? `${pillar.color}20` : "rgba(255,255,255,0.02)",
-                border: `1px solid ${isActive ? `${pillar.color}50` : "rgba(255,255,255,0.08)"}`,
-                color: isActive ? pillar.color : "#94a3b8",
+                background: isActive ? `${pillar.color}20` : "#ffffff",
+                border: `1px solid ${isActive ? `${pillar.color}50` : "rgba(255,153,51,0.2)"}`,
+                color: isActive ? pillar.color : "#64748b",
                 boxShadow: isActive ? `0 0 12px ${pillar.color}15` : "none",
               }}
             >
@@ -175,8 +176,8 @@ export function PillarsGrid() {
           className="rounded-3xl border overflow-hidden"
           style={{
             borderColor: `${activePillar.color}25`,
-            boxShadow: `0 8px 60px ${cat.glow}, 0 0 80px ${cat.glow}`,
-            background: "rgba(255,255,255,0.02)",
+            boxShadow: `0 8px 60px ${cat.glow}`,
+            background: "#ffffff",
           }}
         >
           {/* Header */}
@@ -200,7 +201,7 @@ export function PillarsGrid() {
               </div>
               <div>
                 <div className="flex items-center gap-3 flex-wrap mb-1">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white">{activePillar.name}</h2>
+                  <h2 className={`text-2xl sm:text-3xl font-semibold text-[#1a1a1a] ${SERIF_CLASS}`}>{activePillar.name}</h2>
                   <span className={`text-xs px-3 py-1 rounded-full ${cat.bg} ${cat.text} font-semibold`}>
                     {cat.label}
                   </span>
@@ -208,14 +209,14 @@ export function PillarsGrid() {
                 <p className="text-base font-medium" style={{ color: activePillar.color }}>
                   {activePillar.sanskritName}
                 </p>
-                <p className="text-sm text-[#94a3b8] mt-2">{activePillar.description}</p>
+                <p className="text-sm text-[#64748b] mt-2">{activePillar.description}</p>
                 <div className="flex items-center gap-5 mt-3">
                   {activePillar.defaultDurationMinutes > 0 && (
-                    <span className="inline-flex items-center gap-1.5 text-sm text-[#94a3b8]">
+                    <span className="inline-flex items-center gap-1.5 text-sm text-[#64748b]">
                       <Clock className="w-4 h-4" /> {activePillar.defaultDurationMinutes} min/session
                     </span>
                   )}
-                  <span className="inline-flex items-center gap-1.5 text-sm text-amber-400">
+                  <span className="inline-flex items-center gap-1.5 text-sm text-amber-600">
                     <Award className="w-4 h-4" /> +{activePillar.karmaPointsBase} Karma Points
                   </span>
                   <span className="text-sm text-[#64748b]">Pillar {activePillar.id} of 11</span>
@@ -230,22 +231,22 @@ export function PillarsGrid() {
               {/* Left Column */}
               <div className="space-y-8">
                 <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-[#1a1a1a] uppercase tracking-wider mb-4 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full" style={{ background: activePillar.color }} />
                     About This Pillar
                   </h3>
-                  <p className="text-[15px] text-[#b0b8c8] leading-relaxed">
+                  <p className="text-[15px] text-[#64748b] leading-relaxed">
                     {details.fullDescription}
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-[#1a1a1a] uppercase tracking-wider mb-4 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full" style={{ background: activePillar.color }} />
                     The Science Behind It
                   </h3>
                   <div
-                    className="text-[15px] text-[#b0b8c8] leading-relaxed p-5 rounded-xl border"
+                    className="text-[15px] text-[#64748b] leading-relaxed p-5 rounded-xl border"
                     style={{ background: `${activePillar.color}05`, borderColor: `${activePillar.color}15` }}
                   >
                     <Sparkles className="w-4 h-4 inline mr-2 -mt-0.5" style={{ color: activePillar.color }} />
@@ -257,13 +258,13 @@ export function PillarsGrid() {
               {/* Right Column */}
               <div className="space-y-8">
                 <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-[#1a1a1a] uppercase tracking-wider mb-4 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full" style={{ background: activePillar.color }} />
                     Key Benefits
                   </h3>
                   <ul className="space-y-3">
                     {details.benefits.map((benefit, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-[15px] text-[#b0b8c8]">
+                      <li key={idx} className="flex items-start gap-3 text-[15px] text-[#64748b]">
                         <span
                           className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold"
                           style={{ background: `${activePillar.color}20`, color: activePillar.color }}
@@ -277,13 +278,13 @@ export function PillarsGrid() {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-[#1a1a1a] uppercase tracking-wider mb-4 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full" style={{ background: activePillar.color }} />
                     How to Practice
                   </h3>
                   <div
-                    className="text-[15px] text-[#b0b8c8] leading-relaxed p-5 rounded-xl border-l-3"
-                    style={{ borderLeftColor: activePillar.color, borderLeftWidth: "3px", background: "rgba(255,255,255,0.02)" }}
+                    className="text-[15px] text-[#64748b] leading-relaxed p-5 rounded-xl border-l-3"
+                    style={{ borderLeftColor: activePillar.color, borderLeftWidth: "3px", background: "#FFF9F0" }}
                   >
                     {details.practice}
                   </div>
@@ -292,12 +293,12 @@ export function PillarsGrid() {
             </div>
 
             {/* Navigation + CTA */}
-            <div className="mt-10 pt-8 border-t border-white/[0.06] flex items-center justify-between">
+            <div className="mt-10 pt-8 border-t border-[#1a1a1a]/8 flex items-center justify-between">
               <div>
                 {prevPillar && (
                   <button
                     onClick={() => setActivePillarId(prevPillar.id)}
-                    className="flex items-center gap-2 text-sm text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
+                    className="flex items-center gap-2 text-sm text-[#64748b] hover:text-[#1a1a1a] transition-colors cursor-pointer"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     {prevPillar.name}
@@ -314,7 +315,7 @@ export function PillarsGrid() {
                 {nextPillar && (
                   <button
                     onClick={() => setActivePillarId(nextPillar.id)}
-                    className="flex items-center gap-2 text-sm text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
+                    className="flex items-center gap-2 text-sm text-[#64748b] hover:text-[#1a1a1a] transition-colors cursor-pointer"
                   >
                     {nextPillar.name}
                     <ArrowRight className="w-4 h-4" />

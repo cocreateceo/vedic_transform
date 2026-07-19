@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, GraduationCap, Lock, Sparkles } from "lucide-react";
 import { TRAINING_CHAPTERS } from "@/data/training-book";
 import { pageMetadata, SITE_URL, SITE_NAME } from "@/lib/seo";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 export const metadata = pageMetadata({
   title: "10x Vedic Training Course — Free Online Course",
@@ -21,7 +22,7 @@ const FIVE_DIMENSIONS = [
 
 export default function TenXVedicPage() {
   return (
-    <div className="text-[#e2e8f0]">
+    <div className="text-[#1a1a1a]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -37,8 +38,8 @@ export default function TenXVedicPage() {
         }}
       />
 
-      {/* ═══ Hero ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      {/* ═══ Hero (cinematic dark band — navy) ═══ */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#0F172A] to-[#1E293B]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 text-center">
@@ -46,7 +47,7 @@ export default function TenXVedicPage() {
             <GraduationCap className="w-3.5 h-3.5" />
             Free training course
           </span>
-          <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+          <h1 className={`mt-6 text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight text-white ${SERIF_CLASS}`}>
             <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
               10x Vedic
             </span>
@@ -65,7 +66,7 @@ export default function TenXVedicPage() {
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-[#e2e8f0] hover:bg-white/5 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border border-white/15 text-white hover:bg-white/5 transition-colors"
             >
               Sign in
             </Link>
@@ -77,15 +78,12 @@ export default function TenXVedicPage() {
       </section>
 
       {/* ═══ Five Dimensions ═══ */}
-      <section className="py-20 bg-[#0f0d08]">
+      <section className="py-20 bg-[#FFFEF5]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Evolve in{" "}
-            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">
-              Five Dimensions
-            </span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold mb-4 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            Evolve in <span className="text-[#E8860D]">Five Dimensions</span>
           </h2>
-          <p className="text-[#94a3b8] max-w-2xl mx-auto mb-10">
+          <p className="text-[#64748b] max-w-2xl mx-auto mb-10">
             The course is a roadmap toward conscious living and purposeful
             impact — aligned expansion, not working ten times harder.
           </p>
@@ -93,9 +91,9 @@ export default function TenXVedicPage() {
             {FIVE_DIMENSIONS.map((d) => (
               <span
                 key={d}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-500/25 bg-amber-500/5 text-sm text-amber-200"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#FF9933]/15 bg-[#FFF9F0] text-sm text-[#64748b]"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <Sparkles className="w-3.5 h-3.5 text-[#E8860D]" />
                 {d}
               </span>
             ))}
@@ -104,22 +102,19 @@ export default function TenXVedicPage() {
       </section>
 
       {/* ═══ Chapter Outline ═══ */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0d08] to-[#1a1508]">
+      <section className="py-20 bg-[#FFF9F0]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10">
-            The{" "}
-            <span className="bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">
-              11 Chapters
-            </span>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-10 text-[#1a1a1a] ${SERIF_CLASS}`}>
+            The <span className="text-[#E8860D]">11 Chapters</span>
           </h2>
           <div className="space-y-3">
             {TRAINING_CHAPTERS.map((chapter) => (
               <div
                 key={chapter.slug}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5"
+                className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-4 sm:p-5"
               >
                 <div className="flex items-start gap-4">
-                  <div className="relative shrink-0 w-20 h-[45px] rounded-lg overflow-hidden opacity-90">
+                  <div className="relative shrink-0 w-20 h-[45px] rounded-lg overflow-hidden">
                     <Image
                       src={chapter.image}
                       alt=""
@@ -133,16 +128,16 @@ export default function TenXVedicPage() {
                   </div>
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-sm sm:text-base font-semibold text-[#e2e8f0]">
+                      <h3 className="text-sm sm:text-base font-semibold text-[#1a1a1a]">
                         {chapter.title}
                       </h3>
                       {chapter.status === "coming-soon" && (
-                        <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border border-white/15 text-[#94a3b8]">
+                        <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border border-[#1a1a1a]/15 text-[#64748b]">
                           <Lock className="w-2.5 h-2.5" /> Coming soon
                         </span>
                       )}
                     </div>
-                    <p className="text-xs sm:text-sm text-[#94a3b8] mt-1 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#64748b] mt-1 leading-relaxed">
                       {chapter.description}
                     </p>
                   </div>
@@ -153,10 +148,10 @@ export default function TenXVedicPage() {
         </div>
       </section>
 
-      {/* ═══ Closing CTA ═══ */}
-      <section className="py-20 bg-[#1a1508] text-center">
+      {/* ═══ Closing CTA (navy band) ═══ */}
+      <section className="py-20 bg-[#0F172A] text-center">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <p className="text-xl sm:text-2xl font-semibold leading-relaxed">
+          <p className={`text-xl sm:text-2xl font-semibold leading-relaxed text-white ${SERIF_CLASS}`}>
             &ldquo;The future belongs to the{" "}
             <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
               most conscious

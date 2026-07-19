@@ -29,8 +29,8 @@ export function ContactFormClient() {
   if (submitted) {
     return (
       <div className="text-center py-8">
-        <p className="text-white text-lg font-medium">Thank you for your message!</p>
-        <p className="text-[#94a3b8] mt-2">We will get back to you soon.</p>
+        <p className="text-[#1a1a1a] text-lg font-medium">Thank you for your message!</p>
+        <p className="text-[#64748b] mt-2">We will get back to you soon.</p>
       </div>
     );
   }
@@ -38,7 +38,7 @@ export function ContactFormClient() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-[#94a3b8] mb-1.5">
+        <label htmlFor="name" className="block text-sm font-medium text-[#64748b] mb-1.5">
           Name
         </label>
         <input
@@ -46,13 +46,13 @@ export function ContactFormClient() {
           id="name"
           name="name"
           required
-          className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white placeholder-[#64748b] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
+          className="w-full px-4 py-3 rounded-xl bg-white border border-[#FF9933]/25 text-[#1a1a1a] placeholder-[#94a3b8] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
           placeholder="Your name"
         />
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-[#94a3b8] mb-1.5">
+        <label htmlFor="email" className="block text-sm font-medium text-[#64748b] mb-1.5">
           Email
         </label>
         <input
@@ -60,31 +60,31 @@ export function ContactFormClient() {
           id="email"
           name="email"
           required
-          className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white placeholder-[#64748b] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
+          className="w-full px-4 py-3 rounded-xl bg-white border border-[#FF9933]/25 text-[#1a1a1a] placeholder-[#94a3b8] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
           placeholder="your@email.com"
         />
       </div>
 
       <div>
-        <label htmlFor="subject" className="block text-sm font-medium text-[#94a3b8] mb-1.5">
+        <label htmlFor="subject" className="block text-sm font-medium text-[#64748b] mb-1.5">
           Subject
         </label>
         <select
           id="subject"
           name="subject"
           required
-          className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
+          className="w-full px-4 py-3 rounded-xl bg-white border border-[#FF9933]/25 text-[#1a1a1a] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors"
         >
-          <option value="" className="bg-[#1a1508]">Select a subject</option>
-          <option value="general" className="bg-[#1a1508]">General Inquiry</option>
-          <option value="support" className="bg-[#1a1508]">Support</option>
-          <option value="feedback" className="bg-[#1a1508]">Feedback</option>
-          <option value="partnership" className="bg-[#1a1508]">Partnership</option>
+          <option value="" className="bg-white">Select a subject</option>
+          <option value="general" className="bg-white">General Inquiry</option>
+          <option value="support" className="bg-white">Support</option>
+          <option value="feedback" className="bg-white">Feedback</option>
+          <option value="partnership" className="bg-white">Partnership</option>
         </select>
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-[#94a3b8] mb-1.5">
+        <label htmlFor="message" className="block text-sm font-medium text-[#64748b] mb-1.5">
           Message
         </label>
         <textarea
@@ -92,7 +92,7 @@ export function ContactFormClient() {
           name="message"
           required
           rows={5}
-          className="w-full px-4 py-3 rounded-xl bg-white/[0.05] border border-white/[0.1] text-white placeholder-[#64748b] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors resize-none"
+          className="w-full px-4 py-3 rounded-xl bg-white border border-[#FF9933]/25 text-[#1a1a1a] placeholder-[#94a3b8] focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/30 transition-colors resize-none"
           placeholder="Your message..."
         />
       </div>

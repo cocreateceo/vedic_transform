@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils/cn";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -24,8 +25,8 @@ export function PublicNavbar() {
     <nav
       className={cn(
         "sticky top-0 z-50",
-        "bg-[var(--color-bg-primary)]/80 backdrop-blur-md",
-        "border-b border-[var(--color-border)]"
+        "bg-[#FFFEF5]/85 backdrop-blur-md",
+        "border-b border-[#FF9933]/15"
       )}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -39,7 +40,7 @@ export function PublicNavbar() {
               height={36}
               className="rounded-full"
             />
-            <span className="text-lg font-bold text-[var(--color-text-primary)]">
+            <span className={cn("text-xl font-bold text-[#1a1a1a]", SERIF_CLASS)}>
               10X Vedic
             </span>
           </Link>
@@ -52,8 +53,8 @@ export function PublicNavbar() {
                 href={link.href}
                 className={cn(
                   "px-3 py-2 rounded-lg text-sm font-medium",
-                  "text-[var(--color-text-secondary)]",
-                  "hover:text-[var(--color-text-primary)] hover:bg-[var(--color-card-bg)]",
+                  "text-[#64748b]",
+                  "hover:text-[#1a1a1a] hover:bg-[#FF9933]/8",
                   "transition-colors"
                 )}
               >
@@ -68,10 +69,10 @@ export function PublicNavbar() {
             <Link
               href="/login"
               className={cn(
-                "px-4 py-2 rounded-lg text-sm font-medium",
-                "border border-[var(--color-border)]",
-                "text-[var(--color-text-primary)]",
-                "hover:bg-[var(--color-card-bg)] transition-colors"
+                "px-4 py-2 rounded-full text-sm font-semibold",
+                "border border-[#FF9933]/40",
+                "text-[#E8860D]",
+                "hover:bg-[#FF9933]/10 transition-colors"
               )}
             >
               Login
@@ -79,9 +80,9 @@ export function PublicNavbar() {
             <Link
               href="/register"
               className={cn(
-                "px-4 py-2 rounded-lg text-sm font-medium",
-                "bg-[var(--color-primary)] text-white",
-                "hover:opacity-90 transition-opacity"
+                "px-5 py-2 rounded-full text-sm font-semibold",
+                "bg-[#FF9933] text-white shadow-sm shadow-orange-500/30",
+                "hover:bg-[#E8860D] transition-colors"
               )}
             >
               Start Free
@@ -104,7 +105,7 @@ export function PublicNavbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-[var(--color-border)] bg-[var(--color-bg-primary)]/95 backdrop-blur-md">
+        <div className="md:hidden border-t border-[#FF9933]/15 bg-[#FFFEF5]/95 backdrop-blur-md">
           <div className="px-4 py-4 space-y-1">
             {navLinks.map((link) => (
               <Link
@@ -113,23 +114,23 @@ export function PublicNavbar() {
                 onClick={() => setMobileOpen(false)}
                 className={cn(
                   "block px-3 py-2 rounded-lg text-sm font-medium",
-                  "text-[var(--color-text-secondary)]",
-                  "hover:text-[var(--color-text-primary)] hover:bg-[var(--color-card-bg)]",
+                  "text-[#64748b]",
+                  "hover:text-[#1a1a1a] hover:bg-[#FF9933]/8",
                   "transition-colors"
                 )}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="pt-3 flex flex-col gap-2 border-t border-[var(--color-border)]">
+            <div className="pt-3 flex flex-col gap-2 border-t border-[#FF9933]/15">
               <Link
                 href="/login"
                 onClick={() => setMobileOpen(false)}
                 className={cn(
                   "px-4 py-2 rounded-lg text-sm font-medium text-center",
-                  "border border-[var(--color-border)]",
-                  "text-[var(--color-text-primary)]",
-                  "hover:bg-[var(--color-card-bg)] transition-colors"
+                  "border border-[#FF9933]/40",
+                  "text-[#E8860D]",
+                  "hover:bg-[#FF9933]/10 transition-colors"
                 )}
               >
                 Login
@@ -139,8 +140,8 @@ export function PublicNavbar() {
                 onClick={() => setMobileOpen(false)}
                 className={cn(
                   "px-4 py-2 rounded-lg text-sm font-medium text-center",
-                  "bg-[var(--color-primary)] text-white",
-                  "hover:opacity-90 transition-opacity"
+                  "bg-[#FF9933] text-white",
+                  "hover:bg-[#E8860D] transition-colors"
                 )}
               >
                 Start Free

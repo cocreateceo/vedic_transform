@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PillarsGrid } from "./pillars-grid";
 import { PILLARS } from "@/constants/pillars";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 export const metadata = pageMetadata({
   title: "The 11 Pillars of Vedic Transformation — 10X Vedic Transform",
@@ -13,7 +14,7 @@ export const metadata = pageMetadata({
 
 export default function PillarsOverviewPage() {
   return (
-    <div className="text-[#e2e8f0]">
+    <div className="text-[#1a1a1a]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -31,32 +32,30 @@ export default function PillarsOverviewPage() {
         }}
       />
       {/* ═══ Hero Banner ═══ */}
-      <section className="bg-[#0f0d08]">
+      <section className="bg-[#FFFEF5]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
           <img
             src="/images/vedic-banner.png"
             alt="10X Yourself — Vedic Transformation in 48 Days — Working on Mind, Body, Spirit"
-            className="w-full rounded-2xl shadow-2xl shadow-orange-900/30"
+            className="w-full rounded-2xl shadow-lg shadow-orange-900/10"
             style={{ border: "3px solid rgba(255,153,51,0.35)" }}
           />
         </div>
       </section>
 
       {/* ═══ Filter + Grid (client component) ═══ */}
-      <section className="py-10 bg-[#0f0d08]">
+      <section className="py-10 bg-[#FFFEF5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <PillarsGrid />
         </div>
       </section>
 
       {/* ═══ CTA ═══ */}
-      <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1508] to-amber-900/40" />
-        <div className="absolute inset-0 bg-[#0f0d08]/40" />
+      <section className="relative py-24 overflow-hidden bg-[#0F172A]">
         <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
+          <h2 className={`text-3xl sm:text-5xl font-semibold text-white mb-6 ${SERIF_CLASS}`}>
             Begin Your{" "}
             <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
               Journey

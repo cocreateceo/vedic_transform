@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { pageMetadata } from "@/lib/seo";
+import { SERIF_CLASS } from "@/lib/fonts";
 
 export const metadata: Metadata = pageMetadata({
   title: "Transformation Stories — 10X Vedic Transform",
@@ -20,12 +21,15 @@ function formatPillarName(slug: string): string {
 
 export default function TestimonialsPage() {
   return (
-    <div className="text-[#e2e8f0]">
+    <div className="text-[#1a1a1a]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0f0d08] to-[#1a1508] py-20">
+      <section className="relative overflow-hidden bg-[#0F172A] py-20">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-500/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+          <p className="text-[#FF9933] text-xs font-bold uppercase tracking-[0.2em] mb-4">
+            Community Voices
+          </p>
+          <h1 className={`text-4xl sm:text-5xl font-semibold mb-4 text-white ${SERIF_CLASS}`}>
             <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent">
               Transformation
             </span>{" "}
@@ -38,20 +42,20 @@ export default function TestimonialsPage() {
       </section>
 
       {/* Testimonials Grid */}
-      <section className="py-16 bg-[#0f0d08]">
+      <section className="py-16 bg-[#FFFEF5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t) => (
               <div
                 key={t.id}
-                className="p-6 rounded-2xl bg-white/[0.03] backdrop-blur-sm border border-white/[0.06] hover:border-orange-500/20 transition-colors flex flex-col"
+                className="p-6 rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm hover:border-orange-500/30 transition-colors flex flex-col"
               >
                 {/* Star Rating */}
                 <div className="flex gap-1 mb-4">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <span
                       key={i}
-                      className={`text-lg ${i < t.rating ? "text-amber-400" : "text-gray-600"}`}
+                      className={`text-lg ${i < t.rating ? "text-amber-400" : "text-[#e5dcc8]"}`}
                     >
                       ★
                     </span>
@@ -59,7 +63,7 @@ export default function TestimonialsPage() {
                 </div>
 
                 {/* Quote */}
-                <p className="text-[#94a3b8] text-sm leading-relaxed mb-6 italic flex-1">
+                <p className="text-[#64748b] text-sm leading-relaxed mb-6 italic flex-1">
                   &ldquo;{t.quote}&rdquo;
                 </p>
 
@@ -68,7 +72,7 @@ export default function TestimonialsPage() {
                   {t.topPillars.map((pillar) => (
                     <span
                       key={pillar}
-                      className="text-xs px-2.5 py-1 rounded-full bg-orange-500/15 text-orange-300 border border-orange-500/20"
+                      className="text-xs px-2.5 py-1 rounded-full bg-orange-500/10 text-[#E8860D] border border-orange-500/20"
                     >
                       {formatPillarName(pillar)}
                     </span>
@@ -76,13 +80,13 @@ export default function TestimonialsPage() {
                 </div>
 
                 {/* Author */}
-                <div className="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
+                <div className="flex items-center gap-3 pt-4 border-t border-[#1a1a1a]/8">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
                     {t.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">{t.name}</p>
-                    <p className="text-xs text-[#94a3b8]">Day {t.dayCompleted} completed</p>
+                    <p className="text-[#1a1a1a] font-medium text-sm">{t.name}</p>
+                    <p className="text-xs text-[#64748b]">Day {t.dayCompleted} completed</p>
                   </div>
                 </div>
               </div>
@@ -92,13 +96,11 @@ export default function TestimonialsPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-900/80 via-[#1a1508] to-amber-900/40" />
-        <div className="absolute inset-0 bg-[#0f0d08]/40" />
+      <section className="relative py-20 overflow-hidden bg-[#0F172A]">
         <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-orange-500/20 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-white mb-4 ${SERIF_CLASS}`}>
             Write Your Own{" "}
             <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
               Story
