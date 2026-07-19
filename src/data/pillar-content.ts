@@ -263,58 +263,67 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
   movement: {
     slug: "movement",
     tagline:
-      "The body was built to move daily. Vyayama is not exercise — it is the maintenance ritual of being human.",
+      "The body was built to move daily. Vyayama is not exercise — it is the maintenance ritual of being human, and the foundation Patanjali laid before pranayama and meditation.",
     overview: [
-      "Movement Everyday (Vyayama) is the principle that the body must be challenged daily — but not destroyed. Ayurveda distinguishes vyayama (rejuvenating exercise) from ati-vyayama (depleting overexercise). The goal is not maximum output; it is consistent input.",
-      "30 minutes a day, every day, beats 90 minutes three times a week. This pillar emphasises walking, yoga, mobility, and strength — in that order of priority.",
+      "Movement Everyday (Vyayama) is the principle that the body must be challenged daily — but not destroyed. Ayurveda distinguishes vyayama (rejuvenating exercise) from ati-vyayama (depleting overexertion). The goal is not maximum output; it is consistent input — a body capable of sitting steady and comfortable for everything else this journey asks of it.",
+      "30 minutes a day, every day, beats 90 minutes three times a week. The 10X protocol prioritises yoga (asana), walking, mobility, and strength — in that order. Your dosha decides the flavour: Vata grounds with slow holds, Pitta cools with moon-paced flow, Kapha lights up with vigorous, sweat-inducing movement.",
       "Movement is also one of the most accessible mood regulators. A short walk reliably lifts mood within the hour, and over weeks regular exercise is comparable to antidepressant medication for mild-to-moderate depression — and works best combined with it (Noetel et al., BMJ 2024), not as a guaranteed replacement.",
     ],
     whyItWorks: [
       "Daily walking — particularly outdoor walking — boosts BDNF (brain-derived neurotrophic factor), a key molecule for new neuron growth and resilience against depression. Most of the benefit shows up by about 7,000 steps a day (Lancet Public Health, 2025); 10,000 is a stretch goal, not a requirement.",
-      "The Hatha Yoga tradition (codified by Svatmarama and Gheranda) prescribes asana not for fitness but for steadiness — the body must be capable of sitting motionless for meditation. Movement is the foundation, not the goal.",
+      "Patanjali codified the principle in Yoga Sutra 2.46: sthira-sukham asanam — the posture is steady and comfortable. Asana was never prescribed for fitness. It was prescribed to make the body a stable seat for pranayama and meditation. Move so the body disappears, not so it dominates.",
     ],
     dailyPractice: [
-      "Begin with 5 minutes of gentle joint rotation (neck, shoulders, hips, ankles).",
-      "10-15 minutes of yoga: Surya Namaskar (Sun Salutation) is the universal sequence.",
-      "20-30 minute walk — outdoor light is non-negotiable. Pre-breakfast is ideal.",
-      "Twice a week: add 15 minutes of strength work (bodyweight is enough).",
-      "Once a week: a longer 60-90 minute session — hike, swim, dance, sport.",
-      "Never train hard if you slept under 6 hours — walk instead.",
-      "Always close with 2 minutes of stillness (Savasana).",
+      "Open with 5 minutes of joint rotation — neck, shoulders, hips, ankles — to wake the synovial fluid.",
+      "10-15 minutes of asana matched to your dosha: Vata holds slow grounding poses (Balasana, Vrikshasana, Viparita Karani); Pitta flows through Moon Salutation, Uttanasana, Supta Baddha Konasana; Kapha drives Surya Namaskar, Virabhadrasana II, Utkatasana, Phalakasana.",
+      "Walk 20-30 minutes outdoors. Pre-breakfast in morning light is ideal — never indoors on a treadmill if the sky is available.",
+      "Twice a week, add 15 minutes of strength — bodyweight is enough. Squats, push-ups, planks, lunges.",
+      "Once a week, take a longer 60-90 minute session: hike, swim, dance, or sport. Variety is part of the practice.",
+      "Never train hard on under 6 hours of sleep — walk instead. Pushing through is ati-vyayama.",
+      "Always close with 2 minutes of Savasana. The integration is where the benefit lands.",
     ],
     scripture: [
       {
-        verse: "Hatha Yoga Pradipika 1.1 (Svatmarama)",
-        text: "Salutation to Adinatha (Shiva) who expounded the knowledge of Hatha Yoga, which like a staircase leads the aspirant to the high-pinnacled Raja Yoga.",
+        verse: "Yoga Sutra 2.46 (Patanjali)",
+        text: "Sthira-sukham asanam — Asana is that posture which is steady and comfortable. The body must be both stable and at ease before any deeper practice begins.",
+      },
+      {
+        verse: "Yoga Sutra 1.14 (Patanjali)",
+        text: "Sa tu dirgha-kala-nairantarya-satkarasevito drdha-bhumih — Practice becomes firmly rooted when done for a long time, without break, and with devotion. Three conditions, not one.",
       },
       {
         verse: "Hatha Yoga Pradipika 1.65 (Svatmarama)",
-        text: "Success comes to him who is engaged in the practice. How can one get success without practice? By merely reading books on Yoga, one can never get success.",
+        text: "Success comes to one who is engaged in the practice. How can one get success without practice? By merely reading books on Yoga, one can never get success.",
       },
       {
         verse: "Bhagavad Gita 6.17",
-        text: "Yoga arises in one who is moderate in eating, rest, work, and recreation — destroying all sorrow.",
+        text: "Yoga arises in one who is moderate in eating, rest, work, and recreation — destroying all sorrow. Moderation is the form; movement is its expression.",
       },
     ],
     obstacles: [
       {
         obstacle: "I don't have 30 minutes.",
         remedy:
-          "Walk for 10. Three 10-minute walks beat zero 30-minute walks. The barrier is starting, not continuing.",
+          "Walk for 10. Three 10-minute walks beat one missed 30-minute session. The barrier is starting, not continuing. Stack movement onto things you already do — phone calls become walking calls.",
       },
       {
         obstacle: "I keep getting injured.",
         remedy:
-          "You are doing ati-vyayama (overexertion). Ayurveda's rule is ardha-shakti — work to about half your capacity (Ashtanga Hridaya Su. 2.10-11). Drop intensity by half for two weeks; yoga and walking only. The body must adapt, not survive.",
+          "You are practising ati-vyayama (overexertion). Ayurveda's rule is ardha-shakti — work to about half your capacity (Ashtanga Hridaya Su. 2.10-11). Drop intensity by half for two weeks — yoga and walking only. The body must adapt, not survive. Pitta types especially: heat is not the same as progress.",
       },
       {
         obstacle: "I'm bored of my routine.",
         remedy:
-          "Variety is part of the practice. Rotate three modalities across the week: yoga + walking + strength. Boredom is usually a signal to add — not subtract.",
+          "Rotate three modalities across the week: asana, walking, and strength. Boredom is usually a signal to add variety — not subtract effort.",
+      },
+      {
+        obstacle: "I can't hold the postures long enough.",
+        remedy:
+          "Sthira before sukha. Steadiness builds first. Hold for 3 breaths, not 10. Add one breath per week. Patanjali gave you a long time horizon for a reason.",
       },
     ],
     closing:
-      "Vata types: choose gentle, rhythmic, grounding (yoga, swimming, walking) — avoid running on hard surfaces. Pitta types: cooling and non-competitive (swimming, hiking, gentle yoga). Kapha types: vigorous and sweat-inducing — running, HIIT, dance.",
+      "Vata types: choose slow, rhythmic, grounding movement — yoga, swimming, walking on soft trails. Avoid pounding pavement. Pitta types: keep it cool and non-competitive — Moon Salutation, swimming, hiking before noon. Kapha types: this is your most important pillar — sweat daily, run, dance, vigorous Surya Namaskar. Lightness is the goal.",
   },
 
   "healing-meditation": {
@@ -378,58 +387,73 @@ export const PILLAR_CONTENT: Record<string, PillarContent> = {
   gratitude: {
     slug: "gratitude",
     tagline:
-      "Gratitude is not a feeling. It is a practice that, repeated, rewires the brain's default state from threat-scanning to appreciation.",
+      "Gratitude is not a feeling. It is a daily practice that, repeated, rewires the brain's default state from threat-scanning to santosha — the contentment Patanjali named.",
     overview: [
-      "Gratitude Practice (Kritajnata) is the simplest pillar with the most research behind it. The premise: the brain's default network scans constantly for threat, lack, and comparison. Deliberate gratitude — written, specific, daily — is the most reliable counterweight ever measured.",
-      "This is not about being positive or grateful for hardship. It is about training perception. Most days contain more good than the brain notices. Gratitude practice is how you notice it.",
-      "Five minutes a day. Three specific things. That is the whole protocol.",
+      "Gratitude Practice (Kritajnata) is the simplest pillar with the most research behind it. The premise: the brain's default network scans constantly for threat, lack, and comparison. Deliberate, specific, written gratitude is the most reliable counterweight ever measured — and Patanjali named the result long before neuroscience caught up. Santoshad anuttamah sukha-labhah: from contentment, supreme happiness is attained.",
+      "This is not about being positive or grateful for hardship. It is about training perception. Most days contain more good than the brain notices. Gratitude practice is how you notice it — and how you lay down positive samskaras (mental impressions) in the subconscious.",
+      "Five minutes a day. Three specific things. That is the whole protocol. The shift tends to build gradually, then feels sudden.",
     ],
     whyItWorks: [
       "Dr. Robert Emmons and Michael McCullough (2003) found that people who kept a gratitude journal felt more optimistic, exercised more, and reported better sleep and fewer physical complaints than those who logged hassles. Gratitude practice has small but real benefits for well-being and mood (Cregg & Cheavens, 2021, meta-analysis) — a genuinely helpful habit, not a drug-strength treatment.",
-      "The Taittiriya Upanishad opens with 'Saha nāv avatu, saha nau bhunaktu' — 'May we be protected together, may we be nourished together.' Gratitude in the Vedic tradition is relational, not individualistic. The 'I' practising gratitude is connecting to a 'we.'",
+      "The Taittiriya Upanishad opens with 'Saha nāv avatu, saha nau bhunaktu' — 'May we be protected together, may we be nourished together.' Gratitude in the Vedic tradition is relational, not individualistic. It is woven through Santosha (contentment), Ahimsa (a grateful heart is non-violent), Ishvara Pranidhana (gratitude is surrender), and Chitta Prasadanam (gratitude purifies the mind).",
     ],
     dailyPractice: [
-      "End of day: open a physical journal (not a phone).",
-      "Write 3 specific things you are grateful for that happened today.",
-      "Specific = 'My daughter laughed at my joke at dinner,' not 'My family.'",
-      "For each, write one sentence about why it mattered.",
-      "Read aloud one entry from a week ago — let the past gratitude land again.",
-      "Close with one person you'd like to thank tomorrow.",
-      "Once a week: write and send an actual thank-you message to someone.",
+      "End of day: open a physical journal. Not a phone, not a notes app. Pen on paper signals the subconscious.",
+      "Write three specific things you are grateful for that happened today. Specific = 'My daughter laughed at my joke at dinner,' not 'My family.'",
+      "For each, write one sentence about why it mattered. The 'why' is what wires the pathway.",
+      "Read aloud one entry from a week ago. Let the past gratitude land again — re-experiencing deepens the groove.",
+      "Close with one person you'd like to thank tomorrow, by name.",
+      "Once a week, write and send an actual thank-you message — text, voice note, or letter. Expressed gratitude doubles the benefit.",
+      "Pause for five seconds before each meal and silently thank the food, the farmer, the cook. Two seconds at the door before sleep is enough on hard days.",
+      "Repeat silently in the morning: 'Thank you for health, peace, and wisdom.' Feel it emotionally, not just intellectually.",
     ],
     scripture: [
       {
+        verse: "Yoga Sutra 2.42 (Patanjali)",
+        text: "Santoshad anuttamah sukha-labhah — From contentment, the supreme happiness is attained. Santosha is the deliberate cultivation of gratitude for what is.",
+      },
+      {
         verse: "Taittiriya Upanishad (Shanti Mantra)",
-        text: "May we be protected together. May we be nourished together. May we work together with great vigour. May our study be illuminating. May there be no hatred between us. Om. Peace, peace, peace.",
+        text: "Saha nav avatu, saha nau bhunaktu — May we be protected together. May we be nourished together. May we work together with great vigour. May our study be illuminating. May there be no hatred between us. Om, peace, peace, peace.",
       },
       {
-        verse: "Isha Upanishad 18",
-        text: "O Fire, lead us by the good path to the enjoyment of the fruit of our action. You know, O god, all our deeds.",
+        verse: "Bhagavad Gita 9.26",
+        text: "Whoever offers Me with devotion a leaf, a flower, a fruit, or a sip of water — that offering of love, of a pure heart, I accept. Gratitude is the lowest cost, highest yield offering ever named.",
       },
       {
-        verse: "Bhagavad Gita 10.10",
-        text: "To those who are constantly devoted and who worship Me with love, I give the understanding by which they can come to Me.",
+        verse: "Isha Upanishad — Shanti Mantra",
+        text: "Purnam adah, purnam idam — That is whole, this is whole. From the whole, the whole has been projected. Gratitude is the recognition that the field is already full.",
       },
     ],
     obstacles: [
       {
         obstacle: "I run out of things to be grateful for.",
         remedy:
-          "Get more specific. 'Hot shower' counts. 'The way the light came through the window at 7 AM' counts. Specificity is the practice.",
+          "Get more specific. 'Hot shower' counts. 'The way the light came through the kitchen window at 7 AM' counts. Specificity is the practice — not abundance of items.",
       },
       {
-        obstacle: "It feels forced.",
+        obstacle: "It feels forced and performative.",
         remedy:
-          "It will, for a week or two. Re-patterning takes time — usually longer than the myth-famous 21 days. Keep going; the shift tends to build gradually, then feels sudden.",
+          "It will, for the first week or two. Re-patterning takes time — usually longer than the myth-famous 21 days. Don't quit early; the shift tends to build gradually, then feels sudden.",
       },
       {
-        obstacle: "Hard times — nothing feels worth gratitude.",
+        obstacle: "I'm in a hard season — nothing feels worth gratitude.",
         remedy:
-          "Then practice gratitude for the smallest things: breath, gravity, the cup. The harder the season, the more this pillar is for you.",
+          "Then practice gratitude for the smallest things: breath, gravity, the cup in your hand, the floor under your feet. The harder the season, the more this pillar is for you. Santosha is not the absence of pain; it is contentment that coexists with it.",
+      },
+      {
+        obstacle: "I feel it intellectually but not in my body.",
+        remedy:
+          "Pause and breathe slowly into the chest for three breaths after each entry. Gratitude only rewires when felt. The poster wisdom is precise — 'feel the gratitude emotionally, not just intellectually.'",
+      },
+      {
+        obstacle: "I keep skipping days.",
+        remedy:
+          "Anchor it to an existing habit — the moment you sit on the bed, the moment you finish brushing your teeth. Habit-stacking beats willpower every time. Keep the journal physically on the pillow.",
       },
     ],
     closing:
-      "Vata types: this pillar is grounding — writing by hand is essential. Pitta types: include people you are critical of in the gratitude. Kapha types: this pillar lifts emotional heaviness — pair it with morning light.",
+      "Vata types: this pillar is profoundly grounding — write by hand, slowly, every night. Pitta types: include people you are critical of in the gratitude list; it loosens the inner judge. Kapha types: gratitude lifts emotional heaviness — pair it with morning light and a brisk walk, not with sitting still.",
   },
 
   "sandhya-meditation": {
