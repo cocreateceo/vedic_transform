@@ -250,10 +250,10 @@ export function OnboardingQuiz() {
         <button
           onClick={handleSkip}
           disabled={saving}
-          aria-label="Exit setup and go to the dashboard"
+          aria-label="Skip all questions and go to the dashboard"
           className="text-sm text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
         >
-          {saving ? "Exiting…" : "Exit setup"}
+          {saving ? "Skipping…" : "Skip all"}
         </button>
       </div>
 
@@ -389,6 +389,15 @@ export function OnboardingQuiz() {
               className="px-3 py-2 text-xs font-medium text-gray-400 hover:text-gray-600 underline-offset-2 hover:underline transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               Skip this question
+            </button>
+
+            <button
+              onClick={handleSkip}
+              disabled={saving}
+              aria-label="Skip all questions and go to the dashboard"
+              className="px-4 py-2.5 text-sm font-medium text-amber-700 border-2 border-amber-300 rounded-xl hover:bg-amber-50 hover:border-amber-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {saving ? "Skipping…" : "Skip all"}
             </button>
 
             {step.type === "multi" || isLastStep ? (
