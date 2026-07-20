@@ -18,6 +18,7 @@ import {
 import { PILLARS } from "@/constants/pillars";
 import { ChapterActions } from "./chapter-actions";
 import { IntroductionExperience } from "@/components/features/training/intro/introduction-experience";
+import { ChapterExperience } from "@/components/features/training/chapter-experience";
 
 // Only published chapters are routable; coming-soon slugs 404.
 export function generateStaticParams() {
@@ -58,11 +59,24 @@ export default async function TrainingChapterPage({
   const next = idx < published.length - 1 ? published[idx + 1] : undefined;
 
   // The Introduction is the ceremonial opening of the journey and gets its
-  // own cinematic experience; numbered chapters use the reader below.
+  // own cinematic experience; published numbered chapters get the shared
+  // ceremonial chapter journey. The plain reader below remains the fallback
+  // for any future chapter published before its ceremony is dressed.
   if (chapter.slug === "introduction") {
     return (
       <IntroductionExperience
         chapter={chapter}
+        nextSlug={next?.slug}
+        nextTitle={next?.title}
+      />
+    );
+  }
+  if (chapter.number >= 1) {
+    return (
+      <ChapterExperience
+        chapter={chapter}
+        prevSlug={prev?.slug}
+        prevTitle={prev?.title}
         nextSlug={next?.slug}
         nextTitle={next?.title}
       />
