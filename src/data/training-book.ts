@@ -16,6 +16,13 @@ export interface TrainingExercise {
   steps: string[];
 }
 
+export interface TrainingQuizQuestion {
+  question: string;
+  options: string[];
+  answer: number; // index into options
+  explanation?: string;
+}
+
 export interface TrainingChapter {
   slug: string;
   number: number; // 0 = Introduction, 1-11 = chapters
@@ -34,6 +41,12 @@ export interface TrainingChapter {
   exercises?: TrainingExercise[];
   reflectionQuestions?: string[];
   summary?: string[]; // paragraphs
+  // Learning-cycle extensions (the chapter journey): distilled cards, a
+  // self-assessment, one real-world challenge, and the guided sit length.
+  keyTakeaways?: string[];
+  quiz?: TrainingQuizQuestion[];
+  dailyChallenge?: string;
+  meditationMinutes?: number;
 }
 
 export const TRAINING_CHAPTERS: TrainingChapter[] = [
@@ -284,6 +297,80 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "You are not separate from the universe. You are an expression of it. The infinite conscious universal intelligence that created the universe is within you.",
       "When you remember that truth, everything begins to change.",
     ],
+    keyTakeaways: [
+      "You are not separate from the universe — you are an expression of it.",
+      "Transformation is remembering, not acquiring.",
+      "The illusion of separation creates fear; recognizing connection dissolves it.",
+      "Your internal state influences your external reality.",
+      "Nature demonstrates effortless alignment — spend time in it.",
+    ],
+    quiz: [
+      {
+        question:
+          "In the Ramayana story, what actually changed when Jambavan reminded Hanuman of who he was?",
+        options: [
+          "The ocean became smaller",
+          "The challenge became easier",
+          "Only Hanuman's awareness changed",
+          "Hanuman gained new powers",
+        ],
+        answer: 2,
+        explanation:
+          "The ocean did not become smaller. The challenge did not become easier. Only Hanuman's awareness changed — and that changed everything.",
+      },
+      {
+        question: "According to the Upanishads, our deepest identity is:",
+        options: [
+          "The body",
+          "Consciousness itself",
+          "Our achievements",
+          "Our social status",
+        ],
+        answer: 1,
+        explanation:
+          "Our deepest identity is not the body, mind, emotions, possessions, or social status — it is consciousness itself, not separate from the intelligence that governs the universe.",
+      },
+      {
+        question: "The wave-and-ocean metaphor teaches that:",
+        options: [
+          "Waves are truly separate from the ocean",
+          "Separation is permanent",
+          "The ocean is an illusion",
+          "Our essence remains connected to universal consciousness",
+        ],
+        answer: 3,
+        explanation:
+          "Like a wave that appears separate but remains ocean in essence, every human being appears separate while remaining connected to the same universal consciousness.",
+      },
+      {
+        question: "Krishna helped Arjuna on the battlefield by:",
+        options: [
+          "Teaching him new combat techniques",
+          "Expanding his consciousness",
+          "Removing his enemies",
+          "Fighting in his place",
+        ],
+        answer: 1,
+        explanation:
+          "Krishna did not teach Arjuna new combat techniques. He expanded Arjuna's consciousness so he could see reality from a higher perspective.",
+      },
+      {
+        question:
+          "You feel disconnected and stuck before a major decision. What does this chapter suggest first?",
+        options: [
+          "Gather more information",
+          "Push harder through willpower",
+          "Reconnect — through stillness, nature, and intuition",
+          "Let someone else decide",
+        ],
+        answer: 2,
+        explanation:
+          "The solution is not always more information. The solution is expanded awareness — silence, nature, and the intuition journal are this chapter's doorways back to connection.",
+      },
+    ],
+    dailyChallenge:
+      "Spend 20 minutes in nature today without your phone or headphones. Observe the intelligence present in everything — then write one sentence about what you noticed.",
+    meditationMinutes: 10,
   },
   {
     slug: "consciousness-and-self-awareness",
@@ -468,6 +555,70 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "And when we transform ourselves, we transform our lives. The greatest journey is not outward. It is inward.",
       "The greatest victory is not over others. It is over unconsciousness.",
     ],
+    keyTakeaways: [
+      "Transformation begins with awareness, not action.",
+      "You are not your thoughts — you are the observer of your thoughts.",
+      "The ego seeks validation; consciousness seeks understanding.",
+      "Self-awareness creates space between stimulus and response.",
+      "Where attention goes, energy flows.",
+    ],
+    quiz: [
+      {
+        question: "What is consciousness?",
+        options: ["Thinking", "Awareness", "Memory", "Emotion"],
+        answer: 1,
+        explanation:
+          "Consciousness is awareness itself — the silent witness behind every thought, emotion, and experience.",
+      },
+      {
+        question: "The ego primarily seeks:",
+        options: ["Peace", "Validation", "Love", "Knowledge"],
+        answer: 1,
+        explanation:
+          "The ego constantly seeks validation. It compares, competes, judges, defends, and fears rejection. Consciousness, by contrast, seeks understanding.",
+      },
+      {
+        question:
+          "Your colleague criticizes you in a meeting. How would an aware person respond?",
+        options: [
+          "Defend themselves immediately",
+          "Suppress all feeling and say nothing forever",
+          "Notice the reaction arising, create space, then respond thoughtfully",
+          "Criticize the colleague back later",
+        ],
+        answer: 2,
+        explanation:
+          "Self-awareness creates space between stimulus and response. Within that space lies wisdom — the aware person observes the trigger, asks what it teaches, and responds rather than reacts.",
+      },
+      {
+        question:
+          "In the Katha Upanishad's chariot metaphor, the intellect is:",
+        options: [
+          "The horses",
+          "The reins",
+          "The charioteer",
+          "The passenger",
+        ],
+        answer: 2,
+        explanation:
+          "The body is the chariot, the senses are the horses, the mind holds the reins, the intellect is the charioteer — and the soul is the passenger.",
+      },
+      {
+        question: "According to this chapter, attention is:",
+        options: [
+          "Unlimited and free",
+          "Humanity's most valuable asset",
+          "Only needed for work",
+          "Impossible to train",
+        ],
+        answer: 1,
+        explanation:
+          "The ancient sages would consider attention humanity's most valuable asset. Where attention goes, energy flows; where energy flows, results emerge.",
+      },
+    ],
+    dailyChallenge:
+      "Observe yourself without judgment for one full day. Each time a reaction arises, silently name it — \"I notice anger arising\" — and write down three of these moments before sleep.",
+    meditationMinutes: 10,
   },
   {
     slug: "vedic-meditation-and-healing",

@@ -24,6 +24,7 @@ import { PILLARS } from "@/constants/pillars";
 import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
 import { Mandala, LotusDivider } from "./intro/mandala";
 import { FadeUp, Stagger, StaggerItem } from "./intro/reveal";
+import { ChapterJourney } from "./chapter-journey";
 
 const serif = introSerif;
 const SERIF = SERIF_CLASS;
@@ -359,6 +360,15 @@ export function ChapterExperience({
                 </FadeUp>
               </section>
             )}
+
+          <LotusDivider />
+
+          {/* The learning cycle: practice, reflect, validate, transform */}
+          <ChapterJourney
+            chapter={chapter}
+            nextSlug={nextSlug}
+            nextTitle={nextTitle}
+          />
         </div>
       </div>
 
