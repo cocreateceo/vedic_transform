@@ -675,7 +675,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     dailyChallenge:
       "Observe yourself without judgment for one full day. Each time a reaction arises, silently name it — \"I notice anger arising\" — and write down three of these moments before sleep.",
     meditationMinutes: 10,
-    // lessonVideoId: set when the Chapter 2 documentary upload completes.
+    lessonVideoId: "_S9wfx0j170",
     gallery: [
       { src: "/training-media/gallery/consciousness-and-self-awareness/arjuna_closeup.webp", title: "The warrior who could not fight" },
       { src: "/training-media/gallery/consciousness-and-self-awareness/arjuna_despair2.webp", title: "Overwhelmed at Kurukshetra" },
