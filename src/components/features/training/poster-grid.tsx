@@ -55,11 +55,13 @@ export function PosterGrid({
   subtitle,
   items,
   columns = 3,
+  compact = false,
 }: {
   heading: string;
   subtitle?: string;
   items: { src: string; title: string }[];
   columns?: 2 | 3 | 4;
+  compact?: boolean;
 }) {
   const colClass =
     columns === 4
@@ -69,7 +71,7 @@ export function PosterGrid({
         : "grid-cols-2 lg:grid-cols-3";
 
   return (
-    <section className="py-16 sm:py-20">
+    <section className={compact ? "py-10 sm:py-12" : "py-16 sm:py-20"}>
       <FadeUp className="mx-auto max-w-[44rem] text-center">
         <h2
           className={`${SERIF_CLASS} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
@@ -82,7 +84,7 @@ export function PosterGrid({
           </p>
         )}
       </FadeUp>
-      <Stagger className={`mt-10 grid gap-4 ${colClass}`}>
+      <Stagger className={`${compact ? "mt-6 gap-3" : "mt-10 gap-4"} grid ${colClass}`}>
         {items.map((it) => (
           <StaggerItem key={it.src}>
             <a

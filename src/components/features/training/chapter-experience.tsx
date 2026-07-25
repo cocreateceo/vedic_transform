@@ -23,10 +23,13 @@ import {
 import { PILLARS } from "@/constants/pillars";
 import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
 import { Mandala, LotusDivider } from "./intro/mandala";
-import { FadeUp, Stagger, StaggerItem } from "./intro/reveal";
+import { FadeUp } from "./intro/reveal";
 import { ChapterJourney } from "./chapter-journey";
+import { ChapterAccordion } from "./chapter-accordion";
 import { CinematicLesson } from "./cinematic-lesson";
-import { InlineArt, PosterGrid } from "./poster-grid";
+import { CyclePill } from "./cycle-pill";
+import { PosterGrid } from "./poster-grid";
+import { PracticeCards } from "./practice-cards";
 
 const serif = introSerif;
 const SERIF = SERIF_CLASS;
@@ -94,12 +97,32 @@ export function ChapterExperience({
   const readMinutes = chapterReadMinutes(chapter);
   const pillar = PILLARS.find((p) => p.slug === chapter.relatedPillarSlug);
   const sections = chapter.sections ?? [];
-  // Media woven inline next to the prose it illustrates; leftovers (no
-  // section key) collect in the end-of-chapter galleries.
-  const media = [...(chapter.gallery ?? []), ...(chapter.studyCards ?? [])];
-  const mediaFor = (key: string) => media.filter((m) => m.section === key);
-  const leftoverGallery = (chapter.gallery ?? []).filter((m) => !m.section);
-  const leftoverCards = (chapter.studyCards ?? []).filter((m) => !m.section);
+  // Story artwork stays with its section — inside that section's accordion
+  // panel. Study cards group into one compact Chapter Gallery, except the
+  // overview card, which anchors the snapshot.
+  const storyArtFor = (h: string) =>
+    (chapter.gallery ?? []).filter((m) => m.section === h);
+  const accordionSections = sections.map((sec) => ({
+    heading: sec.heading,
+    paragraphs: sec.paragraphs,
+    art: storyArtFor(sec.heading),
+  }));
+  const snapshotCard = (chapter.studyCards ?? []).find(
+    (c) => c.section === "@lesson",
+  );
+  const galleryCards = (chapter.studyCards ?? []).filter(
+    (c) => c.section !== "@lesson",
+  );
+  const cycleStepKeys = [
+    "read",
+    ...(chapter.lessonVideoId ? ["watch"] : []),
+    ...(chapter.keyTakeaways?.length ? ["takeaways"] : []),
+    ...(chapter.exercises?.length ? ["practice"] : []),
+    ...(chapter.meditationMinutes ? ["meditation"] : []),
+    ...(chapter.reflectionQuestions?.length ? ["reflection"] : []),
+    ...(chapter.quiz?.length ? ["quiz"] : []),
+    ...(chapter.dailyChallenge ? ["challenge"] : []),
+  ];
 
   return (
     <div
@@ -188,281 +211,198 @@ export function ChapterExperience({
                 />
               </div>
             </FadeUp>
-            <InlineArt items={mediaFor("@lesson")} />
           </div>
         </section>
       )}
 
-      {/* ————— Daylight body ————— */}
+      {/* ————— Daylight body: snapshot → teaching → gallery → practice ————— */}
       <div className="relative bg-[var(--color-bg-primary)] px-4 sm:px-6 lg:px-8">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-[radial-gradient(ellipse_at_top,rgba(218,165,32,0.14),transparent_65%)]"
         />
         <div className="relative mx-auto max-w-5xl">
-          {sections.map((section, i) => (
-            <div key={section.heading}>
-              <section
-                id={i === 0 ? "opening" : undefined}
-                className={`scroll-mt-8 ${i === 0 ? "pt-20 sm:pt-28" : "pt-14 sm:pt-16"} pb-4`}
-              >
-                <FadeUp className="mx-auto max-w-[44rem]">
-                  <h2
-                    className={`${SERIF} text-center text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
-                  >
-                    {section.heading}
-                  </h2>
-                  <div className="mt-8 space-y-5 text-[17px] leading-[1.8] text-[var(--color-text-primary)]">
-                    {section.paragraphs.map((p, j) => (
-                      <p key={j}>{p}</p>
-                    ))}
+          {/* Chapter snapshot: the whole chapter at a glance */}
+          <section id="opening" className="scroll-mt-8 pt-10 sm:pt-14">
+            <FadeUp>
+              <div className="grid overflow-hidden rounded-3xl border border-[#DAA520]/40 bg-[var(--color-bg-surface)] md:grid-cols-[2fr_3fr]">
+                <a
+                  href={snapshotCard?.src ?? chapter.image}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative block min-h-56 bg-[#0C0F22] md:min-h-full"
+                >
+                  <Image
+                    src={snapshotCard?.src ?? chapter.image}
+                    alt={snapshotCard?.title ?? chapter.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </a>
+                <div className="p-6 sm:p-8">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">
+                    Chapter snapshot
+                  </p>
+                  <p className="mt-3 text-[16px] leading-relaxed text-[var(--color-text-primary)]">
+                    {chapter.description}
+                  </p>
+                  {chapter.keyTakeaways && chapter.keyTakeaways.length > 0 && (
+                    <ul className="mt-4 space-y-1.5">
+                      {chapter.keyTakeaways.map((t) => (
+                        <li
+                          key={t}
+                          className="flex items-start gap-2 text-[14px] leading-snug text-[var(--color-text-secondary)]"
+                        >
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#DAA520]" />
+                          {t}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-semibold text-[#B8860B]">
+                    <span>{readMinutes} min read</span>
+                    {chapter.lessonVideoId && <span>· Cinematic lesson</span>}
+                    <a href="#cycle" className="underline underline-offset-2">
+                      · {cycleStepKeys.length}-step learning cycle ↓
+                    </a>
                   </div>
-                </FadeUp>
-                <InlineArt items={mediaFor(section.heading)} />
-              </section>
-
-              {/* Feature card after the second section: chapter art + framing */}
-              {i === 1 && (
-                <FadeUp className="pt-12">
-                  <div className="grid overflow-hidden rounded-3xl border border-[#DAA520]/50 bg-gradient-to-br from-[#FFF9F0] via-amber-50/60 to-orange-50/40 md:grid-cols-[2fr_3fr]">
-                    <div className="relative min-h-64 md:min-h-full">
-                      <Image
-                        src={chapter.image}
-                        alt=""
-                        fill
-                        sizes="(max-width: 768px) 100vw, 40vw"
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="relative overflow-hidden p-8 sm:p-12">
-                      <Mandala className="absolute -right-24 -top-24 h-96 w-96 text-[#DAA520] opacity-[0.1]" />
-                      <p className="relative text-[11px] font-semibold uppercase tracking-[0.2em] text-[#B8860B]">
-                        {ceremony.featureLabel}
-                      </p>
-                      <p className="relative mt-4 max-w-[42rem] text-xl leading-[1.7] text-[#3d3223] sm:text-2xl">
-                        {chapter.description}
-                      </p>
-                    </div>
-                  </div>
-                </FadeUp>
-              )}
-
-              {/* Lotus breath between narrative movements */}
-              {i > 0 && i < sections.length - 1 && (i + 1) % 3 === 0 && i !== ceremony.quoteAfter && (
-                <LotusDivider />
-              )}
-
-              {/* Night interlude: the chapter's own words, held up to the dark */}
-              {i === ceremony.quoteAfter && ceremony.quote && (
-                <div className="-mx-4 pt-16 sm:-mx-6 lg:-mx-8">
-                  <section className="relative overflow-hidden bg-[#0C0F22] px-6 py-24 text-center sm:py-32">
-                    <Mandala className="absolute left-1/2 top-1/2 h-[110vmin] w-[110vmin] -translate-x-1/2 -translate-y-1/2 text-[#DAA520] opacity-[0.07]" />
-                    <FadeUp className="relative z-10 mx-auto max-w-3xl">
-                      <p
-                        className={`${SERIF} text-2xl italic leading-snug text-amber-50 sm:text-3xl lg:text-4xl`}
-                      >
-                        “{ceremony.quote}”
-                      </p>
-                    </FadeUp>
-                  </section>
                 </div>
-              )}
+              </div>
+            </FadeUp>
+          </section>
+
+          {/* The teaching — every section intact, revealed one at a time */}
+          <section className="pt-12 sm:pt-16">
+            <FadeUp className="mx-auto max-w-[44rem] text-center">
+              <h2
+                className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
+              >
+                The Teaching
+              </h2>
+              <p className="mt-3 text-[15px] text-[var(--color-text-secondary)]">
+                {sections.length} movements — open each one when you are ready
+                for it. The stories&apos; artwork lives inside.
+              </p>
+            </FadeUp>
+            <div className="mt-8">
+              <ChapterAccordion sections={accordionSections} />
             </div>
-          ))}
+          </section>
 
-          <LotusDivider />
+          {/* Night interlude: the chapter's own words, held up to the dark */}
+          {ceremony.quote && (
+            <div className="-mx-4 pt-12 sm:-mx-6 sm:pt-16 lg:-mx-8">
+              <section className="relative overflow-hidden bg-[#0C0F22] px-6 py-16 text-center sm:py-20">
+                <Mandala className="absolute left-1/2 top-1/2 h-[110vmin] w-[110vmin] -translate-x-1/2 -translate-y-1/2 text-[#DAA520] opacity-[0.07]" />
+                <FadeUp className="relative z-10 mx-auto max-w-3xl">
+                  <p
+                    className={`${SERIF} text-2xl italic leading-snug text-amber-50 sm:text-3xl`}
+                  >
+                    “{ceremony.quote}”
+                  </p>
+                </FadeUp>
+              </section>
+            </div>
+          )}
 
-          {/* Daily Practices */}
+          {/* Chapter gallery — every study frame in one place */}
+          {galleryCards.length > 0 && (
+            <PosterGrid
+              heading="Chapter Gallery"
+              subtitle="The teachings as frames — browse the set, tap any card to study it full size."
+              items={galleryCards}
+              columns={4}
+              compact
+            />
+          )}
+
+          {/* Daily Practices — compact, expandable */}
           {chapter.exercises && chapter.exercises.length > 0 && (
-            <section className="py-16 sm:py-20">
+            <section className="pb-4 pt-8 sm:pt-10">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
                 <h2
                   className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
                 >
                   Daily Practices
                 </h2>
-                <p className="mt-4 text-[16px] text-[var(--color-text-secondary)]">
-                  Small daily acts that carry this chapter into your life.
+                <p className="mt-3 text-[15px] text-[var(--color-text-secondary)]">
+                  Small daily acts that carry this chapter into your life — tap
+                  a practice to open its steps.
                 </p>
               </FadeUp>
-
-              {chapter.sectionArt?.exercises && (
-                <FadeUp className="mt-10">
-                  <div className="relative h-44 overflow-hidden rounded-3xl sm:h-56">
-                    <Image
-                      src={chapter.sectionArt.exercises}
-                      alt=""
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 960px"
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#2A1B0E]/50 to-transparent" />
-                  </div>
-                </FadeUp>
-              )}
-
-              <Stagger className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {chapter.exercises.map((ex, i) => (
-                  <StaggerItem key={ex.title}>
-                    <div className="h-full rounded-3xl border border-[#DAA520]/35 bg-[var(--color-bg-surface)] p-6 transition-all hover:-translate-y-1 hover:border-[#DAA520] hover:shadow-[0_8px_30px_rgba(218,165,32,0.15)]">
-                      <span
-                        className={`${SERIF} flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-amber-100 to-orange-100 text-lg font-semibold text-[#B8860B]`}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <h3
-                        className={`${SERIF} mt-4 text-xl font-semibold text-[var(--color-text-primary)]`}
-                      >
-                        {ex.title}
-                      </h3>
-                      <ul className="mt-3 space-y-2">
-                        {ex.steps.map((step, j) => (
-                          <li
-                            key={j}
-                            className="flex items-start gap-2 text-[15px] leading-relaxed text-[var(--color-text-primary)]"
-                          >
-                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#DAA520]" />
-                            {step}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </StaggerItem>
-                ))}
-              </Stagger>
-              <InlineArt items={mediaFor("@practices")} />
+              <div className="mx-auto mt-8 max-w-3xl">
+                <PracticeCards exercises={chapter.exercises} />
+              </div>
             </section>
           )}
 
-          <LotusDivider />
-
-          {/* Reflections */}
+          {/* Reflection — image beside the questions */}
           {chapter.reflectionQuestions &&
             chapter.reflectionQuestions.length > 0 && (
-              <section className="py-16 sm:py-20">
+              <section className="pt-10 sm:pt-12">
                 <FadeUp>
-                  <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-[#DAA520]/40 bg-[var(--color-bg-surface)]">
+                  <div className="grid overflow-hidden rounded-3xl border border-[#DAA520]/40 bg-[var(--color-bg-surface)] md:grid-cols-[2fr_3fr]">
                     {chapter.sectionArt?.reflections && (
-                      <div className="relative h-40 sm:h-48">
+                      <div className="relative min-h-48 md:min-h-full">
                         <Image
                           src={chapter.sectionArt.reflections}
                           alt=""
                           fill
-                          sizes="(max-width: 768px) 100vw, 768px"
+                          sizes="(max-width: 768px) 100vw, 40vw"
                           className="object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                       </div>
                     )}
-                    <div className="p-7 sm:p-10">
+                    <div className="p-6 sm:p-8">
                       <h2
-                        className={`${SERIF} flex items-center gap-3 text-2xl font-semibold text-[var(--color-text-primary)] sm:text-3xl`}
+                        className={`${SERIF} flex items-center gap-3 text-2xl font-semibold text-[var(--color-text-primary)]`}
                       >
                         <MessageCircleQuestion className="h-6 w-6 text-[#B8860B]" />
                         Sit With These Questions
                       </h2>
-                      <ol className="mt-6 space-y-4">
+                      <ol className="mt-5 space-y-3">
                         {chapter.reflectionQuestions.map((q, i) => (
-                          <li key={i} className="flex items-start gap-4">
-                            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-700">
+                          <li key={i} className="flex items-start gap-3">
+                            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-700">
                               {i + 1}
                             </span>
                             <span
-                              className={`${SERIF} text-lg italic leading-relaxed text-[var(--color-text-primary)]`}
+                              className={`${SERIF} text-[17px] italic leading-relaxed text-[var(--color-text-primary)]`}
                             >
                               {q}
                             </span>
                           </li>
                         ))}
                       </ol>
-                      <p className="mt-6 text-sm text-[var(--color-text-muted)]">
-                        Take these into your{" "}
-                        <Link
-                          href="/journal"
-                          className="text-[var(--color-primary)] underline"
-                        >
-                          journal
-                        </Link>{" "}
-                        for deeper reflection.
-                      </p>
+                      <Link
+                        href="/journal"
+                        className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-sm font-semibold text-white"
+                      >
+                        Write in your journal
+                      </Link>
                     </div>
                   </div>
                 </FadeUp>
-                <InlineArt items={mediaFor("@reflections")} />
               </section>
             )}
 
-          {/* Story artwork — the chapter's stories, painted */}
-          {leftoverGallery.length > 0 && (
-            <>
-              <LotusDivider />
-              <section className="py-16 sm:py-20">
-                <FadeUp className="mx-auto max-w-[44rem] text-center">
-                  <h2
-                    className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
-                  >
-                    The Stories, Painted
-                  </h2>
-                  <p className="mt-4 text-[16px] text-[var(--color-text-secondary)]">
-                    Teaching artwork from this chapter — tap any piece to view
-                    it full size.
-                  </p>
-                </FadeUp>
-                <Stagger className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-3">
-                  {leftoverGallery.map((art) => (
-                    <StaggerItem key={art.src}>
-                      <a
-                        href={art.src}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group block overflow-hidden rounded-2xl border border-[#DAA520]/30 bg-[#0C0F22] transition-all hover:-translate-y-1 hover:border-[#DAA520] hover:shadow-[0_8px_30px_rgba(218,165,32,0.2)]"
-                      >
-                        <div className="relative aspect-video overflow-hidden">
-                          <Image
-                            src={art.src}
-                            alt={art.title}
-                            fill
-                            sizes="(max-width: 1024px) 50vw, 33vw"
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        </div>
-                        <p className="px-4 py-3 text-center text-[13px] font-medium text-amber-100/90">
-                          {art.title}
-                        </p>
-                      </a>
-                    </StaggerItem>
-                  ))}
-                </Stagger>
-              </section>
-            </>
-          )}
-
           <LotusDivider />
 
-          {/* Study cards — learn from the frames */}
-          {leftoverCards.length > 0 && (
-            <>
-              <LotusDivider />
-              <PosterGrid
-                heading="Study Cards"
-                subtitle="The chapter's teachings, one frame at a time — tap any card to study it full size."
-                items={leftoverCards}
-                columns={4}
-              />
-            </>
-          )}
-
           {/* The learning cycle: practice, reflect, validate, transform */}
-          <ChapterJourney
-            chapter={chapter}
-            nextSlug={nextSlug}
-            nextTitle={nextTitle}
-          />
+          <div id="cycle" className="scroll-mt-8">
+            <ChapterJourney
+              chapter={chapter}
+              nextSlug={nextSlug}
+              nextTitle={nextTitle}
+            />
+          </div>
         </div>
       </div>
 
       {/* ————— Sunrise closing ————— */}
-      <section className="relative overflow-hidden px-6 py-24 text-center sm:py-32">
+      <section className="relative overflow-hidden px-6 py-16 text-center sm:py-24">
         {chapter.sectionArt?.summary && (
           <Image
             src={chapter.sectionArt.summary}
