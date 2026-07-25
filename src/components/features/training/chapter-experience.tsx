@@ -26,7 +26,7 @@ import { Mandala, LotusDivider } from "./intro/mandala";
 import { FadeUp, Stagger, StaggerItem } from "./intro/reveal";
 import { ChapterJourney } from "./chapter-journey";
 import { CinematicLesson } from "./cinematic-lesson";
-import { PosterGrid } from "./poster-grid";
+import { InlineArt, PosterGrid } from "./poster-grid";
 
 const serif = introSerif;
 const SERIF = SERIF_CLASS;
@@ -94,6 +94,12 @@ export function ChapterExperience({
   const readMinutes = chapterReadMinutes(chapter);
   const pillar = PILLARS.find((p) => p.slug === chapter.relatedPillarSlug);
   const sections = chapter.sections ?? [];
+  // Media woven inline next to the prose it illustrates; leftovers (no
+  // section key) collect in the end-of-chapter galleries.
+  const media = [...(chapter.gallery ?? []), ...(chapter.studyCards ?? [])];
+  const mediaFor = (key: string) => media.filter((m) => m.section === key);
+  const leftoverGallery = (chapter.gallery ?? []).filter((m) => !m.section);
+  const leftoverCards = (chapter.studyCards ?? []).filter((m) => !m.section);
 
   return (
     <div
@@ -182,6 +188,7 @@ export function ChapterExperience({
                 />
               </div>
             </FadeUp>
+            <InlineArt items={mediaFor("@lesson")} />
           </div>
         </section>
       )}
@@ -211,6 +218,7 @@ export function ChapterExperience({
                     ))}
                   </div>
                 </FadeUp>
+                <InlineArt items={mediaFor(section.heading)} />
               </section>
 
               {/* Feature card after the second section: chapter art + framing */}
@@ -322,6 +330,7 @@ export function ChapterExperience({
                   </StaggerItem>
                 ))}
               </Stagger>
+              <InlineArt items={mediaFor("@practices")} />
             </section>
           )}
 
@@ -379,11 +388,12 @@ export function ChapterExperience({
                     </div>
                   </div>
                 </FadeUp>
+                <InlineArt items={mediaFor("@reflections")} />
               </section>
             )}
 
           {/* Story artwork — the chapter's stories, painted */}
-          {chapter.gallery && chapter.gallery.length > 0 && (
+          {leftoverGallery.length > 0 && (
             <>
               <LotusDivider />
               <section className="py-16 sm:py-20">
@@ -399,7 +409,7 @@ export function ChapterExperience({
                   </p>
                 </FadeUp>
                 <Stagger className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-3">
-                  {chapter.gallery.map((art) => (
+                  {leftoverGallery.map((art) => (
                     <StaggerItem key={art.src}>
                       <a
                         href={art.src}
@@ -430,13 +440,13 @@ export function ChapterExperience({
           <LotusDivider />
 
           {/* Study cards — learn from the frames */}
-          {chapter.studyCards && chapter.studyCards.length > 0 && (
+          {leftoverCards.length > 0 && (
             <>
               <LotusDivider />
               <PosterGrid
                 heading="Study Cards"
                 subtitle="The chapter's teachings, one frame at a time — tap any card to study it full size."
-                items={chapter.studyCards}
+                items={leftoverCards}
                 columns={4}
               />
             </>

@@ -40,7 +40,7 @@ import {
 } from "@/data/training-book";
 import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
 import { CinematicLesson } from "../cinematic-lesson";
-import { PosterGrid } from "../poster-grid";
+import { InlineArt, PosterGrid } from "../poster-grid";
 import { Mandala, LotusDivider } from "./mandala";
 import { FadeUp, Stagger, StaggerItem, GrowLine } from "./reveal";
 import { ElevenGates, type Gate } from "./eleven-gates";
@@ -149,6 +149,12 @@ export function IntroductionExperience({
   });
 
   const readMinutes = chapterReadMinutes(chapter);
+
+  // Study cards woven inline beside the sections they teach; leftovers
+  // (no section key) collect in the Study Cards grid near the end.
+  const cards = chapter.studyCards ?? [];
+  const mediaFor = (key: string) => cards.filter((m) => m.section === key);
+  const leftoverCards = cards.filter((m) => !m.section);
 
   const subtitleLines = (chapter.subtitle ?? "")
     .split(". ")
@@ -405,6 +411,7 @@ export function IntroductionExperience({
                   </div>
                 </FadeUp>
               )}
+              <InlineArt items={mediaFor("A Profound Shift")} />
             </section>
           )}
         </div>
@@ -551,6 +558,7 @@ export function IntroductionExperience({
                   <p className="text-[17px] leading-[1.8] text-[var(--color-text-primary)]">{p}</p>
                 </FadeUp>
               ))}
+              <InlineArt items={mediaFor("Five Dimensions of Evolution")} />
             </section>
           )}
 
@@ -597,17 +605,18 @@ export function IntroductionExperience({
                   </p>
                 </FadeUp>
               )}
+              <InlineArt items={mediaFor("Who This Book Is For")} />
             </section>
           )}
 
           {/* Study cards — learn from the frames */}
-          {chapter.studyCards && chapter.studyCards.length > 0 && (
+          {leftoverCards.length > 0 && (
             <>
               <LotusDivider />
               <PosterGrid
                 heading="Study Cards"
                 subtitle="The Introduction's teachings, one frame at a time — tap any card to study it full size."
-                items={chapter.studyCards}
+                items={leftoverCards}
                 columns={4}
               />
             </>

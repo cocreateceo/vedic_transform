@@ -5,6 +5,51 @@ import Image from "next/image";
 import { SERIF_CLASS } from "@/lib/fonts";
 import { FadeUp, Stagger, StaggerItem } from "./intro/reveal";
 
+/** Compact art strip woven inline after the prose it illustrates. */
+export function InlineArt({
+  items,
+}: {
+  items: { src: string; title: string }[];
+}) {
+  if (items.length === 0) return null;
+  const colClass =
+    items.length === 1
+      ? "mx-auto max-w-2xl grid-cols-1"
+      : items.length === 3
+        ? "grid-cols-1 sm:grid-cols-3"
+        : items.length === 2
+          ? "grid-cols-1 sm:grid-cols-2"
+          : "grid-cols-2";
+  return (
+    <FadeUp className="mx-auto mt-10 max-w-4xl">
+      <div className={`grid gap-4 ${colClass}`}>
+        {items.map((it) => (
+          <a
+            key={it.src}
+            href={it.src}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block overflow-hidden rounded-2xl border border-[#DAA520]/30 bg-[#0C0F22] transition-all hover:-translate-y-1 hover:border-[#DAA520] hover:shadow-[0_8px_30px_rgba(218,165,32,0.2)]"
+          >
+            <div className="relative aspect-video overflow-hidden">
+              <Image
+                src={it.src}
+                alt={it.title}
+                fill
+                sizes="(max-width: 640px) 100vw, 50vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+            <p className="px-4 py-2.5 text-center text-[13px] font-medium text-amber-100/90">
+              {it.title}
+            </p>
+          </a>
+        ))}
+      </div>
+    </FadeUp>
+  );
+}
+
 export function PosterGrid({
   heading,
   subtitle,
