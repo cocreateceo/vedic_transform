@@ -331,7 +331,7 @@ export default function TrainingPage() {
                         >
                           <div className="relative aspect-[16/9] sm:aspect-auto sm:min-h-full">
                             <Image
-                              src={chapter.image}
+                              src={chapter.posterImage ?? chapter.image}
                               alt=""
                               fill
                               sizes="(max-width: 640px) 100vw, 260px"
@@ -378,7 +378,7 @@ export default function TrainingPage() {
                         >
                           <div className="relative shrink-0 w-24 h-[54px] rounded-lg overflow-hidden">
                             <Image
-                              src={chapter.image}
+                              src={chapter.posterImage ?? chapter.image}
                               alt=""
                               fill
                               sizes="96px"
@@ -413,7 +413,7 @@ export default function TrainingPage() {
                       <div className="flex items-start gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-card-bg)] p-4">
                         <div className="relative shrink-0 w-24 h-[54px] rounded-lg overflow-hidden">
                           <Image
-                            src={chapter.image}
+                            src={chapter.posterImage ?? chapter.image}
                             alt=""
                             fill
                             sizes="96px"

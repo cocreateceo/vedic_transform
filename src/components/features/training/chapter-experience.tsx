@@ -26,6 +26,7 @@ import { Mandala, LotusDivider } from "./intro/mandala";
 import { FadeUp, Stagger, StaggerItem } from "./intro/reveal";
 import { ChapterJourney } from "./chapter-journey";
 import { CinematicLesson } from "./cinematic-lesson";
+import { PosterGrid } from "./poster-grid";
 
 const serif = introSerif;
 const SERIF = SERIF_CLASS;
@@ -427,6 +428,19 @@ export function ChapterExperience({
           )}
 
           <LotusDivider />
+
+          {/* Study cards — learn from the frames */}
+          {chapter.studyCards && chapter.studyCards.length > 0 && (
+            <>
+              <LotusDivider />
+              <PosterGrid
+                heading="Study Cards"
+                subtitle="The chapter's teachings, one frame at a time — tap any card to study it full size."
+                items={chapter.studyCards}
+                columns={4}
+              />
+            </>
+          )}
 
           {/* The learning cycle: practice, reflect, validate, transform */}
           <ChapterJourney

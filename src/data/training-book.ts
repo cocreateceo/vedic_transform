@@ -51,6 +51,10 @@ export interface TrainingChapter {
   lessonVideoId?: string;
   /** Story artwork gallery, /training-media/gallery/<slug>/<file>.webp */
   gallery?: { src: string; title: string }[];
+  /** Teaching study cards — "learn from the image" poster frames. */
+  studyCards?: { src: string; title: string }[];
+  /** Chapter-overview roadmap poster (chapter cards / Eleven Gates). */
+  posterImage?: string;
 }
 
 export const TRAINING_CHAPTERS: TrainingChapter[] = [
@@ -58,6 +62,26 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     slug: "introduction",
     number: 0,
     lessonVideoId: "rZ22zP4Jx5A",
+    gallery: [
+      { src: "/training-media/posters/intro/01_48_day_journey.webp", title: "The 48-Day Journey" },
+      { src: "/training-media/posters/intro/02_two_worlds.webp", title: "Two Worlds. One Path." },
+      { src: "/training-media/posters/intro/03_five_dimensions.webp", title: "The Five Dimensions" },
+      { src: "/training-media/posters/intro/04_eleven_chapters.webp", title: "The 11 Chapters" },
+      { src: "/training-media/posters/intro/05_alignment_loop.webp", title: "The Alignment Loop" },
+    ],
+    studyCards: [
+      { src: "/training-media/posters/intro-sections/d1.webp", title: "Dimension 1 — Consciousness" },
+      { src: "/training-media/posters/intro-sections/d2.webp", title: "Dimension 2 — Health & Energy" },
+      { src: "/training-media/posters/intro-sections/d3.webp", title: "Dimension 3 — Relationships & Service" },
+      { src: "/training-media/posters/intro-sections/d4.webp", title: "Dimension 4 — Leadership & Creation" },
+      { src: "/training-media/posters/intro-sections/d5.webp", title: "Dimension 5 — Wealth & Purpose" },
+      { src: "/training-media/posters/intro-sections/s_shift.webp", title: "A Profound Shift" },
+      { src: "/training-media/posters/intro-sections/s_future.webp", title: "The Future Is Conscious" },
+      { src: "/training-media/posters/intro-sections/s_mastering.webp", title: "Mastering the Modern World" },
+      { src: "/training-media/posters/intro-sections/s_combines.webp", title: "What the Journey Combines" },
+      { src: "/training-media/posters/intro-sections/s_expansion.webp", title: "Aligned Expansion" },
+      { src: "/training-media/posters/intro-sections/s_writtenfor.webp", title: "Who This Book Is For" },
+    ],
     title: "10x Vedic Transformation",
     subtitle:
       "Ancient Wisdom. Conscious Leadership. Measurable Outcomes. Science-Powered Transformation.",
@@ -137,6 +161,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     status: "published",
     relatedPillarSlug: "brahman-connection",
     image: "/training-media/hero-connect-to-the-universe.webp",
+    posterImage: "/training-media/posters/roadmap/ch01.webp",
     sectionArt: {
       exercises: "/training-media/connect-to-the-universe-exercises.webp",
       reflections: "/training-media/connect-to-the-universe-reflections.webp",
@@ -387,6 +412,20 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       { src: "/training-media/gallery/connect-to-the-universe/vishwaroopa.webp", title: "Vishwaroopa — the universal form" },
       { src: "/training-media/gallery/connect-to-the-universe/arjuna_renewed.webp", title: "Clarity restored" },
     ],
+    studyCards: [
+      { src: "/training-media/posters/ch01-cards/c1_overview.webp", title: "Chapter Overview" },
+      { src: "/training-media/posters/ch01-cards/c1_hanuman.webp", title: "Hanuman Remembers" },
+      { src: "/training-media/posters/ch01-cards/c1_whoami.webp", title: "Who Am I?" },
+      { src: "/training-media/posters/ch01-cards/c1_wave.webp", title: "The Wave and the Ocean" },
+      { src: "/training-media/posters/ch01-cards/c1_arjuna.webp", title: "Arjuna's Crisis" },
+      { src: "/training-media/posters/ch01-cards/c1_energy.webp", title: "Energy & Frequency" },
+      { src: "/training-media/posters/ch01-cards/c1_observer.webp", title: "The Observer Within" },
+      { src: "/training-media/posters/ch01-cards/c1_nature.webp", title: "Nature as a Teacher" },
+      { src: "/training-media/posters/ch01-cards/c1_alignment.webp", title: "The Way of Alignment" },
+      { src: "/training-media/posters/ch01-cards/c1_practices.webp", title: "The Practices" },
+      { src: "/training-media/posters/ch01-cards/c1_reflect.webp", title: "Reflection" },
+      { src: "/training-media/posters/ch01-cards/c1_affirm.webp", title: "Affirmations" },
+    ],
   },
   {
     slug: "consciousness-and-self-awareness",
@@ -398,6 +437,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     status: "published",
     relatedPillarSlug: "thoughts-intention",
     image: "/training-media/hero-consciousness-and-self-awareness.webp",
+    posterImage: "/training-media/posters/roadmap/ch02.webp",
     sectionArt: {
       exercises:
         "/training-media/consciousness-and-self-awareness-exercises.webp",
@@ -647,6 +687,20 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       { src: "/training-media/gallery/consciousness-and-self-awareness/mirror_reveal.webp", title: "The mirror principle" },
       { src: "/training-media/gallery/consciousness-and-self-awareness/doorway_inward.webp", title: "The doorway inward" },
     ],
+    studyCards: [
+      { src: "/training-media/posters/ch02-cards/c2_overview.webp", title: "Chapter Overview" },
+      { src: "/training-media/posters/ch02-cards/c2_kurukshetra.webp", title: "The Battlefield Within" },
+      { src: "/training-media/posters/ch02-cards/c2_observer.webp", title: "The Silent Witness" },
+      { src: "/training-media/posters/ch02-cards/c2_chariot.webp", title: "The Chariot of Life" },
+      { src: "/training-media/posters/ch02-cards/c2_ego.webp", title: "The Ego's Greatest Trick" },
+      { src: "/training-media/posters/ch02-cards/c2_leadership.webp", title: "Conscious Leadership" },
+      { src: "/training-media/posters/ch02-cards/c2_yudhishthira.webp", title: "Emotional Stability" },
+      { src: "/training-media/posters/ch02-cards/c2_attention.webp", title: "Attention Is Energy" },
+      { src: "/training-media/posters/ch02-cards/c2_mirror.webp", title: "The Mirror Principle" },
+      { src: "/training-media/posters/ch02-cards/c2_meditation.webp", title: "Meditation for Self-Awareness" },
+      { src: "/training-media/posters/ch02-cards/c2_practices.webp", title: "The Practices" },
+      { src: "/training-media/posters/ch02-cards/c2_reflect.webp", title: "Reflection" },
+    ],
   },
   {
     slug: "vedic-meditation-and-healing",
@@ -657,6 +711,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     status: "coming-soon",
     relatedPillarSlug: "healing-meditation",
     image: "/training-media/hero-vedic-meditation-and-healing.webp",
+    posterImage: "/training-media/posters/roadmap/ch03.webp",
   },
   {
     slug: "dharma-and-purpose",
@@ -666,6 +721,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "Discovering life purpose, soul alignment, service to humanity, values-based living, and purposeful decision-making.",
     status: "coming-soon",
     image: "/training-media/hero-dharma-and-purpose.webp",
+    posterImage: "/training-media/posters/roadmap/ch04.webp",
   },
   {
     slug: "health-energy-and-balance",
@@ -675,6 +731,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "The connection between body, mind, food, sleep, emotions, movement, energy systems, and sustainable vitality.",
     status: "coming-soon",
     image: "/training-media/hero-health-energy-and-balance.webp",
+    posterImage: "/training-media/posters/roadmap/ch05.webp",
   },
   {
     slug: "relationships-family-and-community",
@@ -685,6 +742,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     status: "coming-soon",
     relatedPillarSlug: "gratitude",
     image: "/training-media/hero-relationships-family-and-community.webp",
+    posterImage: "/training-media/posters/roadmap/ch06.webp",
   },
   {
     slug: "leadership-through-consciousness",
@@ -694,6 +752,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "Servant leadership, trust, integrity, wisdom-based influence, decision-making, calm leadership under pressure, and conscious organizational culture.",
     status: "coming-soon",
     image: "/training-media/hero-leadership-through-consciousness.webp",
+    posterImage: "/training-media/posters/roadmap/ch07.webp",
   },
   {
     slug: "nutrition-and-fasting",
@@ -704,6 +763,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     status: "coming-soon",
     relatedPillarSlug: "nutrition-fasting",
     image: "/training-media/hero-nutrition-and-fasting.webp",
+    posterImage: "/training-media/posters/roadmap/ch08.webp",
   },
   {
     slug: "movement-exercise-and-sleep-optimization",
@@ -714,6 +774,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     status: "coming-soon",
     relatedPillarSlug: "movement",
     image: "/training-media/hero-movement-exercise-and-sleep-optimization.webp",
+    posterImage: "/training-media/posters/roadmap/ch09.webp",
   },
   {
     slug: "creation-manifestation-and-transformation",
@@ -724,6 +785,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     status: "coming-soon",
     relatedPillarSlug: "divine-manifestation",
     image: "/training-media/hero-creation-manifestation-and-transformation.webp",
+    posterImage: "/training-media/posters/roadmap/ch10.webp",
   },
   {
     slug: "living-the-10x-vedic-life",
@@ -733,6 +795,7 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
       "Integrating spirituality, leadership, technology, healing, family, wealth, and service into one harmonious life journey dedicated to personal evolution and collective upliftment.",
     status: "coming-soon",
     image: "/training-media/hero-living-the-10x-vedic-life.webp",
+    posterImage: "/training-media/posters/roadmap/ch11.webp",
   },
 ];
 

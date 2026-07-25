@@ -40,6 +40,7 @@ import {
 } from "@/data/training-book";
 import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
 import { CinematicLesson } from "../cinematic-lesson";
+import { PosterGrid } from "../poster-grid";
 import { Mandala, LotusDivider } from "./mandala";
 import { FadeUp, Stagger, StaggerItem, GrowLine } from "./reveal";
 import { ElevenGates, type Gate } from "./eleven-gates";
@@ -143,7 +144,7 @@ export function IntroductionExperience({
       title: meta?.title ?? (firstStop > 0 ? p.slice(0, firstStop) : p),
       body: firstStop > 0 ? p.slice(firstStop + 2) : p,
       published: meta?.status === "published",
-      image: meta?.image,
+      image: meta?.posterImage ?? meta?.image,
     };
   });
 
@@ -305,6 +306,19 @@ export function IntroductionExperience({
                 </FadeUp>
               )}
             </section>
+          )}
+
+          {/* The Journey at a Glance — concept posters */}
+          {chapter.gallery && chapter.gallery.length > 0 && (
+            <>
+              <LotusDivider />
+              <PosterGrid
+                heading="The Journey at a Glance"
+                subtitle="Five frames that hold the whole path — tap any poster to view it full size."
+                items={chapter.gallery}
+                columns={3}
+              />
+            </>
           )}
 
           <LotusDivider />
@@ -584,6 +598,19 @@ export function IntroductionExperience({
                 </FadeUp>
               )}
             </section>
+          )}
+
+          {/* Study cards — learn from the frames */}
+          {chapter.studyCards && chapter.studyCards.length > 0 && (
+            <>
+              <LotusDivider />
+              <PosterGrid
+                heading="Study Cards"
+                subtitle="The Introduction's teachings, one frame at a time — tap any card to study it full size."
+                items={chapter.studyCards}
+                columns={4}
+              />
+            </>
           )}
 
           <LotusDivider />
