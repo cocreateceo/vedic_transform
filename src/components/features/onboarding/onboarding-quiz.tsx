@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
+import { useAuth } from "@/context/auth-context";
 import { MandalaBackdrop } from "./mandala-backdrop";
 
 // ── Step Data ────────────────────────────────────────────────────────
@@ -103,6 +104,7 @@ const STEPS = [
 
 export function OnboardingQuiz() {
   const router = useRouter();
+  const { updateUser } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const welcomeAudioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -159,8 +161,10 @@ export function OnboardingQuiz() {
 
   async function markOnboardingComplete() {
     // Always flips the user's onboardingCompleted bit so the (main)
-    // layout's guard stops redirecting back here. Returns when done so
-    // callers can navigate after the flag has propagated to localStorage.
+    // layout's guard stops redirecting back here. The guard reads the auth
+    // context's in-memory user, so the flip must go through updateUser —
+    // writing localStorage alone leaves the context stale and the guard
+    // bounces the user straight back to /onboarding.
     try {
       await apiFetch("/data/user", {
         method: "PATCH",
@@ -173,16 +177,7 @@ export function OnboardingQuiz() {
       // Network/API failure — still flip the local flag so the user
       // doesn't get stuck on /onboarding. Server will reconcile later.
     }
-    const savedUser = localStorage.getItem("vedic-user");
-    if (savedUser) {
-      try {
-        const user = JSON.parse(savedUser);
-        user.onboardingCompleted = true;
-        localStorage.setItem("vedic-user", JSON.stringify(user));
-      } catch {
-        // ignore malformed cached user
-      }
-    }
+    updateUser({ onboardingCompleted: true });
   }
 
   async function handleComplete() {

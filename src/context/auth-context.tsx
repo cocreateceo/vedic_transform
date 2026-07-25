@@ -62,6 +62,10 @@ interface AuthContextType {
   register: (email: string, password: string, name?: string) => Promise<{ success: boolean; error?: string }>;
   loginWithGoogle: (credential: string) => Promise<{ success: boolean; error?: string; isNew?: boolean }>;
   logout: () => void;
+  /** Merge a partial update into the in-memory user AND the localStorage
+   *  cache. Route guards read the in-memory user, so any flow that flips
+   *  user flags (e.g. onboarding completion) must go through this. */
+  updateUser: (patch: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -209,8 +213,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("vedic-user");
   };
 
+  const updateUser = (patch: Partial<User>) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...patch };
+      localStorage.setItem("vedic-user", JSON.stringify(next));
+      return next;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, isLoading, login, register, loginWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, token, isLoading, login, register, loginWithGoogle, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
