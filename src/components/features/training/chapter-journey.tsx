@@ -20,6 +20,7 @@ import {
   Lightbulb,
   ListChecks,
   NotebookPen,
+  PlayCircle,
   Sparkles,
   Timer,
 } from "lucide-react";
@@ -36,6 +37,7 @@ const SERIF = SERIF_CLASS;
 
 type StepKey =
   | "read"
+  | "watch"
   | "takeaways"
   | "practice"
   | "meditation"
@@ -69,6 +71,13 @@ export function ChapterJourney({
         icon: BookOpen,
       },
     ];
+    if (chapter.lessonVideoId)
+      list.push({
+        key: "watch",
+        title: "Watch the Cinematic Lesson",
+        note: "The chapter's documentary, above",
+        icon: PlayCircle,
+      });
     if (chapter.keyTakeaways?.length)
       list.push({
         key: "takeaways",
@@ -328,6 +337,22 @@ function StepBody({
             reached this point with attention, this step is yours to claim.
           </p>
           <MarkButton isDone={isDone} onMark={onMark} label="I read the chapter" />
+        </div>
+      );
+
+    case "watch":
+      return (
+        <div className="space-y-4">
+          <p className="text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+            The cinematic lesson sits just below the chapter opening — the
+            same teaching told as a short documentary. Watch it once with full
+            attention.
+          </p>
+          <MarkButton
+            isDone={isDone}
+            onMark={onMark}
+            label="I watched the lesson"
+          />
         </div>
       );
 

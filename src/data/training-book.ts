@@ -47,12 +47,17 @@ export interface TrainingChapter {
   quiz?: TrainingQuizQuestion[];
   dailyChallenge?: string;
   meditationMinutes?: number;
+  /** YouTube ID of the chapter's cinematic documentary lesson. */
+  lessonVideoId?: string;
+  /** Story artwork gallery, /training-media/gallery/<slug>/<file>.webp */
+  gallery?: { src: string; title: string }[];
 }
 
 export const TRAINING_CHAPTERS: TrainingChapter[] = [
   {
     slug: "introduction",
     number: 0,
+    lessonVideoId: "rZ22zP4Jx5A",
     title: "10x Vedic Transformation",
     subtitle:
       "Ancient Wisdom. Conscious Leadership. Measurable Outcomes. Science-Powered Transformation.",
@@ -371,6 +376,17 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     dailyChallenge:
       "Spend 20 minutes in nature today without your phone or headphones. Observe the intelligence present in everything — then write one sentence about what you noticed.",
     meditationMinutes: 10,
+    lessonVideoId: "3Ml2fdqkA1c",
+    gallery: [
+      { src: "/training-media/gallery/connect-to-the-universe/hanuman_ocean.webp", title: "Hanuman at the ocean's edge" },
+      { src: "/training-media/gallery/connect-to-the-universe/hanuman_jambavan.webp", title: "Jambavan reminds Hanuman who he is" },
+      { src: "/training-media/gallery/connect-to-the-universe/hanuman_rising.webp", title: "The remembering" },
+      { src: "/training-media/gallery/connect-to-the-universe/hanuman_flight.webp", title: "The impossible crossing" },
+      { src: "/training-media/gallery/connect-to-the-universe/arjuna_despair.webp", title: "Arjuna's crisis at Kurukshetra" },
+      { src: "/training-media/gallery/connect-to-the-universe/krishna_counsel.webp", title: "Krishna expands Arjuna's consciousness" },
+      { src: "/training-media/gallery/connect-to-the-universe/vishwaroopa.webp", title: "Vishwaroopa — the universal form" },
+      { src: "/training-media/gallery/connect-to-the-universe/arjuna_renewed.webp", title: "Clarity restored" },
+    ],
   },
   {
     slug: "consciousness-and-self-awareness",
@@ -619,6 +635,18 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     dailyChallenge:
       "Observe yourself without judgment for one full day. Each time a reaction arises, silently name it — \"I notice anger arising\" — and write down three of these moments before sleep.",
     meditationMinutes: 10,
+    // lessonVideoId: set when the Chapter 2 documentary upload completes.
+    gallery: [
+      { src: "/training-media/gallery/consciousness-and-self-awareness/arjuna_closeup.webp", title: "The warrior who could not fight" },
+      { src: "/training-media/gallery/consciousness-and-self-awareness/arjuna_despair2.webp", title: "Overwhelmed at Kurukshetra" },
+      { src: "/training-media/gallery/consciousness-and-self-awareness/chariot_metaphor.webp", title: "The chariot of life — Katha Upanishad" },
+      { src: "/training-media/gallery/consciousness-and-self-awareness/chariot_wild.webp", title: "When the horses run wild" },
+      { src: "/training-media/gallery/consciousness-and-self-awareness/chariot_aligned.webp", title: "The intellect takes the reins" },
+      { src: "/training-media/gallery/consciousness-and-self-awareness/ego_masks.webp", title: "The ego's many masks" },
+      { src: "/training-media/gallery/consciousness-and-self-awareness/yudhishthira_storm.webp", title: "Yudhishthira — calm within the storm" },
+      { src: "/training-media/gallery/consciousness-and-self-awareness/mirror_reveal.webp", title: "The mirror principle" },
+      { src: "/training-media/gallery/consciousness-and-self-awareness/doorway_inward.webp", title: "The doorway inward" },
+    ],
   },
   {
     slug: "vedic-meditation-and-healing",

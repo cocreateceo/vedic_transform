@@ -31,11 +31,13 @@ omitted from the rail).
 
 ## Phase 2 — Media & Motivation (next)
 
-- **Cinematic lessons**: 8–15 min documentary video per chapter (subtitles,
-  speed, chapter markers, transcript). Needs video production; player can be
-  the existing `PexelsVideo`/HTML5 stack + a `lessonVideo` field. Interim: a
-  narrated audio version of each chapter (ElevenLabs or recorded) as
-  "Audio Narration" in the reader.
+- **Cinematic lessons** ✅ (2026-07-24): documentary videos produced in the
+  transform_youtube repo and embedded via `lessonVideoId` + the lazy
+  `CinematicLesson` player — Introduction (rZ22zP4Jx5A) and Chapter 1
+  (3Ml2fdqkA1c) live; Chapter 2 pending upload (set `lessonVideoId` in
+  training-book.ts when the ID arrives). Story-artwork galleries (`gallery`
+  field, "The Stories, Painted") shipped alongside. Still open: subtitles/
+  transcript surfacing and chapter markers.
 - **Per-chapter meditation audio**: wire specific session tracks (not just
   /sessions) — `meditationTrackId` joining the sessions library. Morning /
   evening / deep / sleep variants per the vision.

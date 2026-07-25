@@ -39,6 +39,7 @@ import {
   trainingContentId,
 } from "@/data/training-book";
 import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
+import { CinematicLesson } from "../cinematic-lesson";
 import { Mandala, LotusDivider } from "./mandala";
 import { FadeUp, Stagger, StaggerItem, GrowLine } from "./reveal";
 import { ElevenGates, type Gate } from "./eleven-gates";
@@ -230,6 +231,25 @@ export function IntroductionExperience({
           <ChevronDown className="h-6 w-6" />
         </a>
       </section>
+
+      {/* ————— The cinematic lesson ————— */}
+      {chapter.lessonVideoId && (
+        <section className="relative bg-gradient-to-b from-[#0C0F22] to-[var(--color-bg-primary)] px-4 pb-16 pt-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <FadeUp>
+              <p className="pt-8 text-center text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-200/80">
+                The cinematic lesson
+              </p>
+              <div className="mt-6">
+                <CinematicLesson
+                  videoId={chapter.lessonVideoId}
+                  title={chapter.title}
+                />
+              </div>
+            </FadeUp>
+          </div>
+        </section>
+      )}
 
       {/* ————— Daylight body (dawn glow over the theme background) ————— */}
       <div className="relative bg-[var(--color-bg-primary)] px-4 sm:px-6 lg:px-8">

@@ -25,6 +25,7 @@ import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
 import { Mandala, LotusDivider } from "./intro/mandala";
 import { FadeUp, Stagger, StaggerItem } from "./intro/reveal";
 import { ChapterJourney } from "./chapter-journey";
+import { CinematicLesson } from "./cinematic-lesson";
 
 const serif = introSerif;
 const SERIF = SERIF_CLASS;
@@ -164,6 +165,25 @@ export function ChapterExperience({
           <ChevronDown className="h-6 w-6" />
         </a>
       </section>
+
+      {/* ————— The cinematic lesson: night gives way to the teaching ————— */}
+      {chapter.lessonVideoId && (
+        <section className="relative bg-gradient-to-b from-[#0C0F22] to-[var(--color-bg-primary)] px-4 pb-16 pt-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <FadeUp>
+              <p className="pt-8 text-center text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-200/80">
+                The cinematic lesson
+              </p>
+              <div className="mt-6">
+                <CinematicLesson
+                  videoId={chapter.lessonVideoId}
+                  title={chapter.title}
+                />
+              </div>
+            </FadeUp>
+          </div>
+        </section>
+      )}
 
       {/* ————— Daylight body ————— */}
       <div className="relative bg-[var(--color-bg-primary)] px-4 sm:px-6 lg:px-8">
@@ -360,6 +380,51 @@ export function ChapterExperience({
                 </FadeUp>
               </section>
             )}
+
+          {/* Story artwork — the chapter's stories, painted */}
+          {chapter.gallery && chapter.gallery.length > 0 && (
+            <>
+              <LotusDivider />
+              <section className="py-16 sm:py-20">
+                <FadeUp className="mx-auto max-w-[44rem] text-center">
+                  <h2
+                    className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
+                  >
+                    The Stories, Painted
+                  </h2>
+                  <p className="mt-4 text-[16px] text-[var(--color-text-secondary)]">
+                    Teaching artwork from this chapter — tap any piece to view
+                    it full size.
+                  </p>
+                </FadeUp>
+                <Stagger className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-3">
+                  {chapter.gallery.map((art) => (
+                    <StaggerItem key={art.src}>
+                      <a
+                        href={art.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block overflow-hidden rounded-2xl border border-[#DAA520]/30 bg-[#0C0F22] transition-all hover:-translate-y-1 hover:border-[#DAA520] hover:shadow-[0_8px_30px_rgba(218,165,32,0.2)]"
+                      >
+                        <div className="relative aspect-video overflow-hidden">
+                          <Image
+                            src={art.src}
+                            alt={art.title}
+                            fill
+                            sizes="(max-width: 1024px) 50vw, 33vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+                        <p className="px-4 py-3 text-center text-[13px] font-medium text-amber-100/90">
+                          {art.title}
+                        </p>
+                      </a>
+                    </StaggerItem>
+                  ))}
+                </Stagger>
+              </section>
+            </>
+          )}
 
           <LotusDivider />
 
