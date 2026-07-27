@@ -61,9 +61,9 @@ export default function CohortRegisterPage() {
               key={title}
               className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-5"
             >
-              <Icon className="w-5 h-5 text-[#E8860D]" />
-              <h2 className="mt-3 text-sm font-semibold">{title}</h2>
-              <p className="mt-1 text-xs text-[#64748b] leading-relaxed">{text}</p>
+              <Icon className="w-6 h-6 text-[#E8860D]" />
+              <h2 className="mt-3 text-lg font-semibold">{title}</h2>
+              <p className="mt-1.5 text-[15px] text-[#64748b] leading-relaxed">{text}</p>
             </div>
           ))}
         </div>
@@ -72,10 +72,10 @@ export default function CohortRegisterPage() {
       {/* ═══ Registration form ═══ */}
       <section className="py-16 bg-[#FFF9F0]">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className={`text-3xl font-semibold text-center mb-2 ${SERIF_CLASS}`}>
+          <h2 className={`text-3xl sm:text-4xl font-semibold text-center mb-3 ${SERIF_CLASS}`}>
             Reserve your <span className="text-[#E8860D]">seat</span>
           </h2>
-          <p className="text-sm text-[#64748b] text-center mb-8">
+          <p className="text-base text-[#64748b] text-center mb-8">
             We&rsquo;ll email you joining details before the cohort begins.
           </p>
           <RegistrationForm />

@@ -26,7 +26,9 @@ const SOURCES = [
 ];
 
 const inputClass =
-  "w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-sm";
+  "w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-base";
+
+const labelClass = "block text-sm font-medium text-[#475569] mb-1.5";
 
 export function RegistrationForm() {
   const [name, setName] = useState("");
@@ -61,18 +63,18 @@ export function RegistrationForm() {
   if (done) {
     return (
       <div className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-8 text-center">
-        <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
-        <h3 className="mt-4 text-lg font-semibold">You&rsquo;re in!</h3>
-        <p className="mt-2 text-sm text-[#64748b] leading-relaxed">
+        <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
+        <h3 className="mt-4 text-xl font-semibold">You&rsquo;re in!</h3>
+        <p className="mt-2 text-base text-[#64748b] leading-relaxed">
           The cohort starts Monday, August 17, 2026. We&rsquo;ll email you the
           joining details before we begin.
         </p>
-        <p className="mt-4 text-sm text-[#64748b]">
+        <p className="mt-4 text-base text-[#64748b]">
           Meanwhile, you can start the free self-paced course today:
         </p>
         <Link
           href="/register"
-          className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all"
+          className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-xl text-base font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all"
         >
           Explore the course <ArrowRight className="w-4 h-4" />
         </Link>
@@ -83,10 +85,10 @@ export function RegistrationForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-6 sm:p-8 space-y-4"
+      className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-6 sm:p-8 space-y-5"
     >
       <div>
-        <label htmlFor="reg-name" className="block text-xs font-medium text-[#64748b] mb-1">
+        <label htmlFor="reg-name" className={labelClass}>
           Full name *
         </label>
         <input
@@ -100,7 +102,7 @@ export function RegistrationForm() {
         />
       </div>
       <div>
-        <label htmlFor="reg-email" className="block text-xs font-medium text-[#64748b] mb-1">
+        <label htmlFor="reg-email" className={labelClass}>
           Email address *
         </label>
         <input
@@ -113,7 +115,7 @@ export function RegistrationForm() {
         />
       </div>
       <div>
-        <label htmlFor="reg-phone" className="block text-xs font-medium text-[#64748b] mb-1">
+        <label htmlFor="reg-phone" className={labelClass}>
           Phone (optional, with country code)
         </label>
         <input
@@ -127,7 +129,7 @@ export function RegistrationForm() {
         />
       </div>
       <div>
-        <label htmlFor="reg-region" className="block text-xs font-medium text-[#64748b] mb-1">
+        <label htmlFor="reg-region" className={labelClass}>
           Where will you join from?
         </label>
         <select
@@ -143,7 +145,7 @@ export function RegistrationForm() {
         </select>
       </div>
       <div>
-        <label htmlFor="reg-source" className="block text-xs font-medium text-[#64748b] mb-1">
+        <label htmlFor="reg-source" className={labelClass}>
           How did you hear about us?
         </label>
         <select
@@ -172,24 +174,24 @@ export function RegistrationForm() {
         />
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-base text-red-600">{error}</p>}
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all disabled:opacity-60"
+        className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all disabled:opacity-60"
       >
         {submitting ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin" /> Registering…
+            <Loader2 className="w-5 h-5 animate-spin" /> Registering…
           </>
         ) : (
           <>
-            Register free <ArrowRight className="w-4 h-4" />
+            Register free <ArrowRight className="w-5 h-5" />
           </>
         )}
       </button>
-      <p className="text-[11px] text-[#94a3b8] text-center">
+      <p className="text-xs text-[#94a3b8] text-center">
         Free forever. No payment details asked — ever.
       </p>
     </form>
