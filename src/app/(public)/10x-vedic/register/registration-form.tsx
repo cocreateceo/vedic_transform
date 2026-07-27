@@ -26,7 +26,7 @@ const SOURCES = [
 ];
 
 const inputClass =
-  "w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-base";
+  "w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none text-base";
 
 const labelClass = "block text-sm font-medium text-[#475569] mb-1.5";
 
@@ -62,7 +62,7 @@ export function RegistrationForm() {
 
   if (done) {
     return (
-      <div className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-8 text-center">
+      <div className="rounded-2xl bg-white shadow-xl shadow-black/20 p-8 sm:p-10 text-center">
         <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
         <h3 className="mt-4 text-xl font-semibold">You&rsquo;re in!</h3>
         <p className="mt-2 text-base text-[#64748b] leading-relaxed">
@@ -85,8 +85,14 @@ export function RegistrationForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-6 sm:p-8 space-y-5"
+      className="rounded-2xl bg-white shadow-xl shadow-black/20 p-7 sm:p-10 space-y-4"
     >
+      <div className="text-center mb-2">
+        <h2 className="text-2xl font-semibold">Reserve Your Seat</h2>
+        <p className="mt-1 text-sm text-[#64748b]">
+          Free · Starts Monday, August 17, 2026
+        </p>
+      </div>
       <div>
         <label htmlFor="reg-name" className={labelClass}>
           Full name *
@@ -98,6 +104,7 @@ export function RegistrationForm() {
           onChange={(e) => setName(e.target.value)}
           maxLength={100}
           required
+          placeholder="Your full name"
           className={inputClass}
         />
       </div>
@@ -111,6 +118,7 @@ export function RegistrationForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          placeholder="you@email.com"
           className={inputClass}
         />
       </div>
@@ -187,7 +195,7 @@ export function RegistrationForm() {
           </>
         ) : (
           <>
-            Register free <ArrowRight className="w-5 h-5" />
+            Reserve My Free Seat <ArrowRight className="w-5 h-5" />
           </>
         )}
       </button>
