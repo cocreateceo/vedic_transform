@@ -415,6 +415,10 @@ export default $config({
       handler: "functions/data/admin-users.handler",
       link: adminLink,
     });
+    api.route("GET /admin/class-registrations", {
+      handler: "functions/data/admin-class-registrations.handler",
+      link: [users, jwtSecret, classRegistrations],
+    });
 
     // ── Data Routes ─────────────────────────────────────────────────
 

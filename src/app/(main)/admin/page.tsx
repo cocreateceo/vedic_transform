@@ -97,6 +97,22 @@ export default function AdminUsersPage() {
         </CardContent>
       </Card>
 
+      <Link href="/admin/class-registrations" className="block">
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="font-medium text-[var(--color-text-primary)]">
+                Cohort registrations
+              </p>
+              <p className="text-xs text-gray-500">
+                10x Vedic live cohort roster + CSV export
+              </p>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-400 shrink-0" />
+          </CardContent>
+        </Card>
+      </Link>
+
       <div>
         <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">
           {heading}
