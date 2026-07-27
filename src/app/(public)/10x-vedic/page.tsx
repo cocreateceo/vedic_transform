@@ -59,10 +59,10 @@ export default function TenXVedicPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="/register"
+              href="/10x-vedic/register"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all"
             >
-              Start the course <ArrowRight className="w-4 h-4" />
+              Join the live cohort <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/login"
@@ -72,7 +72,11 @@ export default function TenXVedicPage() {
             </Link>
           </div>
           <p className="mt-4 text-xs text-[#94a3b8]">
-            Free with an account — all you need is an email address.
+            Free live cohort starts Monday, August 17, 2026 — or start the{" "}
+            <Link href="/register" className="underline hover:text-white">
+              self-paced course
+            </Link>{" "}
+            anytime.
           </p>
         </div>
       </section>
@@ -159,10 +163,10 @@ export default function TenXVedicPage() {
             .&rdquo;
           </p>
           <Link
-            href="/register"
+            href="/10x-vedic/register"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25 hover:shadow-xl transition-all"
           >
-            Begin your journey <ArrowRight className="w-4 h-4" />
+            Join the live cohort <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
