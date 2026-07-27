@@ -326,6 +326,16 @@ export default $config({
       primaryIndex: { hashKey: "email" },
     });
 
+    // Live-cohort class registrations (10x Vedic). email+cohortId PK makes
+    // re-registration idempotent; the GSI serves the admin roster list.
+    const classRegistrations = new sst.aws.Dynamo("ClassRegistrations", {
+      fields: { email: "string", cohortId: "string" },
+      primaryIndex: { hashKey: "email", rangeKey: "cohortId" },
+      globalIndexes: {
+        "cohortId-index": { hashKey: "cohortId" },
+      },
+    });
+
     // Subscriptions (M1, scaffold). One row per user; absence = free tier.
     // A future payment-gateway webhook flips plan/status/currentPeriodEnd.
     const subscriptions = new sst.aws.Dynamo("Subscriptions", {
@@ -638,6 +648,12 @@ export default $config({
     api.route("POST /newsletter/subscribe", {
       handler: "functions/data/newsletter.handler",
       link: [newsletterSubscribers, events],
+    });
+
+    // ── Live-cohort registration (public, no auth) ──────────────
+    api.route("POST /class-registration", {
+      handler: "functions/data/class-registration.handler",
+      link: [classRegistrations],
     });
 
     // ── Web Push (P0-1) ─────────────────────────────────────────
