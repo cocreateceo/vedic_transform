@@ -40,7 +40,8 @@ import {
 } from "@/data/training-book";
 import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
 import { CinematicLesson } from "../cinematic-lesson";
-import { InlineArt, PosterGrid } from "../poster-grid";
+import { ChapterAccordion } from "../chapter-accordion";
+import { PosterGrid } from "../poster-grid";
 import { Mandala, LotusDivider } from "./mandala";
 import { FadeUp, Stagger, StaggerItem, GrowLine } from "./reveal";
 import { ElevenGates, type Gate } from "./eleven-gates";
@@ -150,11 +151,12 @@ export function IntroductionExperience({
 
   const readMinutes = chapterReadMinutes(chapter);
 
-  // Study cards woven inline beside the sections they teach; leftovers
-  // (no section key) collect in the Study Cards grid near the end.
-  const cards = chapter.studyCards ?? [];
-  const mediaFor = (key: string) => cards.filter((m) => m.section === key);
-  const leftoverCards = cards.filter((m) => !m.section);
+  // One compact gallery holds every concept poster and study card —
+  // grouped instead of scattered, per the guided-lesson layout.
+  const galleryItems = [
+    ...(chapter.gallery ?? []),
+    ...(chapter.studyCards ?? []),
+  ];
 
   const subtitleLines = (chapter.subtitle ?? "")
     .split(". ")
@@ -267,7 +269,7 @@ export function IntroductionExperience({
         <div className="relative mx-auto max-w-5xl">
           {/* 48-Day Journey */}
           {journey && (
-            <section id="journey" className="scroll-mt-8 py-20 sm:py-28">
+            <section id="journey" className="scroll-mt-8 py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
                 <h2
                   className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
@@ -281,12 +283,12 @@ export function IntroductionExperience({
                 </div>
               </FadeUp>
 
-              <div className="relative mx-auto mt-16 max-w-md">
+              <div className="relative mx-auto mt-8 max-w-md">
                 <GrowLine className="absolute left-[23px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#DAA520] via-[#DAA520]/40 to-[#DAA520]" />
-                <Stagger className="space-y-10">
+                <Stagger className="space-y-4">
                   {MILESTONES.map(({ icon: Icon, label, note }) => (
                     <StaggerItem key={label} className="relative flex items-center gap-5 pl-0">
-                      <span className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-[#DAA520]/60 bg-[var(--color-bg-surface)] text-[#B8860B] shadow-[0_0_14px_rgba(218,165,32,0.2)]">
+                      <span className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#DAA520]/60 bg-[var(--color-bg-surface)] text-[#B8860B] shadow-[0_0_14px_rgba(218,165,32,0.2)]">
                         <Icon className="h-5 w-5" />
                       </span>
                       <span>
@@ -303,7 +305,7 @@ export function IntroductionExperience({
               </div>
 
               {journey.paragraphs[2] && (
-                <FadeUp className="mx-auto mt-16 max-w-[40rem] text-center">
+                <FadeUp className="mx-auto mt-8 max-w-[40rem] text-center">
                   <p
                     className={`${SERIF} text-2xl italic leading-relaxed text-[#8B6914] sm:text-[1.65rem]`}
                   >
@@ -314,15 +316,16 @@ export function IntroductionExperience({
             </section>
           )}
 
-          {/* The Journey at a Glance — concept posters */}
-          {chapter.gallery && chapter.gallery.length > 0 && (
+          {/* Introduction Gallery — every concept poster and study card */}
+          {galleryItems.length > 0 && (
             <>
               <LotusDivider />
               <PosterGrid
                 heading="The Journey at a Glance"
-                subtitle="Five frames that hold the whole path — tap any poster to view it full size."
-                items={chapter.gallery}
-                columns={3}
+                subtitle="The whole Introduction as frames — tap any poster to study it full size."
+                items={galleryItems}
+                columns={4}
+                compact
               />
             </>
           )}
@@ -331,7 +334,7 @@ export function IntroductionExperience({
 
           {/* A Profound Shift — the modern world and the Vedic response */}
           {shift && (
-            <section className="py-20 sm:py-28">
+            <section className="py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
                 <h2
                   className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
@@ -411,7 +414,6 @@ export function IntroductionExperience({
                   </div>
                 </FadeUp>
               )}
-              <InlineArt items={mediaFor("A Profound Shift")} />
             </section>
           )}
         </div>
@@ -419,7 +421,7 @@ export function IntroductionExperience({
 
       {/* ————— Night interlude: the quote ————— */}
       {shift?.paragraphs[3] && (
-        <section className="relative overflow-hidden bg-[#0C0F22] px-6 py-28 text-center sm:py-36">
+        <section className="relative overflow-hidden bg-[#0C0F22] px-6 py-14 text-center sm:py-20">
           <Mandala className="absolute left-1/2 top-1/2 h-[110vmin] w-[110vmin] -translate-x-1/2 -translate-y-1/2 text-[#DAA520] opacity-[0.07]" />
           <FadeUp className="relative z-10 mx-auto max-w-3xl">
             <p
@@ -434,20 +436,18 @@ export function IntroductionExperience({
       {/* ————— Return to daylight ————— */}
       <div className="bg-[var(--color-bg-primary)] px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
-          {/* Remaining Profound Shift prose */}
+          {/* Remaining Profound Shift prose — collapsed continuation */}
           {shift && shift.paragraphs.length > 4 && (
-            <section className="mx-auto max-w-[44rem] py-20 sm:py-24">
-              <FadeUp className="space-y-6 text-[17px] leading-[1.85] text-[var(--color-text-primary)]">
-                {shift.paragraphs[4] && <p>{shift.paragraphs[4]}</p>}
-                {shift.paragraphs[5] && (
-                  <p className="border-l-2 border-[#DAA520] pl-5 text-[var(--color-text-primary)]">
-                    {shift.paragraphs[5]}
-                  </p>
-                )}
-                {shift.paragraphs.slice(6).map((p, i) => (
-                  <p key={i}>{p}</p>
-                ))}
-              </FadeUp>
+            <section className="mx-auto max-w-3xl py-10 sm:py-14">
+              <ChapterAccordion
+                sections={[
+                  {
+                    heading: "The Profound Shift, continued",
+                    paragraphs: shift.paragraphs.slice(4),
+                    art: [],
+                  },
+                ]}
+              />
             </section>
           )}
 
@@ -455,7 +455,7 @@ export function IntroductionExperience({
 
           {/* Five Dimensions of Evolution */}
           {dimensions && (
-            <section className="py-20 sm:py-28">
+            <section className="py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
                 <h2
                   className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
@@ -469,7 +469,7 @@ export function IntroductionExperience({
                 )}
               </FadeUp>
 
-              <Stagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+              <Stagger className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
                 {DIMENSIONS.map(({ icon: Icon, title, note, art }) => (
                   <StaggerItem key={title}>
                     <div className="group h-full overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-bg-surface)] text-center transition-all hover:-translate-y-1 hover:border-[#DAA520] hover:shadow-[0_8px_30px_rgba(218,165,32,0.15)]">
@@ -500,7 +500,7 @@ export function IntroductionExperience({
 
               {/* What the journey combines */}
               {dimensions.paragraphs[1] && (
-                <FadeUp className="mx-auto mt-16 max-w-3xl text-center">
+                <FadeUp className="mx-auto mt-10 max-w-3xl text-center">
                   <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#B8860B]">
                     This Vedic journey combines
                   </p>
@@ -520,7 +520,7 @@ export function IntroductionExperience({
               )}
 
               {dimensions.paragraphs[2] && (
-                <FadeUp className="mx-auto mt-16 max-w-[38rem] text-center">
+                <FadeUp className="mx-auto mt-10 max-w-[38rem] text-center">
                   <p className={`${SERIF} text-2xl italic leading-relaxed text-[#8B6914] sm:text-3xl`}>
                     {dimensions.paragraphs[2]}
                   </p>
@@ -529,7 +529,7 @@ export function IntroductionExperience({
 
               {/* Alignment feature card */}
               {dimensions.paragraphs[3] && (
-                <FadeUp className="mt-16">
+                <FadeUp className="mt-10">
                   <div className="grid overflow-hidden rounded-3xl border border-[#DAA520]/50 bg-gradient-to-br from-[#FFF9F0] via-amber-50/60 to-orange-50/40 md:grid-cols-[2fr_3fr]">
                     <div className="relative min-h-64 md:min-h-full">
                       <Image
@@ -558,7 +558,6 @@ export function IntroductionExperience({
                   <p className="text-[17px] leading-[1.8] text-[var(--color-text-primary)]">{p}</p>
                 </FadeUp>
               ))}
-              <InlineArt items={mediaFor("Five Dimensions of Evolution")} />
             </section>
           )}
 
@@ -566,7 +565,7 @@ export function IntroductionExperience({
 
           {/* Who This Book Is For */}
           {audience && (
-            <section className="py-20 sm:py-28">
+            <section className="py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
                 <h2
                   className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
@@ -591,7 +590,7 @@ export function IntroductionExperience({
                 ))}
               </Stagger>
 
-              <FadeUp className="mx-auto mt-8 max-w-2xl text-center">
+              <FadeUp className="mx-auto mt-6 max-w-2xl text-center">
                 <p className={`${SERIF} text-xl italic text-[#8B6914]`}>
                   Anyone seeking a deeper meaningful connection with themselves
                   and the universe.
@@ -599,34 +598,20 @@ export function IntroductionExperience({
               </FadeUp>
 
               {audience.paragraphs[1] && (
-                <FadeUp className="mx-auto mt-12 max-w-[44rem] text-center">
+                <FadeUp className="mx-auto mt-8 max-w-[44rem] text-center">
                   <p className="text-[17px] leading-[1.8] text-[var(--color-text-primary)]">
                     {audience.paragraphs[1]}
                   </p>
                 </FadeUp>
               )}
-              <InlineArt items={mediaFor("Who This Book Is For")} />
             </section>
-          )}
-
-          {/* Study cards — learn from the frames */}
-          {leftoverCards.length > 0 && (
-            <>
-              <LotusDivider />
-              <PosterGrid
-                heading="Study Cards"
-                subtitle="The Introduction's teachings, one frame at a time — tap any card to study it full size."
-                items={leftoverCards}
-                columns={4}
-              />
-            </>
           )}
 
           <LotusDivider />
 
           {/* The Eleven Gates */}
           {chapterList && (
-            <section className="py-20 sm:py-28">
+            <section className="py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
                 <h2
                   className={`${SERIF} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}
@@ -638,7 +623,7 @@ export function IntroductionExperience({
                   lights the way to the next.
                 </p>
               </FadeUp>
-              <div className="mt-14">
+              <div className="mt-8">
                 <ElevenGates gates={gates} />
               </div>
             </section>
@@ -665,7 +650,7 @@ export function IntroductionExperience({
       </div>
 
       {/* ————— Sunrise closing ————— */}
-      <section className="relative overflow-hidden px-6 py-24 text-center sm:py-32">
+      <section className="relative overflow-hidden px-6 py-16 text-center sm:py-24">
         <Image
           src="/training-media/intro-closing-sunrise.webp"
           alt=""

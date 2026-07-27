@@ -53,7 +53,7 @@ export function ElevenGates({ gates }: { gates: Gate[] }) {
         aria-hidden="true"
         className="absolute left-[19px] sm:left-1/2 sm:-translate-x-px top-4 bottom-4 w-0.5 bg-gradient-to-b from-[#DAA520]/70 via-[#DAA520]/30 to-[var(--color-border)]"
       />
-      <ol className="space-y-8 sm:space-y-4">
+      <ol className="space-y-4 sm:space-y-3">
         {gates.map((gate, i) => {
           const done = completed.has(trainingContentId(gate.slug));
           const current = gate.slug === currentSlug;
@@ -62,7 +62,7 @@ export function ElevenGates({ gates }: { gates: Gate[] }) {
           const card = (
             <div
               className={cn(
-                "rounded-2xl border p-5 transition-all",
+                "flex items-stretch gap-4 rounded-2xl border p-3.5 transition-all",
                 done && "border-[#DAA520]/60 bg-gradient-to-br from-amber-50/80 to-white/60 shadow-[0_0_18px_rgba(218,165,32,0.15)]",
                 current && "border-[var(--color-primary)] bg-[var(--color-card-bg)] shadow-lg shadow-orange-500/10",
                 !done && !current && gate.published && "border-[var(--color-border)] bg-[var(--color-card-bg)] hover:border-[#DAA520]",
@@ -70,37 +70,41 @@ export function ElevenGates({ gates }: { gates: Gate[] }) {
               )}
             >
               {gate.image && (
-                <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-xl">
-                  <Image
-                    src={gate.image}
-                    alt=""
-                    fill
-                    sizes="(max-width: 640px) 100vw, 480px"
-                    className={cn(
-                      "object-cover",
-                      !gate.published && "opacity-60 saturate-50"
-                    )}
-                  />
+                <div className="relative w-24 shrink-0 self-center overflow-hidden rounded-lg sm:w-32">
+                  <div className="relative aspect-video">
+                    <Image
+                      src={gate.image}
+                      alt=""
+                      fill
+                      sizes="128px"
+                      className={cn(
+                        "object-cover",
+                        !gate.published && "opacity-60 saturate-50"
+                      )}
+                    />
+                  </div>
                 </div>
               )}
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B8860B]">
-                Chapter {gate.number}
-                {done && " · Completed"}
-                {current && !done && " · You are here"}
-                {!gate.published && " · Upcoming"}
-              </p>
-              <h3 className="mt-1.5 text-lg font-semibold text-[var(--color-text-primary)] leading-snug">
-                {gate.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                {gate.body}
-              </p>
-              {gate.published && (
-                <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary)]">
-                  {done ? "Revisit chapter" : current ? "Continue here" : "Read chapter"}
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              )}
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[#B8860B]">
+                  Chapter {gate.number}
+                  {done && " · Completed"}
+                  {current && !done && " · You are here"}
+                  {!gate.published && " · Upcoming"}
+                </p>
+                <h3 className="mt-0.5 truncate text-[15px] font-semibold leading-snug text-[var(--color-text-primary)]">
+                  {gate.title}
+                </h3>
+                <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-[var(--color-text-secondary)]">
+                  {gate.body}
+                </p>
+                {gate.published && (
+                  <span className="mt-1.5 inline-flex items-center gap-1 text-[13px] font-semibold text-[var(--color-primary)]">
+                    {done ? "Revisit chapter" : current ? "Continue here" : "Read chapter"}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                )}
+              </div>
             </div>
           );
 
