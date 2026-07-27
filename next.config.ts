@@ -15,6 +15,18 @@ const nextConfig: NextConfig = {
   // Preserve the existing URL shape so inbound links / external citations
   // don't 301-flip.
   trailingSlash: true,
+  async redirects() {
+    return [
+      // /register previously client-redirected to the login signup tab,
+      // which left crawlers and no-JS agents staring at an empty shell.
+      // Redirect at the HTTP layer instead so the URL stays shareable.
+      {
+        source: "/register",
+        destination: "/login/?tab=signup",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

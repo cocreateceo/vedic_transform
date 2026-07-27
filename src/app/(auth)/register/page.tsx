@@ -1,15 +1,7 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default function RegisterPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    // Redirect to unified login page with signup tab
-    router.replace("/login?tab=signup");
-  }, [router]);
-
-  return null;
+  // Fallback for any path that slips past the next.config redirect —
+  // server-side, so no-JS agents and crawlers never see an empty shell.
+  redirect("/login/?tab=signup");
 }
