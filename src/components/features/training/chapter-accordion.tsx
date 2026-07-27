@@ -7,7 +7,7 @@
 // restores the full article flow, and each open panel ends with a
 // "Continue" step to the next movement — a guided reading path.
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
@@ -17,7 +17,11 @@ export interface AccordionSection {
   heading: string;
   paragraphs: string[];
   art: { src: string; title: string }[];
+  minutes?: number;
 }
+
+/** Fired by the LessonOutline drawer to open a specific movement. */
+const OPEN_MOVEMENT_EVENT = "vedic:open-movement";
 
 function previewOf(section: AccordionSection): string {
   const first = section.paragraphs[0] ?? "";
@@ -35,6 +39,19 @@ export function ChapterAccordion({
   const [open, setOpen] = useState<Set<number>>(() => new Set([0]));
   const [expandAll, setExpandAll] = useState(false);
   const refs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const index = (e as CustomEvent<{ index: number }>).detail?.index;
+      if (typeof index !== "number") return;
+      setOpen((prev) => new Set(prev).add(index));
+      setTimeout(() => {
+        refs.current[index]?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+    };
+    window.addEventListener(OPEN_MOVEMENT_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_MOVEMENT_EVENT, onOpen);
+  }, []);
 
   const isOpen = (i: number) => expandAll || open.has(i);
   const allOpen = expandAll || open.size === sections.length;
@@ -118,6 +135,11 @@ export function ChapterAccordion({
                     </span>
                   )}
                 </span>
+                {typeof section.minutes === "number" && (
+                  <span className="mt-1.5 shrink-0 text-[12px] font-semibold text-[var(--color-text-muted)]">
+                    {section.minutes} min
+                  </span>
+                )}
                 <ChevronDown
                   className={cn(
                     "mt-1 h-5 w-5 shrink-0 text-[var(--color-text-muted)] transition-transform",

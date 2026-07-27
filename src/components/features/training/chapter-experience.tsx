@@ -27,7 +27,7 @@ import { FadeUp } from "./intro/reveal";
 import { ChapterJourney } from "./chapter-journey";
 import { ChapterAccordion } from "./chapter-accordion";
 import { CinematicLesson } from "./cinematic-lesson";
-import { CyclePill } from "./cycle-pill";
+import { LessonOutline } from "./lesson-outline";
 import { PosterGrid } from "./poster-grid";
 import { PracticeCards } from "./practice-cards";
 
@@ -102,10 +102,18 @@ export function ChapterExperience({
   // overview card, which anchors the snapshot.
   const storyArtFor = (h: string) =>
     (chapter.gallery ?? []).filter((m) => m.section === h);
+  const sectionMinutes = (sec: { paragraphs: string[] }) =>
+    Math.max(
+      1,
+      Math.round(
+        sec.paragraphs.join(" ").split(/\s+/).length / 200,
+      ),
+    );
   const accordionSections = sections.map((sec) => ({
     heading: sec.heading,
     paragraphs: sec.paragraphs,
     art: storyArtFor(sec.heading),
+    minutes: sectionMinutes(sec),
   }));
   const snapshotCard = (chapter.studyCards ?? []).find(
     (c) => c.section === "@lesson",
@@ -113,6 +121,16 @@ export function ChapterExperience({
   const galleryCards = (chapter.studyCards ?? []).filter(
     (c) => c.section !== "@lesson",
   );
+  const STEP_TITLES: Record<string, string> = {
+    read: "Read the Chapter",
+    watch: "Watch the Cinematic Lesson",
+    takeaways: "Key Learnings",
+    practice: "Daily Practices",
+    meditation: "Guided Meditation",
+    reflection: "Reflection Journal",
+    quiz: "Self-Assessment",
+    challenge: "Daily Challenge",
+  };
   const cycleStepKeys = [
     "read",
     ...(chapter.lessonVideoId ? ["watch"] : []),
@@ -123,6 +141,7 @@ export function ChapterExperience({
     ...(chapter.quiz?.length ? ["quiz"] : []),
     ...(chapter.dailyChallenge ? ["challenge"] : []),
   ];
+  const cycleSteps = cycleStepKeys.map((k) => ({ key: k, title: STEP_TITLES[k] }));
 
   return (
     <div
@@ -260,9 +279,21 @@ export function ChapterExperience({
                       ))}
                     </ul>
                   )}
-                  <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-semibold text-[#B8860B]">
+                  <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-[13px] font-semibold text-[#B8860B]">
                     <span>{readMinutes} min read</span>
                     {chapter.lessonVideoId && <span>· Cinematic lesson</span>}
+                    <span>· {sections.length} movements</span>
+                    {(chapter.gallery?.length ?? 0) + (chapter.studyCards?.length ?? 0) > 0 && (
+                      <span>
+                        · {(chapter.gallery?.length ?? 0) + (chapter.studyCards?.length ?? 0)} artworks
+                      </span>
+                    )}
+                    {chapter.exercises?.length ? (
+                      <span>· {chapter.exercises.length} practices</span>
+                    ) : null}
+                    {chapter.quiz?.length ? (
+                      <span>· {chapter.quiz.length}-question quiz</span>
+                    ) : null}
                     <a href="#cycle" className="underline underline-offset-2">
                       · {cycleStepKeys.length}-step learning cycle ↓
                     </a>
@@ -447,6 +478,15 @@ export function ChapterExperience({
           )}
         </FadeUp>
       </section>
+
+      <LessonOutline
+        slug={chapter.slug}
+        movements={accordionSections.map((m) => ({
+          heading: m.heading,
+          minutes: m.minutes,
+        }))}
+        steps={cycleSteps}
+      />
 
       {/* Pillar link + progress, consistent with the rest of the book */}
       <div className="bg-[var(--color-bg-primary)] px-4 pb-4 sm:px-6 lg:px-8">
