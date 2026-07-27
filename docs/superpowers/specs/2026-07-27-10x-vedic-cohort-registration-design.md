@@ -25,7 +25,7 @@ backend and visible in the admin area.
   - Name (required)
   - Email (required, validated)
   - Phone (optional)
-  - Country/Timezone (dropdown)
+  - Region ("Where will you join from?" — single dropdown combining country/timezone, bounded server-side set)
   - "How did you hear about us?" (dropdown)
   - Hidden honeypot field for spam bots.
 - On success, the form is replaced by a confirmation panel: "You're in — the
@@ -42,7 +42,7 @@ backend and visible in the admin area.
   - Partition key: `email`; sort key: `cohortId` (e.g. `"2026-08"`).
   - Double-submit is idempotent — first registration's `registeredAt` and
     `referralSource` are preserved (conditional put, same as newsletter).
-  - Attributes: `name`, `phone`, `country`, `timezone`, `referralSource`,
+  - Attributes: `name`, `phone`, `region`, `referralSource`,
     `registeredAt`, `status` (`registered`).
 - API route wired in `sst.config.ts` (public POST; authenticated GET for admin).
 
