@@ -1,5 +1,6 @@
-// Live-origin routing smoke test — asserts the HTTP-layer contracts that
-// crawlers and no-JS agents depend on. Currently:
+// Production-edge routing smoke test — requests go through CloudFront,
+// so this asserts exactly what users, crawlers, and no-JS agents
+// receive, CDN behavior included. Currently:
 //   1. /register/ answers 307 → /login/?tab=signup (never an empty shell)
 //   2. /login/ serves the sign-in form in its initial HTML
 //
