@@ -72,7 +72,8 @@ export default function TenXVedicPage() {
             </Link>
           </div>
           <p className="mt-4 text-xs text-[#94a3b8]">
-            Free live cohort starts Monday, August 17, 2026 — or start the{" "}
+            Live cohort starts Monday, August 17, 2026 — $399, discounts
+            available through service exchange. Or start the free{" "}
             <Link href="/register" className="underline hover:text-white">
               self-paced course
             </Link>{" "}

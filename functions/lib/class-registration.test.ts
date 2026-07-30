@@ -35,9 +35,28 @@ describe("normalizeRegistration", () => {
         phone: "+91 98765 43210",
         region: "india",
         referralSource: "friend",
+        referredBy: null,
         status: "registered",
       },
     });
+  });
+
+  test("referredBy is normalized when present", () => {
+    const res = normalizeRegistration({ ...valid, referredBy: " Ravi@Example.COM " });
+    expect("item" in res && res.item.referredBy).toBe("ravi@example.com");
+  });
+
+  test("invalid referredBy errors, blank is null", () => {
+    expect(normalizeRegistration({ ...valid, referredBy: "nope" })).toEqual({
+      error: "Please enter a valid email for who referred you",
+    });
+    const res = normalizeRegistration({ ...valid, referredBy: "  " });
+    expect("item" in res && res.item.referredBy).toBeNull();
+  });
+
+  test("self-referral collapses to null", () => {
+    const res = normalizeRegistration({ ...valid, referredBy: "asha@example.com" });
+    expect("item" in res && res.item.referredBy).toBeNull();
   });
 
   test("phone is optional and null when blank", () => {

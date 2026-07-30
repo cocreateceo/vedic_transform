@@ -6,7 +6,13 @@ import {
   Users,
   Award,
   Mail,
-  Infinity as InfinityIcon,
+  Handshake,
+  Mic,
+  PersonStanding,
+  AudioLines,
+  BookOpenText,
+  Sparkles,
+  Brain,
 } from "lucide-react";
 import { pageMetadata } from "@/lib/seo";
 import { SERIF_CLASS } from "@/lib/fonts";
@@ -15,7 +21,7 @@ import { RegistrationForm } from "./registration-form";
 export const metadata = pageMetadata({
   title: "Register — 10x Vedic Live Cohort",
   description:
-    "Register free for the 10x Vedic live cohort — a guided 48-day, 11-chapter training starting Monday, August 17, 2026.",
+    "Register for the 10x Vedic live cohort — a guided 48-day, 11-chapter training starting Monday, August 17, 2026. $399, with discounts available through service exchange.",
   path: "/10x-vedic/register",
 });
 
@@ -25,7 +31,7 @@ const HERO_BENEFITS = [
   "All 11 chapters of the 10x Vedic framework",
   "Live sessions and weekly Q&A",
   "Private community of fellow seekers",
-  "100% free — no payment details, ever",
+  "$399 — refer 4 friends who join and it's free",
 ];
 
 const WHY_JOIN = [
@@ -36,17 +42,43 @@ const WHY_JOIN = [
 ];
 
 const TRUST_ITEMS = [
-  { icon: InfinityIcon, text: "Free forever" },
+  { icon: Handshake, text: "Service-exchange discounts" },
   { icon: Video, text: "Live weekly Q&A" },
   { icon: Award, text: "Certificate of completion" },
   { icon: Users, text: "Private community" },
   { icon: Mail, text: "Email reminders" },
 ];
 
+// $100 off for every referred friend who joins the cohort.
+const REFERRAL_TIERS = [
+  { label: "Just you", price: "$399" },
+  { label: "1 friend joins", price: "$299" },
+  { label: "2 friends join", price: "$199" },
+  { label: "3 friends join", price: "$99" },
+  { label: "4 friends join", price: "FREE" },
+];
+
+const COMM_SKILLS = [
+  { icon: Mic, title: "Speaking", text: "Speak with clarity and confidence" },
+  { icon: PersonStanding, title: "Body Language", text: "Presence that commands a room" },
+  { icon: AudioLines, title: "Voice Control", text: "Tone, pace, and power" },
+  { icon: BookOpenText, title: "Storytelling", text: "Speak in a way people remember" },
+  { icon: Sparkles, title: "First Impressions", text: "Connect effortlessly from hello" },
+  { icon: Brain, title: "Social Intelligence", text: "Read the room, hold attention" },
+];
+
 const FAQS = [
   {
-    q: "Is it really free?",
-    a: "Yes — the live cohort is completely free. We never ask for payment details, and there is no paid upsell required to complete the 48 days.",
+    q: "How much does the course cost?",
+    a: "The full 48-day live cohort is $399. You can lower it two ways: refer friends ($100 off for each one who joins — four referrals make it free) or exchange your skills and services for a reduced fee. Registration is free; we'll email you the payment and discount details after you reserve your seat.",
+  },
+  {
+    q: "How does the referral discount work?",
+    a: "For every person you refer who registers and joins the cohort, we take $100 off your fee: one referral brings it to $299, two to $199, three to $99, and with four referrals your seat is completely free. Just have your friends enter your email in the “Referred by” field when they register.",
+  },
+  {
+    q: "How does the service-exchange discount work?",
+    a: "If the fee is a stretch, you can exchange your professional skills or services for a discount on the course. After you register, reply to your confirmation email with what you can offer and we'll work out the details together.",
   },
   {
     q: "When does it start and how long does it run?",
@@ -54,7 +86,7 @@ const FAQS = [
   },
   {
     q: "What happens after I register?",
-    a: "You'll receive the joining details by email before the cohort begins — the schedule, how to join the live sessions, and how to access the course materials.",
+    a: "You'll receive the joining details by email before the cohort begins — the schedule, payment instructions, how to join the live sessions, and how to access the course materials.",
   },
   {
     q: "What if I can't attend a live session?",
@@ -77,7 +109,7 @@ export default function CohortRegisterPage() {
             {/* Left: headline + benefits */}
             <div>
               <span className="inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300">
-                Free live cohort — limited seats
+                Live cohort — limited seats
               </span>
               <h1 className={`mt-5 text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold leading-tight text-white ${SERIF_CLASS}`}>
                 Transform Your Life in{" "}
@@ -122,6 +154,50 @@ export default function CohortRegisterPage() {
         </div>
       </section>
 
+      {/* ═══ Referral pricing — $100 off per friend who joins ═══ */}
+      <section className="py-14 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className={`text-3xl font-semibold text-center ${SERIF_CLASS}`}>
+            Bring friends, <span className="text-[#E8860D]">pay less</span>
+          </h2>
+          <p className="mt-3 text-base text-[#64748b] text-center max-w-2xl mx-auto leading-relaxed">
+            For every person you refer who joins the cohort, we take $100 off
+            your fee. Refer four and your seat is completely free.
+          </p>
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {REFERRAL_TIERS.map(({ label, price }, i) => (
+              <div
+                key={label}
+                className={`rounded-2xl border shadow-sm p-5 text-center ${
+                  i === REFERRAL_TIERS.length - 1
+                    ? "bg-gradient-to-b from-orange-500 to-amber-500 border-transparent text-white"
+                    : "bg-[#FFF9F3] border-[#FF9933]/20"
+                }`}
+              >
+                <p
+                  className={`text-2xl font-bold ${
+                    i === REFERRAL_TIERS.length - 1 ? "text-white" : "text-[#E8860D]"
+                  }`}
+                >
+                  {price}
+                </p>
+                <p
+                  className={`mt-1 text-sm font-medium ${
+                    i === REFERRAL_TIERS.length - 1 ? "text-orange-50" : "text-[#64748b]"
+                  }`}
+                >
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-center text-sm text-[#94a3b8]">
+            Have your friends enter your email in the &ldquo;Referred by&rdquo;
+            field when they register — every joiner counts toward your discount.
+          </p>
+        </div>
+      </section>
+
       {/* ═══ Why join — compact cards ═══ */}
       <section className="py-14 bg-[#FFF9F3]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -133,6 +209,32 @@ export default function CohortRegisterPage() {
               <div
                 key={title}
                 className="rounded-2xl bg-white border border-[#FF9933]/20 shadow-sm p-5 text-center"
+              >
+                <Icon className="w-8 h-8 text-[#E8860D] mx-auto" />
+                <h3 className="mt-2.5 text-base font-semibold">{title}</h3>
+                <p className="mt-0.5 text-sm text-[#64748b]">{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ Communication Mastery ═══ */}
+      <section className="py-14 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className={`text-3xl font-semibold text-center ${SERIF_CLASS}`}>
+            Communication <span className="text-[#E8860D]">Mastery</span>
+          </h2>
+          <p className="mt-3 text-base text-[#64748b] text-center max-w-2xl mx-auto leading-relaxed">
+            Learn to communicate effectively, command a room, hold attention,
+            connect effortlessly, and speak in a way people remember. Executive
+            presence and charisma are skills you can develop — come join us.
+          </p>
+          <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 gap-4">
+            {COMM_SKILLS.map(({ icon: Icon, title, text }) => (
+              <div
+                key={title}
+                className="rounded-2xl bg-[#FFF9F3] border border-[#FF9933]/20 shadow-sm p-5 text-center"
               >
                 <Icon className="w-8 h-8 text-[#E8860D] mx-auto" />
                 <h3 className="mt-2.5 text-base font-semibold">{title}</h3>

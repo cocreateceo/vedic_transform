@@ -14,12 +14,13 @@ interface RegistrationRow {
   phone?: string | null;
   region?: string;
   referralSource?: string;
+  referredBy?: string | null;
   registeredAt?: string;
   status?: string;
 }
 
 function toCsv(rows: RegistrationRow[]): string {
-  const cols = ["name", "email", "phone", "region", "referralSource", "registeredAt"] as const;
+  const cols = ["name", "email", "phone", "region", "referralSource", "referredBy", "registeredAt"] as const;
   const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   return [
     cols.join(","),
@@ -128,6 +129,7 @@ export default function AdminClassRegistrationsPage() {
                   <th className="px-4 py-3">Phone</th>
                   <th className="px-4 py-3">Region</th>
                   <th className="px-4 py-3">Source</th>
+                  <th className="px-4 py-3">Referred by</th>
                   <th className="px-4 py-3">Registered</th>
                 </tr>
               </thead>
@@ -139,6 +141,7 @@ export default function AdminClassRegistrationsPage() {
                     <td className="px-4 py-3 text-gray-600">{r.phone || "—"}</td>
                     <td className="px-4 py-3 text-gray-600">{r.region || "—"}</td>
                     <td className="px-4 py-3 text-gray-600">{r.referralSource || "—"}</td>
+                    <td className="px-4 py-3 text-gray-600">{r.referredBy || "—"}</td>
                     <td className="px-4 py-3 text-gray-500">
                       {r.registeredAt ? new Date(r.registeredAt).toLocaleDateString() : "—"}
                     </td>

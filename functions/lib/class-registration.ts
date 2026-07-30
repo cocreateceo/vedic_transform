@@ -34,6 +34,10 @@ export interface RegistrationItem {
   phone: string | null;
   region: string;
   referralSource: string;
+  // Email of the existing registrant who referred this person. Each joiner
+  // naming you knocks $100 off your fee ($399 → $299 → $199 → $99 → $0);
+  // the admin roster tallies these to compute the referrer's price.
+  referredBy: string | null;
   status: 'registered';
 }
 
@@ -70,6 +74,15 @@ export function normalizeRegistration(
     ? body.source
     : 'unknown';
 
+  let referredBy: string | null = null;
+  if (typeof body?.referredBy === 'string' && body.referredBy.trim()) {
+    referredBy = normalizeEmail(body.referredBy);
+    if (!referredBy)
+      return { error: 'Please enter a valid email for who referred you' };
+    // Self-referrals earn no discount — collapse to null.
+    if (referredBy === email) referredBy = null;
+  }
+
   return {
     item: {
       email,
@@ -78,6 +91,7 @@ export function normalizeRegistration(
       phone,
       region,
       referralSource,
+      referredBy,
       status: 'registered',
     },
   };

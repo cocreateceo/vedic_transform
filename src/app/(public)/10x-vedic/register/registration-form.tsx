@@ -36,6 +36,7 @@ export function RegistrationForm() {
   const [phone, setPhone] = useState("");
   const [region, setRegion] = useState("");
   const [source, setSource] = useState("");
+  const [referredBy, setReferredBy] = useState("");
   const [website, setWebsite] = useState(""); // honeypot — humans never see it
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -50,7 +51,7 @@ export function RegistrationForm() {
     try {
       await apiFetch("/class-registration", {
         method: "POST",
-        body: JSON.stringify({ name, email, phone, region, source, website }),
+        body: JSON.stringify({ name, email, phone, region, source, referredBy, website }),
       });
       setDone(true);
     } catch (e) {
@@ -67,7 +68,7 @@ export function RegistrationForm() {
         <h3 className="mt-4 text-xl font-semibold">You&rsquo;re in!</h3>
         <p className="mt-2 text-base text-[#64748b] leading-relaxed">
           The cohort starts Monday, August 17, 2026. We&rsquo;ll email you the
-          joining details before we begin.
+          joining and payment details before we begin.
         </p>
         <p className="mt-4 text-base text-[#64748b]">
           Meanwhile, you can start the free self-paced course today:
@@ -90,7 +91,10 @@ export function RegistrationForm() {
       <div className="text-center mb-2">
         <h2 className="text-2xl font-semibold">Reserve Your Seat</h2>
         <p className="mt-1 text-sm text-[#64748b]">
-          Free · Starts Monday, August 17, 2026
+          $399 · Starts Monday, August 17, 2026
+        </p>
+        <p className="mt-1 text-xs text-[#94a3b8]">
+          Refer friends and save $100 each · service-exchange discounts too
         </p>
       </div>
       <div>
@@ -169,6 +173,24 @@ export function RegistrationForm() {
         </select>
       </div>
 
+      <div>
+        <label htmlFor="reg-referred-by" className={labelClass}>
+          Referred by a friend? Their email (optional)
+        </label>
+        <input
+          id="reg-referred-by"
+          type="email"
+          value={referredBy}
+          onChange={(e) => setReferredBy(e.target.value)}
+          placeholder="friend@email.com"
+          className={inputClass}
+        />
+        <p className="mt-1.5 text-xs text-[#94a3b8]">
+          They save $100 off their fee for every friend who joins — 4 referrals
+          and their seat is free.
+        </p>
+      </div>
+
       {/* Honeypot — hidden from humans, tempting to bots. */}
       <div className="hidden" aria-hidden="true">
         <label htmlFor="reg-website">Website</label>
@@ -195,12 +217,13 @@ export function RegistrationForm() {
           </>
         ) : (
           <>
-            Reserve My Free Seat <ArrowRight className="w-5 h-5" />
+            Reserve My Seat <ArrowRight className="w-5 h-5" />
           </>
         )}
       </button>
       <p className="text-xs text-[#94a3b8] text-center">
-        Free forever. No payment details asked — ever.
+        No payment due today — we&rsquo;ll email you the payment and discount
+        details after you register.
       </p>
     </form>
   );
