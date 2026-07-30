@@ -1,11 +1,23 @@
 "use client";
 
-// The training landing page as a learning journey, not a chapter list:
-// a progress dashboard hero with one dominant Continue CTA, real course
-// statistics, a phase-grouped roadmap where the current chapter is the
-// biggest thing on the page, and honest coming-soon teasers. Every number
-// shown is derived from authored content in training-book.ts — no invented
-// lesson counts, durations, or unlock conditions.
+// The training landing as a learning journey, not a chapter list.
+//
+// Order is deliberate: the hero states where you are and offers one CTA that
+// resumes the exact step you owe, then the current chapter is the first
+// full-width thing you meet, then how that chapter connects to your daily
+// practice, then the roadmap, then the honest course totals.
+//
+// Two things this page used to get wrong:
+//   - Five stat tiles sat between the hero and the current chapter, so the one
+//     action on the page was pushed below a wall of numbers. They are now one
+//     line, below the roadmap.
+//   - It claimed "48 days of transformation", borrowing the 48-day journey's
+//     number for a book that has no day mapping. Gone.
+//   - It called its four chapter groups "Phases", colliding with the six
+//     journey phases the dashboard names. They are now "Parts".
+//
+// Every number shown is still derived from authored content in
+// training-book.ts — no invented lesson counts, durations, or unlock conditions.
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -14,6 +26,7 @@ import {
   ArrowRight,
   Award,
   CheckCircle2,
+  ChevronDown,
   Clock,
   ListChecks,
   Lock,
@@ -31,6 +44,9 @@ import {
 } from "@/data/training-book";
 import { introSerif, SERIF_CLASS } from "@/lib/fonts";
 import { LotusDivider } from "@/components/features/training/intro/mandala";
+import { CurrentChapterCard } from "@/components/features/training/current-chapter-card";
+import { stageTitleForStep } from "@/lib/training-steps";
+import { selectTraining } from "@/lib/training-selection";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils/cn";
 
@@ -39,8 +55,11 @@ interface ProgressRecord {
   completed: boolean;
 }
 
-// Contiguous learning phases — editorial grouping of the fixed reading order.
-const PHASES: { name: string; tagline: string; numbers: number[] }[] = [
+// Contiguous learning parts — editorial grouping of the fixed reading order.
+// Deliberately NOT called phases: the dashboard's "Phase 2" means day 8–14 of
+// the 48-day journey, and two different meanings for one word is worse than two
+// words.
+const PARTS: { name: string; tagline: string; numbers: number[] }[] = [
   {
     name: "Awakening",
     tagline: "Ground yourself in the journey and awaken awareness",
@@ -89,6 +108,92 @@ function MetaChips({ chapter }: { chapter: TrainingChapter }) {
   );
 }
 
+/**
+ * One part of the roadmap. The part holding the current chapter is open; the
+ * rest collapse to a summary row.
+ *
+ * Chapter titles are the clearest statement of what the programme actually
+ * teaches, so they are never removed — collapsing only lowers their default
+ * visual weight, and one tap brings them back. Open state is derived rather
+ * than stored so a part opens by itself when progress moves into it, while a
+ * reader's own toggle still wins.
+ */
+function PartSection({
+  index,
+  name,
+  tagline,
+  status,
+  chapterCount,
+  holdsCurrent,
+  children,
+}: {
+  index: number;
+  name: string;
+  tagline: string;
+  status: string;
+  chapterCount: number;
+  holdsCurrent: boolean;
+  children: React.ReactNode;
+}) {
+  const [override, setOverride] = useState<boolean | null>(null);
+  const open = override ?? holdsCurrent;
+
+  return (
+    <div
+      className={cn(
+        "rounded-2xl transition-colors",
+        open ? "pb-2" : "border border-[var(--color-border)]"
+      )}
+    >
+      <button
+        onClick={() => setOverride(!open)}
+        aria-expanded={open}
+        className={cn(
+          "flex w-full flex-wrap items-baseline justify-between gap-2 text-left",
+          open ? "mb-5" : "p-4"
+        )}
+      >
+        <div className="min-w-0">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B8860B]">
+            Part {index + 1}
+          </p>
+          <h2
+            className={cn(
+              SERIF_CLASS,
+              "font-semibold text-[var(--color-text-primary)]",
+              open ? "text-2xl sm:text-3xl" : "text-xl sm:text-2xl"
+            )}
+          >
+            {name}
+          </h2>
+          {open ? (
+            <p className="text-sm text-[var(--color-text-secondary)]">
+              {tagline}
+            </p>
+          ) : (
+            <p className="text-sm text-[var(--color-text-secondary)]">
+              {chapterCount} chapters ·{" "}
+              <span className="font-semibold text-[#B8860B]">
+                View chapters
+              </span>
+            </p>
+          )}
+        </div>
+        <span className="flex items-center gap-2 text-xs text-[var(--color-text-muted)]">
+          {status}
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 shrink-0 transition-transform",
+              open && "rotate-180"
+            )}
+          />
+        </span>
+      </button>
+      {open && children}
+    </div>
+  );
+}
+
 export default function TrainingPage() {
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
 
@@ -103,20 +208,23 @@ export default function TrainingPage() {
       .catch(() => {}); // progress is an enhancement, never a blocker
   }, []);
 
+  // Which chapter is current, what activity is next, and how it joins daily
+  // practice — computed by the shared selector the dashboard card also uses, so
+  // the two surfaces can never name a different "current chapter".
+  const selection = selectTraining(completedIds);
   const published = getPublishedChapters();
   const isComplete = (c: TrainingChapter) =>
     completedIds.has(trainingContentId(c.slug));
-  const completedCount = published.filter(isComplete).length;
-  const pct =
-    published.length > 0
-      ? Math.round((completedCount / published.length) * 100)
-      : 0;
 
-  // Where the journey stands: first published chapter not yet completed.
-  const current = published.find((c) => !isComplete(c));
-  const remainingMinutes = published
-    .filter((c) => !isComplete(c))
-    .reduce((sum, c) => sum + chapterReadMinutes(c), 0);
+  const completedCount = selection.chaptersSealed;
+  const pct = selection.percentComplete;
+  const current = selection.state === "caught-up" ? undefined : selection.chapter;
+  const remainingMinutes = selection.remainingMinutes;
+  const currentSteps = current ? selection.stepKeys : [];
+  const currentStepsDone = current ? selection.stepsComplete : 0;
+  const nextStepKey = current ? selection.nextStep : undefined;
+  const resumeHref = selection.href;
+  const currentLink = current ? selection.link : undefined;
 
   // Course statistics — real numbers only, from authored content.
   const totalPractices = TRAINING_CHAPTERS.reduce(
@@ -131,13 +239,6 @@ export default function TrainingPage() {
     (n, c) => n + chapterReadMinutes(c),
     0
   );
-  const stats: { value: string; label: string }[] = [
-    { value: "48", label: "days of transformation" },
-    { value: "11", label: "chapters + introduction" },
-    { value: `${totalMinutes}`, label: "minutes of teaching so far" },
-    { value: `${totalPractices}`, label: "guided practices" },
-    { value: `${totalReflections}`, label: "reflection prompts" },
-  ];
 
   return (
     <div
@@ -159,39 +260,21 @@ export default function TrainingPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#FFF9F0]/92 via-[#FFF9F0]/85 to-white/80" />
         <div className="relative z-10 p-6 sm:p-8 space-y-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B8860B]">
-            Training course · 48-day journey
+            10x Vedic · {TRAINING_CHAPTERS.length - 1} chapters + introduction
           </p>
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <h1
-                className={`${SERIF_CLASS} text-4xl sm:text-5xl font-semibold text-[#2A1B0E] leading-tight`}
-              >
-                10x Vedic
-              </h1>
-              <p className="mt-1 text-sm sm:text-base text-[#5a4a33] max-w-xl">
-                Ancient Wisdom. Conscious Leadership. Science-Powered
-                Transformation.
-              </p>
-            </div>
-            {current ? (
-              <Link
-                href={`/training/${current.slug}`}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-shadow hover:shadow-xl"
-              >
-                {completedCount === 0 ? "Begin the journey" : "Continue journey"}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            ) : (
-              published.length > 0 && (
-                <Link
-                  href={`/training/${published[published.length - 1].slug}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#DAA520] bg-white/70 px-7 py-3 text-sm font-semibold text-[#8B6914] transition-colors hover:bg-white"
-                >
-                  Revisit the chapters
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              )
-            )}
+          {/* Status and context only. The Continue action belongs to the
+              current-chapter card below — two Resume buttons 300px apart made
+              the page look like it had two different next moves. */}
+          <div>
+            <h1
+              className={`${SERIF_CLASS} text-4xl sm:text-5xl font-semibold text-[#2A1B0E] leading-tight`}
+            >
+              Your Training
+            </h1>
+            <p className="mt-1 text-sm sm:text-base text-[#5a4a33] max-w-xl">
+              Ancient Wisdom. Conscious Leadership. Science-Powered
+              Transformation.
+            </p>
           </div>
 
           <div className="space-y-1.5">
@@ -203,11 +286,18 @@ export default function TrainingPage() {
                     <strong className="font-semibold text-[#2A1B0E]">
                       {chapterLabel(current)} — {current.title}
                     </strong>
+                    {currentSteps.length > 0 && (
+                      <>
+                        {" · "}
+                        {currentStepsDone} of {currentSteps.length} activities
+                        complete
+                      </>
+                    )}
                     {remainingMinutes > 0 &&
                       ` · about ${remainingMinutes} min of reading remains`}
                   </>
                 ) : (
-                  "All available chapters complete — Chapter 3 is being written"
+                  "All available chapters complete — the next one is being written"
                 )}
               </span>
               <span className="font-semibold">{pct}%</span>
@@ -227,224 +317,231 @@ export default function TrainingPage() {
         </div>
       </header>
 
-      {/* ————— Course statistics (real numbers only) ————— */}
-      <section
-        aria-label="Course statistics"
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3"
-      >
-        {stats.map((s) => (
-          <div
-            key={s.label}
-            className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card-bg)] px-4 py-5 text-center"
-          >
-            <p
-              className={`${SERIF_CLASS} text-3xl font-semibold text-[var(--color-text-primary)]`}
-            >
-              {s.value}
+      {/* ————— The current chapter: the first thing below the hero ————— */}
+      {current && (
+        <section aria-label="Your current chapter" className="space-y-4">
+          <CurrentChapterCard
+            chapter={current}
+            eyebrow={
+              currentSteps.length > 0 && currentStepsDone > 0
+                ? `Current chapter · ${currentStepsDone}/${currentSteps.length} complete`
+                : "Current chapter"
+            }
+            ctaLabel={
+              currentStepsDone > 0 && nextStepKey
+                ? `Continue: ${stageTitleForStep(nextStepKey)}`
+                : completedCount === 0 && current.number === 0
+                  ? "Begin here"
+                  : "Start this chapter"
+            }
+            href={resumeHref}
+          />
+
+          {/* How this chapter becomes a daily practice — the join the book
+              already authored via relatedPillarSlug, finally surfaced. */}
+          {currentLink?.pillar && (
+            <div className="vedic-card flex flex-wrap items-center justify-between gap-4 p-5">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B8860B]">
+                  This chapter in your daily practice
+                </p>
+                <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                  {chapterLabel(current)} is practiced as the{" "}
+                  <Link
+                    href={`/pillars/${currentLink.pillar.slug}`}
+                    className="font-semibold text-[var(--color-text-primary)] underline underline-offset-2"
+                  >
+                    {currentLink.pillar.name}
+                  </Link>{" "}
+                  pillar.
+                </p>
+              </div>
+              {currentLink.practiceHref && (
+                <Link
+                  href={currentLink.practiceHref}
+                  className="inline-flex items-center gap-2 rounded-full border border-[#DAA520]/60 bg-[var(--color-bg-surface)] px-5 py-2.5 text-sm font-semibold text-[#B8860B] transition-colors hover:bg-amber-50"
+                >
+                  Open {currentLink.practiceLabel}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Every published chapter sealed — the hero carries no action, so the
+          revisit route lives here. */}
+      {!current && published.length > 0 && (
+        <Link
+          href={resumeHref}
+          className="vedic-card flex items-center justify-between gap-4 p-5"
+        >
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B8860B]">
+              All published chapters sealed
             </p>
-            <p className="mt-1 text-[11px] leading-snug text-[var(--color-text-muted)]">
-              {s.label}
+            <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+              Revisit the most recent chapter while the next one is written.
             </p>
           </div>
-        ))}
-      </section>
+          <ArrowRight className="h-4 w-4 shrink-0 text-[var(--color-text-muted)]" />
+        </Link>
+      )}
 
       <LotusDivider />
 
-      {/* ————— Learning roadmap, grouped into phases ————— */}
-      <section className="space-y-12">
-        {PHASES.map((phase, phaseIdx) => {
-          const chapters = phase.numbers
+      {/* ————— Learning roadmap, grouped into parts ————— */}
+      <section className="space-y-6">
+        {PARTS.map((part, partIdx) => {
+          const chapters = part.numbers
             .map((n) => TRAINING_CHAPTERS.find((c) => c.number === n))
             .filter((c): c is TrainingChapter => Boolean(c));
-          const phasePublished = chapters.filter(
+          const partPublished = chapters.filter(
             (c) => c.status === "published"
           );
-          const phaseDone = phasePublished.filter(isComplete).length;
+          const partComingSoon = chapters.filter(
+            (c) => c.status !== "published"
+          );
+          const partDone = partPublished.filter(isComplete).length;
+          const holdsCurrent = Boolean(
+            current && chapters.some((c) => c.slug === current.slug)
+          );
 
           return (
-            <div key={phase.name}>
-              <div className="mb-5 flex flex-wrap items-baseline justify-between gap-2">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-[#B8860B]">
-                    Phase {phaseIdx + 1}
-                  </p>
-                  <h2
-                    className={`${SERIF_CLASS} text-2xl sm:text-3xl font-semibold text-[var(--color-text-primary)]`}
-                  >
-                    {phase.name}
-                  </h2>
-                  <p className="text-sm text-[var(--color-text-secondary)]">
-                    {phase.tagline}
-                  </p>
-                </div>
-                <p className="text-xs text-[var(--color-text-muted)]">
-                  {phasePublished.length === 0
-                    ? "In writing"
-                    : `${phaseDone} of ${phasePublished.length} available completed`}
-                </p>
-              </div>
-
-              {/* Spine ties the phase's chapters into one path */}
+            <PartSection
+              key={part.name}
+              index={partIdx}
+              name={part.name}
+              tagline={part.tagline}
+              chapterCount={chapters.length}
+              holdsCurrent={holdsCurrent}
+              status={
+                partPublished.length === 0
+                  ? "In writing"
+                  : `${partDone} of ${partPublished.length} available completed`
+              }
+            >
+              {/* Spine ties the part's chapters into one path */}
               <div className="relative space-y-4 pl-9">
                 <div
                   aria-hidden="true"
                   className="absolute left-[13px] top-3 bottom-3 w-0.5 bg-gradient-to-b from-[#DAA520]/60 to-[var(--color-border)]"
                 />
-                {chapters.map((chapter) => {
+                {partPublished.map((chapter) => {
                   const done = isComplete(chapter);
                   const isCurrent = current?.slug === chapter.slug;
-                  const publishedChapter = chapter.status === "published";
 
-                  const node = (
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "absolute -left-9 top-5 z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 text-[11px] font-bold",
-                        done
-                          ? "border-[#DAA520] bg-gradient-to-br from-amber-300 to-[#DAA520] text-white"
-                          : isCurrent
-                          ? "border-[var(--color-primary)] bg-[var(--color-bg-surface)] text-[var(--color-primary)] ring-4 ring-[var(--color-primary)]/15"
-                          : publishedChapter
-                          ? "border-[#DAA520]/50 bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)]"
-                          : "border-[var(--color-border)] bg-[var(--color-bg-primary)] text-[var(--color-text-muted)]"
-                      )}
-                    >
-                      {done ? (
-                        <CheckCircle2 className="w-4 h-4" />
-                      ) : publishedChapter ? (
-                        chapter.number
-                      ) : (
-                        <Lock className="w-3 h-3" />
-                      )}
-                    </span>
-                  );
-
-                  // Current chapter: the dominant card on the page.
-                  if (isCurrent) {
-                    return (
-                      <div key={chapter.slug} className="relative">
-                        {node}
-                        <Link
-                          href={`/training/${chapter.slug}`}
-                          className="group grid overflow-hidden rounded-3xl border-2 border-[var(--color-primary)] bg-[var(--color-bg-surface)] shadow-lg shadow-orange-500/10 transition-shadow hover:shadow-xl sm:grid-cols-[260px_1fr]"
-                        >
-                          <div className="relative aspect-[16/9] sm:aspect-auto sm:min-h-full">
-                            <Image
-                              src={chapter.posterImage ?? chapter.image}
-                              alt=""
-                              fill
-                              sizes="(max-width: 640px) 100vw, 260px"
-                              className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                          </div>
-                          <div className="p-5 sm:p-6 space-y-2.5">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">
-                              {chapterLabel(chapter)} · You are here
-                            </p>
-                            <h3
-                              className={`${SERIF_CLASS} text-2xl font-semibold leading-snug text-[var(--color-text-primary)]`}
-                            >
-                              {chapter.title}
-                            </h3>
-                            <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                              {chapter.description}
-                            </p>
-                            <MetaChips chapter={chapter} />
-                            <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-2 text-sm font-semibold text-white shadow shadow-orange-500/25">
-                              {completedCount === 0 && chapter.number === 0
-                                ? "Begin here"
-                                : "Resume"}
-                              <ArrowRight className="w-4 h-4" />
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
-                    );
-                  }
-
-                  if (publishedChapter) {
-                    return (
-                      <div key={chapter.slug} className="relative">
-                        {node}
-                        <Link
-                          href={`/training/${chapter.slug}`}
-                          className={cn(
-                            "group flex items-start gap-4 rounded-2xl border p-4 transition-all hover:border-[#DAA520]",
-                            done
-                              ? "border-[#DAA520]/50 bg-gradient-to-br from-amber-50/70 to-white/50"
-                              : "border-[var(--color-border)] bg-[var(--color-card-bg)]"
-                          )}
-                        >
-                          <div className="relative shrink-0 w-24 h-[54px] rounded-lg overflow-hidden">
-                            <Image
-                              src={chapter.posterImage ?? chapter.image}
-                              alt=""
-                              fill
-                              sizes="96px"
-                              className="object-cover"
-                            />
-                          </div>
-                          <div className="min-w-0 space-y-1">
-                            <p className="text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
-                              {chapterLabel(chapter)}
-                              {done && (
-                                <span className="text-[#B8860B]">
-                                  {" "}
-                                  · Completed
-                                </span>
-                              )}
-                            </p>
-                            <h3 className="text-sm sm:text-base font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition-colors">
-                              {chapter.title}
-                            </h3>
-                            <MetaChips chapter={chapter} />
-                          </div>
-                        </Link>
-                      </div>
-                    );
-                  }
-
-                  // Coming soon: tease honestly — blurred art, golden lock,
-                  // real description. No fake durations or unlock conditions.
                   return (
                     <div key={chapter.slug} className="relative">
-                      {node}
-                      <div className="flex items-start gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-card-bg)] p-4">
+                      {/* The current-chapter card above already establishes
+                          where the reader is; the roadmap marks it with a
+                          filled dot rather than a third focal point. */}
+                      <span
+                        aria-hidden="true"
+                        className={cn(
+                          "absolute -left-9 top-5 z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 text-[11px] font-bold",
+                          done
+                            ? "border-[#DAA520] bg-gradient-to-br from-amber-300 to-[#DAA520] text-white"
+                            : isCurrent
+                              ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
+                              : "border-[#DAA520]/50 bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)]"
+                        )}
+                      >
+                        {done ? (
+                          <CheckCircle2 className="w-4 h-4" />
+                        ) : (
+                          chapter.number
+                        )}
+                      </span>
+                      <Link
+                        href={`/training/${chapter.slug}`}
+                        className={cn(
+                          "group flex items-start gap-4 rounded-2xl border p-4 transition-all hover:border-[#DAA520]",
+                          done
+                            ? "border-[#DAA520]/50 bg-gradient-to-br from-amber-50/70 to-white/50"
+                            : "border-[var(--color-border)] bg-[var(--color-card-bg)]"
+                        )}
+                      >
                         <div className="relative shrink-0 w-24 h-[54px] rounded-lg overflow-hidden">
                           <Image
                             src={chapter.posterImage ?? chapter.image}
                             alt=""
                             fill
                             sizes="96px"
-                            className="object-cover blur-[3px] scale-110 opacity-80"
+                            className="object-cover"
                           />
-                          <span className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-black/30 to-black/10">
-                            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-amber-300 to-[#DAA520] shadow">
-                              <Lock className="w-3.5 h-3.5 text-white" />
-                            </span>
-                          </span>
                         </div>
                         <div className="min-w-0 space-y-1">
-                          <p className="text-[11px] font-medium uppercase tracking-wide text-[#B8860B]">
-                            {chapterLabel(chapter)} · In writing — arriving soon
+                          <p className="text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+                            {chapterLabel(chapter)}
+                            {done && (
+                              <span className="text-[#B8860B]"> · Completed</span>
+                            )}
+                            {!done && isCurrent && (
+                              <span className="text-[var(--color-primary)]">
+                                {" "}
+                                · Current
+                              </span>
+                            )}
                           </p>
-                          <h3 className="text-sm sm:text-base font-semibold text-[var(--color-text-primary)]">
+                          <h3 className="text-sm sm:text-base font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition-colors">
                             {chapter.title}
                           </h3>
-                          <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] line-clamp-2">
-                            {chapter.description}
-                          </p>
+                          <MetaChips chapter={chapter} />
                         </div>
-                      </div>
+                      </Link>
                     </div>
                   );
                 })}
+
+                {/* Coming soon: one honest row per part rather than a column of
+                    padlocks. Titles stay visible so the roadmap still reads as
+                    a plan, not a paywall. */}
+                {partComingSoon.length > 0 && (
+                  <div className="relative">
+                    <span
+                      aria-hidden="true"
+                      className="absolute -left-9 top-5 z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 border-[var(--color-border)] bg-[var(--color-bg-primary)] text-[var(--color-text-muted)]"
+                    >
+                      <Lock className="w-3 h-3" />
+                    </span>
+                    <div className="rounded-2xl border border-dashed border-[var(--color-border)] bg-[var(--color-card-bg)] p-4">
+                      <p className="text-[11px] font-medium uppercase tracking-wide text-[#B8860B]">
+                        {partComingSoon.length}{" "}
+                        {partComingSoon.length === 1 ? "chapter" : "chapters"} in
+                        writing — arriving soon
+                      </p>
+                      <ul className="mt-2 space-y-1">
+                        {partComingSoon.map((c) => (
+                          <li
+                            key={c.slug}
+                            className="text-sm text-[var(--color-text-secondary)]"
+                          >
+                            <span className="text-[var(--color-text-muted)]">
+                              {chapterLabel(c)} ·{" "}
+                            </span>
+                            {c.title}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            </PartSection>
           );
         })}
       </section>
+
+      {/* ————— Course totals: one honest line, real numbers only ————— */}
+      <p className="text-center text-sm text-[var(--color-text-secondary)]">
+        <strong className="font-semibold text-[var(--color-text-primary)]">
+          {TRAINING_CHAPTERS.length - 1} chapters + introduction
+        </strong>{" "}
+        · {totalMinutes} minutes of teaching published so far ·{" "}
+        {totalPractices} guided practices · {totalReflections} reflection prompts
+      </p>
 
       <LotusDivider />
 
@@ -462,8 +559,7 @@ export default function TrainingPage() {
               Your achievements
             </h2>
             <p className="text-sm text-[var(--color-text-secondary)]">
-              Milestones you earn across your whole practice — see what
-              completing chapters unlocks.
+              Milestones you earn across your whole practice.
             </p>
           </div>
         </div>

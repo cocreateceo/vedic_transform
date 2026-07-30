@@ -33,12 +33,47 @@ function previewOf(section: AccordionSection): string {
 
 export function ChapterAccordion({
   sections,
+  onAllMovementsOpened,
+  reviewMode = false,
 }: {
   sections: AccordionSection[];
+  /**
+   * Fired once every movement has been opened (individually or via Expand all).
+   * The chapter page uses this to claim the "Read the Chapter" step on the
+   * reader's behalf instead of asking them to tick a box for something they
+   * just did.
+   */
+  onAllMovementsOpened?: () => void;
+  /**
+   * True once the reader has completed the Read activity. Every movement stays
+   * in the DOM — this only closes them, so a returning reader isn't scrolling
+   * back through teaching they've finished to reach Practice. Their own first
+   * toggle wins from then on.
+   */
+  reviewMode?: boolean;
 }) {
   const [open, setOpen] = useState<Set<number>>(() => new Set([0]));
   const [expandAll, setExpandAll] = useState(false);
   const refs = useRef<(HTMLDivElement | null)[]>([]);
+  const notified = useRef(false);
+  const userToggled = useRef(false);
+  const collapsedForReview = useRef(false);
+
+  useEffect(() => {
+    if (notified.current || !onAllMovementsOpened) return;
+    if (expandAll || (sections.length > 0 && open.size >= sections.length)) {
+      notified.current = true;
+      onAllMovementsOpened();
+    }
+  }, [open, expandAll, sections.length, onAllMovementsOpened]);
+
+  // Progress arrives after mount, so this runs once when it lands.
+  useEffect(() => {
+    if (!reviewMode || userToggled.current || collapsedForReview.current) return;
+    collapsedForReview.current = true;
+    setExpandAll(false);
+    setOpen(new Set());
+  }, [reviewMode]);
 
   useEffect(() => {
     const onOpen = (e: Event) => {
@@ -57,6 +92,7 @@ export function ChapterAccordion({
   const allOpen = expandAll || open.size === sections.length;
 
   const toggle = (i: number) => {
+    userToggled.current = true;
     if (expandAll) {
       // Leaving expand-all: keep everything open except the one being closed.
       setExpandAll(false);
@@ -84,6 +120,7 @@ export function ChapterAccordion({
       <div className="mb-4 flex justify-end">
         <button
           onClick={() => {
+            userToggled.current = true;
             if (allOpen) {
               setExpandAll(false);
               setOpen(new Set([0]));
@@ -115,17 +152,17 @@ export function ChapterAccordion({
             >
               <button
                 onClick={() => toggle(i)}
-                className="flex w-full items-start gap-4 px-5 py-4 text-left sm:px-7"
+                className="flex w-full items-start gap-4 px-5 py-3 text-left sm:px-7"
                 aria-expanded={opened}
               >
                 <span
-                  className={`${SERIF_CLASS} w-8 shrink-0 text-xl font-semibold ${opened ? "text-[#B8860B]" : "text-[#DAA520]/60"}`}
+                  className={`${SERIF_CLASS} w-8 shrink-0 text-lg font-semibold ${opened ? "text-[#B8860B]" : "text-[#DAA520]/60"}`}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="min-w-0 flex-1">
                   <span
-                    className={`${SERIF_CLASS} block text-lg font-semibold text-[var(--color-text-primary)] sm:text-xl`}
+                    className={`${SERIF_CLASS} block text-base font-semibold text-[var(--color-text-primary)] sm:text-lg`}
                   >
                     {section.heading}
                   </span>

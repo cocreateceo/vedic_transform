@@ -16,6 +16,7 @@ import { ReflectionCard } from "@/components/features/dashboard/reflection-card"
 import { RecoveryRitualCard } from "@/components/features/dashboard/recovery-ritual-card";
 import { MilestoneCelebration } from "@/components/features/dashboard/milestone-celebration";
 import { CohortBanner } from "@/components/features/dashboard/cohort-banner";
+import { TodaysTeachingCard } from "@/components/features/dashboard/todays-teaching-card";
 import { PILLARS } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -290,6 +291,12 @@ export default function DashboardPage() {
         completedPillarSlugs={completedPillars}
         currentStreak={streak?.currentStreak || 0}
       />
+
+      {/* Today's Teaching — the one link into Training. Deliberately BELOW
+          Today's Practice: the practice is the daily action, the chapter
+          explains it. Hides itself when there's no published chapter, no
+          progress data, or the API is unreachable. */}
+      <TodaysTeachingCard />
 
       {/* One-shot streak event banner (shield used / shield granted) — set
           from pillar-detail-client on a successful check-in and cleared on view. */}

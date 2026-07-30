@@ -39,9 +39,11 @@ import {
   Download,
   FileText,
   Compass,
+  GraduationCap,
   RotateCcw,
 } from "lucide-react";
 import Link from "next/link";
+import { chapterForPillar } from "@/lib/learning-map";
 import { cn } from "@/lib/utils/cn";
 import { useRouter } from "next/navigation";
 import { setStreakEvent, type StreakEventType } from "@/lib/streak-events";
@@ -54,6 +56,8 @@ import { GuidedAudioPlayer } from "@/components/features/sessions/guided-audio-p
 export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const pillar = getPillarBySlug(pillarId);
   const pillarPosters = getPostersByPillar(pillarId);
+  // Published only — never links to a chapter still in writing.
+  const trainingChapter = chapterForPillar(pillarId);
   const router = useRouter();
 
   const [isCompleted, setIsCompleted] = useState(false);
@@ -374,6 +378,34 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
           </a>
         </div>
       </div>
+
+      {/* Where this pillar is taught. Authored metadata via relatedPillarSlug —
+          no progress fetch, and the link opens the chapter normally rather than
+          resuming an activity: the relationship means "this chapter teaches
+          this pillar", not "start at Practice". Absent entirely when the
+          teaching chapter is still in writing. */}
+      {trainingChapter && (
+        <div className="mt-2 mb-8 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#DAA520]/40 bg-amber-50/60 px-4 py-3">
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#B8860B]">
+              Training
+            </p>
+            <p className="mt-0.5 text-sm text-gray-600">
+              Taught in{" "}
+              <span className="font-semibold text-[var(--color-text-primary)]">
+                Chapter {trainingChapter.number} · {trainingChapter.title}
+              </span>
+            </p>
+          </div>
+          <Link
+            href={`/training/${trainingChapter.slug}`}
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#DAA520]/50 bg-white px-4 py-2 text-sm font-medium text-[#B8860B] transition-colors hover:bg-amber-50"
+          >
+            <GraduationCap className="w-4 h-4" />
+            Read Chapter {trainingChapter.number}
+          </Link>
+        </div>
+      )}
 
       {/* Teaching video — the pillar's ~1-min clip from the YouTube channel. */}
       <div className="mt-2 mb-8">

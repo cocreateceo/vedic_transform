@@ -7,15 +7,18 @@
 // surfaces a "related teaching poster" card for the pillar the user just
 // finished, deep-linking into the gallery modal.
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
 import { PILLARS, getPillarBySlug } from "@/constants/pillars";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Home, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, Home, Sparkles } from "lucide-react";
 import { practiceRouteForPillar } from "@/lib/practice-routes";
 import { getPostersByPillar } from "@/data/posters";
+import { stepAnchorId } from "@/lib/training-steps";
+import { markTrainingActivity } from "@/lib/training-progress";
+import { useTrainingReturn } from "./training-return-provider";
 
 interface NextPracticeCtaProps {
   /** Slug of the pillar the user just finished. Treated as completed for
@@ -31,6 +34,54 @@ interface FocusPillarRow {
 export function NextPracticeCta({ justCompletedPillarSlug }: NextPracticeCtaProps) {
   // undefined = loading, null = "all done", string = next slug
   const [nextSlug, setNextSlug] = useState<string | null | undefined>(undefined);
+
+  // This component renders only inside a session's completion view, after the
+  // session's own check-in has fired — so mounting IS the existing "session
+  // completed" signal. The Training activity is marked here, never on the
+  // return click, which would turn a navigation button into a completion one.
+  const trainingReturn = useTrainingReturn();
+  const [trainingHref, setTrainingHref] = useState<string | null>(null);
+  const marked = useRef(false);
+
+  useEffect(() => {
+    if (!trainingReturn || marked.current) return;
+    marked.current = true; // idempotent: once per completion view
+    let alive = true;
+
+    void markTrainingActivity({
+      slug: trainingReturn.slug,
+      step: trainingReturn.step,
+    }).then((result) => {
+      if (!alive) return;
+      // Return to the next outstanding activity when the shared step model
+      // knows one, else back to the activity that launched this session.
+      setTrainingHref(
+        result.ok && result.nextStep
+          ? `/training/${trainingReturn.slug}#${stepAnchorId(result.nextStep)}`
+          : trainingReturn.originHref,
+      );
+    });
+
+    return () => {
+      alive = false;
+    };
+  }, [trainingReturn]);
+
+  // One return CTA, replacing the ordinary next-pillar suggestion.
+  const trainingReturnCard = trainingReturn ? (
+    <div className="flex flex-col items-center gap-3">
+      <p className="text-sm font-medium text-green-700 flex items-center gap-1.5">
+        <CheckCircle2 className="w-4 h-4" />
+        {trainingReturn.label} completed
+      </p>
+      <Link href={trainingHref ?? trainingReturn.originHref}>
+        <Button size="lg">
+          Back to {trainingReturn.chapter.title}
+          <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+      </Link>
+    </div>
+  ) : null;
 
   useEffect(() => {
     let alive = true;
@@ -116,6 +167,17 @@ export function NextPracticeCta({ justCompletedPillarSlug }: NextPracticeCtaProp
       <ArrowRight className="w-4 h-4 text-amber-600 flex-shrink-0 transition-transform group-hover:translate-x-0.5" />
     </Link>
   ) : null;
+
+  // Launched from Training: the return path replaces the next-pillar
+  // suggestion so the completion view carries exactly one onward action.
+  if (trainingReturnCard) {
+    return (
+      <div className="flex flex-col items-center gap-3">
+        {posterCard}
+        {trainingReturnCard}
+      </div>
+    );
+  }
 
   if (nextSlug === undefined) {
     return (

@@ -22,6 +22,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "ClassRegistrations": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "CohortMembers": {
       "name": string
       "type": "sst.aws.Dynamo"
@@ -55,6 +59,10 @@ declare module "sst" {
       "type": "sst.aws.Dynamo"
     }
     "Intentions": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
+    "JournalEntries": {
       "name": string
       "type": "sst.aws.Dynamo"
     }

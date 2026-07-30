@@ -18,7 +18,8 @@ import { PILLARS, type Pillar } from "@/constants/pillars";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
-import { Check, Play, PenLine, BookOpen, Sparkles } from "lucide-react";
+import { Check, Play, PenLine, BookOpen, GraduationCap, Sparkles } from "lucide-react";
+import { chapterForPillar } from "@/lib/learning-map";
 import {
   practiceTypeForPillar,
   type PracticeType,
@@ -286,6 +287,9 @@ function PillarCard({
   const Icon = pillar.icon;
   const label = PRACTICE_LABEL[practiceTypeForPillar(pillar.slug)];
   const LabelIcon = label.icon;
+  // Published only — undefined for pillars taught by a chapter still in
+  // writing, which renders nothing at all rather than a disabled chip.
+  const trainingChapter = chapterForPillar(pillar.slug);
 
   // Tier-driven visual emphasis.
   //   Active      = amber ring + shadow (prominent).
@@ -341,11 +345,30 @@ function PillarCard({
             <Icon className="w-6 h-6" style={{ color: pillar.color }} />
           </div>
           <h3 className="font-semibold text-[var(--color-text-primary)]">{pillar.name}</h3>
-          <p className="text-sm text-gray-500 mt-1">{pillar.sanskritName}</p>
+          {/* Where this pillar is taught. Authored metadata, not progress — it
+              never changes with completion state. Sits on the Sanskrit-name
+              line, which has room, so the chip costs no card height. Not a
+              link: the whole card is already one, and the chapter title lives
+              on the detail page. */}
+          <p className="text-sm text-gray-500 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span>{pillar.sanskritName}</span>
+            {trainingChapter && (
+              <span
+                className="inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-[#DAA520]/30 bg-amber-50 px-1.5 py-px text-[10px] font-medium text-[#B8860B]"
+                title={`Taught in Training Chapter ${trainingChapter.number}`}
+              >
+                <GraduationCap className="w-3 h-3" aria-hidden="true" />
+                <span className="sr-only">
+                  Taught in Training Chapter {trainingChapter.number}
+                </span>
+                <span aria-hidden="true">Ch {trainingChapter.number}</span>
+              </span>
+            )}
+          </p>
           <p className="text-xs text-gray-400 mt-2 line-clamp-2">
             {pillar.description}
           </p>
-          <div className="mt-3 flex items-center justify-between">
+          <div className="mt-3 flex items-center justify-between gap-2">
             <span
               className={cn(
                 "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium",

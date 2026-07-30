@@ -1,6 +1,24 @@
 import { Resource } from 'sst';
-import { QueryCommand, PutCommand, UpdateCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
+import { createHash } from 'node:crypto';
+import { QueryCommand, PutCommand, GetCommand, UpdateCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import { db, ok, err, CORS_HEADERS, getUserFromEvent, generateId ,parseBody } from '../lib/utils';
+
+/**
+ * Stable, opaque id for a Training-origin entry, derived from the
+ * server-authenticated user plus the chapter and prompt it answers. Same
+ * inputs → same id, so a re-save edits rather than duplicates.
+ */
+function trainingEntryId(
+  userId: string,
+  chapterSlug: string,
+  promptIndex: unknown,
+): string {
+  const prompt = Number.isInteger(promptIndex) ? String(promptIndex) : 'all';
+  return createHash('sha256')
+    .update(`training|${userId}|${chapterSlug}|${prompt}`)
+    .digest('hex')
+    .slice(0, 32);
+}
 
 export async function handler(event: any) {
   if (event.requestContext?.http?.method === 'OPTIONS')
@@ -49,6 +67,20 @@ export async function handler(event: any) {
       results.intentions = items;
       const today = todayIso();
       results.todayIntention = items.find((i: any) => i.intentionDate === today) || null;
+    }
+
+    // Generic free-prose entries. Returned under their own key so existing
+    // consumers of gratitudeEntries / intentions / manifestations are
+    // unaffected.
+    if (!filter || filter === 'entry') {
+      const r = await db.send(new QueryCommand({
+        TableName: Resource.JournalEntries.name,
+        IndexName: 'userId-index',
+        KeyConditionExpression: 'userId = :userId',
+        ExpressionAttributeValues: { ':userId': user.id },
+        Limit: limit,
+      }));
+      results.journalEntries = r.Items || [];
     }
 
     if (!filter || filter === 'manifestation') {
@@ -191,7 +223,63 @@ export async function handler(event: any) {
       return ok({ success: true, id });
     }
 
-    return err(400, 'Invalid type. Use: gratitude, intention, manifestation');
+    // Generic journal entry. `source`/`chapterSlug`/`promptIndex` are optional
+    // context — the entry type is "entry", not "reflection", because the table
+    // is deliberately generic and Training is only its first caller.
+    //
+    // Deliberately does NOT call any check-in / pillar credit. Writing a
+    // reflection is not practising; Journey day, streak and karma are
+    // untouched by this path.
+    if (op === 'entry') {
+      const { body: entryBody, source, chapterSlug, promptIndex } = body;
+      const prose = typeof entryBody === 'string' ? entryBody.trim() : '';
+      if (!prose) return err(400, 'body is required');
+
+      const isTraining = source === 'training';
+      if (isTraining && (typeof chapterSlug !== 'string' || !chapterSlug)) {
+        return err(400, 'chapterSlug is required for training entries');
+      }
+
+      // Training reflections are logically one per (user, chapter, prompt), so
+      // re-saving edits the same entry instead of appending a duplicate — that
+      // is what makes double-submit and retry-after-a-failed-progress-write
+      // safe. The identity is derived server-side from the AUTHENTICATED user;
+      // a client-supplied userId is never trusted. Ordinary entries keep
+      // generated ids and may repeat freely within a day.
+      const id = isTraining
+        ? trainingEntryId(user.id, chapterSlug, promptIndex)
+        : generateId();
+
+      const existing = await db.send(new GetCommand({
+        TableName: Resource.JournalEntries.name,
+        Key: { id },
+      }));
+      const prior = existing.Item;
+      if (prior && prior.userId !== user.id) return err(403, 'Forbidden');
+
+      await db.send(new PutCommand({
+        TableName: Resource.JournalEntries.name,
+        Item: {
+          id,
+          userId: user.id,
+          entryDate: prior?.entryDate ?? today,
+          // User prose only. The authored Training question is never copied in
+          // here — it stays in training-book.ts and is resolved for display
+          // from chapterSlug + promptIndex.
+          body: prose,
+          source: source ?? null,
+          chapterSlug: isTraining ? chapterSlug : null,
+          promptIndex:
+            isTraining && Number.isInteger(promptIndex) ? promptIndex : null,
+          createdAt: prior?.createdAt ?? now,
+          updatedAt: now,
+        },
+      }));
+
+      return ok({ success: true, id, updated: Boolean(prior) });
+    }
+
+    return err(400, 'Invalid type. Use: gratitude, intention, manifestation, entry');
   }
 
   if (method === 'PATCH') {

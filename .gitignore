@@ -76,3 +76,11 @@ scripts/migrate-data.ts
 
 # staging dir for media generation
 .media-stage/
+
+# Build/test output captured while verifying — regenerated on demand.
+build-output.log
+test-output.log
+
+# Ad-hoc screenshots dropped into the repo root during review.
+/image.png
+/image copy*.png

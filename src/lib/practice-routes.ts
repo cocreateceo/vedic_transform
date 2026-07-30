@@ -37,7 +37,9 @@ export const SESSION_KEYS: SessionKey[] = [
   "sleep",
 ];
 
-const PILLAR_TO_SESSION: Record<string, SessionKey> = {
+// Exported so the training↔practice join in src/lib/learning-map.ts can reuse
+// the one authoritative mapping instead of restating it.
+export const PILLAR_TO_SESSION: Record<string, SessionKey> = {
   "morning-initiation": "morning-routine",
   "nutrition-fasting": "fasting",
   "breathing-meditation": "breathing",
@@ -49,7 +51,9 @@ const PILLAR_TO_SESSION: Record<string, SessionKey> = {
   "sleep-optimization": "sleep",
 };
 
-const PILLAR_TO_JOURNAL: Record<string, "gratitude" | "intention" | "manifestation"> = {
+export type JournalAction = "gratitude" | "intention" | "manifestation";
+
+export const PILLAR_TO_JOURNAL: Record<string, JournalAction> = {
   "gratitude": "gratitude",
   "thoughts-intention": "intention",
 };

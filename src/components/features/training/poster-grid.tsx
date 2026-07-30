@@ -71,7 +71,7 @@ export function PosterGrid({
         : "grid-cols-2 lg:grid-cols-3";
 
   return (
-    <section className={compact ? "py-10 sm:py-12" : "py-16 sm:py-20"}>
+    <section className={compact ? "py-8 sm:py-10" : "py-16 sm:py-20"}>
       <FadeUp className="mx-auto max-w-[44rem] text-center">
         <h2
           className={`${SERIF_CLASS} text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl`}

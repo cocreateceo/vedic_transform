@@ -13,6 +13,7 @@ import { CalendarHeatmap } from "@/components/features/analytics/calendar-heatma
 import { ConsistencyScore } from "@/components/features/analytics/consistency-score";
 import { InsightList } from "@/components/features/analytics/insight-card";
 import { SutraBook } from "@/components/features/progress/sutra-book";
+import { TrainingProgressCard } from "@/components/features/progress/training-progress-card";
 
 // Recharts (~348 KB) is heavy and only needed here — load it lazily so it
 // stays out of the initial bundle until the charts actually render.
@@ -188,6 +189,10 @@ export default function ProgressPage() {
         todayCompleted={todayCompleted}
         todayTotal={PILLARS.length}
       />
+
+      {/* Training — an additional progress dimension, reported beside the
+          Journey's practice metrics and never folded into them. Read-only. */}
+      <TrainingProgressCard />
 
       {/* Sutra Book — the 48-page artifact, filling in from Day 1 (RC7). */}
       <SutraBook

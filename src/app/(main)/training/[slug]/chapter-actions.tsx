@@ -1,26 +1,85 @@
 "use client";
 
+// Two related pieces:
+//
+//   ChapterNav     — prev/next links only.
+//   ChapterActions — ChapterNav plus a manual "mark complete" toggle.
+//
+// The split matters. A chapter with a learning cycle seals itself when its last
+// step lands (see src/lib/hooks/use-chapter-progress.ts), so a manual toggle on
+// the same page would be a second writer to the same key — mark it by hand and
+// the steps stayed at 0/8; finish every step then tap the toggle and the chapter
+// un-completed itself with all its steps still green.
+//
+// Pages with a cycle therefore use ChapterNav. ChapterActions is for pages that
+// have no cycle to derive completion from — the Introduction, and the plain
+// reader fallback — where an explicit "I'm done" is the only signal available.
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, CheckCircle2, Circle } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import { cn } from "@/lib/utils/cn";
 
-interface ChapterActionsProps {
-  contentId: string;
+interface ChapterNavProps {
   prevSlug?: string;
   prevTitle?: string;
   nextSlug?: string;
   nextTitle?: string;
 }
 
-export function ChapterActions({
-  contentId,
+export function ChapterNav({
   prevSlug,
   prevTitle,
   nextSlug,
   nextTitle,
-}: ChapterActionsProps) {
+  divider = true,
+}: ChapterNavProps & { divider?: boolean }) {
+  return (
+    <div
+      className={cn(
+        "flex items-stretch gap-4",
+        divider && "pt-8 border-t border-[var(--color-border)]",
+      )}
+    >
+      {prevSlug ? (
+        <Link
+          href={`/training/${prevSlug}`}
+          className="vedic-card p-4 flex-1 hover:border-[#DAA520] transition-colors group"
+        >
+          <span className="inline-flex items-center gap-1 text-xs text-[var(--color-text-muted)]">
+            <ArrowLeft className="w-3.5 h-3.5" /> Previous
+          </span>
+          <p className="text-sm font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] mt-1">
+            {prevTitle}
+          </p>
+        </Link>
+      ) : (
+        <div className="flex-1" />
+      )}
+      {nextSlug ? (
+        <Link
+          href={`/training/${nextSlug}`}
+          className="vedic-card p-4 flex-1 text-right hover:border-[#DAA520] transition-colors group"
+        >
+          <span className="inline-flex items-center gap-1 text-xs text-[var(--color-text-muted)]">
+            Next <ArrowRight className="w-3.5 h-3.5" />
+          </span>
+          <p className="text-sm font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] mt-1">
+            {nextTitle}
+          </p>
+        </Link>
+      ) : (
+        <div className="flex-1" />
+      )}
+    </div>
+  );
+}
+
+export function ChapterActions({
+  contentId,
+  ...nav
+}: ChapterNavProps & { contentId: string }) {
   const [completed, setCompleted] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,38 +148,7 @@ export function ChapterActions({
         </p>
       )}
 
-      <div className="flex items-stretch gap-4">
-        {prevSlug ? (
-          <Link
-            href={`/training/${prevSlug}`}
-            className="vedic-card p-4 flex-1 hover:border-[#DAA520] transition-colors group"
-          >
-            <span className="inline-flex items-center gap-1 text-xs text-[var(--color-text-muted)]">
-              <ArrowLeft className="w-3.5 h-3.5" /> Previous
-            </span>
-            <p className="text-sm font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] mt-1">
-              {prevTitle}
-            </p>
-          </Link>
-        ) : (
-          <div className="flex-1" />
-        )}
-        {nextSlug ? (
-          <Link
-            href={`/training/${nextSlug}`}
-            className="vedic-card p-4 flex-1 text-right hover:border-[#DAA520] transition-colors group"
-          >
-            <span className="inline-flex items-center gap-1 text-xs text-[var(--color-text-muted)]">
-              Next <ArrowRight className="w-3.5 h-3.5" />
-            </span>
-            <p className="text-sm font-semibold text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] mt-1">
-              {nextTitle}
-            </p>
-          </Link>
-        ) : (
-          <div className="flex-1" />
-        )}
-      </div>
+      <ChapterNav {...nav} divider={false} />
     </div>
   );
 }

@@ -159,6 +159,26 @@ export default $config({
       },
     });
 
+    // Generic free-prose journal entries. Gratitude, Intentions and
+    // Manifestations are three specialised workflows — each upserts per day or
+    // carries goal state — so none of them can hold an ordinary written entry
+    // without changing its meaning. This is the Journal's general writing
+    // surface; Training reflections are its first contextual caller, carried as
+    // optional `source`/`chapterSlug`/`promptIndex` metadata rather than a
+    // separate Training-owned table.
+    const journalEntries = new sst.aws.Dynamo("JournalEntries", {
+      fields: {
+        id: "string",
+        userId: "string",
+      },
+      primaryIndex: { hashKey: "id" },
+      globalIndexes: {
+        "userId-index": {
+          hashKey: "userId",
+        },
+      },
+    });
+
     const moodLogs = new sst.aws.Dynamo("MoodLogs", {
       fields: {
         id: "string",
@@ -493,7 +513,7 @@ export default $config({
     });
 
     // Journal (gratitude, intentions, manifestations)
-    const journalLink = [gratitudeEntries, intentions, manifestations, jwtSecret];
+    const journalLink = [gratitudeEntries, intentions, manifestations, journalEntries, jwtSecret];
     api.route("GET /data/journal", {
       handler: "functions/data/journal.handler",
       link: journalLink,

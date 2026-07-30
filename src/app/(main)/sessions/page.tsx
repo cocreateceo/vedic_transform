@@ -36,6 +36,10 @@ import { ManasicPractice } from "@/components/features/sessions/manasic-practice
 import { DoshaQuiz } from "@/components/features/sessions/dosha-quiz";
 import { cn } from "@/lib/utils/cn";
 import { sessionKeyToTabIndex } from "@/lib/practice-routes";
+import { parseTrainingReturnContext } from "@/lib/training-return-context";
+import { TrainingReturnProvider } from "@/components/features/sessions/training-return-provider";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 // Tab order MUST stay in lockstep with SESSION_KEYS in
 // src/lib/practice-routes.ts. Order follows the pillar ID sequence so the
@@ -70,6 +74,11 @@ export default function SessionsPage() {
   const desiredTab = sessionKeyToTabIndex(searchParams?.get("practice"));
   const [activeTab, setActiveTab] = useState(desiredTab);
 
+  // Parsed once, here, through the central validator. Anything malformed —
+  // hand-edited URLs, a missing step, an unknown chapter — comes back null and
+  // this behaves as an ordinary Sessions visit.
+  const trainingReturn = parseTrainingReturnContext(searchParams);
+
   // Re-sync when the URL param changes (e.g. user clicks "Next: Breathing"
   // on the meditation completion view — without this the tab wouldn't
   // switch because useState's initializer only runs once).
@@ -81,6 +90,22 @@ export default function SessionsPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      {/* Breadcrumb — only when the learner genuinely arrived from a chapter. */}
+      {trainingReturn && (
+        <Link
+          href={trainingReturn.originHref}
+          className="flex items-center justify-between gap-3 rounded-xl border border-[#DAA520]/40 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2.5 transition-colors hover:border-[#DAA520]"
+        >
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-[#8B6914]">
+            <ArrowLeft className="h-4 w-4" />
+            {trainingReturn.label}
+          </span>
+          <span className="text-xs text-[#B8860B]">
+            Part of your learning cycle
+          </span>
+        </Link>
+      )}
+
       {/* Page header */}
       <div>
         <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
@@ -113,9 +138,12 @@ export default function SessionsPage() {
         })}
       </div>
 
-      {/* Active component */}
+      {/* Active component. The provider is the only channel through which a
+          session learns it was launched by Training. */}
       <div className="vedic-card p-6">
-        <ActiveComponent />
+        <TrainingReturnProvider value={trainingReturn}>
+          <ActiveComponent />
+        </TrainingReturnProvider>
       </div>
     </div>
   );

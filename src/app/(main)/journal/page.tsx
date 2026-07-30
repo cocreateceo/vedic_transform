@@ -1,11 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Heart, Sparkles, Calendar, Check, Trash2, RotateCcw } from "lucide-react";
+import { ArrowLeft, BookOpen, Heart, Sparkles, Calendar, Check, Trash2, RotateCcw } from "lucide-react";
 import { QuillGlyph } from "@/components/features/daily/page-glyphs";
+import {
+  parseJournalContext,
+  resolveEntryTrainingContext,
+} from "@/lib/journal-context";
+import { markTrainingActivity } from "@/lib/training-progress";
+import { cn } from "@/lib/utils/cn";
 
 // Best-effort pillar check-in after a journal save. Same-day server dedupe
 // makes this safe to call repeatedly.
@@ -18,7 +26,38 @@ async function creditPillar(slug: string) {
   } catch {}
 }
 
+// `useSearchParams` in a statically-rendered route needs a Suspense boundary —
+// without one it yields an empty set and the deep-link modes below never
+// activate. (This page is prerendered, so the symptom was silent: the URL had
+// ?action=gratitude and the page rendered as if it didn't.)
 export default function JournalPage() {
+  return (
+    <Suspense fallback={<JournalSkeleton />}>
+      <JournalClient />
+    </Suspense>
+  );
+}
+
+function JournalSkeleton() {
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div className="h-8 bg-gray-200 rounded w-32 animate-pulse" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+        <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
+      </div>
+    </div>
+  );
+}
+
+function JournalClient() {
+  // Parsed once, centrally. Nothing else on this page reads search params.
+  const searchParams = useSearchParams();
+  const context = parseJournalContext(searchParams);
+  const gratitudeRef = useRef<HTMLDivElement | null>(null);
+  const intentionRef = useRef<HTMLDivElement | null>(null);
+
+  const [journalEntries, setJournalEntries] = useState<any[]>([]);
   const [gratitudeEntries, setGratitudeEntries] = useState<any[]>([]);
   const [todayGratitude, setTodayGratitude] = useState<any>(null);
   const [todayIntention, setTodayIntention] = useState<any>(null);
@@ -27,10 +66,16 @@ export default function JournalPage() {
   const [savingGratitude, setSavingGratitude] = useState(false);
   const [savingIntention, setSavingIntention] = useState(false);
   const [savingManifestation, setSavingManifestation] = useState(false);
+  const [reflectionText, setReflectionText] = useState("");
+  const [savingReflection, setSavingReflection] = useState(false);
+  const [reflectionSaved, setReflectionSaved] = useState(false);
+  const [reflectionError, setReflectionError] = useState<string | null>(null);
+  const [progressSynced, setProgressSynced] = useState(true);
 
   const fetchData = async () => {
     try {
       const data = await apiFetch("/data/journal");
+      setJournalEntries(data?.journalEntries || []);
       setGratitudeEntries(data?.gratitudeEntries || []);
       setTodayGratitude(data?.todayGratitude || null);
       setTodayIntention(data?.todayIntention || null);
@@ -44,6 +89,93 @@ export default function JournalPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Revisiting a chapter's reflection loads what was written before, so
+  // re-saving edits the same entry rather than starting a blank second one.
+  const existingReflection =
+    context.kind === "training-reflection"
+      ? journalEntries.find(
+          (e: any) =>
+            e?.source === "training" &&
+            e?.chapterSlug === context.slug &&
+            (e?.promptIndex ?? null) === (context.promptIndex ?? null),
+        )
+      : undefined;
+  const seededFor = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (context.kind !== "training-reflection") return;
+    const key = `${context.slug}:${context.promptIndex ?? "all"}`;
+    if (seededFor.current === key) return; // never clobber live typing
+    if (!existingReflection) return;
+    seededFor.current = key;
+    setReflectionText(existingReflection.body ?? "");
+  }, [context, existingReflection]);
+
+  // A pillar deep-link names one practice — bring it into view instead of
+  // dropping the user at the top of a generic page.
+  useEffect(() => {
+    if (loading || context.kind !== "practice") return;
+    const target =
+      context.action === "gratitude" ? gratitudeRef.current : intentionRef.current;
+    target?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [loading, context]);
+
+  // Training reflection save. The ordering is the whole point:
+  //   journal persists → THEN Training progress → THEN success state.
+  // If the journal write fails the activity stays incomplete. If the journal
+  // write succeeds but the progress write fails, the prose is safe and only
+  // the progress sync is retried — the user is never asked to rewrite.
+  const handleSaveReflection = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (context.kind !== "training-reflection") return;
+    const prose = reflectionText.trim();
+    if (!prose) return;
+
+    setSavingReflection(true);
+    setReflectionError(null);
+    try {
+      await apiFetch("/data/journal", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "entry",
+          body: prose,
+          source: "training",
+          chapterSlug: context.slug,
+          promptIndex: context.promptIndex,
+        }),
+      });
+    } catch {
+      // Nothing was persisted — do not touch Training progress.
+      setReflectionError(
+        "Couldn't save your reflection. Please try again — nothing was lost.",
+      );
+      setSavingReflection(false);
+      return;
+    }
+
+    // Prose is safe from here on, whatever happens next.
+    setReflectionSaved(true);
+    await fetchData();
+
+    const result = await markTrainingActivity({
+      slug: context.slug,
+      step: "reflection",
+    });
+    setProgressSynced(result.ok);
+    setSavingReflection(false);
+  };
+
+  const retryProgressSync = async () => {
+    if (context.kind !== "training-reflection") return;
+    setSavingReflection(true);
+    const result = await markTrainingActivity({
+      slug: context.slug,
+      step: "reflection",
+    });
+    setProgressSynced(result.ok);
+    setSavingReflection(false);
+  };
 
   const handleSaveGratitude = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -182,10 +314,152 @@ export default function JournalPage() {
         </div>
       </div>
 
+      {/* Training reflection context — the authored questions, shown as
+          context. They are never written into the user's own entry: the
+          prompt is ours, the prose is theirs. */}
+      {context.kind === "training-reflection" && (
+        <section className="rounded-2xl border border-[#DAA520]/40 bg-gradient-to-br from-amber-50 to-orange-50 p-5 sm:p-6">
+          <Link
+            href={context.originHref}
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#8B6914] hover:underline"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Reflection from Training
+          </Link>
+          <p className="mt-2 text-sm font-semibold text-[var(--color-text-primary)]">
+            {context.chapter.number === 0
+              ? "Introduction"
+              : `Chapter ${context.chapter.number}`}{" "}
+            · {context.chapter.title}
+          </p>
+          <ol className="mt-3 space-y-2">
+            {(typeof context.promptIndex === "number"
+              ? [context.prompts[context.promptIndex]]
+              : context.prompts
+            ).map((q, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-2.5 text-[15px] italic leading-relaxed text-[#3d3223]"
+              >
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#DAA520]" />
+                {q}
+              </li>
+            ))}
+          </ol>
+          <form onSubmit={handleSaveReflection} className="mt-4 space-y-3">
+            <label
+              htmlFor="training-reflection"
+              className="block text-xs font-semibold uppercase tracking-wide text-[#8B6914]"
+            >
+              Your reflection
+            </label>
+            <textarea
+              id="training-reflection"
+              name="reflection"
+              rows={5}
+              value={reflectionText}
+              onChange={(e) => setReflectionText(e.target.value)}
+              placeholder="In your own words..."
+              className="w-full rounded-lg border border-[#DAA520]/40 bg-white/70 px-3 py-2 text-sm resize-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+            />
+
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                type="submit"
+                size="sm"
+                isLoading={savingReflection}
+                disabled={!reflectionText.trim()}
+              >
+                {existingReflection ? "Update reflection" : "Save reflection"}
+              </Button>
+
+              {reflectionSaved && progressSynced && (
+                <Link
+                  href={context.originHref}
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#B8860B] hover:underline"
+                >
+                  Back to{" "}
+                  {context.chapter.number === 0
+                    ? "the Introduction"
+                    : `Chapter ${context.chapter.number}`}
+                  <ArrowLeft className="w-3.5 h-3.5 rotate-180" />
+                </Link>
+              )}
+            </div>
+
+            {reflectionSaved && progressSynced && (
+              <p className="flex items-center gap-1.5 text-sm font-medium text-green-700">
+                <Check className="w-4 h-4" />
+                Reflection saved · Training activity complete
+              </p>
+            )}
+
+            {/* Prose is already safe here — only the progress sync failed, so
+                that is all we offer to retry. Never "your writing failed". */}
+            {reflectionSaved && !progressSynced && (
+              <div className="text-sm">
+                <p className="flex items-center gap-1.5 font-medium text-green-700">
+                  <Check className="w-4 h-4" />
+                  Reflection saved.
+                </p>
+                <p className="mt-1 text-[var(--color-text-secondary)]">
+                  We couldn&apos;t mark the Training activity complete just
+                  now.{" "}
+                  <button
+                    type="button"
+                    onClick={retryProgressSync}
+                    className="font-semibold text-[#B8860B] underline"
+                  >
+                    Retry
+                  </button>
+                </p>
+              </div>
+            )}
+
+            {reflectionError && (
+              <p className="text-sm text-red-600" role="alert">
+                {reflectionError}
+              </p>
+            )}
+          </form>
+        </section>
+      )}
+
+      {/* Pillar practice mode — the long-dead ?action=gratitude|intention
+          links finally say which practice they opened. Context only; the
+          entry itself saves through the ordinary Journal flow. */}
+      {context.kind === "practice" && context.pillar && (
+        <section className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card-bg)] p-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#B8860B]">
+            {context.action === "gratitude"
+              ? "Gratitude practice"
+              : "Intention practice"}
+          </p>
+          <p className="mt-1 text-sm font-semibold text-[var(--color-text-primary)]">
+            {context.pillar.name}
+            {context.pillar.sanskritName && (
+              <span className="ml-2 font-normal text-gray-500">
+                {context.pillar.sanskritName}
+              </span>
+            )}
+          </p>
+          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+            {context.pillar.description}
+          </p>
+        </section>
+      )}
+
       {/* Today's entries */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Gratitude */}
-        <Card>
+        <Card
+          ref={gratitudeRef}
+          className={cn(
+            context.kind === "practice" &&
+              context.action === "gratitude" &&
+              "ring-2 ring-amber-400",
+          )}
+        >
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
               <Heart className="w-5 h-5 text-orange-500" />
@@ -222,7 +496,14 @@ export default function JournalPage() {
         </Card>
 
         {/* Intention */}
-        <Card>
+        <Card
+          ref={intentionRef}
+          className={cn(
+            context.kind === "practice" &&
+              context.action === "intention" &&
+              "ring-2 ring-amber-400",
+          )}
+        >
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-500" />
@@ -341,6 +622,58 @@ export default function JournalPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Written entries — generic prose, including Training reflections.
+          Kept separate from the gratitude list so existing sections are
+          unchanged. */}
+      {journalEntries.length > 0 && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-amber-500" />
+              <CardTitle>Written Entries</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {journalEntries.slice(0, 8).map((entry: any) => {
+                const training = resolveEntryTrainingContext(entry);
+                return (
+                  <div
+                    key={entry.id}
+                    className="p-4 rounded-xl bg-gray-50 border border-gray-100"
+                  >
+                    <p className="text-sm text-gray-500">
+                      {entry.entryDate
+                        ? new Date(entry.entryDate).toLocaleDateString("en-US", {
+                            weekday: "long",
+                            month: "short",
+                            day: "numeric",
+                          })
+                        : "Journal entry"}
+                    </p>
+                    {/* Present only while the referenced chapter still exists;
+                        if it doesn't, the prose below stands on its own. */}
+                    {training && (
+                      <p className="mt-1 text-xs font-semibold text-[#B8860B]">
+                        {training.label}
+                      </p>
+                    )}
+                    {training?.prompt && (
+                      <p className="mt-1 text-xs italic text-gray-500">
+                        {training.prompt}
+                      </p>
+                    )}
+                    <p className="mt-2 whitespace-pre-wrap text-sm text-gray-700">
+                      {entry.body}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Recent Entries */}
       <Card>
