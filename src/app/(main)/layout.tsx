@@ -5,6 +5,8 @@ import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { CommandPalette } from "@/components/layout/command-palette";
+import { RailProvider } from "@/components/layout/rail-context";
+import { RailOffset } from "@/components/layout/rail-offset";
 import { useAuth } from "@/context/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -28,15 +30,18 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-[var(--color-bg-primary)]">
-        <Sidebar />
-        <div className="lg:pl-64">
-          <Header user={{ email: user?.email || "", name: user?.name }} />
-          <main className="p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">{children}</main>
+      <RailProvider>
+        <div className="min-h-screen bg-[var(--color-bg-primary)]">
+          <Sidebar />
+          {/* Content leaves room for whichever width the rail is at. */}
+          <RailOffset>
+            <Header user={{ email: user?.email || "", name: user?.name }} />
+            <main className="p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">{children}</main>
+          </RailOffset>
+          <MobileNav />
+          <CommandPalette />
         </div>
-        <MobileNav />
-        <CommandPalette />
-      </div>
+      </RailProvider>
     </AuthGuard>
   );
 }
