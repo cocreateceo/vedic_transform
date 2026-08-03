@@ -225,10 +225,16 @@ export function BrahmanPractice() {
         </Button>
       )}
 
-      <p className="text-center text-sm max-w-md" style={{ color: "rgba(255,255,255,0.75)" }}>
-        5 minutes of silent expansion meditation. Let go of body, breath, and
-        thought. Rest in pure awareness.
-      </p>
+      {/* The brief belongs to the moment before the sit. Once the timer is
+          running it is a second thing to read while the instruction is to stop
+          reading, and after the sit it is advice for a practice just finished.
+          It renders where it is useful and nowhere else. */}
+      {phase === "idle" && (
+        <p className="text-center text-sm max-w-md" style={{ color: "rgba(255,255,255,0.75)" }}>
+          5 minutes of silent expansion meditation. Let go of body, breath, and
+          thought. Rest in pure awareness.
+        </p>
+      )}
     </div>
   );
 }

@@ -1,150 +1,73 @@
 "use client";
 
-import { useState, useEffect } from "react";
+// /sessions is now two screens, not one.
+//
+// With no ?practice= it is the index: every practice, its duration, and what
+// is already done today. With one, it is that practice and nothing else —
+// a back link, the session, and no permanent chrome.
+//
+// What went: the page's own <h1>Guided Sessions</h1>, the sixteen-button tab
+// strip (142–148px, three wrapped rows on a phone, on screen even while a
+// timer ran), and the outer card that double-padded every session against the
+// component's own padding. Between them they cost ~250px in every state.
+
 import { useSearchParams } from "next/navigation";
-import {
-  Sun,
-  Timer,
-  Wind,
-  UtensilsCrossed,
-  Dumbbell,
-  SunMedium,
-  Infinity as InfinityIcon,
-  Sparkles,
-  Moon,
-  PersonStanding,
-  Waves,
-  Sunrise,
-  Music2,
-  Leaf,
-  Flame,
-} from "lucide-react";
-import { MorningRoutine } from "@/components/features/sessions/morning-routine";
-import { MeditationTimer } from "@/components/features/sessions/meditation-timer";
-import { BreathingPatterns } from "@/components/features/sessions/breathing-patterns";
-import { FastingTimer } from "@/components/features/sessions/fasting-timer";
-import { MovementTimer } from "@/components/features/sessions/movement-timer";
-import { SandhyaPractice } from "@/components/features/sessions/sandhya-practice";
-import { BrahmanPractice } from "@/components/features/sessions/brahman-practice";
-import { ManifestationPractice } from "@/components/features/sessions/manifestation-practice";
-import { SleepPractice } from "@/components/features/sessions/sleep-practice";
-import { YogaFlow } from "@/components/features/sessions/yoga-flow";
-import { NidraPractice } from "@/components/features/sessions/nidra-practice";
-import { DinacharyaPractice } from "@/components/features/sessions/dinacharya-practice";
-import { MantraPractice } from "@/components/features/sessions/mantra-practice";
-import { ManasicPractice } from "@/components/features/sessions/manasic-practice";
-import { DoshaQuiz } from "@/components/features/sessions/dosha-quiz";
-import { cn } from "@/lib/utils/cn";
-import { sessionKeyToTabIndex } from "@/lib/practice-routes";
-import { parseTrainingReturnContext } from "@/lib/training-return-context";
-import { TrainingReturnProvider } from "@/components/features/sessions/training-return-provider";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-
-// Tab order MUST stay in lockstep with SESSION_KEYS in
-// src/lib/practice-routes.ts. Order follows the pillar ID sequence so the
-// daily ritual reads naturally top-to-bottom:
-//   Morning (1) · Fasting (2) · Breathing (4) · Movement (5) ·
-//   Meditation (6) · Sandhya (8) · Brahman (9) · Manifestation (10) · Sleep (11).
-const tabs = [
-  { name: "Morning Routine", icon: Sun, component: MorningRoutine },
-  { name: "Fasting", icon: UtensilsCrossed, component: FastingTimer },
-  { name: "Breathing", icon: Wind, component: BreathingPatterns },
-  { name: "Movement", icon: Dumbbell, component: MovementTimer },
-  { name: "Meditation", icon: Timer, component: MeditationTimer },
-  { name: "Sandhya", icon: SunMedium, component: SandhyaPractice },
-  { name: "Brahman", icon: InfinityIcon, component: BrahmanPractice },
-  { name: "Manifest", icon: Sparkles, component: ManifestationPractice },
-  { name: "Sleep", icon: Moon, component: SleepPractice },
-  // New activities (appended after the 9 pillar tabs — keep these last so the
-  // pillar deep-link indices in SESSION_KEYS stay valid).
-  { name: "Yoga Flow", icon: PersonStanding, component: YogaFlow },
-  { name: "Yoga Nidra", icon: Waves, component: NidraPractice },
-  { name: "Dinacharya", icon: Sunrise, component: DinacharyaPractice },
-  { name: "Mantra", icon: Music2, component: MantraPractice },
-  { name: "Manasic Puja", icon: Flame, component: ManasicPractice },
-  { name: "Dosha Quiz", icon: Leaf, component: DoshaQuiz },
-];
+import { parseTrainingReturnContext } from "@/lib/training-return-context";
+import { TrainingReturnProvider } from "@/components/features/sessions/training-return-provider";
+import { SessionsIndex } from "@/components/features/sessions/sessions-index";
+import { sessionTabForParam } from "@/components/features/sessions/session-tabs";
 
 export default function SessionsPage() {
-  // Read ?practice=<key> so the dashboard's TodaysPractice CTA — and the
-  // "Next" button on each completion view — can deep-link straight into
-  // the right timer. Defaults to tab 0 when missing or unknown.
   const searchParams = useSearchParams();
-  const desiredTab = sessionKeyToTabIndex(searchParams?.get("practice"));
-  const [activeTab, setActiveTab] = useState(desiredTab);
+  const tab = sessionTabForParam(searchParams?.get("practice"));
 
-  // Parsed once, here, through the central validator. Anything malformed —
-  // hand-edited URLs, a missing step, an unknown chapter — comes back null and
-  // this behaves as an ordinary Sessions visit.
+  // Parsed through the central validator. Anything malformed — hand-edited
+  // URLs, a missing step, an unknown chapter — comes back null and this
+  // behaves as an ordinary Sessions visit.
   const trainingReturn = parseTrainingReturnContext(searchParams);
 
-  // Re-sync when the URL param changes (e.g. user clicks "Next: Breathing"
-  // on the meditation completion view — without this the tab wouldn't
-  // switch because useState's initializer only runs once).
-  useEffect(() => {
-    setActiveTab(desiredTab);
-  }, [desiredTab]);
+  if (!tab) {
+    return (
+      <div className="mx-auto max-w-4xl">
+        <SessionsIndex />
+      </div>
+    );
+  }
 
-  const ActiveComponent = tabs[activeTab].component;
+  const ActiveComponent = tab.component;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Breadcrumb — only when the learner genuinely arrived from a chapter. */}
-      {trainingReturn && (
+    <div className="mx-auto max-w-4xl">
+      {/* One back link, and it says where it goes. A learner sent here by a
+          chapter returns to the chapter; everyone else returns to the index. */}
+      {trainingReturn ? (
         <Link
           href={trainingReturn.originHref}
-          className="flex items-center justify-between gap-3 rounded-xl border border-[#DAA520]/40 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2.5 transition-colors hover:border-[#DAA520]"
+          className="mb-5 inline-flex items-center gap-2 rounded-xl border border-[#DAA520]/40 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2.5 text-sm font-semibold text-[#8B6914] transition-colors hover:border-[#DAA520]"
         >
-          <span className="inline-flex items-center gap-2 text-sm font-semibold text-[#8B6914]">
-            <ArrowLeft className="h-4 w-4" />
-            {trainingReturn.label}
+          <ArrowLeft className="h-4 w-4" />
+          {trainingReturn.label}
+          <span className="font-normal text-[#B8860B]">
+            · part of your learning cycle
           </span>
-          <span className="text-xs text-[#B8860B]">
-            Part of your learning cycle
-          </span>
+        </Link>
+      ) : (
+        <Link
+          href="/sessions"
+          className="mb-5 inline-flex w-fit items-center gap-1.5 text-[13px] font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[#B8860B]"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Sessions
         </Link>
       )}
 
-      {/* Page header */}
-      <div>
-        <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
-          Guided Sessions
-        </h1>
-        <p className="text-[var(--color-text-secondary)] mt-1">
-          Interactive tools to support your daily practice and transformation.
-        </p>
-      </div>
-
-      {/* Tab navigation */}
-      <div className="flex flex-wrap gap-2">
-        {tabs.map((tab, index) => {
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.name}
-              onClick={() => setActiveTab(index)}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
-                activeTab === index
-                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/25"
-                  : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] hover:bg-orange-50 border border-[var(--color-border)]"
-              )}
-            >
-              <Icon className="w-4 h-4" />
-              <span className="hidden sm:inline">{tab.name}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Active component. The provider is the only channel through which a
-          session learns it was launched by Training. */}
-      <div className="vedic-card p-6">
-        <TrainingReturnProvider value={trainingReturn}>
-          <ActiveComponent />
-        </TrainingReturnProvider>
-      </div>
+      {/* The provider is the only channel through which a session learns it
+          was launched by Training. */}
+      <TrainingReturnProvider value={trainingReturn}>
+        <ActiveComponent />
+      </TrainingReturnProvider>
     </div>
   );
 }

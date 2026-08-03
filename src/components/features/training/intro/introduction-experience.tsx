@@ -13,7 +13,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Briefcase,
-  ChevronDown,
   Compass,
   Crown,
   Eye,
@@ -41,6 +40,7 @@ import {
 import { ChapterActions } from "@/app/(main)/training/[slug]/chapter-actions";
 import { CinematicLesson } from "../cinematic-lesson";
 import { ChapterAccordion } from "../chapter-accordion";
+import { IntroductionReader, type IntroSection } from "./introduction-reader";
 import { PosterGrid } from "../poster-grid";
 import { Mandala, LotusDivider } from "./mandala";
 import { FadeUp, Stagger, StaggerItem, GrowLine } from "./reveal";
@@ -163,12 +163,16 @@ export function IntroductionExperience({
     .map((line) => (line.endsWith(".") ? line : `${line}.`))
     .filter((line) => line.length > 1);
 
-  return (
-    <div
-      className={`${serif.variable} -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 lg:-mt-8 overflow-hidden`}
-    >
+
+  // Each section of the Introduction becomes a position in the reader.
+  // The prose, the artwork and the dressing are exactly as authored; only
+  // how many of them are on screen at once has changed.
+  const sections: IntroSection[] = [];
+
+  sections.push({ key: "opening", label: "Opening", panel: (
+    <>
       {/* ————— Opening: pre-dawn ————— */}
-      <section className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden bg-[#0C0F22] px-6 py-20 text-center">
+      <section className="relative flex min-h-[58vh] flex-col items-center justify-center overflow-hidden rounded-3xl bg-[#0C0F22] px-6 py-16 text-center">
         <video
           src="/training-media/ambient-diya.mp4"
           poster={chapter.image}
@@ -184,14 +188,6 @@ export function IntroductionExperience({
         <div className="absolute inset-0 bg-gradient-to-b from-[#0C0F22] via-[#0C0F22]/70 to-[#2A1B0E]/80" />
         <div className="absolute inset-x-0 bottom-0 h-64 bg-[radial-gradient(ellipse_at_bottom,rgba(218,165,32,0.28),transparent_65%)]" />
         <Mandala className="absolute left-1/2 top-1/2 h-[130vmin] w-[130vmin] -translate-x-1/2 -translate-y-1/2 text-[#DAA520] opacity-[0.08]" />
-
-        <Link
-          href="/training"
-          className="absolute left-5 top-5 z-10 inline-flex items-center gap-2 text-sm font-medium text-amber-100/70 transition-colors hover:text-amber-100"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Training
-        </Link>
 
         <div className="relative z-10 max-w-3xl space-y-8">
           <FadeUp>
@@ -232,16 +228,13 @@ export function IntroductionExperience({
           </FadeUp>
         </div>
 
-        <a
-          href="#journey"
-          aria-label="Scroll to the 48-day journey"
-          className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-amber-200/60 transition-colors hover:text-amber-200 motion-safe:animate-bounce"
-        >
-          <ChevronDown className="h-6 w-6" />
-        </a>
       </section>
+    </>
+  ) });
 
-      {/* ————— The cinematic lesson ————— */}
+  if (chapter.lessonVideoId) {
+  sections.push({ key: "lesson", label: "Cinematic lesson", panel: (
+    <>
       {chapter.lessonVideoId && (
         <section className="relative bg-gradient-to-b from-[#0C0F22] to-[var(--color-bg-primary)] px-4 pb-16 pt-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl">
@@ -259,15 +252,13 @@ export function IntroductionExperience({
           </div>
         </section>
       )}
+    </>
+  ) });
+  }
 
-      {/* ————— Daylight body (dawn glow over the theme background) ————— */}
-      <div className="relative bg-[var(--color-bg-primary)] px-4 sm:px-6 lg:px-8">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-[radial-gradient(ellipse_at_top,rgba(218,165,32,0.14),transparent_65%)]"
-        />
-        <div className="relative mx-auto max-w-5xl">
-          {/* 48-Day Journey */}
+  if (journey) {
+  sections.push({ key: "journey", label: "The 48-Day Journey", panel: (
+    <>
           {journey && (
             <section id="journey" className="scroll-mt-8 py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
@@ -315,8 +306,6 @@ export function IntroductionExperience({
               )}
             </section>
           )}
-
-          {/* Introduction Gallery — every concept poster and study card */}
           {galleryItems.length > 0 && (
             <>
               <LotusDivider />
@@ -329,10 +318,13 @@ export function IntroductionExperience({
               />
             </>
           )}
+    </>
+  ) });
+  }
 
-          <LotusDivider />
-
-          {/* A Profound Shift — the modern world and the Vedic response */}
+  if (shift) {
+  sections.push({ key: "shift", label: "A Profound Shift", panel: (
+    <>
           {shift && (
             <section className="py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
@@ -416,12 +408,8 @@ export function IntroductionExperience({
               )}
             </section>
           )}
-        </div>
-      </div>
-
-      {/* ————— Night interlude: the quote ————— */}
       {shift?.paragraphs[3] && (
-        <section className="relative overflow-hidden bg-[#0C0F22] px-6 py-14 text-center sm:py-20">
+        <section className="relative mt-10 overflow-hidden rounded-3xl bg-[#0C0F22] px-6 py-14 text-center sm:py-20">
           <Mandala className="absolute left-1/2 top-1/2 h-[110vmin] w-[110vmin] -translate-x-1/2 -translate-y-1/2 text-[#DAA520] opacity-[0.07]" />
           <FadeUp className="relative z-10 mx-auto max-w-3xl">
             <p
@@ -432,11 +420,6 @@ export function IntroductionExperience({
           </FadeUp>
         </section>
       )}
-
-      {/* ————— Return to daylight ————— */}
-      <div className="bg-[var(--color-bg-primary)] px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
-          {/* Remaining Profound Shift prose — collapsed continuation */}
           {shift && shift.paragraphs.length > 4 && (
             <section className="mx-auto max-w-3xl py-10 sm:py-14">
               <ChapterAccordion
@@ -450,10 +433,13 @@ export function IntroductionExperience({
               />
             </section>
           )}
+    </>
+  ) });
+  }
 
-          <LotusDivider />
-
-          {/* Five Dimensions of Evolution */}
+  if (dimensions) {
+  sections.push({ key: "dimensions", label: "Five Dimensions", panel: (
+    <>
           {dimensions && (
             <section className="py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
@@ -560,10 +546,13 @@ export function IntroductionExperience({
               ))}
             </section>
           )}
+    </>
+  ) });
+  }
 
-          <LotusDivider />
-
-          {/* Who This Book Is For */}
+  if (audience) {
+  sections.push({ key: "audience", label: "Who This Is For", panel: (
+    <>
           {audience && (
             <section className="py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
@@ -606,10 +595,13 @@ export function IntroductionExperience({
               )}
             </section>
           )}
+    </>
+  ) });
+  }
 
-          <LotusDivider />
-
-          {/* The Eleven Gates */}
+  if (chapterList) {
+  sections.push({ key: "gates", label: "The Eleven Gates", panel: (
+    <>
           {chapterList && (
             <section className="py-10 sm:py-14">
               <FadeUp className="mx-auto max-w-[44rem] text-center">
@@ -628,8 +620,13 @@ export function IntroductionExperience({
               </div>
             </section>
           )}
+    </>
+  ) });
+  }
 
-          {/* Any renamed/new sections fall through here untouched */}
+  if (leftovers.length > 0) {
+  sections.push({ key: "more", label: "More", panel: (
+    <>
           {leftovers.length > 0 && (
             <section className="mx-auto max-w-[44rem] space-y-10 py-16">
               {leftovers.map((s) => (
@@ -646,11 +643,13 @@ export function IntroductionExperience({
               ))}
             </section>
           )}
-        </div>
-      </div>
+    </>
+  ) });
+  }
 
-      {/* ————— Sunrise closing ————— */}
-      <section className="relative overflow-hidden px-6 py-16 text-center sm:py-24">
+  sections.push({ key: "closing", label: "Closing", terminal: true, panel: (
+    <>
+      <section className="relative overflow-hidden rounded-3xl px-6 py-16 text-center sm:py-24">
         <Image
           src="/training-media/intro-closing-sunrise.webp"
           alt=""
@@ -685,16 +684,38 @@ export function IntroductionExperience({
           )}
         </FadeUp>
       </section>
+    </>
+  ) });
 
-      {/* Progress + chapter navigation, consistent with the rest of the book */}
-      <div className="bg-[var(--color-bg-primary)] px-4 pb-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl">
-          <ChapterActions
-            contentId={trainingContentId(chapter.slug)}
-            nextSlug={nextSlug}
-            nextTitle={nextTitle}
-          />
-        </div>
+  return (
+    <div className={`${serif.variable} mx-auto max-w-6xl`}>
+      <header className="border-b border-[#DAA520]/20 pb-6">
+        <Link
+          href="/training"
+          className="mb-4 inline-flex w-fit items-center gap-1.5 text-[13px] font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[#B8860B]"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to Training
+        </Link>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#B8860B]">
+          Introduction · {readMinutes} min read · {sections.length} sections
+        </p>
+        <h1
+          className={`${SERIF} mt-3 max-w-3xl text-3xl font-semibold leading-tight text-[var(--color-text-primary)] sm:text-4xl`}
+        >
+          {chapter.title}
+        </h1>
+      </header>
+
+      <IntroductionReader sections={sections} />
+
+      {/* Chapter-level completion and navigation, unchanged. */}
+      <div className="pt-8">
+        <ChapterActions
+          contentId={trainingContentId(chapter.slug)}
+          nextSlug={nextSlug}
+          nextTitle={nextTitle}
+        />
       </div>
     </div>
   );

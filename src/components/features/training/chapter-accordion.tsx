@@ -20,7 +20,14 @@ export interface AccordionSection {
   minutes?: number;
 }
 
-/** Fired by the LessonOutline drawer to open a specific movement. */
+/**
+ * Opens a specific movement from outside the accordion.
+ *
+ * The LessonOutline drawer used to fire this; the chapter spine replaced the
+ * drawer and navigates between activities instead. The listener stays because
+ * it is the accordion's only external entry point, and a "jump to movement"
+ * affordance inside the Read activity is the obvious next use for it.
+ */
 const OPEN_MOVEMENT_EVENT = "vedic:open-movement";
 
 function previewOf(section: AccordionSection): string {
@@ -233,7 +240,11 @@ export function ChapterAccordion({
                         onClick={() => continueTo(i + 1)}
                         className="inline-flex items-center gap-2 rounded-full border border-[#DAA520]/50 bg-gradient-to-r from-amber-50 to-orange-50 px-5 py-2.5 text-sm font-semibold text-[#B8860B] transition-colors hover:border-[#DAA520]"
                       >
-                        Continue — {sections[i + 1].heading}
+                        {/* "Next movement", not "Continue": the reader and the
+                            introduction both put a Continue at the foot of the
+                            panel this accordion sits in, and two controls in
+                            one view must not share a label. */}
+                        Next movement — {sections[i + 1].heading}
                         <ArrowRight className="h-4 w-4" />
                       </button>
                     </div>

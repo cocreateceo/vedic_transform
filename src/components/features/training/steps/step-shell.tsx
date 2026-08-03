@@ -55,53 +55,51 @@ export function StepSection({
   const stage = stageTitleForStep(step.key);
   const variant = markVariant ?? (action ? "subtle" : "primary");
 
+  // Left-aligned, and with no outer padding or card of its own: the player
+  // wraps every activity in one card, so the kicker, the heading, the content
+  // and the way out of the activity read as a single object. A second card
+  // here would nest, and centred text would fight the reading measure.
   return (
-    <section
-      id={stepAnchorId(step.key)}
-      className="scroll-mt-20 pt-9 sm:pt-12"
-      aria-label={`${stage}: ${step.title}`}
-    >
-      <div className="mx-auto max-w-[44rem] text-center">
-        <p
-          className={cn(
-            "inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em]",
-            tone === "dark" ? "text-amber-200/80" : "text-[#B8860B]",
-          )}
-        >
-          <Icon className="h-3.5 w-3.5" />
-          {stage}
-          {isDone && (
-            <CheckCircle2
-              className="h-3.5 w-3.5 text-green-500"
-              aria-label="complete"
-            />
-          )}
-        </p>
-        <h2
-          className={cn(
-            SERIF_CLASS,
-            "mt-2 text-2xl font-semibold sm:text-3xl",
-            tone === "dark" ? "text-amber-50" : "text-[var(--color-text-primary)]",
-          )}
-        >
-          {step.title}
-        </h2>
-        <p
-          className={cn(
-            "mt-1.5 text-[14px]",
-            tone === "dark"
-              ? "text-amber-100/70"
-              : "text-[var(--color-text-secondary)]",
-          )}
-        >
-          {step.note}
-        </p>
-      </div>
+    <div id={stepAnchorId(step.key)} aria-label={`${stage}: ${step.title}`}>
+      <p
+        className={cn(
+          "inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em]",
+          tone === "dark" ? "text-amber-200/80" : "text-[#B8860B]",
+        )}
+      >
+        <Icon className="h-3.5 w-3.5" />
+        {stage}
+        {isDone && (
+          <CheckCircle2
+            className="h-3.5 w-3.5 text-green-500"
+            aria-label="complete"
+          />
+        )}
+      </p>
+      <h2
+        className={cn(
+          SERIF_CLASS,
+          "mt-2.5 text-2xl font-semibold leading-tight sm:text-3xl",
+          tone === "dark" ? "text-amber-50" : "text-[var(--color-text-primary)]",
+        )}
+      >
+        {step.title}
+      </h2>
+      <p
+        className={cn(
+          "mt-1.5 max-w-[68ch] text-[14px]",
+          tone === "dark"
+            ? "text-amber-100/70"
+            : "text-[var(--color-text-secondary)]",
+        )}
+      >
+        {step.note}
+      </p>
 
       <div className="mt-6">{children}</div>
 
       {(action || !hideMarkButton) && (
-        <div className="mt-5 flex flex-col items-center gap-2.5">
+        <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2.5">
           {action}
           {!hideMarkButton && (
             <MarkStepButton
@@ -113,7 +111,7 @@ export function StepSection({
           )}
         </div>
       )}
-    </section>
+    </div>
   );
 }
 

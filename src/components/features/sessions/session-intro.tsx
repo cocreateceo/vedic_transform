@@ -1,15 +1,24 @@
 "use client";
 
-// Reusable "Intro" front-end for guided sessions — the full why-and-how
-// briefing a real teacher gives before a practice begins. Renders a hero
-// (ambient video), the purpose, the benefits, what you'll feel, a setup
-// checklist, a tradition note and any caution, then a Begin button that hands
-// off to the session's Setup/Practice UI.
+// The briefing every guided session opens with.
 //
-// Content lives in ./session-intros.ts so all nine briefings sit in one place.
+// It used to render the whole teacher's briefing before the Begin button —
+// hero, purpose, benefits, what you'll feel, setup checklist, tradition note,
+// caution, duration chip, and only then the button. Measured, that put Start
+// 1,256px down on desktop and 1,536px down on mobile: you scrolled nearly two
+// phone screens before you could start a five-minute practice.
+//
+// Same content, reordered around the decision. What you need to choose to
+// start — what this is, how long, and the safety note — is above the button.
+// The rest is one tap away, with its size stated so nothing feels hidden.
+//
+// Fourteen of the fifteen sessions render through here, so this shape is the
+// Sessions experience.
+//
+// Content lives in ./session-intros.ts so all the briefings sit in one place.
 
 import { Button } from "@/components/ui/button";
-import { Play, Clock, Check, Sparkles, Info, AlertTriangle } from "lucide-react";
+import { Play, Check, Sparkles, Info, AlertTriangle, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { PexelsVideo } from "@/components/ui/pexels-video";
 
@@ -42,6 +51,47 @@ export interface SessionIntroProps extends SessionIntroContent {
   onBegin: () => void;
 }
 
+/**
+ * A collapsed section of the briefing.
+ *
+ * `count` is the point: a summary that states its own size reads as "four more
+ * things, when you want them", not as content that has gone missing.
+ */
+function Disclosure({
+  label,
+  count,
+  light,
+  children,
+}: {
+  label: string;
+  count?: number;
+  light: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <details className="group border-t border-current/10 py-3">
+      <summary
+        className={cn(
+          "flex cursor-pointer list-none items-center justify-between gap-3 text-[13.5px] font-medium",
+          light ? "text-white/85" : "text-[var(--color-text-primary)]",
+        )}
+      >
+        <span>
+          {label}
+          {count !== undefined && (
+            <span className={light ? "text-white/50" : "text-[var(--color-text-muted)]"}>
+              {" · "}
+              {count}
+            </span>
+          )}
+        </span>
+        <ChevronDown className="h-4 w-4 shrink-0 transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="pt-3">{children}</div>
+    </details>
+  );
+}
+
 export function SessionIntro({
   eyebrow,
   title,
@@ -57,127 +107,136 @@ export function SessionIntro({
   onBegin,
   light = false,
 }: SessionIntroProps) {
-  const muted = light ? "text-white/70" : "text-[var(--color-text-secondary)]";
+  const muted = light ? "text-white/60" : "text-[var(--color-text-muted)]";
   const body = light ? "text-white/85" : "text-[var(--color-text-primary)]";
 
   return (
-    <div className="flex flex-col items-center gap-6 py-6 w-full max-w-lg mx-auto">
-      {/* Hero */}
-      <div
+    <div className={cn("mx-auto w-full max-w-xl", light && "text-white")}>
+      {/* Ambient identity, kept to a band — and dropped entirely on phones,
+          which is exactly where the scroll-to-start problem was worst. */}
+      {mediaSlug && (
+        <div className="relative mb-6 hidden h-24 w-full overflow-hidden rounded-xl sm:block">
+          <PexelsVideo
+            slug={mediaSlug}
+            showAttribution={false}
+            className="absolute inset-0 h-full w-full"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        </div>
+      )}
+
+      {/* Masthead: what this is, and how long it takes. */}
+      <p
         className={cn(
-          "relative w-full h-44 rounded-2xl overflow-hidden flex items-end",
-          light ? "bg-white/10" : "bg-orange-50",
+          "text-[11px] font-semibold uppercase tracking-[0.22em]",
+          light ? "text-amber-200/85" : "text-[#B8860B]",
         )}
       >
-        {mediaSlug && (
-          <PexelsVideo slug={mediaSlug} showAttribution={false} className="absolute inset-0 w-full h-full" />
+        {eyebrow}
+        {eyebrow && formatLabel ? " · " : ""}
+        {formatLabel}
+      </p>
+      <h2
+        className={cn(
+          "mt-2.5 text-2xl font-bold leading-tight sm:text-3xl",
+          light ? "text-white" : "text-[var(--color-text-primary)]",
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
-        <div className="relative z-10 p-4">
-          {eyebrow && (
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-white/85">
-              {eyebrow}
-            </p>
-          )}
-          <h2 className="text-2xl font-bold text-white drop-shadow">{title}</h2>
-        </div>
-      </div>
-
-      {/* Why */}
-      <p className={cn("text-base leading-relaxed text-center", light ? "text-white/85" : "text-[var(--color-text-secondary)]")}>
+      >
+        {title}
+      </h2>
+      <p
+        className={cn(
+          "mt-3 text-[15px] leading-relaxed",
+          light ? "text-white/80" : "text-[var(--color-text-secondary)]",
+        )}
+      >
         {why}
       </p>
 
-      {/* Benefits */}
-      <div className="w-full">
-        <p className={cn("text-xs font-semibold uppercase tracking-widest mb-2", muted)}>
-          Why it helps
-        </p>
-        <ul className="space-y-1.5">
-          {benefits.map((b, i) => (
-            <li key={i} className="flex items-start gap-2.5">
-              <Check className={cn("w-4 h-4 mt-0.5 shrink-0", light ? "text-amber-300" : "text-orange-500")} />
-              <span className={cn("text-sm leading-snug", body)}>{b}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* The decision. Nothing optional sits above it. */}
+      <Button size="lg" onClick={onBegin} className="mt-6 w-full sm:w-auto sm:min-w-[220px]">
+        <Play className="w-5 h-5 mr-2" />
+        {beginLabel}
+      </Button>
 
-      {/* What you'll feel */}
-      {feel && (
+      {/* Safety never collapses. */}
+      {caution && (
         <div
           className={cn(
-            "w-full rounded-xl px-4 py-3 flex items-start gap-2.5",
-            light ? "bg-white/10 border border-white/20" : "bg-amber-50 border border-amber-100",
+            "mt-5 flex items-start gap-2.5 rounded-xl px-4 py-3",
+            light
+              ? "border border-amber-300/30 bg-amber-500/15"
+              : "border border-amber-200 bg-amber-50",
           )}
         >
-          <Sparkles className={cn("w-4 h-4 mt-0.5 shrink-0", light ? "text-amber-300" : "text-amber-600")} />
-          <p className={cn("text-sm leading-snug", body)}>
-            <span className="font-semibold">What you&apos;ll feel — </span>
-            {feel}
+          <AlertTriangle
+            className={cn("mt-0.5 h-4 w-4 shrink-0", light ? "text-amber-300" : "text-amber-600")}
+          />
+          <p className={cn("text-xs leading-snug", light ? "text-amber-100" : "text-amber-800")}>
+            {caution}
           </p>
         </div>
       )}
 
-      {/* How / setup */}
-      <div className="w-full">
-        <p className={cn("text-xs font-semibold uppercase tracking-widest mb-2", muted)}>
-          Before you begin
-        </p>
-        <ol className="space-y-2">
-          {setup.map((s, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <span
+      {/* Everything a teacher would still say, one tap away. */}
+      <div className="mt-6">
+        <Disclosure label="Why it helps" count={benefits.length} light={light}>
+          <ul className="space-y-1.5">
+            {benefits.map((b, i) => (
+              <li key={i} className="flex items-start gap-2.5">
+                <Check
+                  className={cn(
+                    "mt-0.5 h-4 w-4 shrink-0",
+                    light ? "text-amber-300" : "text-orange-500",
+                  )}
+                />
+                <span className={cn("text-sm leading-snug", body)}>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </Disclosure>
+
+        <Disclosure label="Before you begin" count={setup.length} light={light}>
+          <ol className="space-y-2">
+            {setup.map((s, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span
+                  className={cn(
+                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold",
+                    light ? "bg-white/20 text-white" : "bg-orange-100 text-orange-700",
+                  )}
+                >
+                  {i + 1}
+                </span>
+                <span className={cn("text-sm leading-snug", body)}>{s}</span>
+              </li>
+            ))}
+          </ol>
+        </Disclosure>
+
+        {feel && (
+          <Disclosure label="What you'll feel" light={light}>
+            <div className="flex items-start gap-2.5">
+              <Sparkles
                 className={cn(
-                  "shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                  light ? "bg-white/20 text-white" : "bg-orange-100 text-orange-700",
+                  "mt-0.5 h-4 w-4 shrink-0",
+                  light ? "text-amber-300" : "text-amber-600",
                 )}
-              >
-                {i + 1}
-              </span>
-              <span className={cn("text-sm leading-snug", body)}>{s}</span>
-            </li>
-          ))}
-        </ol>
+              />
+              <p className={cn("text-sm leading-snug", body)}>{feel}</p>
+            </div>
+          </Disclosure>
+        )}
+
+        {tradition && (
+          <Disclosure label="In the tradition" light={light}>
+            <div className="flex items-start gap-2.5">
+              <Info className={cn("mt-0.5 h-4 w-4 shrink-0", muted)} />
+              <p className={cn("text-xs italic leading-snug", muted)}>{tradition}</p>
+            </div>
+          </Disclosure>
+        )}
       </div>
-
-      {/* Tradition note */}
-      {tradition && (
-        <div className="w-full flex items-start gap-2.5">
-          <Info className={cn("w-4 h-4 mt-0.5 shrink-0", muted)} />
-          <p className={cn("text-xs italic leading-snug", muted)}>{tradition}</p>
-        </div>
-      )}
-
-      {/* Caution */}
-      {caution && (
-        <div
-          className={cn(
-            "w-full rounded-xl px-4 py-3 flex items-start gap-2.5",
-            light ? "bg-amber-500/15 border border-amber-300/30" : "bg-amber-50 border border-amber-200",
-          )}
-        >
-          <AlertTriangle className={cn("w-4 h-4 mt-0.5 shrink-0", light ? "text-amber-300" : "text-amber-600")} />
-          <p className={cn("text-xs leading-snug", light ? "text-amber-100" : "text-amber-800")}>{caution}</p>
-        </div>
-      )}
-
-      {formatLabel && (
-        <span
-          className={cn(
-            "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium",
-            light ? "bg-white/15 text-white/85 border border-white/25" : "bg-[var(--color-card-bg)] text-[var(--color-text-secondary)] border border-[var(--color-border)]",
-          )}
-        >
-          <Clock className="w-3.5 h-3.5" />
-          {formatLabel}
-        </span>
-      )}
-
-      <Button size="lg" onClick={onBegin} className="min-w-[200px]">
-        <Play className="w-5 h-5 mr-2" />
-        {beginLabel}
-      </Button>
     </div>
   );
 }
