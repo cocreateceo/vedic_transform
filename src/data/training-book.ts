@@ -30,7 +30,24 @@ export interface TrainingChapter {
   subtitle?: string;
   description: string; // one-liner for cards / coming-soon entries
   status: "published" | "coming-soon";
-  relatedPillarSlug?: string; // joins src/constants/pillars.ts
+  /**
+   * Every pillar this chapter substantially teaches. Joins
+   * src/constants/pillars.ts.
+   *
+   * A relationship means "this chapter substantially teaches this pillar" — it
+   * is never inferred from title similarity, a single keyword, or the mere
+   * existence of a related Session.
+   */
+  relatedPillarSlugs?: string[];
+  /**
+   * The pillar whose existing practice route resolves this chapter's single
+   * Practice CTA. MUST appear in relatedPillarSlugs.
+   *
+   * This is a CTA choice, not a ranking: the other related pillars are not
+   * pedagogically secondary. Array order in relatedPillarSlugs carries no
+   * behaviour — never derive the primary from position.
+   */
+  primaryPillarSlug?: string;
   image: string; // hero image, /training-media/hero-<slug>.webp, 1600x900
   sectionArt?: {
     exercises?: string;
@@ -162,7 +179,8 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Understanding the self, higher self, universal consciousness, energy, vibration, frequencies, intuition, and creator-spiritual connection.",
     status: "published",
-    relatedPillarSlug: "brahman-connection",
+    relatedPillarSlugs: ["brahman-connection"],
+    primaryPillarSlug: "brahman-connection",
     image: "/training-media/hero-connect-to-the-universe.webp",
     posterImage: "/training-media/posters/roadmap/ch01.webp",
     sectionArt: {
@@ -438,7 +456,8 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Awakening awareness, observing thought patterns, ego vs higher consciousness, emotional intelligence, and inner alignment.",
     status: "published",
-    relatedPillarSlug: "thoughts-intention",
+    relatedPillarSlugs: ["thoughts-intention"],
+    primaryPillarSlug: "thoughts-intention",
     image: "/training-media/hero-consciousness-and-self-awareness.webp",
     posterImage: "/training-media/posters/roadmap/ch02.webp",
     sectionArt: {
@@ -712,7 +731,8 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Meditation, breathwork, energy healing, chakra awareness, manifestation, subconscious transformation, and practices inspired by Vedic science. Align physical body rhythms with nature.",
     status: "coming-soon",
-    relatedPillarSlug: "healing-meditation",
+    relatedPillarSlugs: ["healing-meditation"],
+    primaryPillarSlug: "healing-meditation",
     image: "/training-media/hero-vedic-meditation-and-healing.webp",
     posterImage: "/training-media/posters/roadmap/ch03.webp",
   },
@@ -743,7 +763,8 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Sacred relationships, emotional safety, communication, compassion, shared growth, family harmony, and conscious communities.",
     status: "coming-soon",
-    relatedPillarSlug: "gratitude",
+    relatedPillarSlugs: ["gratitude"],
+    primaryPillarSlug: "gratitude",
     image: "/training-media/hero-relationships-family-and-community.webp",
     posterImage: "/training-media/posters/roadmap/ch06.webp",
   },
@@ -764,7 +785,8 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Sattvic eating, mindful fasting, digestion as inner fire, and the food-energy connection that fuels clarity and vitality.",
     status: "coming-soon",
-    relatedPillarSlug: "nutrition-fasting",
+    relatedPillarSlugs: ["nutrition-fasting"],
+    primaryPillarSlug: "nutrition-fasting",
     image: "/training-media/hero-nutrition-and-fasting.webp",
     posterImage: "/training-media/posters/roadmap/ch08.webp",
   },
@@ -775,7 +797,11 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Key yoga, micro-movements every 90 minutes, strength, exercise, and sleep optimization.",
     status: "coming-soon",
-    relatedPillarSlug: "movement",
+    // Teaches BOTH pillars — both are named in the chapter's own title. The
+    // primary resolves the single Practice CTA only; Sleep Optimization is not
+    // pedagogically secondary.
+    relatedPillarSlugs: ["movement", "sleep-optimization"],
+    primaryPillarSlug: "movement",
     image: "/training-media/hero-movement-exercise-and-sleep-optimization.webp",
     posterImage: "/training-media/posters/roadmap/ch09.webp",
   },
@@ -786,7 +812,8 @@ export const TRAINING_CHAPTERS: TrainingChapter[] = [
     description:
       "Manifestation through clarity, intention, frequency, aligned action, subconscious reprogramming, visualization, gratitude, and disciplined execution.",
     status: "coming-soon",
-    relatedPillarSlug: "divine-manifestation",
+    relatedPillarSlugs: ["divine-manifestation"],
+    primaryPillarSlug: "divine-manifestation",
     image: "/training-media/hero-creation-manifestation-and-transformation.webp",
     posterImage: "/training-media/posters/roadmap/ch10.webp",
   },

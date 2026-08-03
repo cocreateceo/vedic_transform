@@ -89,7 +89,7 @@ describe("training selection — deep link", () => {
 
 describe("training selection — pillar relationship", () => {
   it("omits the relationship when the book authors none", () => {
-    // The Introduction has no relatedPillarSlug — nothing may be manufactured.
+    // The Introduction has no pillar mapping — nothing may be manufactured.
     const s = selectTraining(new Set());
     expect(s.chapter?.slug).toBe(intro.slug);
     expect(s.link?.pillar).toBeUndefined();

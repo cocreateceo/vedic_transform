@@ -1,11 +1,11 @@
 // The join between what the book teaches and what the app makes you do.
 //
 // Three vocabularies already existed and never met:
-//   - training chapters   (src/data/training-book.ts, with relatedPillarSlug)
+//   - training chapters   (src/data/training-book.ts, with relatedPillarSlugs)
 //   - the 11 pillars      (src/constants/pillars.ts)
 //   - Sessions practices  (src/lib/practice-routes.ts)
 //
-// `relatedPillarSlug` was authored for 7 of the 12 chapters but consumed in
+// `relatedPillarSlugs` is authored for 7 of the 12 chapters but was consumed in
 // exactly one place — a card at the bottom of the chapter page. This module
 // exposes the join in both directions so a chapter can send you to the right
 // practice, and a pillar can tell you which chapter explains it.
@@ -55,8 +55,10 @@ export function linkForChapter(slug: string): LearningLink | undefined {
   const chapter = getTrainingChapterBySlug(slug);
   if (!chapter) return undefined;
 
-  const pillar = chapter.relatedPillarSlug
-    ? PILLARS.find((p) => p.slug === chapter.relatedPillarSlug)
+  // The practice destination comes from the explicit primary, never from array
+  // position — order in relatedPillarSlugs carries no behaviour.
+  const pillar = chapter.primaryPillarSlug
+    ? PILLARS.find((p) => p.slug === chapter.primaryPillarSlug)
     : undefined;
 
   if (!pillar) return { chapter };
@@ -103,7 +105,7 @@ export function chaptersForPillar(
 ): TrainingChapter[] {
   return TRAINING_CHAPTERS.filter(
     (c) =>
-      c.relatedPillarSlug === pillarSlug &&
+      (c.relatedPillarSlugs?.includes(pillarSlug) ?? false) &&
       (includeUnpublished || c.status === "published"),
   );
 }

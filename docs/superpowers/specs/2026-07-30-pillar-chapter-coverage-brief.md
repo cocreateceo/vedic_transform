@@ -129,19 +129,56 @@ primaryPillarSlug?: string;
 
 When that happens, introduce an explicit `primaryPractice` (a session key or journal action) rather than stretching the pillar field further. Do **not** pre-build it now.
 
-### 3.4 Proposed editorial mappings — **approve separately from the schema**
+### 3.4 Editorial mappings — decided against authored content, 2026-07-30
 
-The schema change is architecturally sound on its own. These pairings are content judgements and carry different confidence. **Approve the schema first; land the mappings as the author confirms them, against actual chapter content rather than titles.**
+**An earlier revision of this brief proposed mappings for Chapters 3 and 5. Those proposals were derived from chapter titles and are now REJECTED.** A read-only inspection of the authored data disproved them. They are recorded here as rejected hypotheses, **not pending approvals**.
 
-| Chapter | Proposed | Primary practice | Confidence |
+#### The editorial rule
+
+> A pillar relationship means: **"this Training chapter substantially teaches this pillar."**
+>
+> It must **not** be inferred from chapter-title similarity, a single keyword in a description, the existence of a related Session, or a desire to increase pillar coverage.
+>
+> For stub chapters, **defer** the mapping decision until substantive authored content exists.
+
+#### Evidence — Chapter 3, Meditation & Healing
+
+Status `coming-soon`. Authored content is **description-level only** — no `sections`, `exercises`, `reflectionQuestions`, `summary`, `keyTakeaways`, `quiz` or `dailyChallenge`. 499-char record; fields: `number, title, description, status, relatedPillarSlug, image, posterImage`.
+
+| Candidate | Treatment in authored content |
+|---|---|
+| Healing Meditation | MENTIONED ONLY — "meditation", "energy healing" |
+| **Sandhya Meditation** | **NOT PRESENT** — the word "sandhya" never appears |
+| Breathing + Meditation | MENTIONED ONLY — "breathwork", once |
+| Divine Manifestation | MENTIONED ONLY — "manifestation", once |
+
+**Conclusion: INSUFFICIENT CONTENT.** Keep only the already-authored `healing-meditation`. **Do not add Sandhya Meditation, Breathing + Meditation or Divine Manifestation.** The earlier "Sandhya is a meditation practice" argument is **rejected — insufficient authored evidence.**
+
+#### Evidence — Chapter 5, Health, Energy & Balance
+
+Status `coming-soon`. Description-level only, and **no `relatedPillarSlug` at all**. 378-char record.
+
+| Candidate | Treatment in authored content |
+|---|---|
+| **5 AM Initiation** | **NOT PRESENT** — no morning / wake / Brahma Muhurta / Dinacharya |
+| **Breathing + Meditation** | **NOT PRESENT** — no breath / pranayama |
+| Sleep Optimization | MENTIONED ONLY — "sleep", once |
+| Movement Everyday | MENTIONED ONLY — "movement", once |
+| Vedic Nutrition + Fasting | MENTIONED ONLY — "food", once |
+
+**Conclusion: INSUFFICIENT CONTENT. Chapter 5 stays unmapped.** The earlier `["morning-initiation","breathing-meditation"]` proposal is **rejected — insufficient authored evidence.** The description actually gestures at sleep, movement and food — none of which the earlier proposal named — which is itself evidence that title-based inference was arbitrary.
+
+#### What is approved
+
+| Chapter | `relatedPillarSlugs` | `primaryPillarSlug` | Confidence |
 |---|---|---|---|
-| 9 Movement, Exercise and **Sleep Optimization** | `["movement","sleep-optimization"]` | `movement` | **Strong** — both pillars are named in the chapter's own title |
-| 5 Health, Energy & Balance | `["morning-initiation","breathing-meditation"]` | *TBD* | **Plausible** — needs content confirmation; the title implies but does not establish it |
-| 3 Meditation & Healing | `["healing-meditation","sandhya-meditation"]` | *TBD* | **Weakest** — "Sandhya is a meditation practice" does not establish that this chapter teaches Sandhya |
+| 9 Movement, Exercise and **Sleep Optimization** | `["movement","sleep-optimization"]` | `movement` | **HIGH** — both pillars named in the chapter's own title |
+| 3 Meditation & Healing | `["healing-meditation"]` | `healing-meditation` | preserved, unchanged |
+| 5 Health, Energy & Balance | *(absent)* | *(absent)* | deferred |
+| 1, 2, 6, 8, 10 | existing slug as a one-element array | same slug | mechanical migration only |
+| Introduction, 4, 7, 11 | *(absent)* | *(absent)* | unmapped, as today |
 
-Chapters 1, 2, 6, 8, 10 keep their existing value as a one-element array with the same slug as primary. Introduction, 4, 7, 11 stay unmapped.
-
-For 3 and 5 the primary is genuinely undecided: both candidate pillars have real, distinct sessions, so someone must choose which practice the chapter launches. That is a product decision, not a default.
+**Chapter 9's primary is an editorial CTA choice, not a ranking.** The chapter teaches both Movement Everyday and Sleep Optimization, and both have their own practices. It launches the Movement practice because the UI resolves exactly one Practice CTA. Sleep Optimization is **not** pedagogically secondary.
 
 ### 3.5 Coverage is not the goal
 

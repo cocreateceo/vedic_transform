@@ -338,7 +338,7 @@ export default function TrainingPage() {
           />
 
           {/* How this chapter becomes a daily practice — the join the book
-              already authored via relatedPillarSlug, finally surfaced. */}
+              already authored via relatedPillarSlugs, finally surfaced. */}
           {currentLink?.pillar && (
             <div className="vedic-card flex flex-wrap items-center justify-between gap-4 p-5">
               <div>

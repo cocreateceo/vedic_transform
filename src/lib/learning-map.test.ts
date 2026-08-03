@@ -90,11 +90,96 @@ describe("chapter → practice mapping", () => {
 
   it("only maps chapters to pillars that exist", () => {
     for (const chapter of getPublishedChapters()) {
-      if (!chapter.relatedPillarSlug) continue;
-      expect(
-        PILLARS.some((p) => p.slug === chapter.relatedPillarSlug),
-      ).toBe(true);
+      for (const slug of chapter.relatedPillarSlugs ?? []) {
+        expect(PILLARS.some((p) => p.slug === slug)).toBe(true);
+      }
     }
+  });
+});
+
+describe("plural pillar model", () => {
+  const ch = (slug: string) => getTrainingChapterBySlug(slug)!;
+
+  it("preserves the seven migrated single mappings unchanged", () => {
+    const expected: [string, string][] = [
+      ["connect-to-the-universe", "brahman-connection"],
+      ["consciousness-and-self-awareness", "thoughts-intention"],
+      ["vedic-meditation-and-healing", "healing-meditation"],
+      ["relationships-family-and-community", "gratitude"],
+      ["nutrition-and-fasting", "nutrition-fasting"],
+      ["creation-manifestation-and-transformation", "divine-manifestation"],
+    ];
+    for (const [slug, pillar] of expected) {
+      expect(ch(slug).relatedPillarSlugs).toEqual([pillar]);
+      expect(ch(slug).primaryPillarSlug).toBe(pillar);
+    }
+  });
+
+  it("Chapter 3 maps ONLY to healing-meditation", () => {
+    // Sandhya / breathing / manifestation were proposed and rejected: the
+    // authored content is description-level only and never names them.
+    expect(ch("vedic-meditation-and-healing").relatedPillarSlugs).toEqual([
+      "healing-meditation",
+    ]);
+  });
+
+  it("Chapter 5 remains unmapped", () => {
+    expect(ch("health-energy-and-balance").relatedPillarSlugs).toBeUndefined();
+    expect(ch("health-energy-and-balance").primaryPillarSlug).toBeUndefined();
+  });
+
+  it("Chapter 9 teaches movement AND sleep-optimization", () => {
+    const c = ch("movement-exercise-and-sleep-optimization");
+    expect(c.relatedPillarSlugs).toEqual(["movement", "sleep-optimization"]);
+    expect(c.primaryPillarSlug).toBe("movement");
+  });
+
+  it("finds Chapter 9 from either of its pillars when unpublished is included", () => {
+    for (const p of ["movement", "sleep-optimization"]) {
+      expect(
+        chaptersForPillar(p, { includeUnpublished: true }).map((c) => c.slug),
+      ).toContain("movement-exercise-and-sleep-optimization");
+    }
+  });
+
+  it("does not expose Chapter 9 to the published-only default", () => {
+    for (const p of ["movement", "sleep-optimization"]) {
+      expect(chaptersForPillar(p)).toEqual([]);
+    }
+  });
+
+  it("array ORDER carries no behaviour", () => {
+    // The whole point of the explicit primary field. Reversing the array must
+    // not change where the chapter's Practice CTA goes.
+    const c = ch("movement-exercise-and-sleep-optimization");
+    const before = linkForChapter(c.slug)?.pillar?.slug;
+    const original = c.relatedPillarSlugs!;
+    try {
+      c.relatedPillarSlugs = [...original].reverse();
+      expect(linkForChapter(c.slug)?.pillar?.slug).toBe(before);
+      expect(before).toBe("movement");
+    } finally {
+      c.relatedPillarSlugs = original;
+    }
+  });
+
+  it("changing the primary DOES change the practice destination", () => {
+    const c = ch("movement-exercise-and-sleep-optimization");
+    const original = c.primaryPillarSlug;
+    try {
+      c.primaryPillarSlug = "sleep-optimization";
+      expect(linkForChapter(c.slug)?.sessionKey).toBe("sleep");
+    } finally {
+      c.primaryPillarSlug = original;
+    }
+    expect(linkForChapter(c.slug)?.sessionKey).toBe("movement");
+  });
+
+  it("live pillar→chapter chips are unchanged: still exactly two", () => {
+    const live = PILLARS.filter((p) => chaptersForPillar(p.slug).length > 0);
+    expect(live.map((p) => p.slug).sort()).toEqual(
+      ["brahman-connection", "thoughts-intention"].sort(),
+    );
   });
 });
 

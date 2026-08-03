@@ -47,11 +47,44 @@ describe("training book data", () => {
     for (const c of TRAINING_CHAPTERS) expect(c.description.length).toBeGreaterThan(10);
   });
 
-  it("relatedPillarSlug values exist in PILLARS", () => {
+  it("relatedPillarSlugs values exist in PILLARS", () => {
     const valid = new Set(PILLARS.map((p) => p.slug));
     for (const c of TRAINING_CHAPTERS) {
-      if (c.relatedPillarSlug) expect(valid.has(c.relatedPillarSlug)).toBe(true);
+      for (const slug of c.relatedPillarSlugs ?? []) {
+        expect(valid.has(slug)).toBe(true);
+      }
     }
+  });
+
+  it("no chapter lists the same pillar twice", () => {
+    for (const c of TRAINING_CHAPTERS) {
+      const s = c.relatedPillarSlugs ?? [];
+      expect(new Set(s).size).toBe(s.length);
+    }
+  });
+
+  // The central invariant of the two-field model: the practice CTA must point
+  // at a pillar the chapter actually teaches.
+  it("primaryPillarSlug always belongs to relatedPillarSlugs", () => {
+    for (const c of TRAINING_CHAPTERS) {
+      if (!c.primaryPillarSlug) continue;
+      expect(c.relatedPillarSlugs ?? []).toContain(c.primaryPillarSlug);
+    }
+  });
+
+  it("the two fields are declared together or not at all", () => {
+    for (const c of TRAINING_CHAPTERS) {
+      expect(Boolean(c.primaryPillarSlug)).toBe(
+        Boolean(c.relatedPillarSlugs?.length),
+      );
+    }
+  });
+
+  it("no pillar is the primary of more than one chapter", () => {
+    const primaries = TRAINING_CHAPTERS.map((c) => c.primaryPillarSlug).filter(
+      Boolean,
+    );
+    expect(new Set(primaries).size).toBe(primaries.length);
   });
 
   it("helpers resolve slugs and content ids", () => {

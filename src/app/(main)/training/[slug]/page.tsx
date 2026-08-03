@@ -15,7 +15,7 @@ import {
   getTrainingChapterBySlug,
   trainingContentId,
 } from "@/data/training-book";
-import { PILLARS } from "@/constants/pillars";
+import { linkForChapter } from "@/lib/learning-map";
 import { ChapterActions } from "./chapter-actions";
 import { IntroductionExperience } from "@/components/features/training/intro/introduction-experience";
 import { ChapterExperience } from "@/components/features/training/chapter-experience";
@@ -82,7 +82,9 @@ export default async function TrainingChapterPage({
       />
     );
   }
-  const pillar = PILLARS.find((p) => p.slug === chapter.relatedPillarSlug);
+  // Resolved through the shared learning map so this fallback reader and the
+  // main chapter experience can never disagree about the pillar relationship.
+  const pillar = linkForChapter(chapter.slug)?.pillar;
   const chapterLabel =
     chapter.number === 0 ? "Introduction" : `Chapter ${chapter.number}`;
 

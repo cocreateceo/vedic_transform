@@ -379,7 +379,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
         </div>
       </div>
 
-      {/* Where this pillar is taught. Authored metadata via relatedPillarSlug —
+      {/* Where this pillar is taught. Authored metadata via relatedPillarSlugs —
           no progress fetch, and the link opens the chapter normally rather than
           resuming an activity: the relationship means "this chapter teaches
           this pillar", not "start at Practice". Absent entirely when the
