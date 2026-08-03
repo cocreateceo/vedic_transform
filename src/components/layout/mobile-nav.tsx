@@ -86,7 +86,10 @@ export function MobileNav() {
       )}
 
       {/* Bottom bar — Today | Practice | Learn | Progress | More */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-[#DAA520]/40 lg:hidden safe-area-bottom">
+      <nav
+        aria-label="Primary shortcuts"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t-2 border-[#DAA520]/40 lg:hidden safe-area-bottom"
+      >
         <div className="flex items-center justify-around h-16 px-2">
           {MOBILE_TABS.map((item) => {
             const active = isNavItemActive(pathname, item.href);

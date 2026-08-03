@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils/cn";
 import {
   stepAnchorId,
   CLOSING_ANCHOR_ID,
+  STEP_SHORT_LABELS,
   type StepKey,
 } from "@/lib/training-steps";
 import {
@@ -36,18 +37,6 @@ import {
 import { useChapterProgressContext } from "./steps/chapter-progress-context";
 import { ArrowRight, Check } from "lucide-react";
 import { PlayerSpine, PlayerStrip, type SpineItem } from "./player-spine";
-
-/** Short spine labels. The step's own title is the panel heading. */
-const STEP_LABELS: Record<StepKey, string> = {
-  watch: "Watch",
-  read: "Read",
-  takeaways: "Takeaways",
-  practice: "Practice",
-  meditation: "Meditate",
-  reflection: "Reflect",
-  quiz: "Quiz",
-  challenge: "Challenge",
-};
 
 export function ChapterPlayer({
   steps,
@@ -129,6 +118,30 @@ export function ChapterPlayer({
     }
   }, [position]);
 
+  // In-panel anchors change the activity. The closing's "Continue with
+  // Takeaways" is an <a href="#step-takeaways">, and any future link of that
+  // shape works for free. replaceState above never fires this event, so there
+  // is no loop.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onHash = () => {
+      const requested = parseRequestedPosition(
+        null,
+        window.location.hash,
+        steps,
+      );
+      if (!requested) return;
+      resumed.current = true;
+      setPosition(requested);
+      document
+        .getElementById("chapter-panel")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [steps.join(",")]);
+
   const go = useCallback((next: PlayerPosition) => {
     resumed.current = true;
     setPosition(next);
@@ -153,7 +166,7 @@ export function ChapterPlayer({
 
   const { completed, total, percent } = playerProgress(steps, done);
   const spineItems: SpineItem[] = [
-    ...steps.map((k) => ({ key: k, label: STEP_LABELS[k], done: Boolean(done[k]) })),
+    ...steps.map((k) => ({ key: k, label: STEP_SHORT_LABELS[k], done: Boolean(done[k]) })),
     {
       key: "complete",
       label: "Closing",

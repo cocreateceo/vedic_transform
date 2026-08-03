@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { Menu, X, LogOut, Settings, User } from "lucide-react";
+import { LogOut, Settings, User } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils/cn";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { NotificationCenter } from "@/components/features/notifications/notification-center";
 import { useAuth } from "@/context/auth-context";
@@ -19,18 +17,9 @@ interface HeaderProps {
 }
 
 export function Header({ user }: HeaderProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const pathname = usePathname();
   const router = useRouter();
   const { logout } = useAuth();
-
-  const navigation = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Pillars", href: "/pillars" },
-    { name: "Progress", href: "/progress" },
-    { name: "Journal", href: "/journal" },
-  ];
 
   const handleSignOut = () => {
     logout();
@@ -39,41 +28,27 @@ export function Header({ user }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-lg bg-white/80 border-b-2 border-[#DAA520]/40">
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2">
+          {/* Brand, below lg only. The sidebar carries it from lg up, and two
+              logos on one screen is what this header was doing wrong. */}
+          <Link href="/dashboard" className="flex items-center gap-2 lg:hidden">
             <Image
               src="/images/logo.jpg"
               alt="10X Vedic Logo"
-              width={40}
-              height={40}
-              className="rounded-xl"
+              width={32}
+              height={32}
+              className="rounded-lg"
             />
-            <span className="text-xl font-bold text-[#1a1a1a] [font-family:var(--font-intro-serif),Georgia,serif]">
+            <span className="text-lg font-bold text-[#1a1a1a] [font-family:var(--font-intro-serif),Georgia,serif]">
               10X Vedic
             </span>
           </Link>
+          {/* Holds the row open at lg+, where the brand above is hidden. */}
+          <span className="hidden lg:block" aria-hidden="true" />
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:gap-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "text-sm font-medium transition-colors",
-                  pathname === item.href || pathname.startsWith(item.href + "/")
-                    ? "text-amber-600"
-                    : "text-gray-600 hover:text-amber-600"
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-
-          {/* Profile Menu */}
+          {/* Utilities. Navigation lives in the sidebar (lg+) and the bottom
+              tab bar (below lg); this bar owns only what neither can do. */}
           <div className="flex items-center gap-4">
             <NotificationCenter />
             <ThemeToggle />
@@ -110,45 +85,9 @@ export function Header({ user }: HeaderProps) {
                 </div>
               )}
             </div>
-
-            {/* Mobile menu button */}
-            <button
-              type="button"
-              className="md:hidden p-2 rounded-xl hover:bg-amber-50"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6 text-gray-600" />
-              ) : (
-                <Menu className="w-6 h-6 text-gray-600" />
-              )}
-            </button>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-amber-100">
-            <div className="flex flex-col gap-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "px-4 py-2 rounded-xl text-sm font-medium transition-colors",
-                    pathname === item.href
-                      ? "bg-amber-100 text-amber-600"
-                      : "text-gray-600 hover:bg-amber-50"
-                  )}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-      </nav>
+      </div>
     </header>
   );
 }

@@ -39,14 +39,21 @@ export function PlayerSpine({
         {items.map((item) => {
           if (!item.terminal) n += 1;
           return (
-            <SpineRow
-              key={item.key}
-              n={item.terminal ? undefined : n}
-              label={item.label}
-              isDone={item.done}
-              isCurrent={current === item.key}
-              onClick={() => onGo(item.key)}
-            />
+            <div key={item.key}>
+              {/* The closing is not one of the numbered activities — the
+                  header says "8 activities" and there were nine rows. A rule
+                  separates the chapter's work from the end of it. */}
+              {item.terminal && (
+                <div className="my-2 border-t border-[#DAA520]/20" />
+              )}
+              <SpineRow
+                n={item.terminal ? undefined : n}
+                label={item.label}
+                isDone={item.done}
+                isCurrent={current === item.key}
+                onClick={() => onGo(item.key)}
+              />
+            </div>
           );
         })}
       </nav>

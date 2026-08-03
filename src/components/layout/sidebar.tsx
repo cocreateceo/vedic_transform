@@ -66,7 +66,10 @@ export function Sidebar() {
       </div>
 
       {/* Navigation — grouped by what you're doing, from one shared model. */}
-      <nav className="flex-1 px-4 py-4 space-y-4 overflow-y-auto">
+      <nav
+        aria-label="Primary"
+        className="flex-1 px-4 py-4 space-y-4 overflow-y-auto"
+      >
         {NAV_GROUPS.map((group) => (
           <div key={group.title} className="space-y-0.5">
             <p className="px-4 mb-1 text-[10px] font-bold uppercase tracking-[0.15em] text-[#FFD700]/80">
@@ -106,18 +109,6 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Bottom section */}
-      <div className="p-3 border-t border-white/10">
-        <div className="px-3.5 py-3 rounded-xl bg-white/[0.05] border border-[#FFD700]/20">
-          <p className="text-[10px] text-[#FFD700]/90 font-bold uppercase tracking-[0.15em]">
-            Daily Wisdom
-          </p>
-          <p className="text-[13px] leading-snug text-[#e2e8f0] mt-1.5 italic">
-            &quot;The mind is everything. What you think you become.&quot;
-          </p>
-          <p className="text-[11px] text-[#94a3b8] mt-1">— Buddha</p>
-        </div>
-      </div>
     </aside>
   );
 }

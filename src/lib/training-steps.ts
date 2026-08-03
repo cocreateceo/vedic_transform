@@ -206,6 +206,21 @@ export function chapterStages(chapter: TrainingChapter): ChapterStage[] {
 }
 
 /** DOM id of a step's section — the target for outline jumps and resume links. */
+/**
+ * One-word labels for the spine and for any surface naming the next activity.
+ * The step's own `title` is the panel heading; this is the index entry.
+ */
+export const STEP_SHORT_LABELS: Record<StepKey, string> = {
+  watch: "Watch",
+  read: "Read",
+  takeaways: "Takeaways",
+  practice: "Practice",
+  meditation: "Meditate",
+  reflection: "Reflect",
+  quiz: "Quiz",
+  challenge: "Challenge",
+};
+
 export const stepAnchorId = (key: StepKey) => `step-${key}`;
 
 /** DOM id the "Complete" stage scrolls to. */

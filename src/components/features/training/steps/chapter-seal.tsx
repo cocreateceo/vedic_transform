@@ -10,6 +10,7 @@
 import Link from "next/link";
 import { ArrowRight, Award } from "lucide-react";
 import { SERIF_CLASS } from "@/lib/fonts";
+import { STEP_SHORT_LABELS, stepAnchorId } from "@/lib/training-steps";
 import { useChapterProgressContext } from "./chapter-progress-context";
 
 export function ChapterSeal({
@@ -19,27 +20,31 @@ export function ChapterSeal({
   nextSlug?: string;
   nextTitle?: string;
 }) {
-  const { completedCount, total, allDone, loaded } = useChapterProgressContext();
+  const { completedCount, total, allDone, loaded, nextStep } =
+    useChapterProgressContext();
+  const remaining = total - completedCount;
 
   return (
     <div className="space-y-6">
+      {/* An unfinished chapter gets its next move, not a second progress bar.
+          The count and the percentage already live in the spine meter; saying
+          them again here told the reader something they had just read and gave
+          them nothing to do about it. */}
       {loaded && !allDone && total > 0 && (
-        <div className="mx-auto max-w-md">
-          <div className="flex items-center justify-between text-xs font-semibold text-[#5a4a33]">
-            <span>
-              {completedCount} of {total} activities complete
-            </span>
-            <span>{Math.round((completedCount / total) * 100)}%</span>
-          </div>
-          <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-white/50">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-500 transition-all duration-700"
-              style={{ width: `${(completedCount / total) * 100}%` }}
-            />
-          </div>
-          <p className="mt-2 text-[13px] text-[#5a4a33]">
-            Finish the remaining activities to seal this chapter.
+        <div className="mx-auto max-w-md space-y-3">
+          <p className="text-[15px] font-semibold text-[#5a4a33]">
+            {remaining} {remaining === 1 ? "activity" : "activities"} remaining
+            to seal this chapter.
           </p>
+          {nextStep && (
+            <a
+              href={`#${stepAnchorId(nextStep)}`}
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-800/30 transition-shadow hover:shadow-xl"
+            >
+              Continue with {STEP_SHORT_LABELS[nextStep]}
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          )}
         </div>
       )}
 
@@ -57,12 +62,20 @@ export function ChapterSeal({
       )}
 
       {nextSlug ? (
+        // Only the dominant action once the chapter is sealed. While it is
+        // unfinished, moving on is still allowed but must not outrank the
+        // activity the reader is one tap away from finishing.
         <Link
           href={`/training/${nextSlug}`}
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-800/30 transition-shadow hover:shadow-xl"
+          className={
+            allDone
+              ? "inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-800/30 transition-shadow hover:shadow-xl"
+              : "inline-flex items-center gap-1.5 text-[13px] font-medium text-[#8B6914] underline-offset-4 hover:underline"
+          }
         >
-          {allDone ? "Next chapter unlocked" : "Continue to"} {nextTitle ?? "the next chapter"}
-          <ArrowRight className="h-4 w-4" />
+          {allDone ? "Next chapter unlocked" : "Skip ahead to"}{" "}
+          {nextTitle ?? "the next chapter"}
+          <ArrowRight className={allDone ? "h-4 w-4" : "h-3.5 w-3.5"} />
         </Link>
       ) : (
         // Last published chapter — say so, rather than dead-ending on a bare
