@@ -545,9 +545,9 @@ function JournalClient() {
                   name="title"
                   type="text"
                   placeholder="New manifestation..."
-                  className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                  className="w-full min-w-0 rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-amber-500 focus:ring-1 focus:ring-amber-500 sm:w-auto"
                 />
-                <Button type="submit" size="sm" isLoading={savingManifestation}>
+                <Button type="submit" size="sm" className="shrink-0" isLoading={savingManifestation}>
                   Add
                 </Button>
               </div>

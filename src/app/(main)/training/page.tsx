@@ -242,7 +242,7 @@ export default function TrainingPage() {
 
   return (
     <div
-      className={`${introSerif.variable} max-w-3xl lg:max-w-5xl mx-auto space-y-10`}
+      className={`${introSerif.variable} max-w-4xl lg:max-w-7xl mx-auto space-y-10`}
     >
       {/* ————— Progress dashboard hero ————— */}
       <header className="relative overflow-hidden rounded-3xl border border-[#DAA520]/40">

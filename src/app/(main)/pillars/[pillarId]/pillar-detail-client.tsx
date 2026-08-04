@@ -284,7 +284,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
 
   if (!pillar) {
     return (
-      <div className="max-w-4xl mx-auto text-center py-12">
+      <div className="max-w-7xl mx-auto text-center py-12">
         <p className="text-gray-500">Pillar not found.</p>
       </div>
     );
@@ -294,7 +294,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="h-6 bg-gray-200 rounded w-32 animate-pulse mb-6" />
         <div className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
       </div>
@@ -306,7 +306,7 @@ export function PillarDetailClient({ pillarId }: { pillarId: string }) {
   const breathingAutoComplete = !isCompleted && hasJourney ? handleComplete : undefined;
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* Back button */}
       <Link
         href="/pillars"

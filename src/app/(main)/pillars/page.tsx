@@ -104,7 +104,7 @@ export default function PillarsPage() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-[1536px] mx-auto space-y-8">
         <div className="h-8 bg-gray-200 rounded w-64 animate-pulse" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
@@ -122,7 +122,7 @@ export default function PillarsPage() {
   const quietPillars = PILLARS.filter((p) => tiers.quiet.has(p.slug));
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-[1536px] mx-auto space-y-8">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">

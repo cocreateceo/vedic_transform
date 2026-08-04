@@ -39,7 +39,7 @@ export default function UpgradePage() {
   };
 
   return (
-    <div className="mx-auto max-w-xl space-y-8">
+    <div className="mx-auto max-w-2xl space-y-8">
       <div className="flex items-center gap-4">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-sm">
           <Sparkles className="h-6 w-6 text-white" />

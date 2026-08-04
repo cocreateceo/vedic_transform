@@ -35,7 +35,7 @@ export default function WisdomPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-[1536px] mx-auto space-y-8">
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold text-[var(--color-text-primary)] flex items-center gap-3">
@@ -110,14 +110,14 @@ export default function WisdomPage() {
           {past7.map((entry, i) => (
             <div
               key={entry.id}
-              className="glass-card p-5 space-y-3 transition-all hover:scale-[1.02]"
+              className="glass-card min-w-0 p-5 space-y-3 transition-all hover:scale-[1.02]"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-[var(--color-text-muted)]">
+              <div className="flex items-center justify-between gap-2">
+                <span className="shrink-0 text-xs text-[var(--color-text-muted)]">
                   {i + 1} day{i + 1 > 1 ? "s" : ""} ago
                 </span>
                 <span
-                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${categoryColors[entry.category]}`}
+                  className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${categoryColors[entry.category]}`}
                 >
                   {categoryLabels[entry.category]}
                 </span>
@@ -133,8 +133,8 @@ export default function WisdomPage() {
                 </p>
               )}
 
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-[var(--color-text-secondary)]">
+              <div className="flex items-center justify-between gap-2">
+                <p className="min-w-0 truncate text-xs text-[var(--color-text-secondary)]">
                   — {entry.source}
                 </p>
                 <ShareButton

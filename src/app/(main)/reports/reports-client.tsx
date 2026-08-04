@@ -82,7 +82,7 @@ export function ReportsPageClient({
 
   if (!hasJourney) {
     return (
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center py-12">
           <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-[var(--color-text-primary)]">No Journey Started</h2>
@@ -98,7 +98,7 @@ export function ReportsPageClient({
   endDate.setDate(endDate.getDate() + 48);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
       {/* Print-only stylesheet: when body has the printing-cert class, hide
           everything except elements inside .cert-print-area. Classic print
           pattern so the certificate's existing Tailwind classes render. */}

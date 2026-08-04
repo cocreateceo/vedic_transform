@@ -50,7 +50,7 @@ export default async function LibraryArticlePage({
   const related = LIBRARY_ARTICLES.filter((a) => a.slug !== article.slug);
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-8">
       <Link
         href="/library"
         className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] transition-colors"

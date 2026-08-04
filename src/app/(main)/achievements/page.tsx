@@ -76,7 +76,7 @@ export default function AchievementsPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-[1536px] mx-auto space-y-8">
         <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
         <div className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -100,7 +100,7 @@ export default function AchievementsPage() {
   const totalCount = badgesWithStatus.length;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-[1536px] mx-auto space-y-8">
       {/* Page Header */}
       <div className="flex items-center gap-4">
         <TrophyGlyph />

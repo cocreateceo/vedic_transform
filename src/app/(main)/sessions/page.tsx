@@ -18,6 +18,7 @@ import { parseTrainingReturnContext } from "@/lib/training-return-context";
 import { TrainingReturnProvider } from "@/components/features/sessions/training-return-provider";
 import { SessionsIndex } from "@/components/features/sessions/sessions-index";
 import { sessionTabForParam } from "@/components/features/sessions/session-tabs";
+import { PageContainer } from "@/components/layout/page-container";
 
 export default function SessionsPage() {
   const searchParams = useSearchParams();
@@ -30,16 +31,16 @@ export default function SessionsPage() {
 
   if (!tab) {
     return (
-      <div className="mx-auto max-w-4xl">
+      <PageContainer width="wide">
         <SessionsIndex />
-      </div>
+      </PageContainer>
     );
   }
 
   const ActiveComponent = tab.component;
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <PageContainer width="reading">
       {/* One back link, and it says where it goes. A learner sent here by a
           chapter returns to the chapter; everyone else returns to the index. */}
       {trainingReturn ? (
@@ -68,6 +69,6 @@ export default function SessionsPage() {
       <TrainingReturnProvider value={trainingReturn}>
         <ActiveComponent />
       </TrainingReturnProvider>
-    </div>
+    </PageContainer>
   );
 }

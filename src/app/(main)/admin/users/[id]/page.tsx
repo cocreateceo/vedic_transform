@@ -48,7 +48,7 @@ export default function AdminUserDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-6 w-40 bg-gray-200 rounded" />
           <div className="h-32 bg-gray-100 rounded-xl" />
@@ -60,7 +60,7 @@ export default function AdminUserDetailPage() {
 
   if (error || !data) {
     return (
-      <div className="max-w-5xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-6">
         <Link
           href="/admin"
           className="inline-flex items-center gap-1 text-sm text-gray-500 mb-4"
@@ -81,7 +81,7 @@ export default function AdminUserDetailPage() {
   const pack = data.contextPack as any;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
+    <div className="max-w-7xl mx-auto p-6 space-y-6">
       <Link
         href="/admin"
         className="inline-flex items-center gap-1 text-sm text-gray-500"

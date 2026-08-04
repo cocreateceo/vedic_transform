@@ -17,7 +17,7 @@ export default function MoodPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
         <div className="h-64 bg-gray-100 rounded-2xl animate-pulse" />
       </div>

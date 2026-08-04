@@ -144,7 +144,7 @@ export function MoodPageClient({
   }, [logs]);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8">
       {/* Page Header */}
       <div className="flex items-center gap-4">
         <MoodGlyph />

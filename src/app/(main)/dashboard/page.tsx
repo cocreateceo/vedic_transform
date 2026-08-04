@@ -146,7 +146,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-[1536px] mx-auto space-y-6">
         <div className="vedic-card p-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse h-32 rounded-2xl" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="vedic-card p-6 animate-pulse h-40 rounded-2xl bg-gray-100" />
@@ -186,7 +186,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-[1536px] mx-auto space-y-6">
       <DailyWisdomPopup />
       <MilestoneCelebration currentDay={currentDay} />
       {/* Welcome banner — left: phase + day narrative; right: mandala ring */}

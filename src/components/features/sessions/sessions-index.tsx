@@ -61,7 +61,7 @@ export function SessionsIndex() {
         <h1 className="mt-2.5 text-3xl font-bold text-[var(--color-text-primary)]">
           Sessions
         </h1>
-        <p className="mt-1.5 text-[var(--color-text-secondary)]">
+        <p className="mt-1.5 max-w-2xl text-[var(--color-text-secondary)]">
           Practice, guided. Pick one and begin.
         </p>
       </header>
@@ -99,7 +99,7 @@ function Group({
           {title}
         </h2>
       )}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
         {items.map((tab) => {
           const Icon = tab.icon;
           const done = sessionDone(tab.key);

@@ -71,7 +71,7 @@ export default function AdminUsersPage() {
   }, [loading, users.length, total, q]);
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center shadow-sm">
           <Shield className="w-5 h-5 text-white" />

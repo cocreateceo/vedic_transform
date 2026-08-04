@@ -62,7 +62,7 @@ export default function ProgressPage() {
 
   if (loading || !data) {
     return (
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-[1536px] mx-auto space-y-6">
         <div className="h-8 bg-gray-200 rounded w-48 animate-pulse" />
         <div className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -88,7 +88,7 @@ export default function ProgressPage() {
 
   if (!journey) {
     return (
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-[1536px] mx-auto space-y-6">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Your Progress</h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">
@@ -171,7 +171,7 @@ export default function ProgressPage() {
       : 0;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-[1536px] mx-auto space-y-6">
       {/* Page Header */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-[var(--color-text-primary)]">Your Progress</h1>

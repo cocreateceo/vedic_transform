@@ -275,7 +275,7 @@ export function LibraryPageClient({ initialProgress }: LibraryPageClientProps) {
   );
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-[1536px] mx-auto space-y-6">
       {/* Masthead */}
       <header className="pt-4 pb-2 text-center space-y-3">
         <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#DAA520]/40 bg-[var(--color-bg-surface)]">
